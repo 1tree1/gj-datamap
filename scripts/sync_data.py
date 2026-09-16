@@ -2,7 +2,7 @@
 import shutil, json, sys
 from pathlib import Path
 SRC = Path(r"C:\Users\User\Desktop\9_도시\archive\C_data")
-DST = Path(__file__).resolve().parent.parent / "data"
+DST = Path(__file__).resolve().parent.parent / "public" / "data"   # Vite: public/ 은 그대로 dist/ 로 복사
 FILES = {
     "processed/gosi2026-8_zone_4326.geojson":   "zone.geojson",
     "processed/gosi2026-8_blocks_4326.geojson": "blocks.geojson",

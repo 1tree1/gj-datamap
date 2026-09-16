@@ -4,7 +4,7 @@
 
 ```bash
 npm install
-python scripts/sync_data.py        # 9_도시 산출물(4326 GeoJSON) → data/
+python scripts/sync_data.py        # 9_도시 산출물(4326 GeoJSON) → public/data/
 cp src/config.example.js src/config.js   # V-World 키 (선택)
 npm run dev                        # http://localhost:5173
 ```
