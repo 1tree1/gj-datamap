@@ -51,6 +51,8 @@ map.on("load", async () => {
           paint: { "text-color": "#1d2320", "text-halo-color": "#fff", "text-halo-width": 1.5 } });
         ids.push(`${L.id}-lb`);
       }
+    } else if (L.type === "circle") {
+      map.addLayer({ id: L.id, type: "circle", source: L.id, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     } else {
       map.addLayer({ id: L.id, type: "line", source: L.id, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     }
@@ -69,7 +71,7 @@ map.on("load", async () => {
     li.querySelector("input").addEventListener("change", (ev) => ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")));
     list.prepend(li);
   }
-  ["blocks", "blocks-ol", "blocks-lb", "zone"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["blocks", "blocks-ol", "blocks-lb", "zone", "stores"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart();
 });
 
@@ -87,6 +89,26 @@ function updateStats() {
   jiga.sort((a, b) => a - b);
   document.getElementById("st-parcels").textContent = seen.size ? seen.size.toLocaleString() : "–";
   document.getElementById("st-jiga").textContent = jiga.length ? Math.round(jiga[jiga.length >> 1]).toLocaleString() + "원/㎡" : "–";
+  // 노후도: 건물 있는 필지 중 사용승인 30년↑ 비율
+  const aged = [...new Set(feats.filter((f) => f.properties.bldg_age != null).map((f) => f.properties.pnu + "|" + f.properties.bldg_age))].map((s) => +s.split("|")[1]);
+  document.getElementById("st-old").textContent = aged.length ? Math.round(aged.filter((a) => a >= 30).length / aged.length * 100) + "%" : "–";
+  // 업종 분포 (화면 내 업소)
+  if (map.getLayer("stores")) {
+    const st = map.queryRenderedFeatures({ layers: ["stores"] }); const cnt = {}; const ids = new Set();
+    for (const f of st) { if (ids.has(f.properties.bizesId)) continue; ids.add(f.properties.bizesId); cnt[f.properties.indsLclsNm] = (cnt[f.properties.indsLclsNm] || 0) + 1; }
+    document.getElementById("st-stores").textContent = ids.size ? ids.size.toLocaleString() : "–";
+    drawIndsChart(cnt);
+  }
+}
+let indsChart;
+function drawIndsChart(cnt) {
+  const rows = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  indsChart ??= echarts.init(document.getElementById("chart-inds"));
+  indsChart.setOption({
+    grid: { left: 70, right: 12, top: 4, bottom: 4 }, tooltip: { trigger: "axis" },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: rows.map((r) => r[0]), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: rows.map((r) => r[1]), itemStyle: { color: "#2c6a5c" }, barCategoryGap: "30%", label: { show: true, position: "right", fontSize: 10 } }],
+  }, true);
 }
 map.on("moveend", updateStats);
 map.on("idle", updateStats);   // 최초 타일 처리 완료 후에도 갱신

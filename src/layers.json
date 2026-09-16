@@ -1,41 +1,380 @@
 {
-  "center": [129.2190, 35.8454],
+  "center": [
+    129.219,
+    35.8454
+  ],
   "zoom": 15.6,
   "layers": [
     {
-      "id": "landuse", "title": "용도지역 (V-World UQ111)", "file": "landuse.geojson", "type": "fill", "visible": true,
+      "id": "landuse",
+      "title": "용도지역 (V-World UQ111)",
+      "file": "landuse.geojson",
+      "type": "fill",
+      "visible": true,
       "source_note": "V-World LT_C_UQ111 · 고시 2026-8호 반영 여부 미확인",
-      "paint": { "fill-opacity": 0.35,
-        "fill-color": ["match", ["get", "uname"],
-          "제1종일반주거지역", "#fff7b3", "제2종일반주거지역", "#ffe97a", "일반상업지역", "#f5a3d8",
-          "자연녹지지역", "#cfe9b0", "보전녹지지역", "#9fd48c", "#dddddd"] },
-      "legend": [["#fff7b3","1종일반주거"],["#ffe97a","2종일반주거"],["#f5a3d8","일반상업"],["#cfe9b0","자연녹지"],["#9fd48c","보전녹지"]],
-      "popup": ["uname", "dyear", "dnum"]
+      "paint": {
+        "fill-opacity": 0.35,
+        "fill-color": [
+          "match",
+          [
+            "get",
+            "uname"
+          ],
+          "제1종일반주거지역",
+          "#fff7b3",
+          "제2종일반주거지역",
+          "#ffe97a",
+          "일반상업지역",
+          "#f5a3d8",
+          "자연녹지지역",
+          "#cfe9b0",
+          "보전녹지지역",
+          "#9fd48c",
+          "#dddddd"
+        ]
+      },
+      "legend": [
+        [
+          "#fff7b3",
+          "1종일반주거"
+        ],
+        [
+          "#ffe97a",
+          "2종일반주거"
+        ],
+        [
+          "#f5a3d8",
+          "일반상업"
+        ],
+        [
+          "#cfe9b0",
+          "자연녹지"
+        ],
+        [
+          "#9fd48c",
+          "보전녹지"
+        ]
+      ],
+      "popup": [
+        "uname",
+        "dyear",
+        "dnum"
+      ]
     },
     {
-      "id": "parcels", "title": "필지 (연속지적도)", "file": "parcels.geojson", "type": "line", "visible": true, "minzoom": 15,
-      "source_note": "V-World LP_PA_CBND_BUBUN · 7,616필지 · jiga=개별공시지가(원/㎡)",
-      "paint": { "line-color": "#6b7c88", "line-width": ["interpolate", ["linear"], ["zoom"], 15, 0.3, 18, 1.2], "line-opacity": 0.8 },
-      "legend": [["#6b7c88","필지 경계"]],
-      "popup": ["addr", "pnu", "jiga", "gosi_year"]
+      "id": "sbiz_zones",
+      "title": "상권영역 (소진공)",
+      "file": "sbiz_zones.geojson",
+      "type": "line",
+      "visible": false,
+      "source_note": "소상공인시장진흥공단 상가(상권)정보 API storeZoneInRectangle · 5개",
+      "paint": {
+        "line-color": "#7a3e9d",
+        "line-width": 2,
+        "line-dasharray": [
+          2,
+          1.5
+        ]
+      },
+      "legend": [
+        [
+          "#7a3e9d",
+          "상권영역"
+        ]
+      ],
+      "popup": [
+        "mainTrarNm",
+        "trarNo",
+        "trarArea",
+        "stdrDt"
+      ]
     },
     {
-      "id": "blocks", "title": "획지·공원·주차장 (고시 2026-8호)", "file": "blocks.geojson", "type": "fill", "visible": true,
+      "id": "parcels",
+      "title": "필지 · 건축물 노후도",
+      "file": "parcels.geojson",
+      "type": "fill",
+      "visible": true,
+      "minzoom": 14,
+      "source_note": "V-World 지적 7,616필지 + 건축HUB 건축물대장 2,164필지 조인 · 색 = 최고령 건물 사용승인 후 경과연수",
+      "paint": {
+        "fill-opacity": 0.55,
+        "fill-color": [
+          "case",
+          [
+            "!",
+            [
+              "has",
+              "bldg_age"
+            ]
+          ],
+          "rgba(0,0,0,0)",
+          [
+            "step",
+            [
+              "get",
+              "bldg_age"
+            ],
+            "#e8f3e6",
+            10,
+            "#c7e0bd",
+            20,
+            "#f6d68a",
+            30,
+            "#e9975a",
+            40,
+            "#c8452b"
+          ]
+        ]
+      },
+      "legend": [
+        [
+          "#e8f3e6",
+          "<10년"
+        ],
+        [
+          "#c7e0bd",
+          "10–20"
+        ],
+        [
+          "#f6d68a",
+          "20–30"
+        ],
+        [
+          "#e9975a",
+          "30–40"
+        ],
+        [
+          "#c8452b",
+          "40년↑"
+        ],
+        [
+          "rgba(0,0,0,0)",
+          "건물 없음/미조인"
+        ]
+      ],
+      "popup": [
+        "addr",
+        "pnu",
+        "jiga",
+        "bldg_oldest",
+        "bldg_age",
+        "bldg_purps",
+        "bldg_strct",
+        "bldg_flr",
+        "bldg_totArea",
+        "bldg_n"
+      ],
+      "outline": {
+        "line-color": "#6b7c88",
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          14,
+          0.2,
+          18,
+          1.0
+        ],
+        "line-opacity": 0.8
+      }
+    },
+    {
+      "id": "blocks",
+      "title": "획지·공원·주차장 (고시 2026-8호)",
+      "file": "blocks.geojson",
+      "type": "fill",
+      "visible": true,
       "source_note": "지형도면고시도 11·12장 벡터화 · 고시 결정조서 면적 대비 ±4%",
-      "paint": { "fill-opacity": 0.55,
-        "fill-color": ["match", ["get", "cls"],
-          "commercial", "#e879c9", "civic", "#5db4e6", "culture", "#f2b25b", "park", "#3fae4a", "parking", "#8d8d8d", "#999"] },
-      "outline": { "line-color": "#3a2a3a", "line-width": 1.2 },
-      "label": { "field": "name", "size": 13 },
-      "legend": [["#e879c9","상업(상1~3)"],["#5db4e6","공공청사"],["#f2b25b","문화"],["#3fae4a","근린공원"],["#8d8d8d","주차장"]],
-      "popup": ["name", "cls", "area_m2", "gosi_area_m2", "note"]
+      "paint": {
+        "fill-opacity": 0.55,
+        "fill-color": [
+          "match",
+          [
+            "get",
+            "cls"
+          ],
+          "commercial",
+          "#e879c9",
+          "civic",
+          "#5db4e6",
+          "culture",
+          "#f2b25b",
+          "park",
+          "#3fae4a",
+          "parking",
+          "#8d8d8d",
+          "#999"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a2a3a",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "name",
+        "size": 13
+      },
+      "legend": [
+        [
+          "#e879c9",
+          "상업(상1~3)"
+        ],
+        [
+          "#5db4e6",
+          "공공청사"
+        ],
+        [
+          "#f2b25b",
+          "문화"
+        ],
+        [
+          "#3fae4a",
+          "근린공원"
+        ],
+        [
+          "#8d8d8d",
+          "주차장"
+        ]
+      ],
+      "popup": [
+        "name",
+        "cls",
+        "area_m2",
+        "gosi_area_m2",
+        "note"
+      ]
     },
     {
-      "id": "zone", "title": "지구단위계획구역 (구역 27)", "file": "zone.geojson", "type": "line", "visible": true,
+      "id": "zone",
+      "title": "지구단위계획구역 (구역 27)",
+      "file": "zone.geojson",
+      "type": "line",
+      "visible": true,
       "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
-      "paint": { "line-color": "#d81e1e", "line-width": 2.5, "line-dasharray": [4, 2, 1, 2] },
-      "legend": [["#d81e1e","구역 경계"]],
-      "popup": ["name", "area_m2", "gosi_area_m2"]
+      "paint": {
+        "line-color": "#d81e1e",
+        "line-width": 2.5,
+        "line-dasharray": [
+          4,
+          2,
+          1,
+          2
+        ]
+      },
+      "legend": [
+        [
+          "#d81e1e",
+          "구역 경계"
+        ]
+      ],
+      "popup": [
+        "name",
+        "area_m2",
+        "gosi_area_m2"
+      ]
+    },
+    {
+      "id": "stores",
+      "title": "상가 업소 (소진공 2026-03)",
+      "file": "stores.geojson",
+      "type": "circle",
+      "visible": true,
+      "minzoom": 14,
+      "source_note": "소상공인시장진흥공단 상가(상권)정보 API · S2 창 6,045개 · 영업 중 스냅샷(폐업 미포함)",
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          14,
+          1.5,
+          17,
+          4,
+          19,
+          7
+        ],
+        "circle-opacity": 0.85,
+        "circle-stroke-width": 0.4,
+        "circle-stroke-color": "#fff",
+        "circle-color": [
+          "match",
+          [
+            "get",
+            "indsLclsNm"
+          ],
+          "음식",
+          "#e05a3a",
+          "소매",
+          "#3a7bd5",
+          "숙박",
+          "#8e44ad",
+          "수리·개인",
+          "#7f8c8d",
+          "과학·기술",
+          "#16a085",
+          "예술·스포츠",
+          "#f39c12",
+          "교육",
+          "#27ae60",
+          "보건의료",
+          "#c0392b",
+          "부동산",
+          "#95a5a6",
+          "#555"
+        ]
+      },
+      "legend": [
+        [
+          "#e05a3a",
+          "음식"
+        ],
+        [
+          "#3a7bd5",
+          "소매"
+        ],
+        [
+          "#8e44ad",
+          "숙박"
+        ],
+        [
+          "#7f8c8d",
+          "수리·개인"
+        ],
+        [
+          "#16a085",
+          "과학·기술"
+        ],
+        [
+          "#f39c12",
+          "예술·스포츠"
+        ],
+        [
+          "#27ae60",
+          "교육"
+        ],
+        [
+          "#555",
+          "기타"
+        ]
+      ],
+      "popup": [
+        "bizesNm",
+        "indsLclsNm",
+        "indsMclsNm",
+        "indsSclsNm",
+        "lnoAdr",
+        "bldNm",
+        "flrNo"
+      ]
     }
   ]
 }

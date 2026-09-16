@@ -17,9 +17,10 @@ h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2
 .legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin:4px 0 0 24px;font-size:11.5px;color:var(--ink2)}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
 dl{margin:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+#chart-inds{height:190px}
 dl div{background:var(--bg);padding:8px 10px;border-radius:4px}
 dt{font-size:10.5px;color:var(--ink2);font-family:var(--mono)}
-dd{margin:0;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+dd{margin:0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
 #chart{height:230px}
 #sel-body{font-size:13px}
 #sel-body table{border-collapse:collapse;width:100%}
