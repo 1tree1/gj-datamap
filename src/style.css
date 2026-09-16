@@ -1,0 +1,34 @@
+:root{--bg:#f4f5f3;--panel:#fff;--ink:#1d2320;--ink2:#5b6661;--line:#dfe3df;--accent:#2c6a5c;--mono:"IBM Plex Mono",Consolas,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font:14px/1.5 "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+body{display:grid;grid-template-columns:340px 1fr}
+#map{height:100vh}
+#sidebar{height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column}
+#sidebar header{padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+h1{font-size:18px;margin:0;letter-spacing:-.02em}
+.sub{margin:4px 0 0;color:var(--ink2);font-size:12.5px}
+section{padding:14px 18px;border-bottom:1px solid var(--line)}
+h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px;font-family:var(--mono)}
+#layer-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+#layer-list li label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+#layer-list li input{margin-top:3px}
+.lt{font-weight:600}
+.note{display:block;color:var(--ink2);font-size:11.5px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin:4px 0 0 24px;font-size:11.5px;color:var(--ink2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
+dl{margin:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+dl div{background:var(--bg);padding:8px 10px;border-radius:4px}
+dt{font-size:10.5px;color:var(--ink2);font-family:var(--mono)}
+dd{margin:0;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+#chart{height:230px}
+#sel-body{font-size:13px}
+#sel-body table{border-collapse:collapse;width:100%}
+#sel-body td{padding:3px 0;border-bottom:1px solid var(--line);vertical-align:top}
+#sel-body td:first-child{color:var(--ink2);font-family:var(--mono);font-size:11.5px;width:38%}
+.muted{color:var(--ink2)}
+footer{margin-top:auto;padding:12px 18px;font-size:11px;color:var(--ink2);font-family:var(--mono)}
+#basemap-ctl{display:block;margin-bottom:6px}
+#basemap-ctl button{font:inherit;font-size:11px;margin-right:6px;padding:2px 8px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer}
+#basemap-ctl button.on{border-color:var(--accent);color:var(--accent)}
+.maplibregl-popup-content{font:12.5px/1.5 inherit;padding:10px 12px}
+@media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:55vh 45vh}#map{height:55vh}#sidebar{height:45vh;border-right:0;border-top:1px solid var(--line)}}
