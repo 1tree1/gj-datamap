@@ -10,7 +10,7 @@
       "title": "용도지역 (V-World UQ111)",
       "file": "landuse.geojson",
       "type": "fill",
-      "visible": true,
+      "visible": false,
       "source_note": "V-World LT_C_UQ111 · 고시 2026-8호 반영 여부 미확인",
       "paint": {
         "fill-opacity": 0.35,
@@ -59,7 +59,9 @@
         "uname",
         "dyear",
         "dnum"
-      ]
+      ],
+      "group": "계획",
+      "short": "용도지역"
     },
     {
       "id": "upis",
@@ -131,7 +133,9 @@
         "wtnnc_sn",
         "dyear",
         "dnum"
-      ]
+      ],
+      "group": "계획",
+      "short": "도시계획시설"
     },
     {
       "id": "sbiz_zones",
@@ -159,14 +163,16 @@
         "trarNo",
         "trarArea",
         "stdrDt"
-      ]
+      ],
+      "group": "상권·관광",
+      "short": "상권영역"
     },
     {
       "id": "parcels",
       "title": "필지 · 건축물 노후도",
       "file": "parcels.geojson",
       "type": "fill",
-      "visible": true,
+      "visible": false,
       "minzoom": 14,
       "source_note": "V-World 지적 7,616필지 + 건축물대장 2,164필지 조인 · 클릭 시 토지이용계획(지역·지구 목록, 토지이음과 동일) · 색 = 최고령 건물 경과연수",
       "paint": {
@@ -255,7 +261,9 @@
           1.0
         ],
         "line-opacity": 0.8
-      }
+      },
+      "group": "건물·필지",
+      "short": "필지 · 건물 노후도"
     },
     {
       "id": "reg",
@@ -319,7 +327,9 @@
         "reg_scenic",
         "reg_cult",
         "reg_jdp"
-      ]
+      ],
+      "group": "규제",
+      "short": "규제 겹 수 (필지)"
     },
     {
       "id": "reg_areas",
@@ -418,7 +428,9 @@
         "parcels",
         "parts",
         "source"
-      ]
+      ],
+      "group": "규제",
+      "short": "규제 영역 (종류별)"
     },
     {
       "id": "energy",
@@ -488,7 +500,9 @@
         "bldg_totArea",
         "bldg_age",
         "use_ym"
-      ]
+      ],
+      "group": "건물·필지",
+      "short": "건물 전기사용 (공실 프록시)"
     },
     {
       "id": "traffic",
@@ -589,14 +603,16 @@
         "LENGTH",
         "n_obs",
         "LINK_ID"
-      ]
+      ],
+      "group": "교통",
+      "short": "교통소통 (실시간)"
     },
     {
       "id": "busstops",
       "title": "버스정류장 (경주BIS 1,951)",
       "file": "busstops.geojson",
       "type": "circle",
-      "visible": true,
+      "visible": false,
       "minzoom": 13,
       "source_note": "국토교통부 전국 버스정류장 위치정보 2025-10-31 파일 · 경주시 1,951개 · 경주시 버스 API(노선·실시간)는 서버 504로 대기",
       "paint": {
@@ -632,7 +648,9 @@
         "short_no",
         "bis",
         "date"
-      ]
+      ],
+      "group": "교통",
+      "short": "버스정류장"
     },
     {
       "id": "blocks",
@@ -698,7 +716,9 @@
         "area_m2",
         "gosi_area_m2",
         "note"
-      ]
+      ],
+      "group": "계획",
+      "short": "획지·공원·주차장"
     },
     {
       "id": "zone",
@@ -727,7 +747,9 @@
         "name",
         "area_m2",
         "gosi_area_m2"
-      ]
+      ],
+      "group": "계획",
+      "short": "지구단위계획구역"
     },
     {
       "id": "stores",
@@ -822,14 +844,16 @@
           "부동산": "#95a5a6",
           "보건의료": "#c0392b"
         }
-      }
+      },
+      "group": "상권·관광",
+      "short": "상가 업소"
     },
     {
       "id": "tour_sites",
       "title": "관광지 (경주시 현황 159)",
       "file": "tour_sites.geojson",
       "type": "circle",
-      "visible": true,
+      "visible": false,
       "source_note": "경주시 관광지 현황 API · 주소만 제공 → V-World 지오코딩 153/159 (권역 TURSM_DSTRCT)",
       "paint": {
         "circle-radius": [
@@ -864,7 +888,16 @@
         "addr",
         "TELNO",
         "geocode"
-      ]
+      ],
+      "group": "상권·관광",
+      "short": "관광지"
     }
+  ],
+  "groups": [
+    "계획",
+    "규제",
+    "건물·필지",
+    "상권·관광",
+    "교통"
   ]
 }

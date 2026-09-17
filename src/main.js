@@ -8,10 +8,11 @@ let VWORLD_KEY = "";
 try { VWORLD_KEY = (await import("./config.js")).VWORLD_KEY || ""; } catch { /* config.js 없음 → Carto만 */ }
 const BASEMAPS = {
   osm: { title: "OSM", tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"], attribution: "© OpenStreetMap contributors" },
-  vbase: VWORLD_KEY ? { title: "V-World", tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Base/{z}/{y}/{x}.png`], attribution: "© 국토지리정보원 V-World" } : null,
+  vwhite: VWORLD_KEY ? { title: "백지도", tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/white/{z}/{y}/{x}.png`], attribution: "© 국토지리정보원 V-World" } : null,
+  vbase: VWORLD_KEY ? { title: "일반", tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Base/{z}/{y}/{x}.png`], attribution: "© 국토지리정보원 V-World" } : null,
   vsat:  VWORLD_KEY ? { title: "항공", tiles: [`https://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Satellite/{z}/{y}/{x}.jpeg`], attribution: "© 국토지리정보원 V-World" } : null,
 };
-const DEFAULT_BASE = VWORLD_KEY ? "vbase" : "osm";
+const DEFAULT_BASE = VWORLD_KEY ? "vwhite" : "osm";
 const baseSource = (k) => ({ type: "raster", tiles: BASEMAPS[k].tiles, tileSize: 256, attribution: BASEMAPS[k].attribution, maxzoom: 19 });
 
 const map = new maplibregl.Map({
@@ -26,7 +27,17 @@ map.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: "metric" }), "
 
 // ---- 레이어 ---------------------------------------------------------------
 const base = import.meta.env.BASE_URL;
-const list = document.getElementById("layer-list");
+const groupsEl = document.getElementById("layer-groups");
+const groupBox = {};   // 그룹명 → <details>
+for (const g of cfg.groups) {
+  const d = document.createElement("details"); d.className = "group"; d.open = true;
+  d.innerHTML = `<summary>${g}<span class="cnt"></span></summary>`;
+  groupsEl.appendChild(d); groupBox[g] = d;
+}
+const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
+// 탭
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
 const fmt = (v) => (typeof v === "number" ? v.toLocaleString("ko-KR") : /^\d{4,}$/.test(String(v)) ? Number(v).toLocaleString("ko-KR") : v);
@@ -61,40 +72,42 @@ map.on("load", async () => {
     } else {
       map.addLayer({ id: L.id, type: "line", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     }
-    // 클릭 팝업 + 선택 패널
+    // 클릭: 팝업은 핵심 4줄, 전체 속성은 '선택' 탭
     map.on("click", L.id, (e) => {
-      const p = e.features[0].properties;
-      new maplibregl.Popup({ closeButton: false, maxWidth: "320px" }).setLngLat(e.lngLat).setHTML(popupHtml(p, L.popup)).addTo(map);
-      document.getElementById("sel-body").innerHTML = `<div class="muted" style="margin-bottom:6px">${L.title}</div>` + popupHtml(p, Object.keys(p));
+      const p = e.features[0].properties; const f = L.popup || Object.keys(p);
+      const head = p[f[0]] ?? L.short; const rest = f.slice(1, 4).filter((k) => p[k] !== undefined && p[k] !== "" && p[k] !== null).map((k) => `${k} ${fmt(p[k])}`).join(" · ");
+      const pop = new maplibregl.Popup({ closeButton: false, maxWidth: "260px" }).setLngLat(e.lngLat)
+        .setHTML(`<div class="pt">${fmt(head)}</div><div class="pl">${rest}</div><div class="pm">전체 속성 보기 →</div>`).addTo(map);
+      pop.getElement().querySelector(".pm").onclick = () => showTab("selected");
+      document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p));
+      document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", L.id, () => (map.getCanvas().style.cursor = ""));
-    // 사이드바 항목 (json 순서 = 그리기 순서 아래→위; 목록은 위가 최상단)
-    const li = document.createElement("li");
-    li.innerHTML = `<label><input type="checkbox" ${L.visible ? "checked" : ""}><span><span class="lt">${L.title}</span><span class="note">${L.source_note}</span></span></label>
+    // 사이드바 항목: 그룹 안에, 짧은 제목 + (i) 설명 + 켠 경우에만 범례/하위토글
+    const li = document.createElement("div"); li.className = "layer" + (L.visible ? " on" : "");
+    li.innerHTML = `<label><input type="checkbox" ${L.visible ? "checked" : ""}><span>${L.short}</span><button type="button" class="info" title="출처·설명">i</button></label>
+      <div class="desc">${L.source_note}</div>
       <div class="legend">${(L.legend || []).map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("")}</div>`;
-    li.querySelector("input").addEventListener("change", (ev) => ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")));
-    // 유형별 하위 토글 (subfilter): 체크된 값만 남기는 MapLibre 필터
+    li.querySelector("input").addEventListener("change", (ev) => { ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")); li.classList.toggle("on", ev.target.checked); refreshCounts(); updateStats(); });
+    li.querySelector(".info").addEventListener("click", (ev) => { ev.preventDefault(); li.classList.toggle("showdesc"); });
     if (L.subfilter) {
       const sf = L.subfilter; const box = document.createElement("div"); box.className = "subfilter";
-      const apply = () => {
-        const on = [...box.querySelectorAll("input:checked")].map((x) => x.value);
-        ids.forEach((id) => map.setFilter(id, ["in", ["get", sf.field], ["literal", on]]));   // 채움·외곽선·라벨 모두
-        updateStats();
-      };
+      const apply = () => { const on = [...box.querySelectorAll("input:checked")].map((x) => x.value); ids.forEach((id) => map.setFilter(id, ["in", ["get", sf.field], ["literal", on]])); updateStats(); };
       for (const v of sf.values) {
         const lab = document.createElement("label");
         lab.innerHTML = `<input type="checkbox" value="${v}" checked><i class="sw" style="background:${sf.colors[v] || "#555"}"></i>${v}`;
         lab.querySelector("input").addEventListener("change", apply); box.appendChild(lab);
       }
-      const all = document.createElement("button"); all.type = "button"; all.textContent = "전체"; all.className = "sf-btn";
-      all.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = true)); apply(); };
-      const none = document.createElement("button"); none.type = "button"; none.textContent = "해제"; none.className = "sf-btn";
-      none.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = false)); apply(); };
+      const all = document.createElement("button"); all.type = "button"; all.textContent = "전체"; all.className = "sf-btn"; all.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = true)); apply(); };
+      const none = document.createElement("button"); none.type = "button"; none.textContent = "해제"; none.className = "sf-btn"; none.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = false)); apply(); };
       box.append(all, none); li.appendChild(box);
     }
-    list.prepend(li);
+    (groupBox[L.group] || groupsEl).appendChild(li);
   }
+  refreshCounts();
+  // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
+  if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
   ["reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
 });
@@ -121,8 +134,8 @@ async function drawVisitors() {
 // ---- 화면 통계 (지도 범위 종속) --------------------------------------------
 function updateStats() {
   document.getElementById("st-zoom").textContent = map.getZoom().toFixed(1);
-  if (!map.getLayer("parcels")) return;
-  const feats = map.queryRenderedFeatures({ layers: ["parcels"] });
+  if (!map.getLayer("parcels-q")) return;
+  const feats = map.queryRenderedFeatures({ layers: ["parcels-q"] });
   const seen = new Set(); const jiga = [];
   for (const f of feats) {
     if (seen.has(f.properties.pnu)) continue;

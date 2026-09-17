@@ -9,52 +9,63 @@
 <body>
   <aside id="sidebar">
     <header>
-      <h1>구경주역 데이터맵</h1>
-      <p class="sub">경주시 고시 제2026-8호 지구단위계획 · S1 부지</p>
-    </header>
-    <section id="layers">
-      <h2>레이어</h2>
-      <ul id="layer-list"></ul>
-    </section>
-    <section id="viewstats">
-      <h2>현재 화면</h2>
-      <dl>
+      <div class="brand">
+        <h1>구경주역 데이터맵</h1>
+        <span class="sub">고시 제2026-8호 지구단위계획 · S1</span>
+      </div>
+      <!-- 핵심 요약: 현재 화면 안의 숫자 4개만 -->
+      <div id="kpi">
         <div><dt>필지</dt><dd id="st-parcels">–</dd></div>
-        <div><dt>공시지가 중앙값</dt><dd id="st-jiga">–</dd></div>
-        <div><dt>30년↑ 건물 필지</dt><dd id="st-old">–</dd></div>
         <div><dt>업소</dt><dd id="st-stores">–</dd></div>
         <div><dt>정체 링크</dt><dd id="st-cong">–</dd></div>
-        <div><dt>정류장</dt><dd id="st-bus">–</dd></div>
-        <div><dt>줌</dt><dd id="st-zoom">–</dd></div>
-      </dl>
-    </section>
-    <section>
-      <h2>화면 내 업종 (대분류)</h2>
-      <div id="chart-inds"></div>
-    </section>
-    <section>
-      <h2>교통 — 시간대별 평균속도 · 정체 비율</h2>
-      <div id="chart-traffic"></div>
-      <p class="muted" id="traffic-note" style="margin:6px 0 0;font-size:11.5px"></p>
-      <h2 style="margin-top:14px">상습 정체 링크</h2>
-      <ol id="cong-list" class="muted" style="margin:0;padding-left:18px;font-size:12.5px"></ol>
-    </section>
-    <section>
-      <h2>경주시 일별 방문자 — 관광공사·KT (S3)</h2>
-      <div id="chart-vis"></div>
-      <p class="muted" id="vis-note" style="margin:6px 0 0;font-size:11.5px"></p>
-    </section>
-    <section id="chart-sec">
-      <h2>획지 면적 — 추출 vs 고시</h2>
-      <div id="chart"></div>
-    </section>
-    <section id="selected">
-      <h2>선택</h2>
-      <div id="sel-body" class="muted">지도에서 피처를 클릭</div>
-    </section>
+        <div><dt>30년↑ 건물</dt><dd id="st-old">–</dd></div>
+      </div>
+      <nav id="tabs">
+        <button class="on" data-tab="layers">레이어</button>
+        <button data-tab="analysis">분석</button>
+        <button data-tab="selected" id="tab-selected">선택</button>
+      </nav>
+    </header>
+
+    <div id="panel">
+      <section id="pane-layers" class="pane on">
+        <div id="layer-groups"></div>
+      </section>
+
+      <section id="pane-analysis" class="pane">
+        <div class="card">
+          <h2>화면 내 업종 (대분류)</h2>
+          <div id="chart-inds"></div>
+        </div>
+        <div class="card">
+          <h2>교통 — 시간대별 평균속도 · 정체 비율</h2>
+          <div id="chart-traffic"></div>
+          <p class="note" id="traffic-note"></p>
+          <h3>상습 정체 링크</h3>
+          <ol id="cong-list"></ol>
+        </div>
+        <div class="card">
+          <h2>획지 면적 — 추출 vs 고시</h2>
+          <div id="chart"></div>
+        </div>
+        <div class="card">
+          <h2>경주시 일별 방문자 (S3)</h2>
+          <div id="chart-vis"></div>
+          <p class="note" id="vis-note"></p>
+        </div>
+        <div class="card muted small">
+          공시지가 중앙값(화면) <b id="st-jiga">–</b> · 정류장(화면) <b id="st-bus">–</b> · 줌 <b id="st-zoom">–</b>
+        </div>
+      </section>
+
+      <section id="pane-selected" class="pane">
+        <div id="sel-body" class="muted">지도에서 필지·건물·업소·도로를 클릭하면 여기에 전체 속성이 나온다.</div>
+      </section>
+    </div>
+
     <footer>
       <span id="basemap-ctl"></span>
-      좌표: 처리본 EPSG:5187 → 웹 4326 · 출처 T1 경주시 고시 / V-World
+      <span class="fine">처리본 EPSG:5187 → 웹 4326 · T1 경주시 고시 / V-World · T2 소진공·ITS·관광공사</span>
     </footer>
   </aside>
   <div id="map"></div>

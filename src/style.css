@@ -1,43 +1,71 @@
-:root{--bg:#f4f5f3;--panel:#fff;--ink:#1d2320;--ink2:#5b6661;--line:#dfe3df;--accent:#2c6a5c;--mono:"IBM Plex Mono",Consolas,monospace}
+:root{--bg:#f3f4f2;--panel:#fff;--ink:#1d2320;--ink2:#5b6661;--ink3:#8a948f;--line:#e2e6e2;--accent:#2c6a5c;--accent-soft:#e3efea;--mono:"IBM Plex Mono",Consolas,monospace}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;font:14px/1.5 "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-body{display:grid;grid-template-columns:340px 1fr}
+html,body{margin:0;height:100%;font:13.5px/1.5 "IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+body{display:grid;grid-template-columns:360px 1fr}
 #map{height:100vh}
-#sidebar{height:100vh;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column}
-#sidebar header{padding:18px 18px 12px;border-bottom:1px solid var(--line)}
-h1{font-size:18px;margin:0;letter-spacing:-.02em}
-.sub{margin:4px 0 0;color:var(--ink2);font-size:12.5px}
-section{padding:14px 18px;border-bottom:1px solid var(--line)}
-h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px;font-family:var(--mono)}
-#layer-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-#layer-list li label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
-#layer-list li input{margin-top:3px}
-.lt{font-weight:600}
-.note{display:block;color:var(--ink2);font-size:11.5px}
-.legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin:4px 0 0 24px;font-size:11.5px;color:var(--ink2)}
-.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
-dl{margin:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-#chart-inds{height:190px}
-#chart-vis{height:170px}
-#chart-traffic{height:170px}
-#cong-list li{cursor:pointer}#cong-list li:hover{color:var(--accent)}
-dl div{background:var(--bg);padding:8px 10px;border-radius:4px}
-dt{font-size:10.5px;color:var(--ink2);font-family:var(--mono)}
-dd{margin:0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
-#chart{height:230px}
-#sel-body{font-size:13px}
-#sel-body table{border-collapse:collapse;width:100%}
-#sel-body td{padding:3px 0;border-bottom:1px solid var(--line);vertical-align:top}
-#sel-body td:first-child{color:var(--ink2);font-family:var(--mono);font-size:11.5px;width:38%}
-.muted{color:var(--ink2)}
-footer{margin-top:auto;padding:12px 18px;font-size:11px;color:var(--ink2);font-family:var(--mono)}
-#basemap-ctl{display:block;margin-bottom:6px}
-#basemap-ctl button{font:inherit;font-size:11px;margin-right:6px;padding:2px 8px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer}
-#basemap-ctl button.on{border-color:var(--accent);color:var(--accent)}
-.maplibregl-popup-content{font:12.5px/1.5 inherit;padding:10px 12px}
-@media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:55vh 45vh}#map{height:55vh}#sidebar{height:45vh;border-right:0;border-top:1px solid var(--line)}}
-
-.subfilter{display:flex;flex-wrap:wrap;gap:3px 10px;margin:6px 0 0 24px;font-size:11.5px;color:var(--ink2)}
+#sidebar{height:100vh;display:flex;flex-direction:column;background:var(--panel);border-right:1px solid var(--line)}
+#sidebar header{padding:14px 16px 0;border-bottom:1px solid var(--line);flex:none}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+h1{font-size:16px;margin:0;letter-spacing:-.02em}
+.sub{color:var(--ink3);font-size:11.5px;white-space:nowrap}
+/* KPI — 현재 화면 요약 */
+#kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 10px}
+#kpi div{background:var(--bg);border-radius:5px;padding:7px 8px;min-width:0}
+#kpi dt{font-size:10px;color:var(--ink3);font-family:var(--mono);letter-spacing:.02em;white-space:nowrap}
+#kpi dd{margin:2px 0 0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* tabs */
+#tabs{display:flex;gap:2px}
+#tabs button{flex:1;font:inherit;font-size:12.5px;padding:8px 0;border:0;background:none;color:var(--ink2);border-bottom:2px solid transparent;cursor:pointer}
+#tabs button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+#tabs button .badge{display:inline-block;min-width:16px;padding:0 5px;margin-left:4px;border-radius:8px;background:var(--accent);color:#fff;font-size:10px;line-height:16px}
+#panel{flex:1;overflow-y:auto;overscroll-behavior:contain}
+.pane{display:none;padding:10px 16px 20px}.pane.on{display:block}
+/* layer groups — 접기, 켠 것만 범례 */
+.group{border-bottom:1px solid var(--line)}
+.group > summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:10px 0;font-weight:600;font-size:13px}
+.group > summary::-webkit-details-marker{display:none}
+.group > summary .cnt{font-weight:400;color:var(--ink3);font-size:11.5px;font-family:var(--mono);margin-left:auto;margin-right:8px}
+.group > summary::after{content:"›";color:var(--ink3);display:inline-block;transform:rotate(90deg);transition:transform .15s}
+.group[open] > summary::after{transform:rotate(-90deg)}
+.layer{padding:5px 0 7px 2px}
+.layer > label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px}
+.layer > label input{margin:0}
+.layer .info{margin-left:auto;width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink3);font-size:11px;font-family:var(--mono);cursor:pointer;line-height:16px;text-align:center;flex:none}
+.layer .info:hover{border-color:var(--accent);color:var(--accent)}
+.layer .desc{display:none;color:var(--ink2);font-size:11.5px;margin:4px 0 0 24px;line-height:1.45}
+.layer.showdesc .desc{display:block}
+.layer .legend,.layer .subfilter{display:none}
+.layer.on .legend,.layer.on .subfilter{display:flex}
+.legend{flex-wrap:wrap;gap:3px 10px;margin:5px 0 0 24px;font-size:11.5px;color:var(--ink2)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.12)}
+.subfilter{flex-wrap:wrap;gap:3px 9px;margin:6px 0 0 24px;font-size:11.5px;color:var(--ink2)}
 .subfilter label{display:inline-flex;align-items:center;gap:4px;cursor:pointer}
 .subfilter input{margin:0}
 .sf-btn{font:inherit;font-size:10.5px;padding:0 6px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer;color:var(--ink2)}
+/* analysis cards */
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 12px 10px;margin-bottom:10px;background:#fff}
+.card h2{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin:0 0 8px;font-family:var(--mono)}
+.card h3{font-size:11px;letter-spacing:.08em;color:var(--ink3);margin:10px 0 4px;font-family:var(--mono);font-weight:500}
+.card .note{margin:6px 0 0;font-size:11px;color:var(--ink3);line-height:1.45}
+.card.small{font-size:12px;padding:8px 12px}
+#chart{height:210px}#chart-inds{height:190px}#chart-vis{height:160px}#chart-traffic{height:170px}
+#cong-list{margin:0;padding-left:18px;font-size:12px;color:var(--ink2)}
+#cong-list li{cursor:pointer;padding:1px 0}#cong-list li:hover{color:var(--accent)}
+/* selected */
+#sel-body{font-size:12.5px}
+#sel-body .src{color:var(--ink3);font-size:11px;margin-bottom:6px;font-family:var(--mono)}
+#sel-body table{border-collapse:collapse;width:100%}
+#sel-body td{padding:4px 0;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}
+#sel-body td:first-child{color:var(--ink3);font-family:var(--mono);font-size:11px;width:36%;padding-right:8px}
+.muted{color:var(--ink2)}
+/* footer */
+footer{flex:none;padding:8px 16px 10px;border-top:1px solid var(--line);font-size:11px;color:var(--ink3);display:flex;flex-direction:column;gap:5px}
+.fine{font-family:var(--mono);font-size:10px;line-height:1.4}
+#basemap-ctl button{font:inherit;font-size:11px;margin-right:4px;padding:2px 8px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer;color:var(--ink2)}
+#basemap-ctl button.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+/* popup — 핵심만, 나머지는 선택 탭 */
+.maplibregl-popup-content{font:12px/1.45 inherit;padding:8px 10px;max-width:260px;border-radius:5px}
+.maplibregl-popup-content .pt{font-weight:600;margin-bottom:3px}
+.maplibregl-popup-content .pl{color:var(--ink2);font-size:11.5px}
+.maplibregl-popup-content .pm{margin-top:4px;color:var(--accent);font-size:11px;cursor:pointer}
+@media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:52vh 48vh}#map{height:52vh}#sidebar{height:48vh;border-right:0;border-top:1px solid var(--line)}}
