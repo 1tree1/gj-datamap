@@ -36,7 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
-const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
@@ -84,7 +84,8 @@ map.on("load", async () => {
       const pop = new maplibregl.Popup({ closeButton: false, maxWidth: "260px" }).setLngLat(e.lngLat)
         .setHTML(`<div class="pt">${fmt(head)}</div><div class="pl">${rest}</div><div class="pm">전체 속성 보기 →</div>`).addTo(map);
       pop.getElement().querySelector(".pm").onclick = () => showTab("selected");
-      document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p));
+      document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p).filter((k) => !["age", "yearly", "bjd"].includes(k)));
+      if (p.age) drawPop(p);
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -113,9 +114,40 @@ map.on("load", async () => {
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop65-lb", "popchg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
+  // 인구 카드 초기값: 경주시 전체 = 행정동 합
+  const hp = dataCache["hadm_pop.geojson"]; if (hp) drawPop(null, hp);
 });
+
+// ---- 행정동 인구: 연령 피라미드 + 10년 추이 -----------------------------------
+function drawPop(p, fc) {
+  let age, yearly, name;
+  if (p) { age = typeof p.age === "string" ? JSON.parse(p.age) : p.age; yearly = typeof p.yearly === "string" ? JSON.parse(p.yearly) : p.yearly; name = p.hadm; }
+  else { // 경주시 합계
+    age = {}; yearly = {}; name = "경주시 (행정동 합)";
+    for (const f of fc.features) { const a = f.properties.age || {}, y = f.properties.yearly || {}; for (const k in a) age[k] = (age[k] || 0) + a[k]; for (const k in y) yearly[k] = (yearly[k] || 0) + y[k]; }
+  }
+  document.getElementById("pop-name").textContent = name;
+  const lo = (k) => parseInt(k.replace("+", "").split("-")[0]);
+  const keys = Object.keys(age).sort((a, b) => lo(a) - lo(b));
+  const tot = keys.reduce((s, k) => s + age[k], 0);
+  const c1 = echarts.getInstanceByDom(document.getElementById("chart-pyr")) || echarts.init(document.getElementById("chart-pyr"));
+  c1.setOption({
+    grid: { left: 52, right: 12, top: 6, bottom: 4 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", data: keys.map((k) => k.replace(" - ", "–").replace("세", "")), axisLabel: { fontSize: 9.5 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: keys.map((k) => age[k]), itemStyle: { color: (d) => lo(keys[d.dataIndex]) >= 65 ? "#e07b39" : lo(keys[d.dataIndex]) <= 10 ? "#7fb3d5" : "#2c6a5c" }, barCategoryGap: "20%" }],
+  }, true);
+  const ys = Object.keys(yearly).sort();
+  const c2 = echarts.getInstanceByDom(document.getElementById("chart-yr")) || echarts.init(document.getElementById("chart-yr"));
+  c2.setOption({
+    grid: { left: 52, right: 12, top: 10, bottom: 18 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
+    xAxis: { type: "category", data: ys, axisLabel: { fontSize: 9.5, interval: 3 } }, yAxis: { type: "value", axisLabel: { fontSize: 9.5, formatter: (v) => (v / 1000).toFixed(0) + "k" }, splitLine: { lineStyle: { color: "#eee" } }, scale: true },
+    series: [{ type: "line", data: ys.map((y) => yearly[y]), showSymbol: false, lineStyle: { width: 2, color: "#2c6a5c" }, areaStyle: { opacity: .12, color: "#2c6a5c" } }],
+  }, true);
+  const o65 = keys.filter((k) => lo(k) >= 65).reduce((s, k) => s + age[k], 0);
+  document.getElementById("pop-note").textContent = `총 ${tot.toLocaleString()}명 · 65세↑ ${(o65 / tot * 100).toFixed(1)}% · 주민등록 2026-08 (KOSIS DT_1B04005N) · 연도별 추이 2011–2025`;
+}
 
 // ---- 방문자 시계열 (시군구 = S3, 지도와 독립) ---------------------------------
 async function drawVisitors() {

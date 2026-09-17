@@ -39,6 +39,157 @@
       ]
     },
     {
+      "id": "pop65",
+      "title": "행정동 고령화율",
+      "short": "고령화율 (65세↑ %)",
+      "group": "인구",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": true,
+      "source_note": "KOSIS 주민등록 5세별 인구 2026-08 (행안부) × 행정동 경계(법정동 합집합 근사) · 22개 행정동 · 2025년 중부동→황오동 통합 반영 · 클릭 시 분석 탭에 연령 피라미드·10년 추이",
+      "paint": {
+        "fill-opacity": 0.55,
+        "fill-color": [
+          "step",
+          [
+            "get",
+            "pct_65"
+          ],
+          "#f7fbf4",
+          15,
+          "#d4e8d0",
+          20,
+          "#a9d1a4",
+          27,
+          "#f2c078",
+          35,
+          "#e07b39",
+          45,
+          "#b5322a"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "hadm",
+        "size": 11
+      },
+      "legend": [
+        [
+          "#f7fbf4",
+          "<15%"
+        ],
+        [
+          "#d4e8d0",
+          "15–20"
+        ],
+        [
+          "#a9d1a4",
+          "20–27"
+        ],
+        [
+          "#f2c078",
+          "27–35"
+        ],
+        [
+          "#e07b39",
+          "35–45"
+        ],
+        [
+          "#b5322a",
+          "45%↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "pop",
+        "pct_65",
+        "pct_0_14",
+        "pct_20_39",
+        "chg_10y_pct",
+        "prd"
+      ]
+    },
+    {
+      "id": "popchg",
+      "title": "행정동 10년 인구변화",
+      "short": "10년 인구변화 (2015→2025 %)",
+      "group": "인구",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "KOSIS 주민등록 연도별 총인구 2015→2025 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 추세 −30%) · 용강동 +33% 신도심",
+      "paint": {
+        "fill-opacity": 0.55,
+        "fill-color": [
+          "step",
+          [
+            "get",
+            "chg_10y_pct"
+          ],
+          "#8c2d04",
+          -30,
+          "#d94801",
+          -20,
+          "#fd8d3c",
+          -10,
+          "#fdd0a2",
+          0,
+          "#c7e9c0",
+          10,
+          "#41ab5d",
+          25,
+          "#00441b"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "hadm",
+        "size": 11
+      },
+      "legend": [
+        [
+          "#8c2d04",
+          "−30%↓"
+        ],
+        [
+          "#d94801",
+          "−30~−20"
+        ],
+        [
+          "#fd8d3c",
+          "−20~−10"
+        ],
+        [
+          "#fdd0a2",
+          "−10~0"
+        ],
+        [
+          "#c7e9c0",
+          "0~+10"
+        ],
+        [
+          "#41ab5d",
+          "+10~25"
+        ],
+        [
+          "#00441b",
+          "+25%↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "chg_10y_pct",
+        "pop",
+        "pct_65"
+      ]
+    },
+    {
       "id": "landuse",
       "title": "용도지역 (V-World UQ111)",
       "file": "landuse.geojson",
@@ -789,7 +940,7 @@
       "title": "상가 업소 (소진공 2026-03 + 게스트하우스)",
       "file": "stores.geojson",
       "type": "circle",
-      "visible": true,
+      "visible": false,
       "minzoom": 14,
       "source_note": "소진공 상가정보 API 10,314 (원도심+황성·동천·용강·보문 창) + 게스트하우스 18 · 영업 중 스냅샷",
       "paint": {
@@ -927,6 +1078,7 @@
     }
   ],
   "groups": [
+    "인구",
     "계획",
     "규제",
     "건물·필지",
