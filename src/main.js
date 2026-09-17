@@ -122,7 +122,7 @@ map.on("load", async () => {
       box.innerHTML = `<label class="hs-kind"><input type="radio" name="hs-kind" value="wd" checked>평일</label><label class="hs-kind"><input type="radio" name="hs-kind" value="we">주말</label>
         <input type="range" id="hs-hour" min="0" max="23" value="8" step="1"><span id="hs-label" class="hs-val">08시</span><button type="button" class="sf-btn" id="hs-play">▶ 재생</button>`;
       li.appendChild(box);
-      const colorExpr = (k, h) => { const f = `${k}_${String(h).padStart(2, "0")}`; return ["case", ["!", ["has", f]], "#ccc", ["step", ["get", f], "#d7191c", 15, "#fdae61", 30, "#1a9641"]]; };
+      const colorExpr = (k, h) => { const f = `${k}_${String(h).padStart(2, "0")}`; return ["case", ["!", ["has", f]], "#ccc", ["<", ["get", f], ["coalesce", ["get", "thr_c"], 15]], "#d7191c", ["<", ["get", f], ["coalesce", ["get", "thr_f"], 25]], "#fdae61", "#1a9641"]; };  // 도로등급별 임계(thr_c/thr_f)
       const applyHour = () => { const h = +box.querySelector("#hs-hour").value, k = box.querySelector("input[name=hs-kind]:checked").value;
         box.querySelector("#hs-label").textContent = `${String(h).padStart(2, "0")}시 · ${k === "wd" ? "평일" : "주말"}`; map.setPaintProperty(L.id, "line-color", colorExpr(k, h)); window.__histHour = { h, k }; };
       box.querySelector("#hs-hour").addEventListener("input", applyHour); box.querySelectorAll("input[name=hs-kind]").forEach((r) => r.addEventListener("change", applyHour));
@@ -194,7 +194,7 @@ function drawPop(p, fc) {
     series: [{ type: "line", data: ys.map((y) => yearly[y]), showSymbol: false, lineStyle: { width: 2, color: "#2c6a5c" }, areaStyle: { opacity: .12, color: "#2c6a5c" } }],
   }, true);
   const o65 = keys.filter((k) => lo(k) >= 65).reduce((s, k) => s + age[k], 0);
-  document.getElementById("pop-note").textContent = `총 ${tot.toLocaleString()}명 · 65세↑ ${(o65 / tot * 100).toFixed(1)}% · 주민등록 2026-08 (KOSIS DT_1B04005N) · 연도별 추이 2011–2025`;
+  document.getElementById("pop-note").textContent = `총 ${tot.toLocaleString()}명 · 65세↑ ${(o65 / tot * 100).toFixed(1)}% · 주민등록 2026-08 (KOSIS DT_1B04005N) · 연도별 추이 2011–2025${p && p.yearly_note ? " · " + p.yearly_note : ""}`;
 }
 
 // ---- 방문자 시계열 (시군구 = S3, 지도와 독립) ---------------------------------
@@ -240,7 +240,7 @@ function updateStats() {
   // 교통: 화면 내 정체 링크 비율
   if (map.getLayer("traffic")) {
     const tf = map.queryRenderedFeatures({ layers: ["traffic"] }); const ids = new Set(); let cong = 0, tot = 0;
-    for (const f of tf) { if (ids.has(f.properties.LINK_ID)) continue; ids.add(f.properties.LINK_ID); if (f.properties.speed != null) { tot++; if (f.properties.speed < 15) cong++; } }
+    for (const f of tf) { if (ids.has(f.properties.LINK_ID)) continue; ids.add(f.properties.LINK_ID); if (f.properties.speed != null) { tot++; if (f.properties.speed < (f.properties.thr_c ?? 15)) cong++; } }
     document.getElementById("st-cong").textContent = tot ? `${cong}/${tot} (${Math.round(cong / tot * 100)}%)` : "–";
   }
   // 업종 분포 (화면 내 업소)
@@ -316,18 +316,18 @@ async function drawTraffic() {
     ch.setOption({ series: [line("wd", `평일 평균 (${hs.days.wd.length}일)`, "#1f5e42"), line("we", `주말 평균 (${hs.days.we.length}일)`, "#8e44ad")] });
     document.getElementById("traffic-note").textContent = `이력 표본 ${hs.n_days}일 (평일 ${hs.days.wd.length}·주말 ${hs.days.we.length}, ${hs.days.wd.concat(hs.days.we).sort()[0]}~) · 링크 ${hs.links.toLocaleString()} · 실시간 스냅샷 ${h.snapshots}개`;
     window.addEventListener("resize", () => ch.resize());
-    renderCong(c); return;
+    renderCong(c, h); return;
   } catch { /* 이력 없음 */ }
   const lt = h.latest; const covered = Object.keys(h.hourly).length;
   document.getElementById("traffic-note").textContent = `최신 ${lt.slice(0,4)}.${lt.slice(4,6)}.${lt.slice(6,8)} ${lt.slice(8,10)}:${lt.slice(10,12)} · 스냅샷 ${h.snapshots}개 · 시간대 ${covered}/24 수집됨 — 24시간 누적 후 혼잡시간대가 의미를 가짐`;
-  renderCong(c);
+  renderCong(c, h);
 }
-function renderCong(c) {
+function renderCong(c, h) {
   const ol = document.getElementById("cong-list"); ol.innerHTML = "";
+  const meta = document.getElementById("cong-meta"); if (meta && h) meta.textContent = `(실시간 스냅샷 ${h.snapshots}개, ${h.first ? h.first.slice(8,10)+":"+h.first.slice(10,12)+"~" : ""}${h.latest.slice(8,10)}:${h.latest.slice(10,12)} · 관측 ${h.min_obs ?? 1}회↑만)`;
   for (const t of c.slice(0, 8)) {
     const li = document.createElement("li"); li.textContent = `${t.road || "(무명)"} — 정체 ${t.congested_pct}% · 평균 ${t.speed_avg} km/h (${t.n}회)`;
     li.onclick = () => { const f = (dataCache.traffic?.features || []).find((x) => x.properties.LINK_ID === t.linkId); if (!f) return; const cs = f.geometry.type === "LineString" ? f.geometry.coordinates : f.geometry.coordinates[0]; map.flyTo({ center: cs[Math.floor(cs.length / 2)], zoom: 16.5 }); };
     ol.appendChild(li);
   }
-  window.addEventListener("resize", () => ch.resize());
 }

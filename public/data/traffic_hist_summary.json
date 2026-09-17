@@ -1,307 +1,319 @@
 {
  "days": {
   "wd": [
+   "20250114",
    "20250211",
    "20250311",
+   "20250408",
+   "20250513",
+   "20250610",
+   "20250708",
+   "20250812",
    "20260916"
   ],
   "we": [
-   "20250308"
+   "20250111",
+   "20250208",
+   "20250308",
+   "20250412",
+   "20250510",
+   "20250614",
+   "20250712"
   ]
  },
- "n_days": 4,
- "links": 2491,
+ "n_days": 16,
+ "links": 2495,
  "hourly": {
   "wd": [
    {
     "hour": 0,
-    "speed_avg": 36.9,
-    "congested_pct": 7.0,
-    "links": 2491
+    "speed_avg": 37.3,
+    "congested_pct": 6.6,
+    "links": 2495
    },
    {
     "hour": 1,
-    "speed_avg": 37.0,
-    "congested_pct": 6.9,
-    "links": 2491
+    "speed_avg": 37.5,
+    "congested_pct": 6.3,
+    "links": 2495
    },
    {
     "hour": 2,
-    "speed_avg": 36.8,
-    "congested_pct": 7.2,
-    "links": 2491
+    "speed_avg": 37.3,
+    "congested_pct": 6.7,
+    "links": 2495
    },
    {
     "hour": 3,
-    "speed_avg": 36.9,
-    "congested_pct": 7.1,
-    "links": 2491
+    "speed_avg": 37.4,
+    "congested_pct": 6.5,
+    "links": 2495
    },
    {
     "hour": 4,
-    "speed_avg": 36.8,
-    "congested_pct": 7.0,
-    "links": 2491
+    "speed_avg": 37.3,
+    "congested_pct": 6.5,
+    "links": 2495
    },
    {
     "hour": 5,
-    "speed_avg": 36.9,
-    "congested_pct": 6.2,
-    "links": 2491
+    "speed_avg": 37.3,
+    "congested_pct": 5.9,
+    "links": 2495
    },
    {
     "hour": 6,
-    "speed_avg": 36.1,
-    "congested_pct": 6.7,
-    "links": 2491
+    "speed_avg": 36.6,
+    "congested_pct": 6.5,
+    "links": 2495
    },
    {
     "hour": 7,
-    "speed_avg": 35.2,
+    "speed_avg": 35.7,
     "congested_pct": 7.3,
-    "links": 2491
+    "links": 2495
    },
    {
     "hour": 8,
-    "speed_avg": 33.6,
-    "congested_pct": 9.3,
-    "links": 2491
+    "speed_avg": 34.2,
+    "congested_pct": 8.9,
+    "links": 2495
    },
    {
     "hour": 9,
-    "speed_avg": 33.7,
-    "congested_pct": 7.5,
-    "links": 2491
+    "speed_avg": 34.3,
+    "congested_pct": 7.3,
+    "links": 2495
    },
    {
     "hour": 10,
-    "speed_avg": 33.7,
-    "congested_pct": 8.6,
-    "links": 2491
+    "speed_avg": 34.2,
+    "congested_pct": 8.5,
+    "links": 2495
    },
    {
     "hour": 11,
-    "speed_avg": 32.9,
-    "congested_pct": 8.5,
-    "links": 2491
+    "speed_avg": 33.6,
+    "congested_pct": 8.0,
+    "links": 2495
    },
    {
     "hour": 12,
-    "speed_avg": 33.0,
-    "congested_pct": 8.1,
-    "links": 2491
+    "speed_avg": 33.7,
+    "congested_pct": 7.5,
+    "links": 2495
    },
    {
     "hour": 13,
-    "speed_avg": 33.1,
-    "congested_pct": 8.1,
-    "links": 2491
+    "speed_avg": 33.6,
+    "congested_pct": 7.9,
+    "links": 2495
    },
    {
     "hour": 14,
-    "speed_avg": 32.8,
-    "congested_pct": 9.0,
-    "links": 2491
+    "speed_avg": 33.4,
+    "congested_pct": 8.7,
+    "links": 2495
    },
    {
     "hour": 15,
-    "speed_avg": 32.9,
-    "congested_pct": 9.4,
-    "links": 2491
+    "speed_avg": 33.5,
+    "congested_pct": 9.1,
+    "links": 2495
    },
    {
     "hour": 16,
-    "speed_avg": 32.5,
-    "congested_pct": 10.2,
-    "links": 2491
+    "speed_avg": 33.1,
+    "congested_pct": 9.3,
+    "links": 2495
    },
    {
     "hour": 17,
-    "speed_avg": 32.4,
-    "congested_pct": 10.1,
-    "links": 2491
+    "speed_avg": 33.0,
+    "congested_pct": 9.6,
+    "links": 2495
    },
    {
     "hour": 18,
-    "speed_avg": 31.9,
-    "congested_pct": 10.9,
-    "links": 2491
+    "speed_avg": 32.6,
+    "congested_pct": 10.1,
+    "links": 2495
    },
    {
     "hour": 19,
-    "speed_avg": 32.7,
-    "congested_pct": 8.6,
-    "links": 2491
+    "speed_avg": 33.4,
+    "congested_pct": 8.1,
+    "links": 2495
    },
    {
     "hour": 20,
-    "speed_avg": 33.5,
+    "speed_avg": 34.0,
     "congested_pct": 7.7,
-    "links": 2491
+    "links": 2495
    },
    {
     "hour": 21,
-    "speed_avg": 34.0,
-    "congested_pct": 6.7,
-    "links": 2491
+    "speed_avg": 34.4,
+    "congested_pct": 6.8,
+    "links": 2495
    },
    {
     "hour": 22,
-    "speed_avg": 35.0,
-    "congested_pct": 6.1,
-    "links": 2491
+    "speed_avg": 35.4,
+    "congested_pct": 6.3,
+    "links": 2495
    },
    {
     "hour": 23,
-    "speed_avg": 36.3,
-    "congested_pct": 6.1,
-    "links": 2491
+    "speed_avg": 36.6,
+    "congested_pct": 6.3,
+    "links": 2495
    }
   ],
   "we": [
    {
     "hour": 0,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 34.9,
+    "congested_pct": 10.3,
+    "links": 1639
    },
    {
     "hour": 1,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 35.1,
+    "congested_pct": 10.4,
+    "links": 1639
    },
    {
     "hour": 2,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 35.3,
+    "congested_pct": 10.3,
+    "links": 1639
    },
    {
     "hour": 3,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 35.3,
+    "congested_pct": 10.4,
+    "links": 1639
    },
    {
     "hour": 4,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 35.2,
+    "congested_pct": 10.4,
+    "links": 1639
    },
    {
     "hour": 5,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 35.2,
+    "congested_pct": 10.4,
+    "links": 1639
    },
    {
     "hour": 6,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 34.5,
+    "congested_pct": 11.0,
+    "links": 1639
    },
    {
     "hour": 7,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 34.2,
+    "congested_pct": 11.5,
+    "links": 1639
    },
    {
     "hour": 8,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.9,
+    "congested_pct": 11.8,
+    "links": 1639
    },
    {
     "hour": 9,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.6,
+    "congested_pct": 12.1,
+    "links": 1639
    },
    {
     "hour": 10,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.2,
+    "congested_pct": 12.6,
+    "links": 1639
    },
    {
     "hour": 11,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.0,
+    "congested_pct": 13.4,
+    "links": 1639
    },
    {
     "hour": 12,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.9,
+    "congested_pct": 13.2,
+    "links": 1639
    },
    {
     "hour": 13,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.9,
+    "congested_pct": 13.5,
+    "links": 1639
    },
    {
     "hour": 14,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.8,
+    "congested_pct": 13.4,
+    "links": 1639
    },
    {
     "hour": 15,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.8,
+    "congested_pct": 13.4,
+    "links": 1639
    },
    {
     "hour": 16,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.8,
+    "congested_pct": 13.5,
+    "links": 1639
    },
    {
     "hour": 17,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.7,
+    "congested_pct": 13.7,
+    "links": 1639
    },
    {
     "hour": 18,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 32.8,
+    "congested_pct": 13.5,
+    "links": 1639
    },
    {
     "hour": 19,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.0,
+    "congested_pct": 12.5,
+    "links": 1639
    },
    {
     "hour": 20,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.3,
+    "congested_pct": 11.6,
+    "links": 1639
    },
    {
     "hour": 21,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 33.6,
+    "congested_pct": 11.2,
+    "links": 1639
    },
    {
     "hour": 22,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 34.1,
+    "congested_pct": 10.5,
+    "links": 1639
    },
    {
     "hour": 23,
-    "speed_avg": null,
-    "congested_pct": null,
-    "links": 0
+    "speed_avg": 34.6,
+    "congested_pct": 10.6,
+    "links": 1639
    }
   ]
  }

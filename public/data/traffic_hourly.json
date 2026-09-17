@@ -1,11 +1,33 @@
 {
- "latest": "20260917091500",
- "snapshots": 1,
+ "latest": "20260917140500",
+ "snapshots": 43,
+ "first": "20260917091500",
+ "min_obs": 6,
  "hourly": {
   "9": {
    "speed_avg": 30.7,
-   "congested_pct": 13.4,
-   "n": 1528
+   "congested_pct": 14.2,
+   "n": 13752
+  },
+  "10": {
+   "speed_avg": 30.6,
+   "congested_pct": 13.6,
+   "n": 18336
+  },
+  "11": {
+   "speed_avg": 30.5,
+   "congested_pct": 14.1,
+   "n": 12224
+  },
+  "13": {
+   "speed_avg": 30.4,
+   "congested_pct": 13.8,
+   "n": 18336
+  },
+  "14": {
+   "speed_avg": 30.4,
+   "congested_pct": 13.9,
+   "n": 3056
   }
  }
 }
