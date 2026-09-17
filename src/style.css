@@ -18,6 +18,7 @@ h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
 dl{margin:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 #chart-inds{height:190px}
+#chart-vis{height:170px}
 dl div{background:var(--bg);padding:8px 10px;border-radius:4px}
 dt{font-size:10.5px;color:var(--ink2);font-family:var(--mono)}
 dd{margin:0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}

@@ -8,10 +8,15 @@ FILES = {
     "processed/gosi2026-8_blocks_4326.geojson": "blocks.geojson",
     "processed/parcels_bldg_4326.geojson":     "parcels.geojson",   # 필지 + 건축물대장 조인(노후도)
     "raw/sbiz_stores.geojson":                  "stores.geojson",
+    "raw/vworld_upis.geojson":                  "upis.geojson",
+    "processed/parcels_energy_4326.geojson":   "energy.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",
     "raw/vworld_uq111.geojson":                 "landuse.geojson",
 }
 DST.mkdir(exist_ok=True)
+# 비공간 표(사이드바용)
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json"}.items():
+    if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s
     if not src.exists():

@@ -72,8 +72,27 @@ map.on("load", async () => {
     list.prepend(li);
   }
   ["blocks", "blocks-ol", "blocks-lb", "zone", "stores"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  updateStats(); drawChart();
+  updateStats(); drawChart(); drawVisitors();
 });
+
+// ---- 방문자 시계열 (시군구 = S3, 지도와 독립) ---------------------------------
+async function drawVisitors() {
+  let d; try { d = await fetch(`${base}data/visitors.json`, { cache: "no-cache" }).then((r) => r.json()); } catch { return; }
+  const days = Object.keys(d).sort().filter((k) => d[k]["현지인"] != null);
+  if (!days.length) return;
+  const ch = echarts.init(document.getElementById("chart-vis"));
+  const ser = (k, c) => ({ name: k, type: "line", stack: "v", areaStyle: { opacity: .5 }, showSymbol: false, lineStyle: { width: 1 }, itemStyle: { color: c }, data: days.map((x) => Math.round(d[x][k] || 0)) });
+  ch.setOption({
+    grid: { left: 46, right: 8, top: 24, bottom: 20 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
+    legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 11 } },
+    xAxis: { type: "category", data: days.map((x) => x.slice(4, 6) + "/" + x.slice(6)), axisLabel: { fontSize: 10 } },
+    yAxis: { type: "value", axisLabel: { fontSize: 10, formatter: (v) => v / 1000 + "k" }, splitLine: { lineStyle: { color: "#eee" } } },
+    series: [ser("현지인", "#8fa3ad"), ser("외지인", "#2c6a5c"), ser("외국인", "#e0a23a")],
+  });
+  const last = days[days.length - 1];
+  document.getElementById("vis-note").textContent = `KT 이동통신 기반 순방문자 · ${days[0].slice(0,4)}.${days[0].slice(4,6)}.${days[0].slice(6)}~${last.slice(4,6)}.${last.slice(6)} · 공표 지연 약 3주 · 시군구 단위라 부지(S1) 정당화에 쓰지 않음`;
+  window.addEventListener("resize", () => ch.resize());
+}
 
 // ---- 화면 통계 (지도 범위 종속) --------------------------------------------
 function updateStats() {
