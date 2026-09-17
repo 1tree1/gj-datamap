@@ -37,24 +37,29 @@ function popupHtml(props, fields) {
 
 map.on("load", async () => {
   for (const L of cfg.layers) {
-    const fc = await fetch(`${base}data/${L.file}`, { cache: "no-cache" }).then((r) => r.json());  // 데이터 갱신 시 ETag 재검증
-    dataCache[L.id] = fc;
-    map.addSource(L.id, { type: "geojson", data: fc });
+    // 같은 파일을 쓰는 레이어는 소스를 공유 (필지 8MB를 두 번 안 받도록)
+    const srcId = L.file;
+    if (!map.getSource(srcId)) {
+      const fc = await fetch(`${base}data/${L.file}`, { cache: "no-cache" }).then((r) => r.json());  // 데이터 갱신 시 ETag 재검증
+      dataCache[srcId] = fc;
+      map.addSource(srcId, { type: "geojson", data: fc });
+    }
+    dataCache[L.id] = dataCache[srcId];
     const vis = L.visible ? "visible" : "none";
     const ids = [];
     if (L.type === "fill") {
-      map.addLayer({ id: L.id, type: "fill", source: L.id, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
-      if (L.outline) { map.addLayer({ id: `${L.id}-ol`, type: "line", source: L.id, paint: L.outline, layout: { visibility: vis } }); ids.push(`${L.id}-ol`); }
+      map.addLayer({ id: L.id, type: "fill", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
+      if (L.outline) { map.addLayer({ id: `${L.id}-ol`, type: "line", source: srcId, paint: L.outline, layout: { visibility: vis } }); ids.push(`${L.id}-ol`); }
       if (L.label) {
-        map.addLayer({ id: `${L.id}-lb`, type: "symbol", source: L.id,
+        map.addLayer({ id: `${L.id}-lb`, type: "symbol", source: srcId,
           layout: { visibility: vis, "text-field": ["get", L.label.field], "text-size": L.label.size, "text-font": ["Open Sans Semibold"] },
           paint: { "text-color": "#1d2320", "text-halo-color": "#fff", "text-halo-width": 1.5 } });
         ids.push(`${L.id}-lb`);
       }
     } else if (L.type === "circle") {
-      map.addLayer({ id: L.id, type: "circle", source: L.id, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
+      map.addLayer({ id: L.id, type: "circle", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     } else {
-      map.addLayer({ id: L.id, type: "line", source: L.id, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
+      map.addLayer({ id: L.id, type: "line", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     }
     // 클릭 팝업 + 선택 패널
     map.on("click", L.id, (e) => {

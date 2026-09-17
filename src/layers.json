@@ -258,6 +258,70 @@
       }
     },
     {
+      "id": "reg",
+      "title": "규제 중첩 (4겹) — 필지 속성",
+      "file": "parcels.geojson",
+      "type": "fill",
+      "visible": false,
+      "minzoom": 14,
+      "source_note": "V-World 토지이용계획 속성 7,616필지 · 용도지역+고도지구+역사문화환경(보존지역/특별보존/보호지구)+지구단위계획구역 겹 수 · 토지이음 확인서와 동일 원천",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "match",
+          [
+            "get",
+            "reg_layers"
+          ],
+          1,
+          "#e9f0ec",
+          2,
+          "#b7d7c2",
+          3,
+          "#e3a857",
+          4,
+          "#b23a2c",
+          "#ccc"
+        ]
+      },
+      "outline": {
+        "line-color": "#555",
+        "line-width": 0.3
+      },
+      "legend": [
+        [
+          "#e9f0ec",
+          "1겹 (용도지역만)"
+        ],
+        [
+          "#b7d7c2",
+          "2겹"
+        ],
+        [
+          "#e3a857",
+          "3겹"
+        ],
+        [
+          "#b23a2c",
+          "4겹"
+        ]
+      ],
+      "popup": [
+        "addr",
+        "reg_layers",
+        "lu_list",
+        "lu_touch",
+        "reg_godo",
+        "reg_special",
+        "reg_heritage",
+        "reg_boho",
+        "reg_fire",
+        "reg_scenic",
+        "reg_cult",
+        "reg_jdp"
+      ]
+    },
+    {
       "id": "energy",
       "title": "건물 전기사용 (2026-05, 공실 프록시)",
       "file": "energy.geojson",
