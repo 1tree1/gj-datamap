@@ -69,3 +69,8 @@ footer{flex:none;padding:8px 16px 10px;border-top:1px solid var(--line);font-siz
 .maplibregl-popup-content .pl{color:var(--ink2);font-size:11.5px}
 .maplibregl-popup-content .pm{margin-top:4px;color:var(--accent);font-size:11px;cursor:pointer}
 @media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:52vh 48vh}#map{height:52vh}#sidebar{height:48vh;border-right:0;border-top:1px solid var(--line)}}
+
+.hourbox{align-items:center;gap:6px 8px}
+.hourbox #hs-hour{flex:1 1 120px;min-width:100px;accent-color:var(--accent)}
+.hourbox .hs-val{font-family:var(--mono);font-size:11px;color:var(--ink);min-width:74px}
+.hs-kind{margin-right:2px}

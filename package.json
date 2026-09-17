@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "data": "python scripts/sync_data.py",
-    "traffic": "python ../9_도시/pipeline/build_traffic.py && python scripts/sync_data.py"
+    "traffic": "python ../9_도시/pipeline/build_traffic.py && python ../9_도시/pipeline/build_traffic_history.py && python scripts/sync_data.py"
   },
   "dependencies": {
     "echarts": "^5.5.1",

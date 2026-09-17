@@ -949,6 +949,106 @@
       "short": "건물 전기사용 (공실 프록시)"
     },
     {
+      "id": "traffic_hist",
+      "title": "시간대별 평균 소통 (이력)",
+      "short": "시간대별 평균 소통 (이력 표본)",
+      "group": "교통",
+      "file": "traffic_hist.geojson",
+      "type": "line",
+      "visible": false,
+      "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조",
+      "paint": {
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          [
+            "match",
+            [
+              "get",
+              "ROAD_RANK"
+            ],
+            "101",
+            3,
+            "103",
+            2.5,
+            1.2
+          ],
+          16,
+          [
+            "match",
+            [
+              "get",
+              "ROAD_RANK"
+            ],
+            "101",
+            8,
+            "103",
+            6,
+            3.5
+          ]
+        ],
+        "line-opacity": 0.9,
+        "line-color": [
+          "case",
+          [
+            "!",
+            [
+              "has",
+              "wd_08"
+            ]
+          ],
+          "#ccc",
+          [
+            "step",
+            [
+              "get",
+              "wd_08"
+            ],
+            "#d7191c",
+            15,
+            "#fdae61",
+            30,
+            "#1a9641"
+          ]
+        ]
+      },
+      "hourslider": true,
+      "legend": [
+        [
+          "#d7191c",
+          "정체 <15"
+        ],
+        [
+          "#fdae61",
+          "서행 15–30"
+        ],
+        [
+          "#1a9641",
+          "원활 30↑"
+        ],
+        [
+          "#ccc",
+          "표본 없음"
+        ]
+      ],
+      "popup": [
+        "ROAD_NAME",
+        "wd_mean",
+        "wd_min",
+        "wd_worst_hour",
+        "n_obs_hist",
+        "MAX_SPD",
+        "LANES",
+        "LINK_ID"
+      ]
+    },
+    {
       "id": "traffic",
       "title": "교통소통 (ITS 실시간, 5분)",
       "file": "traffic.geojson",
@@ -1049,7 +1149,7 @@
         "LINK_ID"
       ],
       "group": "교통",
-      "short": "교통소통 (실시간)"
+      "short": "교통소통 (실시간 5분)"
     },
     {
       "id": "busstops",

@@ -116,12 +116,26 @@ map.on("load", async () => {
       const none = document.createElement("button"); none.type = "button"; none.textContent = "해제"; none.className = "sf-btn"; none.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = false)); apply(); };
       box.append(all, none); li.appendChild(box);
     }
+    if (L.hourslider) {
+      const box = document.createElement("div"); box.className = "subfilter hourbox";
+      box.innerHTML = `<label class="hs-kind"><input type="radio" name="hs-kind" value="wd" checked>평일</label><label class="hs-kind"><input type="radio" name="hs-kind" value="we">주말</label>
+        <input type="range" id="hs-hour" min="0" max="23" value="8" step="1"><span id="hs-label" class="hs-val">08시</span><button type="button" class="sf-btn" id="hs-play">▶ 재생</button>`;
+      li.appendChild(box);
+      const colorExpr = (k, h) => { const f = `${k}_${String(h).padStart(2, "0")}`; return ["case", ["!", ["has", f]], "#ccc", ["step", ["get", f], "#d7191c", 15, "#fdae61", 30, "#1a9641"]]; };
+      const applyHour = () => { const h = +box.querySelector("#hs-hour").value, k = box.querySelector("input[name=hs-kind]:checked").value;
+        box.querySelector("#hs-label").textContent = `${String(h).padStart(2, "0")}시 · ${k === "wd" ? "평일" : "주말"}`; map.setPaintProperty(L.id, "line-color", colorExpr(k, h)); window.__histHour = { h, k }; };
+      box.querySelector("#hs-hour").addEventListener("input", applyHour); box.querySelectorAll("input[name=hs-kind]").forEach((r) => r.addEventListener("change", applyHour));
+      let timer = null; box.querySelector("#hs-play").addEventListener("click", (ev) => {
+        if (timer) { clearInterval(timer); timer = null; ev.target.textContent = "▶ 재생"; return; }
+        ev.target.textContent = "■ 정지"; timer = setInterval(() => { const r = box.querySelector("#hs-hour"); r.value = (+r.value + 1) % 24; applyHour(); }, 700); });
+      applyHour();
+    }
     (groupBox[L.group] || groupsEl).appendChild(li);
   }
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) drawPop(null, hp);
@@ -265,11 +279,23 @@ async function drawTraffic() {
     xAxis: { type: "category", data: hours.map((x) => x + "시"), axisLabel: { fontSize: 10, interval: 2 } },
     yAxis: [{ type: "value", name: "km/h", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10 }, splitLine: { lineStyle: { color: "#eee" } } },
             { type: "value", name: "정체%", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10 }, max: 100, splitLine: { show: false } }],
-    series: [{ name: "평균속도", type: "bar", data: hours.map((x) => h.hourly[x]?.speed_avg ?? null), itemStyle: { color: "#2c6a5c" } },
+    series: [{ name: "실시간 평균", type: "bar", data: hours.map((x) => h.hourly[x]?.speed_avg ?? null), itemStyle: { color: "#9fc3b6" } },
              { name: "정체 링크 %", type: "line", yAxisIndex: 1, data: hours.map((x) => h.hourly[x]?.congested_pct ?? null), itemStyle: { color: "#d7191c" }, connectNulls: false }],
   });
+  // 이력 표본 요약(평일/주말) — 있으면 실시간 스냅샷 차트 위에 선으로 겹침
+  try {
+    const hs = await fetch(`${base}data/traffic_hist_summary.json`, { cache: "no-cache" }).then((r) => r.json());
+    const line = (k, name, color) => ({ name, type: "line", data: hs.hourly[k].map((r) => r.speed_avg), showSymbol: false, lineStyle: { width: 2, color }, itemStyle: { color } });
+    ch.setOption({ series: [line("wd", `평일 평균 (${hs.days.wd.length}일)`, "#1f5e42"), line("we", `주말 평균 (${hs.days.we.length}일)`, "#8e44ad")] });
+    document.getElementById("traffic-note").textContent = `이력 표본 ${hs.n_days}일 (평일 ${hs.days.wd.length}·주말 ${hs.days.we.length}, ${hs.days.wd.concat(hs.days.we).sort()[0]}~) · 링크 ${hs.links.toLocaleString()} · 실시간 스냅샷 ${h.snapshots}개`;
+    window.addEventListener("resize", () => ch.resize());
+    renderCong(c); return;
+  } catch { /* 이력 없음 */ }
   const lt = h.latest; const covered = Object.keys(h.hourly).length;
   document.getElementById("traffic-note").textContent = `최신 ${lt.slice(0,4)}.${lt.slice(4,6)}.${lt.slice(6,8)} ${lt.slice(8,10)}:${lt.slice(10,12)} · 스냅샷 ${h.snapshots}개 · 시간대 ${covered}/24 수집됨 — 24시간 누적 후 혼잡시간대가 의미를 가짐`;
+  renderCong(c);
+}
+function renderCong(c) {
   const ol = document.getElementById("cong-list"); ol.innerHTML = "";
   for (const t of c.slice(0, 8)) {
     const li = document.createElement("li"); li.textContent = `${t.road || "(무명)"} — 정체 ${t.congested_pct}% · 평균 ${t.speed_avg} km/h (${t.n}회)`;

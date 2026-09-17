@@ -13,6 +13,7 @@ FILES = {
     "processed/parcels_energy_4326.geojson":   "energy.geojson",
     "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
     "processed/traffic_links_4326.geojson":    "traffic.geojson",
+    "processed/traffic_hist_links_4326.geojson": "traffic_hist.geojson",
     "processed/reg_areas_4326.geojson":        "reg_areas.geojson",
     "raw/vworld_emd_gj.geojson":                "emd.geojson",
     "processed/hadm_pop_4326.geojson":         "hadm_pop.geojson",
@@ -21,7 +22,7 @@ FILES = {
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s
