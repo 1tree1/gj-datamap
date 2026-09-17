@@ -168,7 +168,7 @@
       "type": "fill",
       "visible": true,
       "minzoom": 14,
-      "source_note": "V-World 지적 7,616필지 + 건축HUB 건축물대장 2,164필지 조인 · 색 = 최고령 건물 사용승인 후 경과연수",
+      "source_note": "V-World 지적 7,616필지 + 건축물대장 2,164필지 조인 · 클릭 시 토지이용계획(지역·지구 목록, 토지이음과 동일) · 색 = 최고령 건물 경과연수",
       "paint": {
         "fill-opacity": 0.55,
         "fill-color": [
@@ -228,6 +228,8 @@
       "popup": [
         "addr",
         "pnu",
+        "lu_list",
+        "lu_touch",
         "jiga",
         "bldg_oldest",
         "bldg_age",
@@ -516,6 +518,89 @@
         "lnoAdr",
         "bldNm",
         "flrNo"
+      ]
+    },
+    {
+      "id": "tour_sites",
+      "title": "관광지 (경주시 현황 159)",
+      "file": "tour_sites.geojson",
+      "type": "circle",
+      "visible": true,
+      "source_note": "경주시 관광지 현황 API · 주소만 제공 → V-World 지오코딩 153/159 (권역 TURSM_DSTRCT)",
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          3,
+          15,
+          6,
+          18,
+          9
+        ],
+        "circle-color": "#c0392b",
+        "circle-opacity": 0.9,
+        "circle-stroke-width": 1.2,
+        "circle-stroke-color": "#fff"
+      },
+      "legend": [
+        [
+          "#c0392b",
+          "관광지"
+        ]
+      ],
+      "popup": [
+        "name",
+        "TURSM_DSTRCT",
+        "addr",
+        "TELNO",
+        "geocode"
+      ]
+    },
+    {
+      "id": "guesthouse",
+      "title": "게스트하우스 (경주시 현황 24)",
+      "file": "guesthouse.geojson",
+      "type": "circle",
+      "visible": true,
+      "source_note": "경주시 게스트하우스 현황 API · 지오코딩 24/24 · 관광 숙박 공급의 원도심 집중도",
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          3,
+          15,
+          6,
+          18,
+          9
+        ],
+        "circle-color": "#8e44ad",
+        "circle-opacity": 0.9,
+        "circle-stroke-width": 1.2,
+        "circle-stroke-color": "#fff"
+      },
+      "legend": [
+        [
+          "#8e44ad",
+          "게스트하우스"
+        ]
+      ],
+      "popup": [
+        "name",
+        "addr",
+        "HMPG_NM",
+        "TELNO"
       ]
     }
   ]

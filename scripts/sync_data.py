@@ -6,10 +6,12 @@ DST = Path(__file__).resolve().parent.parent / "public" / "data"   # Vite: publi
 FILES = {
     "processed/gosi2026-8_zone_4326.geojson":   "zone.geojson",
     "processed/gosi2026-8_blocks_4326.geojson": "blocks.geojson",
-    "processed/parcels_bldg_4326.geojson":     "parcels.geojson",   # 필지 + 건축물대장 조인(노후도)
+    "processed/parcels_lu_4326.geojson":       "parcels.geojson",   # 필지 + 건축물대장 + 토지이용계획 속성
     "raw/sbiz_stores.geojson":                  "stores.geojson",
     "raw/vworld_upis.geojson":                  "upis.geojson",
     "processed/parcels_energy_4326.geojson":   "energy.geojson",
+    "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
+    "raw/gj_guesthouse.geojson":                "guesthouse.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",
     "raw/vworld_uq111.geojson":                 "landuse.geojson",
 }

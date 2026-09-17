@@ -71,7 +71,7 @@ map.on("load", async () => {
     li.querySelector("input").addEventListener("change", (ev) => ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")));
     list.prepend(li);
   }
-  ["blocks", "blocks-ol", "blocks-lb", "zone", "stores"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "guesthouse"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors();
 });
 
