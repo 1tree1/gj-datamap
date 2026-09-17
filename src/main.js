@@ -79,7 +79,7 @@ map.on("load", async () => {
       const sf = L.subfilter; const box = document.createElement("div"); box.className = "subfilter";
       const apply = () => {
         const on = [...box.querySelectorAll("input:checked")].map((x) => x.value);
-        map.setFilter(L.id, ["in", ["get", sf.field], ["literal", on]]);
+        ids.forEach((id) => map.setFilter(id, ["in", ["get", sf.field], ["literal", on]]));   // 채움·외곽선·라벨 모두
         updateStats();
       };
       for (const v of sf.values) {
@@ -95,7 +95,7 @@ map.on("load", async () => {
     }
     list.prepend(li);
   }
-  ["traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
 });
 

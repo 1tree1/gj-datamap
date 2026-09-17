@@ -13,6 +13,7 @@ FILES = {
     "processed/parcels_energy_4326.geojson":   "energy.geojson",
     "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
     "processed/traffic_links_4326.geojson":    "traffic.geojson",
+    "processed/reg_areas_4326.geojson":        "reg_areas.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",
     "raw/vworld_uq111.geojson":                 "landuse.geojson",
 }
