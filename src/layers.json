@@ -450,6 +450,259 @@
       ]
     },
     {
+      "id": "fr_pct",
+      "title": "외국인주민 (수·비율)",
+      "short": "외국인주민 (수·비율)",
+      "group": "외국인·다문화",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "행안부 지방자치단체 외국인주민 현황 2024 (KOSIS DT_110025_A033_A, 읍면동). 근로자·결혼이민·유학생·외국국적동포·기타 + 귀화 + 자녀. 중부동은 황오동에 합산(2025 통합). 비율 분모 = 주민등록 2026-08 + 국적미취득 외국인 — 시점 차이로 근사.",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "step",
+          [
+            "coalesce",
+            [
+              "get",
+              "fr_pct"
+            ],
+            0
+          ],
+          "#f7f4f9",
+          2,
+          "#d4b9da",
+          5,
+          "#c994c7",
+          10,
+          "#df65b0",
+          20,
+          "#dd1c77",
+          30,
+          "#980043"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "lbl_fr",
+        "size": 10.5
+      },
+      "legend": [
+        [
+          "#f7f4f9",
+          "<2%"
+        ],
+        [
+          "#d4b9da",
+          "2–5"
+        ],
+        [
+          "#c994c7",
+          "5–10"
+        ],
+        [
+          "#df65b0",
+          "10–20"
+        ],
+        [
+          "#dd1c77",
+          "20–30"
+        ],
+        [
+          "#980043",
+          "30%↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "fr_total",
+        "fr_pct",
+        "fr_worker",
+        "fr_diaspora",
+        "fr_student",
+        "fr_marriage",
+        "fr_other",
+        "fr_naturalized",
+        "fr_children",
+        "mc_households",
+        "mc_marriage",
+        "mc_children",
+        "pop",
+        "fr_year",
+        "fr_note"
+      ]
+    },
+    {
+      "id": "mc_hh",
+      "title": "다문화가구 (수)",
+      "short": "다문화가구 (수)",
+      "group": "외국인·다문화",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "행안부 외국인주민 현황 2024 (KOSIS DT_110025_A045_A, 읍면동). 결혼이민자·귀화자 가구 + 자녀 수. 중부동은 황오동에 합산.",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "step",
+          [
+            "coalesce",
+            [
+              "get",
+              "mc_households"
+            ],
+            0
+          ],
+          "#fff7fb",
+          100,
+          "#ece2f0",
+          250,
+          "#d0d1e6",
+          450,
+          "#a6bddb",
+          700,
+          "#3690c0",
+          1200,
+          "#034e7b"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "lbl_mc",
+        "size": 10.5
+      },
+      "legend": [
+        [
+          "#fff7fb",
+          "<100"
+        ],
+        [
+          "#ece2f0",
+          "100–250"
+        ],
+        [
+          "#d0d1e6",
+          "250–450"
+        ],
+        [
+          "#a6bddb",
+          "450–700"
+        ],
+        [
+          "#3690c0",
+          "700–1,200"
+        ],
+        [
+          "#034e7b",
+          "1,200↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "fr_total",
+        "fr_pct",
+        "fr_worker",
+        "fr_diaspora",
+        "fr_student",
+        "fr_marriage",
+        "fr_other",
+        "fr_naturalized",
+        "fr_children",
+        "mc_households",
+        "mc_marriage",
+        "mc_children",
+        "pop",
+        "fr_year",
+        "fr_note"
+      ]
+    },
+    {
+      "id": "fr_places",
+      "title": "외국인 관련 상점·시설 (키워드 추정)",
+      "short": "외국인 관련 상점·시설 (추정)",
+      "group": "외국인·다문화",
+      "file": "foreign_places.geojson",
+      "type": "circle",
+      "visible": false,
+      "minzoom": 11,
+      "source_note": "소진공 상가업소 상호·업종 키워드 매칭 — 공식 등록부가 아닌 추정. '상호' 근거(러시아·베트남·할랄 등)는 강하고, '업종' 근거(베트남식·중국식 등)는 한국인 운영 프랜차이즈를 포함. 이슬람 종교시설(마스지드·무살라)은 공공 등록 데이터가 없어 현장·POI 조사 필요.",
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          3,
+          15,
+          6,
+          18,
+          10
+        ],
+        "circle-opacity": 0.9,
+        "circle-stroke-width": 1.2,
+        "circle-stroke-color": "#fff",
+        "circle-color": [
+          "match",
+          [
+            "get",
+            "fr_cat"
+          ],
+          "중앙아시아·고려인",
+          "#c0392b",
+          "동남아",
+          "#e67e22",
+          "할랄·이슬람",
+          "#1e8449",
+          "중국·기타",
+          "#8e44ad",
+          "지원시설",
+          "#2874a6",
+          "외국 음식 업종",
+          "#b2babb",
+          "#555"
+        ]
+      },
+      "subfilter": {
+        "field": "fr_cat",
+        "values": [
+          "중앙아시아·고려인",
+          "동남아",
+          "할랄·이슬람",
+          "중국·기타",
+          "지원시설",
+          "외국 음식 업종"
+        ],
+        "colors": {
+          "중앙아시아·고려인": "#c0392b",
+          "동남아": "#e67e22",
+          "할랄·이슬람": "#1e8449",
+          "중국·기타": "#8e44ad",
+          "지원시설": "#2874a6",
+          "외국 음식 업종": "#b2babb"
+        }
+      },
+      "legend": [],
+      "popup": [
+        "bizesNm",
+        "fr_cat",
+        "fr_kw",
+        "fr_basis",
+        "indsSclsNm",
+        "lnoAdr"
+      ]
+    },
+    {
       "id": "landuse",
       "title": "용도지역 (V-World UQ111)",
       "file": "landuse.geojson",
@@ -1439,6 +1692,7 @@
   ],
   "groups": [
     "인구",
+    "외국인·다문화",
     "계획",
     "규제",
     "건물·필지",

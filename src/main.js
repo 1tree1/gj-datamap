@@ -36,7 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
-const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
@@ -86,6 +86,7 @@ map.on("load", async () => {
       pop.getElement().querySelector(".pm").onclick = () => showTab("selected");
       document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p).filter((k) => !["age", "yearly", "bjd"].includes(k)));
       if (p.age) drawPop(p);
+      if (p.fr_total !== undefined) drawForeign(p);
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -97,8 +98,8 @@ map.on("load", async () => {
       <div class="legend">${(L.legend || []).map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("")}</div>`;
     li.querySelector("input").addEventListener("change", (ev) => {
       ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")); li.classList.toggle("on", ev.target.checked);
-      if (ev.target.checked && L.id.startsWith("pop_")) {   // 인구 단계구분도는 한 번에 하나만
-        document.querySelectorAll('.layer[data-id^="pop_"]').forEach((o) => { if (o !== li && o.querySelector("input").checked) { o.querySelector("input").checked = false; o.querySelector("input").dispatchEvent(new Event("change")); } });
+      if (ev.target.checked && /^(pop_|fr_pct|mc_hh)/.test(L.id)) {   // 인구 단계구분도는 한 번에 하나만
+        document.querySelectorAll('.layer[data-id^="pop_"], .layer[data-id="fr_pct"], .layer[data-id="mc_hh"]').forEach((o) => { if (o !== li && o.querySelector("input").checked) { o.querySelector("input").checked = false; o.querySelector("input").dispatchEvent(new Event("change")); } });
       }
       refreshCounts(); updateStats();
     });
@@ -135,11 +136,37 @@ map.on("load", async () => {
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
-  const hp = dataCache["hadm_pop.geojson"]; if (hp) drawPop(null, hp);
+  const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
+  drawNationality();
 });
+
+// ---- 외국인주민 유형 (선택 동 / 경주시 합) ---------------------------------------
+const FR_KINDS = [["fr_worker", "외국인근로자"], ["fr_marriage", "결혼이민자"], ["fr_student", "유학생"], ["fr_diaspora", "외국국적동포"], ["fr_other", "기타외국인"], ["fr_naturalized", "귀화자"], ["fr_children", "외국인주민 자녀"]];
+function drawForeign(p, fc) {
+  const sum = (k) => fc.features.reduce((s, f) => s + (+f.properties[k] || 0), 0);
+  const vals = FR_KINDS.map(([k]) => (p ? +p[k] || 0 : sum(k)));
+  const mc = p ? +p.mc_households || 0 : sum("mc_households");
+  document.getElementById("fr-name").textContent = p ? p.hadm : "경주시 (행정동 합)";
+  const el = document.getElementById("chart-fr"); const ch = echarts.getInstanceByDom(el) || echarts.init(el);
+  ch.setOption({ grid: { left: 92, right: 40, top: 4, bottom: 4 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: FR_KINDS.map((k) => k[1]), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: vals, itemStyle: { color: "#980043" }, label: { show: true, position: "right", fontSize: 10, formatter: (d) => d.value.toLocaleString() }, barCategoryGap: "30%" }] }, true);
+  const tot = vals.reduce((a, b) => a + b, 0);
+  document.getElementById("fr-note").textContent = `외국인주민 ${tot.toLocaleString()}명 · 다문화가구 ${mc.toLocaleString()}가구 — 행안부 2024.11 기준(KOSIS), 읍면동 단위`;
+}
+// ---- 국적별 등록외국인 (경주시, 법무부) — 읍면동 단위 국적 통계는 없음 ----------------
+async function drawNationality() {
+  let d; try { d = await fetch(`${base}data/nationality.json`, { cache: "no-cache" }).then((r) => r.json()); } catch { return; }
+  const rows = Object.entries(d.nationality).filter(([k]) => k !== "계").sort((a, b) => b[1] - a[1]).slice(0, 12);
+  const el = document.getElementById("chart-nat"); const ch = echarts.getInstanceByDom(el) || echarts.init(el);
+  ch.setOption({ grid: { left: 92, right: 40, top: 4, bottom: 4 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: rows.map((r) => r[0].replace("(연방)", "")), axisLabel: { fontSize: 10.5 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: rows.map((r) => r[1]), itemStyle: { color: "#5b3a8a" }, label: { show: true, position: "right", fontSize: 10, formatter: (x) => x.value.toLocaleString() }, barCategoryGap: "28%" }] });
+  document.getElementById("nat-note").textContent = `경주시 등록외국인 ${(+d.nationality["계"]).toLocaleString()}명 — 법무부 ${d.prd || ""} (시군구 단위, 상위 12개국)`;
+}
 
 // ---- 행정동 인구: 연령 피라미드 + 10년 추이 -----------------------------------
 function drawPop(p, fc) {
