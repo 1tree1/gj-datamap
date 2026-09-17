@@ -95,7 +95,14 @@ map.on("load", async () => {
     li.innerHTML = `<label><input type="checkbox" ${L.visible ? "checked" : ""}><span>${L.short}</span><button type="button" class="info" title="출처·설명">i</button></label>
       <div class="desc">${L.source_note}</div>
       <div class="legend">${(L.legend || []).map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("")}</div>`;
-    li.querySelector("input").addEventListener("change", (ev) => { ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")); li.classList.toggle("on", ev.target.checked); refreshCounts(); updateStats(); });
+    li.querySelector("input").addEventListener("change", (ev) => {
+      ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")); li.classList.toggle("on", ev.target.checked);
+      if (ev.target.checked && L.id.startsWith("pop_")) {   // 인구 단계구분도는 한 번에 하나만
+        document.querySelectorAll('.layer[data-id^="pop_"]').forEach((o) => { if (o !== li && o.querySelector("input").checked) { o.querySelector("input").checked = false; o.querySelector("input").dispatchEvent(new Event("change")); } });
+      }
+      refreshCounts(); updateStats();
+    });
+    li.dataset.id = L.id;
     li.querySelector(".info").addEventListener("click", (ev) => { ev.preventDefault(); li.classList.toggle("showdesc"); });
     if (L.subfilter) {
       const sf = L.subfilter; const box = document.createElement("div"); box.className = "subfilter";
@@ -114,7 +121,7 @@ map.on("load", async () => {
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["pop65-lb", "popchg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) drawPop(null, hp);

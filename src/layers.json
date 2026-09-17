@@ -39,21 +39,187 @@
       ]
     },
     {
-      "id": "pop65",
-      "title": "행정동 고령화율",
-      "short": "고령화율 (65세↑ %)",
+      "id": "pop_total",
+      "title": "총인구 (행정동)",
+      "short": "총인구 (행정동)",
       "group": "인구",
       "file": "hadm_pop.geojson",
       "type": "fill",
       "visible": true,
-      "source_note": "KOSIS 주민등록 5세별 인구 2026-08 (행안부) × 행정동 경계(법정동 합집합 근사) · 22개 행정동 · 2025년 중부동→황오동 통합 반영 · 클릭 시 분석 탭에 연령 피라미드·10년 추이",
+      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 라벨 = 인구",
       "paint": {
-        "fill-opacity": 0.55,
+        "fill-opacity": 0.6,
         "fill-color": [
           "step",
           [
-            "get",
-            "pct_65"
+            "coalesce",
+            [
+              "get",
+              "pop"
+            ],
+            0
+          ],
+          "#f7fbf4",
+          5000,
+          "#d4e8d0",
+          10000,
+          "#a9d1a4",
+          15000,
+          "#6fb389",
+          22000,
+          "#3b8a63",
+          26000,
+          "#1f5e42"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "lbl_pop",
+        "size": 10.5
+      },
+      "legend": [
+        [
+          "#f7fbf4",
+          "<5천"
+        ],
+        [
+          "#d4e8d0",
+          "5천–1만"
+        ],
+        [
+          "#a9d1a4",
+          "1–1.5만"
+        ],
+        [
+          "#6fb389",
+          "1.5–2.2만"
+        ],
+        [
+          "#3b8a63",
+          "2.2–2.6만"
+        ],
+        [
+          "#1f5e42",
+          "2.6만↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "pop",
+        "area_km2",
+        "density",
+        "n_65",
+        "pct_65",
+        "n_youth",
+        "pct_youth",
+        "n_0_14",
+        "chg_10y_pct"
+      ]
+    },
+    {
+      "id": "pop_density",
+      "title": "인구밀도 (명/㎢)",
+      "short": "인구밀도 (명/㎢)",
+      "group": "인구",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 면적은 EPSG:5187 계산 · 황성동 7,204 / 용강동 4,827 / 황오동 4,147 명/㎢",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "step",
+          [
+            "coalesce",
+            [
+              "get",
+              "density"
+            ],
+            0
+          ],
+          "#fff7ec",
+          100,
+          "#fee8c8",
+          500,
+          "#fdbb84",
+          2000,
+          "#fc8d59",
+          4000,
+          "#e34a33",
+          6000,
+          "#b30000"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "lbl_den",
+        "size": 10.5
+      },
+      "legend": [
+        [
+          "#fff7ec",
+          "<100"
+        ],
+        [
+          "#fee8c8",
+          "100–500"
+        ],
+        [
+          "#fdbb84",
+          "500–2천"
+        ],
+        [
+          "#fc8d59",
+          "2–4천"
+        ],
+        [
+          "#e34a33",
+          "4–6천"
+        ],
+        [
+          "#b30000",
+          "6천↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "pop",
+        "area_km2",
+        "density",
+        "n_65",
+        "pct_65",
+        "n_youth",
+        "pct_youth",
+        "n_0_14",
+        "chg_10y_pct"
+      ]
+    },
+    {
+      "id": "pop_65",
+      "title": "고령인구 (65세↑ 수·비율)",
+      "short": "고령인구 (65세↑ 수·비율)",
+      "group": "인구",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8%",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "step",
+          [
+            "coalesce",
+            [
+              "get",
+              "pct_65"
+            ],
+            0
           ],
           "#f7fbf4",
           15,
@@ -73,8 +239,8 @@
         "line-width": 1.2
       },
       "label": {
-        "field": "hadm",
-        "size": 11
+        "field": "lbl_65",
+        "size": 10.5
       },
       "legend": [
         [
@@ -105,29 +271,117 @@
       "popup": [
         "hadm",
         "pop",
+        "area_km2",
+        "density",
+        "n_65",
         "pct_65",
-        "pct_0_14",
-        "pct_20_39",
-        "chg_10y_pct",
-        "prd"
+        "n_youth",
+        "pct_youth",
+        "n_0_14",
+        "chg_10y_pct"
       ]
     },
     {
-      "id": "popchg",
-      "title": "행정동 10년 인구변화",
+      "id": "pop_youth",
+      "title": "청년인구 (20–39세 수·비율)",
+      "short": "청년인구 (20–39세 수·비율)",
+      "group": "인구",
+      "file": "hadm_pop.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 청년 = 20–39세(5세 구간 근사; 경주시 청년 기준 19–39) · 성건동 23.8% / 황성동 21.6% / 황남동 9.4%",
+      "paint": {
+        "fill-opacity": 0.6,
+        "fill-color": [
+          "step",
+          [
+            "coalesce",
+            [
+              "get",
+              "pct_youth"
+            ],
+            0
+          ],
+          "#f1eef6",
+          8,
+          "#d4b9da",
+          12,
+          "#c994c7",
+          16,
+          "#df65b0",
+          20,
+          "#dd1c77",
+          23,
+          "#980043"
+        ]
+      },
+      "outline": {
+        "line-color": "#3a4a44",
+        "line-width": 1.2
+      },
+      "label": {
+        "field": "lbl_youth",
+        "size": 10.5
+      },
+      "legend": [
+        [
+          "#f1eef6",
+          "<8%"
+        ],
+        [
+          "#d4b9da",
+          "8–12"
+        ],
+        [
+          "#c994c7",
+          "12–16"
+        ],
+        [
+          "#df65b0",
+          "16–20"
+        ],
+        [
+          "#dd1c77",
+          "20–23"
+        ],
+        [
+          "#980043",
+          "23%↑"
+        ]
+      ],
+      "popup": [
+        "hadm",
+        "pop",
+        "area_km2",
+        "density",
+        "n_65",
+        "pct_65",
+        "n_youth",
+        "pct_youth",
+        "n_0_14",
+        "chg_10y_pct"
+      ]
+    },
+    {
+      "id": "pop_chg",
+      "title": "10년 인구변화 (2015→2025 %)",
       "short": "10년 인구변화 (2015→2025 %)",
       "group": "인구",
       "file": "hadm_pop.geojson",
       "type": "fill",
       "visible": false,
-      "source_note": "KOSIS 주민등록 연도별 총인구 2015→2025 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 추세 −30%) · 용강동 +33% 신도심",
+      "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심",
       "paint": {
-        "fill-opacity": 0.55,
+        "fill-opacity": 0.6,
         "fill-color": [
           "step",
           [
-            "get",
-            "chg_10y_pct"
+            "coalesce",
+            [
+              "get",
+              "chg_10y_pct"
+            ],
+            0
           ],
           "#8c2d04",
           -30,
@@ -150,7 +404,7 @@
       },
       "label": {
         "field": "hadm",
-        "size": 11
+        "size": 10.5
       },
       "legend": [
         [
@@ -184,9 +438,15 @@
       ],
       "popup": [
         "hadm",
-        "chg_10y_pct",
         "pop",
-        "pct_65"
+        "area_km2",
+        "density",
+        "n_65",
+        "pct_65",
+        "n_youth",
+        "pct_youth",
+        "n_0_14",
+        "chg_10y_pct"
       ]
     },
     {
