@@ -71,6 +71,11 @@ map.on("load", async () => {
       map.addLayer({ id: L.id, type: "circle", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
     } else {
       map.addLayer({ id: L.id, type: "line", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
+      if (L.label) {
+        map.addLayer({ id: `${L.id}-lb`, type: "symbol", source: srcId, layout: { visibility: vis, "symbol-placement": "point", "text-field": ["get", L.label.field], "text-size": L.label.size, "text-font": ["Open Sans Semibold"] },
+          paint: { "text-color": "#3a4a44", "text-halo-color": "#fff", "text-halo-width": 1.4 } });
+        ids.push(`${L.id}-lb`);
+      }
     }
     // 클릭: 팝업은 핵심 4줄, 전체 속성은 '선택' 탭
     map.on("click", L.id, (e) => {

@@ -1,10 +1,43 @@
 {
   "center": [
     129.219,
-    35.8454
+    35.844
   ],
-  "zoom": 15.6,
+  "zoom": 14.2,
   "layers": [
+    {
+      "id": "emd",
+      "title": "법정동 경계 (경주시 56)",
+      "short": "법정동 경계",
+      "group": "계획",
+      "file": "emd.geojson",
+      "type": "line",
+      "visible": false,
+      "source_note": "V-World LT_C_ADEMD_INFO · 법정동 56개 · 인구통계는 행정동(23) 기준이라 SGIS 행정동 경계 확보 후 인구 레이어 추가 예정",
+      "paint": {
+        "line-color": "#5a6b64",
+        "line-width": 1.2,
+        "line-dasharray": [
+          3,
+          2
+        ]
+      },
+      "label": {
+        "field": "emd_kor_nm",
+        "size": 11
+      },
+      "legend": [
+        [
+          "#5a6b64",
+          "법정동"
+        ]
+      ],
+      "popup": [
+        "emd_kor_nm",
+        "emd_cd",
+        "full_nm"
+      ]
+    },
     {
       "id": "landuse",
       "title": "용도지역 (V-World UQ111)",
@@ -758,7 +791,7 @@
       "type": "circle",
       "visible": true,
       "minzoom": 14,
-      "source_note": "소진공 상가정보 API 6,045 + 경주시 게스트하우스 현황 24(숙박으로 병합, 60m 내 동명 중복 제거) · 영업 중 스냅샷 · 아래 유형별 켜고 끄기",
+      "source_note": "소진공 상가정보 API 10,314 (원도심+황성·동천·용강·보문 창) + 게스트하우스 18 · 영업 중 스냅샷",
       "paint": {
         "circle-radius": [
           "interpolate",
@@ -846,7 +879,7 @@
         }
       },
       "group": "상권·관광",
-      "short": "상가 업소"
+      "short": "상가 업소 (10,332)"
     },
     {
       "id": "tour_sites",
