@@ -95,7 +95,7 @@ map.on("load", async () => {
     const li = document.createElement("div"); li.className = "layer" + (L.visible ? " on" : "");
     li.innerHTML = `<label><input type="checkbox" ${L.visible ? "checked" : ""}><span>${L.short}</span><button type="button" class="info" title="출처·설명">i</button></label>
       <div class="desc">${L.source_note}</div>
-      <div class="legend">${(L.legend || []).map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("")}</div>`;
+      <div class="legend">${(L.legend || []).map(([c, t]) => (c === "transparent" ? `<span class="lg-note">${t}</span>` : `<span><i class="sw" style="background:${c}"></i>${t}</span>`)).join("")}</div>`;
     li.querySelector("input").addEventListener("change", (ev) => {
       ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")); li.classList.toggle("on", ev.target.checked);
       if (ev.target.checked && /^(pop_|fr_pct|mc_hh)/.test(L.id)) {   // 인구 단계구분도는 한 번에 하나만
@@ -136,7 +136,7 @@ map.on("load", async () => {
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
@@ -230,9 +230,9 @@ function updateStats() {
   jiga.sort((a, b) => a - b);
   document.getElementById("st-parcels").textContent = seen.size ? seen.size.toLocaleString() : "–";
   document.getElementById("st-jiga").textContent = jiga.length ? Math.round(jiga[jiga.length >> 1]).toLocaleString() + "원/㎡" : "–";
-  // 노후도: 건물 있는 필지 중 사용승인 30년↑ 비율
+  // 노후도: 건물 있는 필지 중 사용승인 20년↑(쇠퇴진단 기준) / 30년↑ 비율
   const aged = [...new Set(feats.filter((f) => f.properties.bldg_age != null).map((f) => f.properties.pnu + "|" + f.properties.bldg_age))].map((s) => +s.split("|")[1]);
-  document.getElementById("st-old").textContent = aged.length ? Math.round(aged.filter((a) => a >= 30).length / aged.length * 100) + "%" : "–";
+  document.getElementById("st-old").textContent = aged.length ? `${Math.round(aged.filter((a) => a >= 20).length / aged.length * 100)}% / ${Math.round(aged.filter((a) => a >= 30).length / aged.length * 100)}%` : "–";
   if (map.getLayer("busstops")) {
     const bs = new Set(map.queryRenderedFeatures({ layers: ["busstops"] }).map((f) => f.properties.stop_id));
     document.getElementById("st-bus").textContent = bs.size ? bs.size.toLocaleString() : "–";

@@ -11,14 +11,14 @@
     <header>
       <div class="brand">
         <h1>구경주역 데이터맵</h1>
-        <span class="sub">고시 제2026-8호 지구단위계획 · S1</span>
+        <span class="sub">구경주역 일원 · S1 부지 / S2 원도심 / S3 경주시</span>
       </div>
       <!-- 핵심 요약: 현재 화면 안의 숫자 4개만 -->
       <div id="kpi">
-        <div><dt>필지</dt><dd id="st-parcels">–</dd></div>
-        <div><dt>업소</dt><dd id="st-stores">–</dd></div>
-        <div><dt>정체 링크</dt><dd id="st-cong">–</dd></div>
-        <div><dt>30년↑ 건물</dt><dd id="st-old">–</dd></div>
+        <div title="화면 안 · 수집 창(부지 일원 7,616필지) 한정"><dt>필지 (화면)</dt><dd id="st-parcels">–</dd></div>
+        <div title="화면 안 · 상가 레이어를 켰을 때"><dt>업소 (화면)</dt><dd id="st-stores">–</dd></div>
+        <div title="화면 안 실시간 링크 중 도로등급별 정체 임계 미만"><dt>정체 링크 (화면)</dt><dd id="st-cong">–</dd></div>
+        <div title="화면 안 필지 중 사용승인일이 있는 건물 기준. 20년↑은 도시재생 쇠퇴진단(노후건축물) 기준, 30년↑은 참고"><dt>노후 20년↑ / 30년↑</dt><dd id="st-old">–</dd></div>
       </div>
       <nav id="tabs">
         <button class="on" data-tab="layers">레이어</button>
@@ -79,7 +79,7 @@
 
     <footer>
       <span id="basemap-ctl"></span>
-      <span class="fine">처리본 EPSG:5187 → 웹 4326 · T1 경주시 고시 / V-World · T2 소진공·ITS·관광공사</span>
+      <span class="fine">처리본 EPSG:5187 → 웹 4326 · T1 경주시·경북 고시 / V-World / 건축HUB · T2 KOSIS(행안부·법무부) / 소진공 / ITS / 관광공사 / 국토부 정류장 · 단계구분도 급간은 임의 설정</span>
     </footer>
   </aside>
   <div id="map"></div>

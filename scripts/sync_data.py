@@ -14,6 +14,7 @@ FILES = {
     "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
     "processed/traffic_links_4326.geojson":    "traffic.geojson",
     "processed/traffic_hist_links_4326.geojson": "traffic_hist.geojson",
+    "processed/tourism_complex_4326.geojson":  "tourism_complex.geojson",
     "processed/reg_areas_4326.geojson":        "reg_areas.geojson",
     "raw/vworld_emd_gj.geojson":                "emd.geojson",
     "processed/godo_4326.geojson":            "godo.geojson",
