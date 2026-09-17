@@ -74,9 +74,28 @@ map.on("load", async () => {
     li.innerHTML = `<label><input type="checkbox" ${L.visible ? "checked" : ""}><span><span class="lt">${L.title}</span><span class="note">${L.source_note}</span></span></label>
       <div class="legend">${(L.legend || []).map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join("")}</div>`;
     li.querySelector("input").addEventListener("change", (ev) => ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")));
+    // 유형별 하위 토글 (subfilter): 체크된 값만 남기는 MapLibre 필터
+    if (L.subfilter) {
+      const sf = L.subfilter; const box = document.createElement("div"); box.className = "subfilter";
+      const apply = () => {
+        const on = [...box.querySelectorAll("input:checked")].map((x) => x.value);
+        map.setFilter(L.id, ["in", ["get", sf.field], ["literal", on]]);
+        updateStats();
+      };
+      for (const v of sf.values) {
+        const lab = document.createElement("label");
+        lab.innerHTML = `<input type="checkbox" value="${v}" checked><i class="sw" style="background:${sf.colors[v] || "#555"}"></i>${v}`;
+        lab.querySelector("input").addEventListener("change", apply); box.appendChild(lab);
+      }
+      const all = document.createElement("button"); all.type = "button"; all.textContent = "전체"; all.className = "sf-btn";
+      all.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = true)); apply(); };
+      const none = document.createElement("button"); none.type = "button"; none.textContent = "해제"; none.className = "sf-btn";
+      none.onclick = () => { box.querySelectorAll("input").forEach((x) => (x.checked = false)); apply(); };
+      box.append(all, none); li.appendChild(box);
+    }
     list.prepend(li);
   }
-  ["traffic", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "guesthouse"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic();
 });
 
@@ -116,6 +135,10 @@ function updateStats() {
   // 노후도: 건물 있는 필지 중 사용승인 30년↑ 비율
   const aged = [...new Set(feats.filter((f) => f.properties.bldg_age != null).map((f) => f.properties.pnu + "|" + f.properties.bldg_age))].map((s) => +s.split("|")[1]);
   document.getElementById("st-old").textContent = aged.length ? Math.round(aged.filter((a) => a >= 30).length / aged.length * 100) + "%" : "–";
+  if (map.getLayer("busstops")) {
+    const bs = new Set(map.queryRenderedFeatures({ layers: ["busstops"] }).map((f) => f.properties.stop_id));
+    document.getElementById("st-bus").textContent = bs.size ? bs.size.toLocaleString() : "–";
+  }
   // 교통: 화면 내 정체 링크 비율
   if (map.getLayer("traffic")) {
     const tf = map.queryRenderedFeatures({ layers: ["traffic"] }); const ids = new Set(); let cong = 0, tot = 0;

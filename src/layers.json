@@ -493,6 +493,49 @@
       ]
     },
     {
+      "id": "busstops",
+      "title": "버스정류장 (경주BIS 1,951)",
+      "file": "busstops.geojson",
+      "type": "circle",
+      "visible": true,
+      "minzoom": 13,
+      "source_note": "국토교통부 전국 버스정류장 위치정보 2025-10-31 파일 · 경주시 1,951개 · 경주시 버스 API(노선·실시간)는 서버 504로 대기",
+      "paint": {
+        "circle-radius": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          2,
+          16,
+          5,
+          18,
+          8
+        ],
+        "circle-color": "#1565c0",
+        "circle-opacity": 0.9,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#fff"
+      },
+      "legend": [
+        [
+          "#1565c0",
+          "정류장"
+        ]
+      ],
+      "popup": [
+        "name",
+        "stop_id",
+        "short_no",
+        "bis",
+        "date"
+      ]
+    },
+    {
       "id": "blocks",
       "title": "획지·공원·주차장 (고시 2026-8호)",
       "file": "blocks.geojson",
@@ -589,12 +632,12 @@
     },
     {
       "id": "stores",
-      "title": "상가 업소 (소진공 2026-03)",
+      "title": "상가 업소 (소진공 2026-03 + 게스트하우스)",
       "file": "stores.geojson",
       "type": "circle",
       "visible": true,
       "minzoom": 14,
-      "source_note": "소상공인시장진흥공단 상가(상권)정보 API · S2 창 6,045개 · 영업 중 스냅샷(폐업 미포함)",
+      "source_note": "소진공 상가정보 API 6,045 + 경주시 게스트하우스 현황 24(숙박으로 병합, 60m 내 동명 중복 제거) · 영업 중 스냅샷 · 아래 유형별 켜고 끄기",
       "paint": {
         "circle-radius": [
           "interpolate",
@@ -630,51 +673,20 @@
           "#7f8c8d",
           "과학·기술",
           "#16a085",
+          "시설관리·임대",
+          "#a67c52",
           "예술·스포츠",
           "#f39c12",
           "교육",
           "#27ae60",
-          "보건의료",
-          "#c0392b",
           "부동산",
           "#95a5a6",
+          "보건의료",
+          "#c0392b",
           "#555"
         ]
       },
-      "legend": [
-        [
-          "#e05a3a",
-          "음식"
-        ],
-        [
-          "#3a7bd5",
-          "소매"
-        ],
-        [
-          "#8e44ad",
-          "숙박"
-        ],
-        [
-          "#7f8c8d",
-          "수리·개인"
-        ],
-        [
-          "#16a085",
-          "과학·기술"
-        ],
-        [
-          "#f39c12",
-          "예술·스포츠"
-        ],
-        [
-          "#27ae60",
-          "교육"
-        ],
-        [
-          "#555",
-          "기타"
-        ]
-      ],
+      "legend": [],
       "popup": [
         "bizesNm",
         "indsLclsNm",
@@ -682,8 +694,36 @@
         "indsSclsNm",
         "lnoAdr",
         "bldNm",
-        "flrNo"
-      ]
+        "flrNo",
+        "src"
+      ],
+      "subfilter": {
+        "field": "indsLclsNm",
+        "values": [
+          "음식",
+          "소매",
+          "숙박",
+          "수리·개인",
+          "과학·기술",
+          "시설관리·임대",
+          "예술·스포츠",
+          "교육",
+          "부동산",
+          "보건의료"
+        ],
+        "colors": {
+          "음식": "#e05a3a",
+          "소매": "#3a7bd5",
+          "숙박": "#8e44ad",
+          "수리·개인": "#7f8c8d",
+          "과학·기술": "#16a085",
+          "시설관리·임대": "#a67c52",
+          "예술·스포츠": "#f39c12",
+          "교육": "#27ae60",
+          "부동산": "#95a5a6",
+          "보건의료": "#c0392b"
+        }
+      }
     },
     {
       "id": "tour_sites",
@@ -725,47 +765,6 @@
         "addr",
         "TELNO",
         "geocode"
-      ]
-    },
-    {
-      "id": "guesthouse",
-      "title": "게스트하우스 (경주시 현황 24)",
-      "file": "guesthouse.geojson",
-      "type": "circle",
-      "visible": true,
-      "source_note": "경주시 게스트하우스 현황 API · 지오코딩 24/24 · 관광 숙박 공급의 원도심 집중도",
-      "paint": {
-        "circle-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          11,
-          3,
-          15,
-          6,
-          18,
-          9
-        ],
-        "circle-color": "#8e44ad",
-        "circle-opacity": 0.9,
-        "circle-stroke-width": 1.2,
-        "circle-stroke-color": "#fff"
-      },
-      "legend": [
-        [
-          "#8e44ad",
-          "게스트하우스"
-        ]
-      ],
-      "popup": [
-        "name",
-        "addr",
-        "HMPG_NM",
-        "TELNO"
       ]
     }
   ]

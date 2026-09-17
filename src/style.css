@@ -36,3 +36,8 @@ footer{margin-top:auto;padding:12px 18px;font-size:11px;color:var(--ink2);font-f
 #basemap-ctl button.on{border-color:var(--accent);color:var(--accent)}
 .maplibregl-popup-content{font:12.5px/1.5 inherit;padding:10px 12px}
 @media (max-width:760px){body{grid-template-columns:1fr;grid-template-rows:55vh 45vh}#map{height:55vh}#sidebar{height:45vh;border-right:0;border-top:1px solid var(--line)}}
+
+.subfilter{display:flex;flex-wrap:wrap;gap:3px 10px;margin:6px 0 0 24px;font-size:11.5px;color:var(--ink2)}
+.subfilter label{display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.subfilter input{margin:0}
+.sf-btn{font:inherit;font-size:10.5px;padding:0 6px;border:1px solid var(--line);background:#fff;border-radius:3px;cursor:pointer;color:var(--ink2)}
