@@ -16,6 +16,7 @@ FILES = {
     "processed/traffic_hist_links_4326.geojson": "traffic_hist.geojson",
     "processed/reg_areas_4326.geojson":        "reg_areas.geojson",
     "raw/vworld_emd_gj.geojson":                "emd.geojson",
+    "processed/godo_4326.geojson":            "godo.geojson",
     "processed/foreign_places_4326.geojson":   "foreign_places.geojson",
     "processed/hadm_pop_4326.geojson":         "hadm_pop.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",

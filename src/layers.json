@@ -1029,6 +1029,89 @@
       "short": "규제 겹 수 (필지)"
     },
     {
+      "id": "godo",
+      "title": "고도지구 — 높이 상한별",
+      "short": "고도지구 (높이 상한별)",
+      "group": "규제",
+      "file": "godo.geojson",
+      "type": "fill",
+      "visible": false,
+      "source_note": "경계: V-World 용도지구(LT_C_UQ123, 토지이음 원본) · 높이: 경상북도 고시 제2020-479호 경주 도시관리계획(고도지구) 결정(변경) 조서·지형도면(2020-12-28) 라벨을 폴리곤에 배정. conf=label(도면 라벨)·zone(2026-8호 조서 교차면적)·area(조서 면적합 ±1%)·approx(추정). 도심 밖(황성·동천·보문 등)은 도면 범위 밖이라 '미확인'. 최저고도지구는 별도(최저 높이 규제). 구경주역 구역 = 도심20m(145,364㎡)+도심15m(11,143㎡).",
+      "paint": {
+        "fill-opacity": 0.55,
+        "fill-color": [
+          "match",
+          [
+            "get",
+            "h_cls"
+          ],
+          "36m",
+          "#7f0000",
+          "25m",
+          "#b30000",
+          "20m",
+          "#d7301f",
+          "15m",
+          "#ef6548",
+          "12m",
+          "#fc8d59",
+          "10m",
+          "#fdbb84",
+          "7.5m",
+          "#fdd49e",
+          "최저고도",
+          "#2c7bb6",
+          "미확인",
+          "#bdbdbd",
+          "#bdbdbd"
+        ]
+      },
+      "outline": {
+        "line-color": "#5a1a1a",
+        "line-width": 0.8
+      },
+      "label": {
+        "field": "lbl",
+        "size": 10.5
+      },
+      "subfilter": {
+        "field": "h_cls",
+        "values": [
+          "36m",
+          "25m",
+          "20m",
+          "15m",
+          "12m",
+          "10m",
+          "7.5m",
+          "최저고도",
+          "미확인"
+        ],
+        "colors": {
+          "36m": "#7f0000",
+          "25m": "#b30000",
+          "20m": "#d7301f",
+          "15m": "#ef6548",
+          "12m": "#fc8d59",
+          "10m": "#fdbb84",
+          "7.5m": "#fdd49e",
+          "최저고도": "#2c7bb6",
+          "미확인": "#bdbdbd"
+        }
+      },
+      "legend": [],
+      "popup": [
+        "godo_nm",
+        "h_max",
+        "kind",
+        "conf",
+        "godo_no",
+        "area_m2",
+        "gosi_last",
+        "src"
+      ]
+    },
+    {
       "id": "reg_areas",
       "title": "규제 영역 — 종류별",
       "file": "reg_areas.geojson",
