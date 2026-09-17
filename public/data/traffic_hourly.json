@@ -1,0 +1,11 @@
+{
+ "latest": "20260917091500",
+ "snapshots": 1,
+ "hourly": {
+  "9": {
+   "speed_avg": 30.7,
+   "congested_pct": 13.4,
+   "n": 1528
+  }
+ }
+}

@@ -19,6 +19,8 @@ h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2
 dl{margin:0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 #chart-inds{height:190px}
 #chart-vis{height:170px}
+#chart-traffic{height:170px}
+#cong-list li{cursor:pointer}#cong-list li:hover{color:var(--accent)}
 dl div{background:var(--bg);padding:8px 10px;border-radius:4px}
 dt{font-size:10.5px;color:var(--ink2);font-family:var(--mono)}
 dd{margin:0;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}

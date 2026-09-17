@@ -76,8 +76,8 @@ map.on("load", async () => {
     li.querySelector("input").addEventListener("change", (ev) => ids.forEach((id) => map.setLayoutProperty(id, "visibility", ev.target.checked ? "visible" : "none")));
     list.prepend(li);
   }
-  ["blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "guesthouse"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  updateStats(); drawChart(); drawVisitors();
+  ["traffic", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "guesthouse"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  updateStats(); drawChart(); drawVisitors(); drawTraffic();
 });
 
 // ---- 방문자 시계열 (시군구 = S3, 지도와 독립) ---------------------------------
@@ -116,6 +116,12 @@ function updateStats() {
   // 노후도: 건물 있는 필지 중 사용승인 30년↑ 비율
   const aged = [...new Set(feats.filter((f) => f.properties.bldg_age != null).map((f) => f.properties.pnu + "|" + f.properties.bldg_age))].map((s) => +s.split("|")[1]);
   document.getElementById("st-old").textContent = aged.length ? Math.round(aged.filter((a) => a >= 30).length / aged.length * 100) + "%" : "–";
+  // 교통: 화면 내 정체 링크 비율
+  if (map.getLayer("traffic")) {
+    const tf = map.queryRenderedFeatures({ layers: ["traffic"] }); const ids = new Set(); let cong = 0, tot = 0;
+    for (const f of tf) { if (ids.has(f.properties.LINK_ID)) continue; ids.add(f.properties.LINK_ID); if (f.properties.speed != null) { tot++; if (f.properties.speed < 15) cong++; } }
+    document.getElementById("st-cong").textContent = tot ? `${cong}/${tot} (${Math.round(cong / tot * 100)}%)` : "–";
+  }
   // 업종 분포 (화면 내 업소)
   if (map.getLayer("stores")) {
     const st = map.queryRenderedFeatures({ layers: ["stores"] }); const cnt = {}; const ids = new Set();
@@ -165,3 +171,30 @@ for (const [k, b] of Object.entries(BASEMAPS)) {
   ctl.appendChild(btn);
 }
 if (!VWORLD_KEY) { const s = document.createElement("span"); s.className = "muted"; s.textContent = " (V-World 배경: src/config.js에 키)"; ctl.appendChild(s); }
+
+
+// ---- 교통: 시간대별 · 상습정체 (build_traffic.py 산출) ------------------------
+async function drawTraffic() {
+  let h, c;
+  try { [h, c] = await Promise.all([fetch(`${base}data/traffic_hourly.json`, { cache: "no-cache" }).then((r) => r.json()), fetch(`${base}data/traffic_congested.json`, { cache: "no-cache" }).then((r) => r.json())]); } catch { return; }
+  const hours = [...Array(24).keys()].map(String);
+  const ch = echarts.init(document.getElementById("chart-traffic"));
+  ch.setOption({
+    grid: { left: 40, right: 36, top: 24, bottom: 20 }, tooltip: { trigger: "axis" },
+    legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 11 } },
+    xAxis: { type: "category", data: hours.map((x) => x + "시"), axisLabel: { fontSize: 10, interval: 2 } },
+    yAxis: [{ type: "value", name: "km/h", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10 }, splitLine: { lineStyle: { color: "#eee" } } },
+            { type: "value", name: "정체%", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10 }, max: 100, splitLine: { show: false } }],
+    series: [{ name: "평균속도", type: "bar", data: hours.map((x) => h.hourly[x]?.speed_avg ?? null), itemStyle: { color: "#2c6a5c" } },
+             { name: "정체 링크 %", type: "line", yAxisIndex: 1, data: hours.map((x) => h.hourly[x]?.congested_pct ?? null), itemStyle: { color: "#d7191c" }, connectNulls: false }],
+  });
+  const lt = h.latest; const covered = Object.keys(h.hourly).length;
+  document.getElementById("traffic-note").textContent = `최신 ${lt.slice(0,4)}.${lt.slice(4,6)}.${lt.slice(6,8)} ${lt.slice(8,10)}:${lt.slice(10,12)} · 스냅샷 ${h.snapshots}개 · 시간대 ${covered}/24 수집됨 — 24시간 누적 후 혼잡시간대가 의미를 가짐`;
+  const ol = document.getElementById("cong-list"); ol.innerHTML = "";
+  for (const t of c.slice(0, 8)) {
+    const li = document.createElement("li"); li.textContent = `${t.road || "(무명)"} — 정체 ${t.congested_pct}% · 평균 ${t.speed_avg} km/h (${t.n}회)`;
+    li.onclick = () => { const f = (dataCache.traffic?.features || []).find((x) => x.properties.LINK_ID === t.linkId); if (!f) return; const cs = f.geometry.type === "LineString" ? f.geometry.coordinates : f.geometry.coordinates[0]; map.flyTo({ center: cs[Math.floor(cs.length / 2)], zoom: 16.5 }); };
+    ol.appendChild(li);
+  }
+  window.addEventListener("resize", () => ch.resize());
+}

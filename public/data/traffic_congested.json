@@ -1,0 +1,177 @@
+[
+ {
+  "linkId": "3521209301",
+  "road": "강변로",
+  "congested_pct": 100,
+  "speed_avg": 5.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521209201",
+  "road": "강변로",
+  "congested_pct": 100,
+  "speed_avg": 4.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521205701",
+  "road": "유림로",
+  "congested_pct": 100,
+  "speed_avg": 12.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521204701",
+  "road": "새안현로",
+  "congested_pct": 100,
+  "speed_avg": 10.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521202501",
+  "road": "알천북로",
+  "congested_pct": 100,
+  "speed_avg": 11.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521202101",
+  "road": "알천북로",
+  "congested_pct": 100,
+  "speed_avg": 13.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521197401",
+  "road": "새안현로",
+  "congested_pct": 100,
+  "speed_avg": 14.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521197301",
+  "road": "새안현로",
+  "congested_pct": 100,
+  "speed_avg": 12.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521185600",
+  "road": "용황로4길",
+  "congested_pct": 100,
+  "speed_avg": 14.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521178000",
+  "road": "원화로309번길",
+  "congested_pct": 100,
+  "speed_avg": 9.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521170800",
+  "road": "용황로6길",
+  "congested_pct": 100,
+  "speed_avg": 11.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521170700",
+  "road": "용황로6길",
+  "congested_pct": 100,
+  "speed_avg": 13.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521170600",
+  "road": "용황로9길",
+  "congested_pct": 100,
+  "speed_avg": 10.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521170300",
+  "road": "용황로11길",
+  "congested_pct": 100,
+  "speed_avg": 14.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521169800",
+  "road": "광중2길",
+  "congested_pct": 100,
+  "speed_avg": 13.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521169700",
+  "road": "광중2길",
+  "congested_pct": 100,
+  "speed_avg": 14.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521167200",
+  "road": "동방중앙길",
+  "congested_pct": 100,
+  "speed_avg": 8.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521153000",
+  "road": "-",
+  "congested_pct": 100,
+  "speed_avg": 8.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521152900",
+  "road": "-",
+  "congested_pct": 100,
+  "speed_avg": 12.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521152100",
+  "road": "충효2길",
+  "congested_pct": 100,
+  "speed_avg": 13.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521149900",
+  "road": "용담로116번길",
+  "congested_pct": 100,
+  "speed_avg": 9.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521142700",
+  "road": "현진앞3길",
+  "congested_pct": 100,
+  "speed_avg": 8.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521141700",
+  "road": "현진앞3길",
+  "congested_pct": 100,
+  "speed_avg": 10.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521141100",
+  "road": "현진앞2길",
+  "congested_pct": 100,
+  "speed_avg": 10.0,
+  "n": 1
+ },
+ {
+  "linkId": "3521140900",
+  "road": "현진앞3길",
+  "congested_pct": 100,
+  "speed_avg": 14.0,
+  "n": 1
+ }
+]

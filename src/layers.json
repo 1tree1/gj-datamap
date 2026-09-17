@@ -392,6 +392,107 @@
       ]
     },
     {
+      "id": "traffic",
+      "title": "교통소통 (ITS 실시간, 5분)",
+      "file": "traffic.geojson",
+      "type": "line",
+      "visible": true,
+      "source_note": "국가교통정보센터 trafficInfo × 표준노드링크(2026-09-14) · 1,528링크 · 색 = 현재 속도(정체<15 / 서행<30 / 원활) · 스냅샷 누적으로 시간대별 평균 생성",
+      "paint": {
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          [
+            "match",
+            [
+              "get",
+              "ROAD_RANK"
+            ],
+            "101",
+            3,
+            "103",
+            2.5,
+            1.2
+          ],
+          16,
+          [
+            "match",
+            [
+              "get",
+              "ROAD_RANK"
+            ],
+            "101",
+            8,
+            "103",
+            6,
+            3.5
+          ]
+        ],
+        "line-opacity": 0.9,
+        "line-color": [
+          "case",
+          [
+            "!",
+            [
+              "has",
+              "speed"
+            ]
+          ],
+          "#bbb",
+          [
+            "step",
+            [
+              "get",
+              "speed"
+            ],
+            "#d7191c",
+            15,
+            "#fdae61",
+            30,
+            "#1a9641"
+          ]
+        ]
+      },
+      "legend": [
+        [
+          "#d7191c",
+          "정체 <15 km/h"
+        ],
+        [
+          "#fdae61",
+          "서행 15–30"
+        ],
+        [
+          "#1a9641",
+          "원활 30↑"
+        ],
+        [
+          "#bbb",
+          "자료 없음"
+        ]
+      ],
+      "popup": [
+        "ROAD_NAME",
+        "road_its",
+        "speed",
+        "speed_avg",
+        "ratio",
+        "level",
+        "MAX_SPD",
+        "LANES",
+        "ROAD_RANK",
+        "LENGTH",
+        "n_obs",
+        "LINK_ID"
+      ]
+    },
+    {
       "id": "blocks",
       "title": "획지·공원·주차장 (고시 2026-8호)",
       "file": "blocks.geojson",

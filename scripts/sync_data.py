@@ -12,12 +12,13 @@ FILES = {
     "processed/parcels_energy_4326.geojson":   "energy.geojson",
     "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
     "raw/gj_guesthouse.geojson":                "guesthouse.geojson",
+    "processed/traffic_links_4326.geojson":    "traffic.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",
     "raw/vworld_uq111.geojson":                 "landuse.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s
