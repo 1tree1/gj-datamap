@@ -36,7 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
-const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-yd", "chart-yind", "chart-ymig", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
@@ -165,13 +165,59 @@ map.on("load", async () => {
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
-  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_y2034-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts", "religion", "religion-lb", "schools", "schools-lb", "hwango_grid", "hwango_grid-ol", "hwango_grid-lb", "hwango_biz2024", "hwango_biz2024-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras(); drawHwango();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
+  drawYouth();
   drawNationality();
 });
+
+// ---- 청년: 어디 살고(행정동 20–34), 무슨 일(시 단위 취업 구조), 남는가(순이동) ----------
+async function drawYouth() {
+  let d; try { d = await fetch(`${base}data/youth.json`, { cache: "no-cache" }).then((r) => r.json()); } catch { return; }
+  const mk = (id) => { const el = document.getElementById(id); return el ? (echarts.getInstanceByDom(el) || echarts.init(el)) : null; };
+  const hbar = { grid: { left: 92, right: 44, top: 4, bottom: 4 }, tooltip: { trigger: "axis" }, xAxis: { type: "value", show: false },
+                 yAxis: { type: "category", inverse: true, axisLabel: { fontSize: 10.5 }, axisTick: { show: false }, axisLine: { show: false } } };
+  // 1) 행정동 20–34세 상위 12 (막대 = 인원, 라벨 = 비율)
+  const dong = d.dong.slice(0, 12);
+  const c1 = mk("chart-yd"); if (c1) c1.setOption({ ...hbar, yAxis: { ...hbar.yAxis, data: dong.map((x) => x.hadm) },
+    tooltip: { trigger: "axis", formatter: (ps) => { const x = dong[ps[0].dataIndex]; return `${x.hadm}<br>20–34세 ${x.n.toLocaleString()}명 · ${x.pct}% · 인구 ${x.pop.toLocaleString()}`; } },
+    series: [{ type: "bar", data: dong.map((x) => x.n), itemStyle: { color: (p) => ["황오동", "성건동", "황남동", "월성동"].includes(dong[p.dataIndex].hadm) ? "#6e016b" : "#9ebcda" },
+               label: { show: true, position: "right", fontSize: 10, formatter: (p) => `${p.value.toLocaleString()} · ${dong[p.dataIndex].pct}%` }, barCategoryGap: "28%" }] }, true);
+  const core = d.dong.filter((x) => ["황오동", "성건동", "황남동", "월성동"].includes(x.hadm)); const coreN = core.reduce((s, x) => s + x.n, 0);
+  const top4 = d.dong.slice(0, 4).reduce((s, x) => s + x.n, 0);
+  const ydn = document.getElementById("yd-note"); if (ydn) ydn.textContent = `경주시 20–34세 ${d.city_y2034.toLocaleString()}명(${d.city_pct}%). 상위 4곳(${d.dong.slice(0, 4).map((x) => x.hadm).join("·")})에 ${Math.round(top4 / d.city_y2034 * 100)}%가 삽니다. 부지가 속한 원도심 4개 동(진한 색)은 합쳐 ${coreN.toLocaleString()}명(${Math.round(coreN / d.city_y2034 * 100)}%)이고 그중 ${Math.round(core.find((x) => x.hadm === "성건동").n / coreN * 100)}%가 대학이 있는 성건동입니다. 황남동은 ${core.find((x) => x.hadm === "황남동").pct}%로 시 평균의 절반입니다.`;
+  // 2) 산업·직업 (전 연령) — 두 막대 나란히
+  const c2 = mk("chart-yind"); if (c2) {
+    const ind = d.industry.map(([k, v]) => [k.replace(/\s*\(.*?\)\s*/g, "").replace("사업·개인·공공서비스 및 기타", "사업·개인·공공서비스"), v]);
+    const occ = d.occupation.map(([k, v]) => [k.replace(" 및 관련종사자", "").replace(" 종사자", "").replace("기능·기계조작·조립", "기능·기계조작"), v]);
+    c2.setOption({ grid: [{ left: 118, right: 40, top: 22, bottom: 4, width: "30%" }, { left: "62%", right: 40, top: 22, bottom: 4 }],
+      title: [{ text: "산업 (천명)", left: 0, top: 0, textStyle: { fontSize: 10.5, color: "#5b6661", fontWeight: 500 } }, { text: "직업 (천명)", left: "50%", top: 0, textStyle: { fontSize: 10.5, color: "#5b6661", fontWeight: 500 } }],
+      tooltip: { trigger: "axis", valueFormatter: (v) => v + "천명" },
+      xAxis: [{ type: "value", show: false, gridIndex: 0 }, { type: "value", show: false, gridIndex: 1 }],
+      yAxis: [{ type: "category", inverse: true, gridIndex: 0, data: ind.map((x) => x[0]), axisLabel: { fontSize: 10 }, axisTick: { show: false }, axisLine: { show: false } },
+              { type: "category", inverse: true, gridIndex: 1, data: occ.map((x) => x[0]), axisLabel: { fontSize: 10 }, axisTick: { show: false }, axisLine: { show: false } }],
+      series: [{ type: "bar", xAxisIndex: 0, yAxisIndex: 0, data: ind.map((x) => x[1]), itemStyle: { color: "#2c6a5c" }, label: { show: true, position: "right", fontSize: 10 }, barCategoryGap: "30%" },
+               { type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: occ.map((x) => x[1]), itemStyle: { color: "#7f8c8d" }, label: { show: true, position: "right", fontSize: 10 }, barCategoryGap: "30%" }] }, true);
+  }
+  const a = Object.fromEntries(d.age_emp), r = Object.fromEntries(d.age_rate);
+  const yin = document.getElementById("yind-note"); if (yin) yin.textContent = `취업자 ${d.emp_total_k}천명(${d.emp_prd.slice(0, 4)}년 ${d.emp_prd.slice(4) === "01" ? "상" : "하"}반기, 전 연령). 15–29세 취업자는 ${a["15 - 29세"]}천명, 고용률 ${r["15 - 29세"]}%로 30–49세(${r["30 - 49세"]}%)의 절반 수준입니다. 청년만의 산업 구성은 시군구 단위로 공표되지 않아(통계청 MDIS 신청 필요) 이 그래프는 전 연령입니다 — 농림어업 ${a["65세이상"]}천명의 65세 이상 취업자가 있는 구조라 청년은 제조·서비스 쪽에 더 몰려 있을 것으로 추정되지만, 이는 추정입니다.`;
+  // 3) 순이동 연령대별 선
+  const c3 = mk("chart-ymig"); if (c3) {
+    const bands = ["20-24세", "25-29세", "30-34세", "35-39세"]; const col = { "20-24세": "#980043", "25-29세": "#dd1c77", "30-34세": "#df65b0", "35-39세": "#9ebcda" };
+    c3.setOption({ grid: { left: 44, right: 12, top: 26, bottom: 22 }, tooltip: { trigger: "axis", valueFormatter: (v) => (v > 0 ? "+" : "") + v.toLocaleString() + "명" },
+      legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 10.5 } },
+      xAxis: { type: "category", data: d.mig_years, axisLabel: { fontSize: 10 } },
+      yAxis: { type: "value", axisLabel: { fontSize: 10, formatter: (v) => v.toLocaleString() }, splitLine: { lineStyle: { color: "#eee" } } },
+      series: [...bands.map((b) => ({ name: b, type: "line", data: d.net[b], symbolSize: 5, lineStyle: { width: 2, color: col[b] }, itemStyle: { color: col[b] } })),
+               { name: "전체", type: "bar", data: d.net["계"], itemStyle: { color: "rgba(120,130,125,.25)" }, barWidth: "40%" },
+               { type: "line", markLine: { silent: true, symbol: "none", lineStyle: { color: "#999", type: "dashed" }, data: [{ yAxis: 0 }], label: { show: false } }, data: [] }] }, true);
+  }
+  const ys = d.mig_years, n2034 = d.net["20-34세"], n2024 = d.net["20-24세"];
+  const ymn = document.getElementById("ymig-note"); if (ymn) ymn.textContent = `20–34세는 ${ys[0]}~${ys[ys.length - 1]}년 매년 순유출(${n2034.map((v) => v.toLocaleString()).join(" / ")}명)이고, 그중 20–24세가 가장 큽니다(${ys[0]} ${n2024[0].toLocaleString()} → ${ys[ys.length - 1]} ${n2024[n2024.length - 1].toLocaleString()}). ${ys[ys.length - 1]}년 전체가 ${d.net["계"][ys.length - 1] > 0 ? "+" : ""}${d.net["계"][ys.length - 1].toLocaleString()}명으로 돌아선 것은 30대 이상 유입 때문이며 20–24세는 여전히 빠져나갑니다.`;
+}
 
 // ---- 외국인주민 유형 (선택 동 / 경주시 합) ---------------------------------------
 const FR_KINDS = [["fr_worker", "외국인근로자"], ["fr_marriage", "결혼이민자"], ["fr_student", "유학생"], ["fr_diaspora", "외국국적동포"], ["fr_other", "기타외국인"], ["fr_naturalized", "귀화자"], ["fr_children", "외국인주민 자녀"]];
