@@ -1,1946 +1,2395 @@
 {
-  "center": [
-    129.219,
-    35.844
-  ],
-  "zoom": 14.2,
-  "layers": [
-    {
-      "id": "emd",
-      "title": "법정동 경계 (경주시 56)",
-      "short": "법정동 경계",
-      "group": "계획",
-      "file": "emd.geojson",
-      "type": "line",
-      "visible": false,
-      "source_note": "V-World LT_C_ADEMD_INFO · 법정동 56개 · 인구통계는 행정동(23) 기준이라 SGIS 행정동 경계 확보 후 인구 레이어 추가 예정",
-      "paint": {
-        "line-color": "#5a6b64",
-        "line-width": 1.2,
-        "line-dasharray": [
-          3,
-          2
-        ]
-      },
-      "label": {
-        "field": "emd_kor_nm",
-        "size": 11
-      },
-      "legend": [
-        [
-          "#5a6b64",
-          "법정동"
-        ]
+ "center": [
+  129.219,
+  35.844
+ ],
+ "zoom": 14.2,
+ "layers": [
+  {
+   "id": "emd",
+   "title": "법정동 경계 (경주시 56)",
+   "short": "법정동 경계",
+   "group": "계획",
+   "file": "emd.geojson",
+   "type": "line",
+   "visible": false,
+   "source_note": "V-World LT_C_ADEMD_INFO · 법정동 56개 · 인구통계는 행정동(23) 기준이라 SGIS 행정동 경계 확보 후 인구 레이어 추가 예정",
+   "paint": {
+    "line-color": "#5a6b64",
+    "line-width": 1.2,
+    "line-dasharray": [
+     3,
+     2
+    ]
+   },
+   "label": {
+    "field": "emd_kor_nm",
+    "size": 11
+   },
+   "legend": [
+    [
+     "#5a6b64",
+     "법정동"
+    ]
+   ],
+   "popup": [
+    "emd_kor_nm",
+    "emd_cd",
+    "full_nm"
+   ]
+  },
+  {
+   "id": "pop_total",
+   "title": "총인구 (행정동)",
+   "short": "총인구 (행정동)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": true,
+   "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 라벨 = 인구 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "pop"
       ],
-      "popup": [
-        "emd_kor_nm",
-        "emd_cd",
-        "full_nm"
-      ]
-    },
-    {
-      "id": "pop_total",
-      "title": "총인구 (행정동)",
-      "short": "총인구 (행정동)",
-      "group": "인구",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": true,
-      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 라벨 = 인구 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "pop"
-            ],
-            0
-          ],
-          "#f7fbf4",
-          5000,
-          "#d4e8d0",
-          10000,
-          "#a9d1a4",
-          15000,
-          "#6fb389",
-          22000,
-          "#3b8a63",
-          26000,
-          "#1f5e42"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_pop",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#f7fbf4",
-          "<5천"
-        ],
-        [
-          "#d4e8d0",
-          "5천–1만"
-        ],
-        [
-          "#a9d1a4",
-          "1–1.5만"
-        ],
-        [
-          "#6fb389",
-          "1.5–2.2만"
-        ],
-        [
-          "#3b8a63",
-          "2.2–2.6만"
-        ],
-        [
-          "#1f5e42",
-          "2.6만↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#f7fbf4",
+     5000,
+     "#d4e8d0",
+     10000,
+     "#a9d1a4",
+     15000,
+     "#6fb389",
+     22000,
+     "#3b8a63",
+     26000,
+     "#1f5e42"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_pop",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f7fbf4",
+     "<5천"
+    ],
+    [
+     "#d4e8d0",
+     "5천–1만"
+    ],
+    [
+     "#a9d1a4",
+     "1–1.5만"
+    ],
+    [
+     "#6fb389",
+     "1.5–2.2만"
+    ],
+    [
+     "#3b8a63",
+     "2.2–2.6만"
+    ],
+    [
+     "#1f5e42",
+     "2.6만↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "area_km2",
+    "density",
+    "n_65",
+    "pct_65",
+    "n_youth",
+    "pct_youth",
+    "n_0_14",
+    "chg_10y_pct"
+   ]
+  },
+  {
+   "id": "pop_density",
+   "title": "인구밀도 (명/㎢)",
+   "short": "인구밀도 (명/㎢)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 면적은 EPSG:5187 계산 · 황성동 7,204 / 용강동 4,827 / 황오동 4,147 명/㎢ 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "density"
       ],
-      "popup": [
-        "hadm",
-        "pop",
-        "area_km2",
-        "density",
-        "n_65",
-        "pct_65",
-        "n_youth",
-        "pct_youth",
-        "n_0_14",
-        "chg_10y_pct"
-      ]
-    },
-    {
-      "id": "pop_density",
-      "title": "인구밀도 (명/㎢)",
-      "short": "인구밀도 (명/㎢)",
-      "group": "인구",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 면적은 EPSG:5187 계산 · 황성동 7,204 / 용강동 4,827 / 황오동 4,147 명/㎢ 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "density"
-            ],
-            0
-          ],
-          "#fff7ec",
-          100,
-          "#fee8c8",
-          500,
-          "#fdbb84",
-          2000,
-          "#fc8d59",
-          4000,
-          "#e34a33",
-          6000,
-          "#b30000"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_den",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#fff7ec",
-          "<100"
-        ],
-        [
-          "#fee8c8",
-          "100–500"
-        ],
-        [
-          "#fdbb84",
-          "500–2천"
-        ],
-        [
-          "#fc8d59",
-          "2–4천"
-        ],
-        [
-          "#e34a33",
-          "4–6천"
-        ],
-        [
-          "#b30000",
-          "6천↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#fff7ec",
+     100,
+     "#fee8c8",
+     500,
+     "#fdbb84",
+     2000,
+     "#fc8d59",
+     4000,
+     "#e34a33",
+     6000,
+     "#b30000"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_den",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#fff7ec",
+     "<100"
+    ],
+    [
+     "#fee8c8",
+     "100–500"
+    ],
+    [
+     "#fdbb84",
+     "500–2천"
+    ],
+    [
+     "#fc8d59",
+     "2–4천"
+    ],
+    [
+     "#e34a33",
+     "4–6천"
+    ],
+    [
+     "#b30000",
+     "6천↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "area_km2",
+    "density",
+    "n_65",
+    "pct_65",
+    "n_youth",
+    "pct_youth",
+    "n_0_14",
+    "chg_10y_pct"
+   ]
+  },
+  {
+   "id": "pop_65",
+   "title": "고령인구 (65세↑ 수·비율)",
+   "short": "고령인구 (65세↑ 수·비율)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "pct_65"
       ],
-      "popup": [
-        "hadm",
-        "pop",
-        "area_km2",
-        "density",
-        "n_65",
-        "pct_65",
-        "n_youth",
-        "pct_youth",
-        "n_0_14",
-        "chg_10y_pct"
-      ]
-    },
-    {
-      "id": "pop_65",
-      "title": "고령인구 (65세↑ 수·비율)",
-      "short": "고령인구 (65세↑ 수·비율)",
-      "group": "인구",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "pct_65"
-            ],
-            0
-          ],
-          "#f7fbf4",
-          15,
-          "#d4e8d0",
-          20,
-          "#a9d1a4",
-          27,
-          "#f2c078",
-          35,
-          "#e07b39",
-          45,
-          "#b5322a"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_65",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#f7fbf4",
-          "<15%"
-        ],
-        [
-          "#d4e8d0",
-          "15–20"
-        ],
-        [
-          "#a9d1a4",
-          "20–27"
-        ],
-        [
-          "#f2c078",
-          "27–35"
-        ],
-        [
-          "#e07b39",
-          "35–45"
-        ],
-        [
-          "#b5322a",
-          "45%↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#f7fbf4",
+     15,
+     "#d4e8d0",
+     20,
+     "#a9d1a4",
+     27,
+     "#f2c078",
+     35,
+     "#e07b39",
+     45,
+     "#b5322a"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_65",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f7fbf4",
+     "<15%"
+    ],
+    [
+     "#d4e8d0",
+     "15–20"
+    ],
+    [
+     "#a9d1a4",
+     "20–27"
+    ],
+    [
+     "#f2c078",
+     "27–35"
+    ],
+    [
+     "#e07b39",
+     "35–45"
+    ],
+    [
+     "#b5322a",
+     "45%↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "area_km2",
+    "density",
+    "n_65",
+    "pct_65",
+    "n_youth",
+    "pct_youth",
+    "n_0_14",
+    "chg_10y_pct"
+   ]
+  },
+  {
+   "id": "pop_youth",
+   "title": "청년인구 (20–39세 수·비율)",
+   "short": "청년인구 (20–39세 수·비율)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 청년 = 20–39세(5세 구간 근사; 경주시 청년 기준 19–39) · 성건동 23.8% / 황성동 21.6% / 황남동 9.4% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. '청년' 20–39세는 이 지도의 정의(청년기본법 19–34세, 경북 청년기본조례 19–39세와 다름).",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "pct_youth"
       ],
-      "popup": [
-        "hadm",
-        "pop",
-        "area_km2",
-        "density",
-        "n_65",
-        "pct_65",
-        "n_youth",
-        "pct_youth",
-        "n_0_14",
-        "chg_10y_pct"
-      ]
-    },
-    {
-      "id": "pop_youth",
-      "title": "청년인구 (20–39세 수·비율)",
-      "short": "청년인구 (20–39세 수·비율)",
-      "group": "인구",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 청년 = 20–39세(5세 구간 근사; 경주시 청년 기준 19–39) · 성건동 23.8% / 황성동 21.6% / 황남동 9.4% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. '청년' 20–39세는 이 지도의 정의(청년기본법 19–34세, 경북 청년기본조례 19–39세와 다름).",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "pct_youth"
-            ],
-            0
-          ],
-          "#f1eef6",
-          8,
-          "#d4b9da",
-          12,
-          "#c994c7",
-          16,
-          "#df65b0",
-          20,
-          "#dd1c77",
-          23,
-          "#980043"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_youth",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#f1eef6",
-          "<8%"
-        ],
-        [
-          "#d4b9da",
-          "8–12"
-        ],
-        [
-          "#c994c7",
-          "12–16"
-        ],
-        [
-          "#df65b0",
-          "16–20"
-        ],
-        [
-          "#dd1c77",
-          "20–23"
-        ],
-        [
-          "#980043",
-          "23%↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#f1eef6",
+     8,
+     "#d4b9da",
+     12,
+     "#c994c7",
+     16,
+     "#df65b0",
+     20,
+     "#dd1c77",
+     23,
+     "#980043"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_youth",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f1eef6",
+     "<8%"
+    ],
+    [
+     "#d4b9da",
+     "8–12"
+    ],
+    [
+     "#c994c7",
+     "12–16"
+    ],
+    [
+     "#df65b0",
+     "16–20"
+    ],
+    [
+     "#dd1c77",
+     "20–23"
+    ],
+    [
+     "#980043",
+     "23%↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "area_km2",
+    "density",
+    "n_65",
+    "pct_65",
+    "n_youth",
+    "pct_youth",
+    "n_0_14",
+    "chg_10y_pct"
+   ]
+  },
+  {
+   "id": "pop_chg",
+   "title": "10년 인구변화 (2015→2025 %)",
+   "short": "10년 인구변화 (2015→2025 %)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심 2025년 폐지된 중부동은 2011~2024 시계열을 황오동에 합산해 계산(황오동 2015 = 8,045+6,314). 합산 전 값은 yearly_raw. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "chg_10y_pct"
       ],
-      "popup": [
-        "hadm",
-        "pop",
-        "area_km2",
-        "density",
-        "n_65",
-        "pct_65",
-        "n_youth",
-        "pct_youth",
-        "n_0_14",
-        "chg_10y_pct"
-      ]
-    },
-    {
-      "id": "pop_chg",
-      "title": "10년 인구변화 (2015→2025 %)",
-      "short": "10년 인구변화 (2015→2025 %)",
-      "group": "인구",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심 2025년 폐지된 중부동은 2011~2024 시계열을 황오동에 합산해 계산(황오동 2015 = 8,045+6,314). 합산 전 값은 yearly_raw. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "chg_10y_pct"
-            ],
-            0
-          ],
-          "#8c2d04",
-          -30,
-          "#d94801",
-          -20,
-          "#fd8d3c",
-          -10,
-          "#fdd0a2",
-          0,
-          "#c7e9c0",
-          10,
-          "#41ab5d",
-          25,
-          "#00441b"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "hadm",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#8c2d04",
-          "−30%↓"
-        ],
-        [
-          "#d94801",
-          "−30~−20"
-        ],
-        [
-          "#fd8d3c",
-          "−20~−10"
-        ],
-        [
-          "#fdd0a2",
-          "−10~0"
-        ],
-        [
-          "#c7e9c0",
-          "0~+10"
-        ],
-        [
-          "#41ab5d",
-          "+10~25"
-        ],
-        [
-          "#00441b",
-          "+25%↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#8c2d04",
+     -30,
+     "#d94801",
+     -20,
+     "#fd8d3c",
+     -10,
+     "#fdd0a2",
+     0,
+     "#c7e9c0",
+     10,
+     "#41ab5d",
+     25,
+     "#00441b"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "hadm",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#8c2d04",
+     "−30%↓"
+    ],
+    [
+     "#d94801",
+     "−30~−20"
+    ],
+    [
+     "#fd8d3c",
+     "−20~−10"
+    ],
+    [
+     "#fdd0a2",
+     "−10~0"
+    ],
+    [
+     "#c7e9c0",
+     "0~+10"
+    ],
+    [
+     "#41ab5d",
+     "+10~25"
+    ],
+    [
+     "#00441b",
+     "+25%↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "area_km2",
+    "density",
+    "n_65",
+    "pct_65",
+    "n_youth",
+    "pct_youth",
+    "n_0_14",
+    "chg_10y_pct",
+    "yearly_note"
+   ]
+  },
+  {
+   "id": "fr_pct",
+   "title": "외국인주민 (수·비율)",
+   "short": "외국인주민 (수·비율)",
+   "group": "외국인·다문화",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "행안부 지방자치단체 외국인주민 현황 2024 (KOSIS DT_110025_A033_A, 읍면동). 근로자·결혼이민·유학생·외국국적동포·기타 + 귀화 + 자녀. 중부동은 황오동에 합산(2025 통합). 비율 분모 = 주민등록 2026-08 + 국적미취득 외국인 — 시점 차이로 근사. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "fr_pct"
       ],
-      "popup": [
-        "hadm",
-        "pop",
-        "area_km2",
-        "density",
-        "n_65",
-        "pct_65",
-        "n_youth",
-        "pct_youth",
-        "n_0_14",
-        "chg_10y_pct",
-        "yearly_note"
-      ]
-    },
-    {
-      "id": "fr_pct",
-      "title": "외국인주민 (수·비율)",
-      "short": "외국인주민 (수·비율)",
-      "group": "외국인·다문화",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "행안부 지방자치단체 외국인주민 현황 2024 (KOSIS DT_110025_A033_A, 읍면동). 근로자·결혼이민·유학생·외국국적동포·기타 + 귀화 + 자녀. 중부동은 황오동에 합산(2025 통합). 비율 분모 = 주민등록 2026-08 + 국적미취득 외국인 — 시점 차이로 근사. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "fr_pct"
-            ],
-            0
-          ],
-          "#f7f4f9",
-          2,
-          "#d4b9da",
-          5,
-          "#c994c7",
-          10,
-          "#df65b0",
-          20,
-          "#dd1c77",
-          30,
-          "#980043"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_fr",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#f7f4f9",
-          "<2%"
-        ],
-        [
-          "#d4b9da",
-          "2–5"
-        ],
-        [
-          "#c994c7",
-          "5–10"
-        ],
-        [
-          "#df65b0",
-          "10–20"
-        ],
-        [
-          "#dd1c77",
-          "20–30"
-        ],
-        [
-          "#980043",
-          "30%↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
+      0
+     ],
+     "#f7f4f9",
+     2,
+     "#d4b9da",
+     5,
+     "#c994c7",
+     10,
+     "#df65b0",
+     20,
+     "#dd1c77",
+     30,
+     "#980043"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_fr",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f7f4f9",
+     "<2%"
+    ],
+    [
+     "#d4b9da",
+     "2–5"
+    ],
+    [
+     "#c994c7",
+     "5–10"
+    ],
+    [
+     "#df65b0",
+     "10–20"
+    ],
+    [
+     "#dd1c77",
+     "20–30"
+    ],
+    [
+     "#980043",
+     "30%↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "fr_total",
+    "fr_pct",
+    "fr_worker",
+    "fr_diaspora",
+    "fr_student",
+    "fr_marriage",
+    "fr_other",
+    "fr_naturalized",
+    "fr_children",
+    "mc_households",
+    "mc_marriage",
+    "mc_children",
+    "pop",
+    "fr_year",
+    "fr_note"
+   ]
+  },
+  {
+   "id": "mc_hh",
+   "title": "다문화가구 (수)",
+   "short": "다문화가구 (수)",
+   "group": "외국인·다문화",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "행안부 외국인주민 현황 2024 (KOSIS DT_110025_A045_A, 읍면동). 결혼이민자·귀화자 가구 + 자녀 수. 중부동은 황오동에 합산. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "mc_households"
       ],
-      "popup": [
-        "hadm",
-        "fr_total",
-        "fr_pct",
-        "fr_worker",
-        "fr_diaspora",
-        "fr_student",
-        "fr_marriage",
-        "fr_other",
-        "fr_naturalized",
-        "fr_children",
-        "mc_households",
-        "mc_marriage",
-        "mc_children",
-        "pop",
-        "fr_year",
-        "fr_note"
-      ]
-    },
-    {
-      "id": "mc_hh",
-      "title": "다문화가구 (수)",
-      "short": "다문화가구 (수)",
-      "group": "외국인·다문화",
-      "file": "hadm_pop.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "행안부 외국인주민 현황 2024 (KOSIS DT_110025_A045_A, 읍면동). 결혼이민자·귀화자 가구 + 자녀 수. 중부동은 황오동에 합산. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "step",
-          [
-            "coalesce",
-            [
-              "get",
-              "mc_households"
-            ],
-            0
-          ],
-          "#fff7fb",
-          100,
-          "#ece2f0",
-          250,
-          "#d0d1e6",
-          450,
-          "#a6bddb",
-          700,
-          "#3690c0",
-          1200,
-          "#034e7b"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a4a44",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "lbl_mc",
-        "size": 10.5
-      },
-      "legend": [
-        [
-          "#fff7fb",
-          "<100"
-        ],
-        [
-          "#ece2f0",
-          "100–250"
-        ],
-        [
-          "#d0d1e6",
-          "250–450"
-        ],
-        [
-          "#a6bddb",
-          "450–700"
-        ],
-        [
-          "#3690c0",
-          "700–1,200"
-        ],
-        [
-          "#034e7b",
-          "1,200↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
-      ],
-      "popup": [
-        "hadm",
-        "fr_total",
-        "fr_pct",
-        "fr_worker",
-        "fr_diaspora",
-        "fr_student",
-        "fr_marriage",
-        "fr_other",
-        "fr_naturalized",
-        "fr_children",
-        "mc_households",
-        "mc_marriage",
-        "mc_children",
-        "pop",
-        "fr_year",
-        "fr_note"
-      ]
-    },
-    {
-      "id": "fr_places",
-      "title": "외국인 관련 상점·시설 (키워드 추정)",
-      "short": "외국인 관련 상점·시설 (추정)",
-      "group": "외국인·다문화",
-      "file": "foreign_places.geojson",
-      "type": "circle",
-      "visible": false,
-      "minzoom": 11,
-      "source_note": "소진공 상가업소 상호·업종 키워드 매칭 — 공식 등록부가 아닌 추정. '상호' 근거(러시아·베트남·할랄 등)는 강하고, '업종' 근거(베트남식·중국식 등)는 한국인 운영 프랜차이즈를 포함. 이슬람 종교시설(마스지드·무살라)은 공공 등록 데이터가 없어 현장·POI 조사 필요.",
-      "paint": {
-        "circle-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          11,
-          3,
-          15,
-          6,
-          18,
-          10
-        ],
-        "circle-opacity": 0.9,
-        "circle-stroke-width": 1.2,
-        "circle-stroke-color": "#fff",
-        "circle-color": [
-          "match",
-          [
-            "get",
-            "fr_cat"
-          ],
-          "중앙아시아·고려인",
-          "#c0392b",
-          "동남아",
-          "#e67e22",
-          "할랄·이슬람",
-          "#1e8449",
-          "중국·기타",
-          "#8e44ad",
-          "지원시설",
-          "#2874a6",
-          "외국 음식 업종",
-          "#b2babb",
-          "#555"
-        ]
-      },
-      "subfilter": {
-        "field": "fr_cat",
-        "values": [
-          "중앙아시아·고려인",
-          "동남아",
-          "할랄·이슬람",
-          "중국·기타",
-          "지원시설",
-          "외국 음식 업종"
-        ],
-        "colors": {
-          "중앙아시아·고려인": "#c0392b",
-          "동남아": "#e67e22",
-          "할랄·이슬람": "#1e8449",
-          "중국·기타": "#8e44ad",
-          "지원시설": "#2874a6",
-          "외국 음식 업종": "#b2babb"
-        }
-      },
-      "legend": [],
-      "popup": [
-        "bizesNm",
-        "fr_cat",
-        "fr_kw",
-        "fr_basis",
-        "indsSclsNm",
-        "lnoAdr"
-      ]
-    },
-    {
-      "id": "landuse",
-      "title": "용도지역 (V-World UQ111)",
-      "file": "landuse.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "V-World LT_C_UQ111 · 고시 2026-8호 반영 여부 미확인",
-      "paint": {
-        "fill-opacity": 0.35,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "uname"
-          ],
-          "제1종일반주거지역",
-          "#fff7b3",
-          "제2종일반주거지역",
-          "#ffe97a",
-          "일반상업지역",
-          "#f5a3d8",
-          "자연녹지지역",
-          "#cfe9b0",
-          "보전녹지지역",
-          "#9fd48c",
-          "#dddddd"
-        ]
-      },
-      "legend": [
-        [
-          "#fff7b3",
-          "1종일반주거"
-        ],
-        [
-          "#ffe97a",
-          "2종일반주거"
-        ],
-        [
-          "#f5a3d8",
-          "일반상업"
-        ],
-        [
-          "#cfe9b0",
-          "자연녹지"
-        ],
-        [
-          "#9fd48c",
-          "보전녹지"
-        ]
-      ],
-      "popup": [
-        "uname",
-        "dyear",
-        "dnum"
-      ],
-      "group": "계획",
-      "short": "용도지역"
-    },
-    {
-      "id": "upis",
-      "title": "도시계획시설 (V-World UPIS)",
-      "file": "upis.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "도로 87 · 공원·광장 8 · 학교·청사 5 · 교통 3 · 기타 3 · 지구단위계획구역 3 — 고시 2026-8호 반영 여부 dgm_nm으로 확인",
-      "paint": {
-        "fill-opacity": 0.35,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "_layer"
-          ],
-          "LT_C_UPISUQ151",
-          "#9aa5b1",
-          "LT_C_UPISUQ152",
-          "#5c6bc0",
-          "LT_C_UPISUQ153",
-          "#43a047",
-          "LT_C_UPISUQ155",
-          "#00897b",
-          "LT_C_UPISUQ161",
-          "#8e24aa",
-          "LT_C_UQ141",
-          "#d81b60",
-          "#999"
-        ]
-      },
-      "outline": {
-        "line-color": "#333",
-        "line-width": 0.6
-      },
-      "legend": [
-        [
-          "#9aa5b1",
-          "도로"
-        ],
-        [
-          "#5c6bc0",
-          "교통(주차·철도)"
-        ],
-        [
-          "#43a047",
-          "공원·광장"
-        ],
-        [
-          "#00897b",
-          "학교·청사"
-        ],
-        [
-          "#8e24aa",
-          "기타"
-        ],
-        [
-          "#d81b60",
-          "지구단위계획구역"
-        ]
-      ],
-      "popup": [
-        "_layer_nm",
-        "dgm_nm",
-        "uname",
-        "dgm_ar",
-        "dgm_lt",
-        "ntfc_sn",
-        "wtnnc_sn",
-        "dyear",
-        "dnum"
-      ],
-      "group": "계획",
-      "short": "도시계획시설"
-    },
-    {
-      "id": "sbiz_zones",
-      "title": "상권영역 (소진공, 상권명)",
-      "file": "sbiz_zones.geojson",
-      "type": "line",
-      "visible": false,
-      "source_note": "소상공인시장진흥공단 상가(상권)정보 API storeZoneInRectangle · 5개 라벨 = 소진공 상권명(mainTrarNm; 대표 시설명으로 붙인 이름).",
-      "paint": {
-        "line-color": "#7a3e9d",
-        "line-width": 2,
-        "line-dasharray": [
-          2,
-          1.5
-        ]
-      },
-      "legend": [
-        [
-          "#7a3e9d",
-          "상권영역"
-        ]
-      ],
-      "popup": [
-        "mainTrarNm",
-        "trarArea",
-        "stdrDt",
-        "trarNo"
-      ],
-      "group": "상권·관광",
-      "short": "상권영역 (소진공)",
-      "label": {
-        "field": "mainTrarNm",
-        "size": 11
-      }
-    },
-    {
-      "id": "parcels",
-      "title": "필지 · 건축물 노후도",
-      "file": "parcels.geojson",
-      "type": "fill",
-      "visible": false,
-      "minzoom": 14,
-      "source_note": "V-World 지적 7,616필지 + 건축물대장 2,164필지 조인 · 클릭 시 토지이용계획(지역·지구 목록, 토지이음과 동일) · 색 = 최고령 건물 경과연수 사용승인일이 없는 대장(철도시설·구 역사 등 12필지)은 회색 '미상'. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. 노후 기준: 도시재생 쇠퇴진단은 20년↑ 노후건축물 비율(50%↑)을 쓴다. 30년↑은 참고 구간.",
-      "paint": {
-        "fill-opacity": 0.55,
-        "fill-color": [
-          "case",
-          [
-            "!",
-            [
-              "has",
-              "bldg_age"
-            ]
-          ],
-          "rgba(0,0,0,0)",
-          [
-            "!=",
-            [
-              "typeof",
-              [
-                "get",
-                "bldg_age"
-              ]
-            ],
-            "number"
-          ],
-          "#b0b0b0",
-          [
-            "step",
-            [
-              "get",
-              "bldg_age"
-            ],
-            "#e8f3e6",
-            10,
-            "#c7e0bd",
-            20,
-            "#f6d68a",
-            30,
-            "#e9975a",
-            40,
-            "#c8452b"
-          ]
-        ]
-      },
-      "legend": [
-        [
-          "#e8f3e6",
-          "<10년"
-        ],
-        [
-          "#c7e0bd",
-          "10–20"
-        ],
-        [
-          "#f6d68a",
-          "20–30"
-        ],
-        [
-          "#e9975a",
-          "30–40"
-        ],
-        [
-          "#c8452b",
-          "40년↑"
-        ],
-        [
-          "#b0b0b0",
-          "대장 있음 · 사용승인일 미상 (역사·철도시설 등 12필지)"
-        ],
-        [
-          "rgba(0,0,0,0)",
-          "건물 없음/미조인"
-        ]
-      ],
-      "popup": [
-        "addr",
-        "pnu",
-        "lu_list",
-        "lu_touch",
-        "jiga",
-        "bldg_oldest",
-        "bldg_age",
-        "bldg_purps",
-        "bldg_strct",
-        "bldg_flr",
-        "bldg_totArea",
-        "bldg_n"
-      ],
-      "outline": {
-        "line-color": "#6b7c88",
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          14,
-          0.2,
-          18,
-          1.0
-        ],
-        "line-opacity": 0.8
-      },
-      "group": "건물·필지",
-      "short": "필지 · 건물 노후도"
-    },
-    {
-      "id": "reg",
-      "title": "규제 중첩 — 겹 수 (필지)",
-      "file": "parcels.geojson",
-      "type": "fill",
-      "visible": false,
-      "minzoom": 14,
-      "source_note": "V-World 토지이용계획 속성 7,616필지(토지이음 확인서와 동일 원천). 겹 수 = ①용도지역·지구(항상 1; 고도·방화·경관·보호지구 포함) + ②고도보존육성지구(역사문화환경 특별보존지구∨보존육성지구) + ③역사문화환경 보존지역(문화유산법 500m 허용기준∨국가지정문화유산구역) + ④지구단위계획구역 — CLAUDE.md 4겹 정의. '포함·저촉'만 인정, '접함'은 제외(lu_touch에 기록). pipeline/build_reg_flags.py",
-      "paint": {
-        "fill-opacity": 0.6,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "reg_layers"
-          ],
-          1,
-          "#e9f0ec",
-          2,
-          "#b7d7c2",
-          3,
-          "#e3a857",
-          4,
-          "#b23a2c",
-          "#ccc"
-        ]
-      },
-      "outline": {
-        "line-color": "#555",
-        "line-width": 0.3
-      },
-      "legend": [
-        [
-          "#e9f0ec",
-          "1겹 (용도지역·지구만)"
-        ],
-        [
-          "#b7d7c2",
-          "2겹"
-        ],
-        [
-          "#e3a857",
-          "3겹"
-        ],
-        [
-          "#b23a2c",
-          "4겹 (고도보존+문화유산+지구단위)"
-        ]
-      ],
-      "popup": [
-        "addr",
-        "reg_layers",
-        "reg_l2",
-        "reg_l3",
-        "reg_l4",
-        "lu_list",
-        "lu_touch",
-        "jiga"
-      ],
-      "group": "규제",
-      "short": "규제 겹 수 (필지)"
-    },
-    {
-      "id": "godo",
-      "title": "고도지구 — 높이 상한별",
-      "short": "고도지구 (높이 상한별)",
-      "group": "규제",
-      "file": "godo.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "경계: V-World 용도지구(LT_C_UQ123, 토지이음 원본) · 높이: 경상북도 고시 제2020-479호 경주 도시관리계획(고도지구) 결정(변경) 조서·지형도면(2020-12-28) 라벨을 폴리곤에 배정. conf=label(도면 라벨)·zone(2026-8호 조서 교차면적)·area(조서 면적합 ±1%)·approx(추정). 도심 밖(황성·동천·보문 등)은 도면 범위 밖이라 '미확인'. 최저고도지구는 별도(최저 높이 규제). 구경주역 구역 = 도심20m(145,364㎡)+도심15m(11,143㎡).",
-      "paint": {
-        "fill-opacity": 0.55,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "h_cls"
-          ],
-          "36m",
-          "#7f0000",
-          "25m",
-          "#b30000",
-          "20m",
-          "#d7301f",
-          "15m",
-          "#ef6548",
-          "12m",
-          "#fc8d59",
-          "10m",
-          "#fdbb84",
-          "7.5m",
-          "#fdd49e",
-          "최저고도",
-          "#2c7bb6",
-          "미확인",
-          "#bdbdbd",
-          "#bdbdbd"
-        ]
-      },
-      "outline": {
-        "line-color": "#5a1a1a",
-        "line-width": 0.8
-      },
-      "label": {
-        "field": "lbl",
-        "size": 10.5
-      },
-      "subfilter": {
-        "field": "h_cls",
-        "values": [
-          "36m",
-          "25m",
-          "20m",
-          "15m",
-          "12m",
-          "10m",
-          "7.5m",
-          "최저고도",
-          "미확인"
-        ],
-        "colors": {
-          "36m": "#7f0000",
-          "25m": "#b30000",
-          "20m": "#d7301f",
-          "15m": "#ef6548",
-          "12m": "#fc8d59",
-          "10m": "#fdbb84",
-          "7.5m": "#fdd49e",
-          "최저고도": "#2c7bb6",
-          "미확인": "#bdbdbd"
-        }
-      },
-      "legend": [],
-      "popup": [
-        "godo_nm",
-        "h_max",
-        "kind",
-        "conf",
-        "godo_no",
-        "area_m2",
-        "gosi_last",
-        "src"
-      ]
-    },
-    {
-      "id": "reg_areas",
-      "title": "규제 영역 — 종류별 (법정 경계 + 일부 필지 근사)",
-      "file": "reg_areas.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "법정 경계: V-World LT_C_UO301(역사문화환경보존지역·국가지정문화유산구역·문화유산 보호구역·시도지정·등록·지정물, 경주 272건) · UQ126 역사문화환경보호지구 88 · UQ124 방화지구 8 · UQ123 고도지구 · UQ141 지구단위계획구역. V-World에 없는 3종(고도보존육성 특별법의 특별보존·보존육성지구, 경관계획의 중점경관관리구역)만 토지이용계획 포함·저촉 필지 외곽으로 근사(수집 창 한정). v1(2026-09-17 오전)은 전부 필지 외곽이었음 — 창 안에서 법정보다 10~26% 넓고, 저촉 필지 때문에 구역 안에 없는 문화유산구역이 0.8ha 있는 것처럼 보였음. 문화유산 이름은 alias/remark에서 정리(지정번호는 note).",
-      "paint": {
-        "fill-opacity": 0.18,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "reg"
-          ],
-          "역사문화환경보존지역",
-          "#e6550d",
-          "역사문화환경 특별보존지구",
-          "#b2182b",
-          "역사문화환경 보존육성지구",
-          "#7b3294",
-          "역사문화환경보호지구",
-          "#fdae6b",
-          "국가지정문화유산구역",
-          "#8c510a",
-          "문화유산 보호구역",
-          "#bf812d",
-          "시도지정문화유산구역",
-          "#dfc27d",
-          "등록문화유산구역",
-          "#c7a76c",
-          "문화유산(지정물)",
-          "#543005",
-          "고도지구",
-          "#6a3d9a",
-          "방화지구",
-          "#d62728",
-          "중점경관관리구역",
-          "#1f78b4",
-          "지구단위계획구역",
-          "#e7298a",
-          "#999"
-        ]
-      },
-      "outline": {
-        "line-color": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "geom_src"
-            ],
-            "필지 외곽 (근사)"
-          ],
-          "#999",
-          "#3a3a3a"
-        ],
-        "line-width": [
-          "case",
-          [
-            "==",
-            [
-              "get",
-              "geom_src"
-            ],
-            "필지 외곽 (근사)"
-          ],
-          1.0,
-          0.8
-        ],
-        "line-dasharray": [
-          2,
-          1
-        ]
-      },
-      "label": {
-        "field": "lbl",
-        "size": 10
-      },
-      "subfilter": {
-        "field": "reg",
-        "values": [
-          "역사문화환경보존지역",
-          "역사문화환경 특별보존지구",
-          "역사문화환경 보존육성지구",
-          "역사문화환경보호지구",
-          "국가지정문화유산구역",
-          "문화유산 보호구역",
-          "시도지정문화유산구역",
-          "등록문화유산구역",
-          "문화유산(지정물)",
-          "고도지구",
-          "방화지구",
-          "중점경관관리구역",
-          "지구단위계획구역"
-        ],
-        "colors": {
-          "역사문화환경보존지역": "#e6550d",
-          "역사문화환경 특별보존지구": "#b2182b",
-          "역사문화환경 보존육성지구": "#7b3294",
-          "역사문화환경보호지구": "#fdae6b",
-          "국가지정문화유산구역": "#8c510a",
-          "문화유산 보호구역": "#bf812d",
-          "시도지정문화유산구역": "#dfc27d",
-          "등록문화유산구역": "#c7a76c",
-          "문화유산(지정물)": "#543005",
-          "고도지구": "#6a3d9a",
-          "방화지구": "#d62728",
-          "중점경관관리구역": "#1f78b4",
-          "지구단위계획구역": "#e7298a"
-        }
-      },
-      "legend": [
-        [
-          "transparent",
-          "실선 = 법정 경계(V-World 토지이용규제 원본) · 점선회색 = 필지 외곽 근사(특별보존·보존육성·중점경관)"
-        ]
-      ],
-      "popup": [
-        "lbl",
-        "reg",
-        "name",
-        "note",
-        "geom_src",
-        "gosi",
-        "area_ha",
-        "layer"
-      ],
-      "group": "규제",
-      "short": "규제 영역 (종류별)"
-    },
-    {
-      "id": "energy",
-      "title": "건물 전기사용 (2026-05)",
-      "file": "energy.geojson",
-      "type": "fill",
-      "visible": false,
-      "minzoom": 14,
-      "source_note": "건축HUB 건물에너지 · 구역 300m 내 건물필지 450 중 기록 있는 154 · 단독주택·소규모 공동주택은 제공 제외 → 상가·업무 건물만 유효 · 0 kWh = 공실 후보 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. ★공실의 대리변수(proxy)로 수집했지만 0 kWh가 곧 공실은 아니다 — 미계량·미제공·신축을 구분할 수 없다.",
-      "paint": {
-        "fill-opacity": 0.75,
-        "fill-color": [
-          "step",
-          [
-            "get",
-            "kwh_per_m2"
-          ],
-          "#7b1fa2",
-          0.01,
-          "#d32f2f",
-          1,
-          "#fb8c00",
-          3,
-          "#fdd835",
-          6,
-          "#8bc34a",
-          12,
-          "#2e7d32"
-        ]
-      },
-      "outline": {
-        "line-color": "#333",
-        "line-width": 0.8
-      },
-      "legend": [
-        [
-          "#7b1fa2",
-          "0 kWh — 미계량·미제공·공실 등 원인 미구분"
-        ],
-        [
-          "#d32f2f",
-          "<1 kWh/㎡"
-        ],
-        [
-          "#fb8c00",
-          "1–3"
-        ],
-        [
-          "#fdd835",
-          "3–6"
-        ],
-        [
-          "#8bc34a",
-          "6–12"
-        ],
-        [
-          "#2e7d32",
-          "12↑"
-        ],
-        [
-          "transparent",
-          "※ 급간은 임의 설정(분위수 아님)"
-        ]
-      ],
-      "popup": [
-        "addr",
-        "elec_kwh",
-        "gas_m3",
-        "kwh_per_m2",
-        "bldg_purps",
-        "bldg_totArea",
-        "bldg_age",
-        "use_ym"
-      ],
-      "group": "건물·필지",
-      "short": "건물 전기사용 (2026-05)"
-    },
-    {
-      "id": "traffic_hist",
-      "title": "시간대별 평균 소통 (이력)",
-      "short": "시간대별 평균 소통 (이력 표본)",
-      "group": "교통",
-      "file": "traffic_hist.geojson",
-      "type": "line",
-      "visible": false,
-      "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          12,
-          [
-            "match",
-            [
-              "get",
-              "ROAD_RANK"
-            ],
-            "101",
-            3,
-            "103",
-            2.5,
-            1.2
-          ],
-          16,
-          [
-            "match",
-            [
-              "get",
-              "ROAD_RANK"
-            ],
-            "101",
-            8,
-            "103",
-            6,
-            3.5
-          ]
-        ],
-        "line-opacity": 0.9,
-        "line-color": [
-          "case",
-          [
-            "!",
-            [
-              "has",
-              "wd_08"
-            ]
-          ],
-          "#bbb",
-          [
-            "<",
-            [
-              "get",
-              "wd_08"
-            ],
-            [
-              "coalesce",
-              [
-                "get",
-                "thr_c"
-              ],
-              15
-            ]
-          ],
-          "#d7191c",
-          [
-            "<",
-            [
-              "get",
-              "wd_08"
-            ],
-            [
-              "coalesce",
-              [
-                "get",
-                "thr_f"
-              ],
-              25
-            ]
-          ],
-          "#fdae61",
-          "#1a9641"
-        ]
-      },
-      "hourslider": true,
-      "legend": [
-        [
-          "#d7191c",
-          "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
-        ],
-        [
-          "#fdae61",
-          "서행"
-        ],
-        [
-          "#1a9641",
-          "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
-        ],
-        [
-          "#ccc",
-          "표본 없음"
-        ]
-      ],
-      "popup": [
-        "ROAD_NAME",
-        "wd_mean",
-        "wd_min",
-        "wd_worst_hour",
-        "n_obs_hist",
-        "MAX_SPD",
-        "LANES",
-        "LINK_ID"
-      ]
-    },
-    {
-      "id": "traffic",
-      "title": "교통소통 (ITS 실시간, 5분)",
-      "file": "traffic.geojson",
-      "type": "line",
-      "visible": true,
-      "source_note": "국가교통정보센터 trafficInfo × 표준노드링크(2026-09-14) · 1,528링크 · 색 = 현재 속도의 소통등급 · 스냅샷 누적으로 시간대별 평균 생성 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
-      "paint": {
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          12,
-          [
-            "match",
-            [
-              "get",
-              "ROAD_RANK"
-            ],
-            "101",
-            3,
-            "103",
-            2.5,
-            1.2
-          ],
-          16,
-          [
-            "match",
-            [
-              "get",
-              "ROAD_RANK"
-            ],
-            "101",
-            8,
-            "103",
-            6,
-            3.5
-          ]
-        ],
-        "line-opacity": 0.9,
-        "line-color": [
-          "case",
-          [
-            "!",
-            [
-              "has",
-              "speed"
-            ]
-          ],
-          "#bbb",
-          [
-            "<",
-            [
-              "get",
-              "speed"
-            ],
-            [
-              "coalesce",
-              [
-                "get",
-                "thr_c"
-              ],
-              15
-            ]
-          ],
-          "#d7191c",
-          [
-            "<",
-            [
-              "get",
-              "speed"
-            ],
-            [
-              "coalesce",
-              [
-                "get",
-                "thr_f"
-              ],
-              25
-            ]
-          ],
-          "#fdae61",
-          "#1a9641"
-        ]
-      },
-      "legend": [
-        [
-          "#d7191c",
-          "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
-        ],
-        [
-          "#fdae61",
-          "서행"
-        ],
-        [
-          "#1a9641",
-          "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
-        ],
-        [
-          "#bbb",
-          "자료 없음"
-        ]
-      ],
-      "popup": [
-        "ROAD_NAME",
-        "road_its",
-        "speed",
-        "speed_avg",
-        "ratio",
-        "level",
-        "MAX_SPD",
-        "LANES",
-        "ROAD_RANK",
-        "LENGTH",
-        "n_obs",
-        "LINK_ID"
-      ],
-      "group": "교통",
-      "short": "교통소통 (실시간 5분)"
-    },
-    {
-      "id": "busstops",
-      "title": "버스정류장 (경주BIS 1,951)",
-      "file": "busstops.geojson",
-      "type": "circle",
-      "visible": false,
-      "minzoom": 13,
-      "source_note": "국토교통부 전국 버스정류장 위치정보 2025-10-31 파일 · 경주시 1,951개 · 경주시 버스 API(노선·실시간)는 서버 504로 대기",
-      "paint": {
-        "circle-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          13,
-          2,
-          16,
-          5,
-          18,
-          8
-        ],
-        "circle-color": "#1565c0",
-        "circle-opacity": 0.9,
-        "circle-stroke-width": 1,
-        "circle-stroke-color": "#fff"
-      },
-      "legend": [
-        [
-          "#1565c0",
-          "정류장"
-        ]
-      ],
-      "popup": [
-        "name",
-        "stop_id",
-        "short_no",
-        "bis",
-        "date"
-      ],
-      "group": "교통",
-      "short": "버스정류장"
-    },
-    {
-      "id": "blocks",
-      "title": "획지·공원·주차장 (고시 2026-8호)",
-      "file": "blocks.geojson",
-      "type": "fill",
-      "visible": true,
-      "source_note": "지형도면고시도 11·12장 벡터화 · 고시 결정조서 면적 대비 ±4%",
-      "paint": {
-        "fill-opacity": 0.55,
-        "fill-color": [
-          "match",
-          [
-            "get",
-            "cls"
-          ],
-          "commercial",
-          "#e879c9",
-          "civic",
-          "#5db4e6",
-          "culture",
-          "#f2b25b",
-          "park",
-          "#3fae4a",
-          "parking",
-          "#8d8d8d",
-          "#999"
-        ]
-      },
-      "outline": {
-        "line-color": "#3a2a3a",
-        "line-width": 1.2
-      },
-      "label": {
-        "field": "name",
-        "size": 13
-      },
-      "legend": [
-        [
-          "#e879c9",
-          "상업(상1~3)"
-        ],
-        [
-          "#5db4e6",
-          "공공청사"
-        ],
-        [
-          "#f2b25b",
-          "문화"
-        ],
-        [
-          "#3fae4a",
-          "근린공원"
-        ],
-        [
-          "#8d8d8d",
-          "주차장"
-        ]
-      ],
-      "popup": [
-        "name",
-        "cls",
-        "area_m2",
-        "gosi_area_m2",
-        "note"
-      ],
-      "group": "계획",
-      "short": "획지·공원·주차장"
-    },
-    {
-      "id": "zone",
-      "title": "지구단위계획구역 (구역 27)",
-      "file": "zone.geojson",
-      "type": "line",
-      "visible": true,
-      "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
-      "paint": {
-        "line-color": "#d81e1e",
-        "line-width": 2.5,
-        "line-dasharray": [
-          4,
-          2,
-          1,
-          2
-        ]
-      },
-      "legend": [
-        [
-          "#d81e1e",
-          "구역 경계"
-        ]
-      ],
-      "popup": [
-        "name",
-        "area_m2",
-        "gosi_area_m2"
-      ],
-      "group": "계획",
-      "short": "지구단위계획구역"
-    },
-    {
-      "id": "stores",
-      "title": "상가 업소 (소진공 2026-03 + 게스트하우스)",
-      "file": "stores.geojson",
-      "type": "circle",
-      "visible": false,
-      "minzoom": 14,
-      "source_note": "소진공 상가정보 API 10,314 (원도심+황성·동천·용강·보문 창) + 게스트하우스 18 · 영업 중 스냅샷",
-      "paint": {
-        "circle-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          14,
-          1.5,
-          17,
-          4,
-          19,
-          7
-        ],
-        "circle-opacity": 0.85,
-        "circle-stroke-width": 0.4,
-        "circle-stroke-color": "#fff",
-        "circle-color": [
-          "match",
-          [
-            "get",
-            "indsLclsNm"
-          ],
-          "음식",
-          "#e05a3a",
-          "소매",
-          "#3a7bd5",
-          "숙박",
-          "#8e44ad",
-          "수리·개인",
-          "#7f8c8d",
-          "과학·기술",
-          "#16a085",
-          "시설관리·임대",
-          "#a67c52",
-          "예술·스포츠",
-          "#f39c12",
-          "교육",
-          "#27ae60",
-          "부동산",
-          "#95a5a6",
-          "보건의료",
-          "#c0392b",
-          "#555"
-        ]
-      },
-      "legend": [],
-      "popup": [
-        "bizesNm",
-        "indsLclsNm",
-        "indsMclsNm",
-        "indsSclsNm",
-        "lnoAdr",
-        "bldNm",
-        "flrNo",
-        "src"
-      ],
-      "subfilter": {
-        "field": "indsLclsNm",
-        "values": [
-          "음식",
-          "소매",
-          "숙박",
-          "수리·개인",
-          "과학·기술",
-          "시설관리·임대",
-          "예술·스포츠",
-          "교육",
-          "부동산",
-          "보건의료"
-        ],
-        "colors": {
-          "음식": "#e05a3a",
-          "소매": "#3a7bd5",
-          "숙박": "#8e44ad",
-          "수리·개인": "#7f8c8d",
-          "과학·기술": "#16a085",
-          "시설관리·임대": "#a67c52",
-          "예술·스포츠": "#f39c12",
-          "교육": "#27ae60",
-          "부동산": "#95a5a6",
-          "보건의료": "#c0392b"
-        }
-      },
-      "group": "상권·관광",
-      "short": "상가 업소 (10,332)"
-    },
-    {
-      "id": "tourism_complex",
-      "title": "관광단지 (관광진흥법)",
-      "short": "관광단지 (보문·감포·북경주·마우나오션)",
-      "group": "상권·관광",
-      "file": "tourism_complex.geojson",
-      "type": "fill",
-      "visible": false,
-      "source_note": "V-World LT_C_UO601(관광단지 지정 경계, 토지이용규제 원본). 속성에 이름이 없어 마지막 고시번호(dyear-dnum)를 토지이음 고시정보로 대조해 이름 확정: 보문 2008-128 / 감포해양 2021-172 / 북경주 웰니스 2021-233 / 마우나오션 2026-202(모두 경상북도 고시, T1). 면적은 폴리곤 계산값.",
-      "paint": {
-        "fill-opacity": 0.28,
-        "fill-color": "#0e8a7a"
-      },
-      "outline": {
-        "line-color": "#0e8a7a",
-        "line-width": 1.6,
-        "line-dasharray": [
-          3,
-          2
-        ]
-      },
-      "label": {
-        "field": "lbl",
-        "size": 11.5
-      },
-      "legend": [
-        [
-          "#0e8a7a",
-          "관광단지 지정 경계"
-        ]
-      ],
-      "popup": [
-        "name",
-        "area_ha",
-        "gosi",
-        "basis",
-        "src"
-      ]
-    },
-    {
-      "id": "tour_sites",
-      "title": "관광지 (경주시 현황 159)",
-      "file": "tour_sites.geojson",
-      "type": "circle",
-      "visible": false,
-      "source_note": "경주시 관광지 현황 API · 주소만 제공 → V-World 지오코딩 153/159 (권역 TURSM_DSTRCT)",
-      "paint": {
-        "circle-radius": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          11,
-          3,
-          15,
-          6,
-          18,
-          9
-        ],
-        "circle-color": "#c0392b",
-        "circle-opacity": 0.9,
-        "circle-stroke-width": 1.2,
-        "circle-stroke-color": "#fff"
-      },
-      "legend": [
-        [
-          "#c0392b",
-          "관광지"
-        ]
-      ],
-      "popup": [
-        "name",
-        "TURSM_DSTRCT",
-        "addr",
-        "TELNO",
-        "geocode"
-      ],
-      "group": "상권·관광",
-      "short": "관광지"
+      0
+     ],
+     "#fff7fb",
+     100,
+     "#ece2f0",
+     250,
+     "#d0d1e6",
+     450,
+     "#a6bddb",
+     700,
+     "#3690c0",
+     1200,
+     "#034e7b"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_mc",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#fff7fb",
+     "<100"
+    ],
+    [
+     "#ece2f0",
+     "100–250"
+    ],
+    [
+     "#d0d1e6",
+     "250–450"
+    ],
+    [
+     "#a6bddb",
+     "450–700"
+    ],
+    [
+     "#3690c0",
+     "700–1,200"
+    ],
+    [
+     "#034e7b",
+     "1,200↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "fr_total",
+    "fr_pct",
+    "fr_worker",
+    "fr_diaspora",
+    "fr_student",
+    "fr_marriage",
+    "fr_other",
+    "fr_naturalized",
+    "fr_children",
+    "mc_households",
+    "mc_marriage",
+    "mc_children",
+    "pop",
+    "fr_year",
+    "fr_note"
+   ]
+  },
+  {
+   "id": "fr_places",
+   "title": "외국인 관련 상점·시설 (키워드 추정)",
+   "short": "외국인 관련 상점·시설 (추정)",
+   "group": "외국인·다문화",
+   "file": "foreign_places.geojson",
+   "type": "circle",
+   "visible": false,
+   "minzoom": 11,
+   "source_note": "소진공 상가업소 상호·업종 키워드 매칭 — 공식 등록부가 아닌 추정. '상호' 근거(러시아·베트남·할랄 등)는 강하고, '업종' 근거(베트남식·중국식 등)는 한국인 운영 프랜차이즈를 포함. 이슬람 종교시설(마스지드·무살라)은 공공 등록 데이터가 없어 현장·POI 조사 필요.",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     11,
+     3,
+     15,
+     6,
+     18,
+     10
+    ],
+    "circle-opacity": 0.9,
+    "circle-stroke-width": 1.2,
+    "circle-stroke-color": "#fff",
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "fr_cat"
+     ],
+     "중앙아시아·고려인",
+     "#c0392b",
+     "동남아",
+     "#e67e22",
+     "할랄·이슬람",
+     "#1e8449",
+     "중국·기타",
+     "#8e44ad",
+     "지원시설",
+     "#2874a6",
+     "외국 음식 업종",
+     "#b2babb",
+     "#555"
+    ]
+   },
+   "subfilter": {
+    "field": "fr_cat",
+    "values": [
+     "중앙아시아·고려인",
+     "동남아",
+     "할랄·이슬람",
+     "중국·기타",
+     "지원시설",
+     "외국 음식 업종"
+    ],
+    "colors": {
+     "중앙아시아·고려인": "#c0392b",
+     "동남아": "#e67e22",
+     "할랄·이슬람": "#1e8449",
+     "중국·기타": "#8e44ad",
+     "지원시설": "#2874a6",
+     "외국 음식 업종": "#b2babb"
     }
-  ],
-  "groups": [
-    "인구",
-    "외국인·다문화",
-    "계획",
-    "규제",
-    "건물·필지",
-    "상권·관광",
-    "교통"
-  ]
+   },
+   "legend": [],
+   "popup": [
+    "bizesNm",
+    "fr_cat",
+    "fr_kw",
+    "fr_basis",
+    "indsSclsNm",
+    "lnoAdr"
+   ]
+  },
+  {
+   "id": "landuse",
+   "title": "용도지역 (V-World UQ111)",
+   "file": "landuse.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "V-World LT_C_UQ111 · 고시 2026-8호 반영 여부 미확인",
+   "paint": {
+    "fill-opacity": 0.35,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "uname"
+     ],
+     "제1종일반주거지역",
+     "#fff7b3",
+     "제2종일반주거지역",
+     "#ffe97a",
+     "일반상업지역",
+     "#f5a3d8",
+     "자연녹지지역",
+     "#cfe9b0",
+     "보전녹지지역",
+     "#9fd48c",
+     "#dddddd"
+    ]
+   },
+   "legend": [
+    [
+     "#fff7b3",
+     "1종일반주거"
+    ],
+    [
+     "#ffe97a",
+     "2종일반주거"
+    ],
+    [
+     "#f5a3d8",
+     "일반상업"
+    ],
+    [
+     "#cfe9b0",
+     "자연녹지"
+    ],
+    [
+     "#9fd48c",
+     "보전녹지"
+    ]
+   ],
+   "popup": [
+    "uname",
+    "dyear",
+    "dnum"
+   ],
+   "group": "계획",
+   "short": "용도지역"
+  },
+  {
+   "id": "upis",
+   "title": "도시계획시설 (V-World UPIS)",
+   "file": "upis.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "도로 87 · 공원·광장 8 · 학교·청사 5 · 교통 3 · 기타 3 · 지구단위계획구역 3 — 고시 2026-8호 반영 여부 dgm_nm으로 확인",
+   "paint": {
+    "fill-opacity": 0.35,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "_layer"
+     ],
+     "LT_C_UPISUQ151",
+     "#9aa5b1",
+     "LT_C_UPISUQ152",
+     "#5c6bc0",
+     "LT_C_UPISUQ153",
+     "#43a047",
+     "LT_C_UPISUQ155",
+     "#00897b",
+     "LT_C_UPISUQ161",
+     "#8e24aa",
+     "LT_C_UQ141",
+     "#d81b60",
+     "#999"
+    ]
+   },
+   "outline": {
+    "line-color": "#333",
+    "line-width": 0.6
+   },
+   "legend": [
+    [
+     "#9aa5b1",
+     "도로"
+    ],
+    [
+     "#5c6bc0",
+     "교통(주차·철도)"
+    ],
+    [
+     "#43a047",
+     "공원·광장"
+    ],
+    [
+     "#00897b",
+     "학교·청사"
+    ],
+    [
+     "#8e24aa",
+     "기타"
+    ],
+    [
+     "#d81b60",
+     "지구단위계획구역"
+    ]
+   ],
+   "popup": [
+    "_layer_nm",
+    "dgm_nm",
+    "uname",
+    "dgm_ar",
+    "dgm_lt",
+    "ntfc_sn",
+    "wtnnc_sn",
+    "dyear",
+    "dnum"
+   ],
+   "group": "계획",
+   "short": "도시계획시설"
+  },
+  {
+   "id": "sbiz_zones",
+   "title": "상권영역 (소진공, 상권명)",
+   "file": "sbiz_zones.geojson",
+   "type": "line",
+   "visible": false,
+   "source_note": "소상공인시장진흥공단 상가(상권)정보 API storeZoneInRectangle · 5개 라벨 = 소진공 상권명(mainTrarNm; 대표 시설명으로 붙인 이름).",
+   "paint": {
+    "line-color": "#7a3e9d",
+    "line-width": 2,
+    "line-dasharray": [
+     2,
+     1.5
+    ]
+   },
+   "legend": [
+    [
+     "#7a3e9d",
+     "상권영역"
+    ]
+   ],
+   "popup": [
+    "mainTrarNm",
+    "trarArea",
+    "stdrDt",
+    "trarNo"
+   ],
+   "group": "상권·관광",
+   "short": "상권영역 (소진공)",
+   "label": {
+    "field": "mainTrarNm",
+    "size": 11
+   }
+  },
+  {
+   "id": "parcels",
+   "title": "필지 · 건축물 노후도",
+   "file": "parcels.geojson",
+   "type": "fill",
+   "visible": false,
+   "minzoom": 14,
+   "source_note": "V-World 지적 7,616필지 + 건축물대장 2,164필지 조인 · 클릭 시 토지이용계획(지역·지구 목록, 토지이음과 동일) · 색 = 최고령 건물 경과연수 사용승인일이 없는 대장(철도시설·구 역사 등 12필지)은 회색 '미상'. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. 노후 기준: 도시재생 쇠퇴진단은 20년↑ 노후건축물 비율(50%↑)을 쓴다. 30년↑은 참고 구간.",
+   "paint": {
+    "fill-opacity": 0.55,
+    "fill-color": [
+     "case",
+     [
+      "!",
+      [
+       "has",
+       "bldg_age"
+      ]
+     ],
+     "rgba(0,0,0,0)",
+     [
+      "!=",
+      [
+       "typeof",
+       [
+        "get",
+        "bldg_age"
+       ]
+      ],
+      "number"
+     ],
+     "#b0b0b0",
+     [
+      "step",
+      [
+       "get",
+       "bldg_age"
+      ],
+      "#e8f3e6",
+      10,
+      "#c7e0bd",
+      20,
+      "#f6d68a",
+      30,
+      "#e9975a",
+      40,
+      "#c8452b"
+     ]
+    ]
+   },
+   "legend": [
+    [
+     "#e8f3e6",
+     "<10년"
+    ],
+    [
+     "#c7e0bd",
+     "10–20"
+    ],
+    [
+     "#f6d68a",
+     "20–30"
+    ],
+    [
+     "#e9975a",
+     "30–40"
+    ],
+    [
+     "#c8452b",
+     "40년↑"
+    ],
+    [
+     "#b0b0b0",
+     "대장 있음 · 사용승인일 미상 (역사·철도시설 등 12필지)"
+    ],
+    [
+     "rgba(0,0,0,0)",
+     "건물 없음/미조인"
+    ]
+   ],
+   "popup": [
+    "addr",
+    "pnu",
+    "lu_list",
+    "lu_touch",
+    "jiga",
+    "bldg_oldest",
+    "bldg_age",
+    "bldg_purps",
+    "bldg_strct",
+    "bldg_flr",
+    "bldg_totArea",
+    "bldg_n"
+   ],
+   "outline": {
+    "line-color": "#6b7c88",
+    "line-width": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     14,
+     0.2,
+     18,
+     1.0
+    ],
+    "line-opacity": 0.8
+   },
+   "group": "건물·필지",
+   "short": "필지 · 건물 노후도"
+  },
+  {
+   "id": "reg",
+   "title": "규제 중첩 — 겹 수 (필지)",
+   "file": "parcels.geojson",
+   "type": "fill",
+   "visible": false,
+   "minzoom": 14,
+   "source_note": "V-World 토지이용계획 속성 7,616필지(토지이음 확인서와 동일 원천). 겹 수 = ①용도지역·지구(항상 1; 고도·방화·경관·보호지구 포함) + ②고도보존육성지구(역사문화환경 특별보존지구∨보존육성지구) + ③역사문화환경 보존지역(문화유산법 500m 허용기준∨국가지정문화유산구역) + ④지구단위계획구역 — CLAUDE.md 4겹 정의. '포함·저촉'만 인정, '접함'은 제외(lu_touch에 기록). pipeline/build_reg_flags.py",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "reg_layers"
+     ],
+     1,
+     "#e9f0ec",
+     2,
+     "#b7d7c2",
+     3,
+     "#e3a857",
+     4,
+     "#b23a2c",
+     "#ccc"
+    ]
+   },
+   "outline": {
+    "line-color": "#555",
+    "line-width": 0.3
+   },
+   "legend": [
+    [
+     "#e9f0ec",
+     "1겹 (용도지역·지구만)"
+    ],
+    [
+     "#b7d7c2",
+     "2겹"
+    ],
+    [
+     "#e3a857",
+     "3겹"
+    ],
+    [
+     "#b23a2c",
+     "4겹 (고도보존+문화유산+지구단위)"
+    ]
+   ],
+   "popup": [
+    "addr",
+    "reg_layers",
+    "reg_l2",
+    "reg_l3",
+    "reg_l4",
+    "lu_list",
+    "lu_touch",
+    "jiga"
+   ],
+   "group": "규제",
+   "short": "규제 겹 수 (필지)"
+  },
+  {
+   "id": "godo",
+   "title": "고도지구 — 높이 상한별",
+   "short": "고도지구 (높이 상한별)",
+   "group": "규제",
+   "file": "godo.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "경계: V-World 용도지구(LT_C_UQ123, 토지이음 원본) · 높이: 경상북도 고시 제2020-479호 경주 도시관리계획(고도지구) 결정(변경) 조서·지형도면(2020-12-28) 라벨을 폴리곤에 배정. conf=label(도면 라벨)·zone(2026-8호 조서 교차면적)·area(조서 면적합 ±1%)·approx(추정). 도심 밖(황성·동천·보문 등)은 도면 범위 밖이라 '미확인'. 최저고도지구는 별도(최저 높이 규제). 구경주역 구역 = 도심20m(145,364㎡)+도심15m(11,143㎡).",
+   "paint": {
+    "fill-opacity": 0.55,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "h_cls"
+     ],
+     "36m",
+     "#7f0000",
+     "25m",
+     "#b30000",
+     "20m",
+     "#d7301f",
+     "15m",
+     "#ef6548",
+     "12m",
+     "#fc8d59",
+     "10m",
+     "#fdbb84",
+     "7.5m",
+     "#fdd49e",
+     "최저고도",
+     "#2c7bb6",
+     "미확인",
+     "#bdbdbd",
+     "#bdbdbd"
+    ]
+   },
+   "outline": {
+    "line-color": "#5a1a1a",
+    "line-width": 0.8
+   },
+   "label": {
+    "field": "lbl",
+    "size": 10.5
+   },
+   "subfilter": {
+    "field": "h_cls",
+    "values": [
+     "36m",
+     "25m",
+     "20m",
+     "15m",
+     "12m",
+     "10m",
+     "7.5m",
+     "최저고도",
+     "미확인"
+    ],
+    "colors": {
+     "36m": "#7f0000",
+     "25m": "#b30000",
+     "20m": "#d7301f",
+     "15m": "#ef6548",
+     "12m": "#fc8d59",
+     "10m": "#fdbb84",
+     "7.5m": "#fdd49e",
+     "최저고도": "#2c7bb6",
+     "미확인": "#bdbdbd"
+    }
+   },
+   "legend": [],
+   "popup": [
+    "godo_nm",
+    "h_max",
+    "kind",
+    "conf",
+    "godo_no",
+    "area_m2",
+    "gosi_last",
+    "src"
+   ]
+  },
+  {
+   "id": "reg_areas",
+   "title": "규제 영역 — 종류별 (법정 경계 + 일부 필지 근사)",
+   "file": "reg_areas.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "법정 경계: V-World LT_C_UO301(역사문화환경보존지역·국가지정문화유산구역·문화유산 보호구역·시도지정·등록·지정물, 경주 272건) · UQ126 역사문화환경보호지구 88 · UQ124 방화지구 8 · UQ123 고도지구 · UQ141 지구단위계획구역. V-World에 없는 3종(고도보존육성 특별법의 특별보존·보존육성지구, 경관계획의 중점경관관리구역)만 토지이용계획 포함·저촉 필지 외곽으로 근사(수집 창 한정). v1(2026-09-17 오전)은 전부 필지 외곽이었음 — 창 안에서 법정보다 10~26% 넓고, 저촉 필지 때문에 구역 안에 없는 문화유산구역이 0.8ha 있는 것처럼 보였음. 문화유산 이름은 alias/remark에서 정리(지정번호는 note).",
+   "paint": {
+    "fill-opacity": 0.18,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "reg"
+     ],
+     "역사문화환경보존지역",
+     "#e6550d",
+     "역사문화환경 특별보존지구",
+     "#b2182b",
+     "역사문화환경 보존육성지구",
+     "#7b3294",
+     "역사문화환경보호지구",
+     "#fdae6b",
+     "국가지정문화유산구역",
+     "#8c510a",
+     "문화유산 보호구역",
+     "#bf812d",
+     "시도지정문화유산구역",
+     "#dfc27d",
+     "등록문화유산구역",
+     "#c7a76c",
+     "문화유산(지정물)",
+     "#543005",
+     "고도지구",
+     "#6a3d9a",
+     "방화지구",
+     "#d62728",
+     "중점경관관리구역",
+     "#1f78b4",
+     "지구단위계획구역",
+     "#e7298a",
+     "#999"
+    ]
+   },
+   "outline": {
+    "line-color": [
+     "case",
+     [
+      "==",
+      [
+       "get",
+       "geom_src"
+      ],
+      "필지 외곽 (근사)"
+     ],
+     "#999",
+     "#3a3a3a"
+    ],
+    "line-width": [
+     "case",
+     [
+      "==",
+      [
+       "get",
+       "geom_src"
+      ],
+      "필지 외곽 (근사)"
+     ],
+     1.0,
+     0.8
+    ],
+    "line-dasharray": [
+     2,
+     1
+    ]
+   },
+   "label": {
+    "field": "lbl",
+    "size": 10
+   },
+   "subfilter": {
+    "field": "reg",
+    "values": [
+     "역사문화환경보존지역",
+     "역사문화환경 특별보존지구",
+     "역사문화환경 보존육성지구",
+     "역사문화환경보호지구",
+     "국가지정문화유산구역",
+     "문화유산 보호구역",
+     "시도지정문화유산구역",
+     "등록문화유산구역",
+     "문화유산(지정물)",
+     "고도지구",
+     "방화지구",
+     "중점경관관리구역",
+     "지구단위계획구역"
+    ],
+    "colors": {
+     "역사문화환경보존지역": "#e6550d",
+     "역사문화환경 특별보존지구": "#b2182b",
+     "역사문화환경 보존육성지구": "#7b3294",
+     "역사문화환경보호지구": "#fdae6b",
+     "국가지정문화유산구역": "#8c510a",
+     "문화유산 보호구역": "#bf812d",
+     "시도지정문화유산구역": "#dfc27d",
+     "등록문화유산구역": "#c7a76c",
+     "문화유산(지정물)": "#543005",
+     "고도지구": "#6a3d9a",
+     "방화지구": "#d62728",
+     "중점경관관리구역": "#1f78b4",
+     "지구단위계획구역": "#e7298a"
+    }
+   },
+   "legend": [
+    [
+     "transparent",
+     "실선 = 법정 경계(V-World 토지이용규제 원본) · 점선회색 = 필지 외곽 근사(특별보존·보존육성·중점경관)"
+    ]
+   ],
+   "popup": [
+    "lbl",
+    "reg",
+    "name",
+    "note",
+    "geom_src",
+    "gosi",
+    "area_ha",
+    "layer"
+   ],
+   "group": "규제",
+   "short": "규제 영역 (종류별)"
+  },
+  {
+   "id": "energy",
+   "title": "건물 전기사용 (2026-05)",
+   "file": "energy.geojson",
+   "type": "fill",
+   "visible": false,
+   "minzoom": 14,
+   "source_note": "건축HUB 건물에너지 · 구역 300m 내 건물필지 450 중 기록 있는 154 · 단독주택·소규모 공동주택은 제공 제외 → 상가·업무 건물만 유효 · 0 kWh = 공실 후보 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. ★공실의 대리변수(proxy)로 수집했지만 0 kWh가 곧 공실은 아니다 — 미계량·미제공·신축을 구분할 수 없다.",
+   "paint": {
+    "fill-opacity": 0.75,
+    "fill-color": [
+     "step",
+     [
+      "get",
+      "kwh_per_m2"
+     ],
+     "#7b1fa2",
+     0.01,
+     "#d32f2f",
+     1,
+     "#fb8c00",
+     3,
+     "#fdd835",
+     6,
+     "#8bc34a",
+     12,
+     "#2e7d32"
+    ]
+   },
+   "outline": {
+    "line-color": "#333",
+    "line-width": 0.8
+   },
+   "legend": [
+    [
+     "#7b1fa2",
+     "0 kWh — 미계량·미제공·공실 등 원인 미구분"
+    ],
+    [
+     "#d32f2f",
+     "<1 kWh/㎡"
+    ],
+    [
+     "#fb8c00",
+     "1–3"
+    ],
+    [
+     "#fdd835",
+     "3–6"
+    ],
+    [
+     "#8bc34a",
+     "6–12"
+    ],
+    [
+     "#2e7d32",
+     "12↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "addr",
+    "elec_kwh",
+    "gas_m3",
+    "kwh_per_m2",
+    "bldg_purps",
+    "bldg_totArea",
+    "bldg_age",
+    "use_ym"
+   ],
+   "group": "건물·필지",
+   "short": "건물 전기사용 (2026-05)"
+  },
+  {
+   "id": "traffic_hist",
+   "title": "시간대별 평균 소통 (이력)",
+   "short": "시간대별 평균 소통 (이력 표본)",
+   "group": "교통",
+   "file": "traffic_hist.geojson",
+   "type": "line",
+   "visible": false,
+   "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+   "paint": {
+    "line-width": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     12,
+     [
+      "match",
+      [
+       "get",
+       "ROAD_RANK"
+      ],
+      "101",
+      3,
+      "103",
+      2.5,
+      1.2
+     ],
+     16,
+     [
+      "match",
+      [
+       "get",
+       "ROAD_RANK"
+      ],
+      "101",
+      8,
+      "103",
+      6,
+      3.5
+     ]
+    ],
+    "line-opacity": 0.9,
+    "line-color": [
+     "case",
+     [
+      "!",
+      [
+       "has",
+       "wd_08"
+      ]
+     ],
+     "#bbb",
+     [
+      "<",
+      [
+       "get",
+       "wd_08"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "thr_c"
+       ],
+       15
+      ]
+     ],
+     "#d7191c",
+     [
+      "<",
+      [
+       "get",
+       "wd_08"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "thr_f"
+       ],
+       25
+      ]
+     ],
+     "#fdae61",
+     "#1a9641"
+    ]
+   },
+   "hourslider": true,
+   "legend": [
+    [
+     "#d7191c",
+     "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+    ],
+    [
+     "#fdae61",
+     "서행"
+    ],
+    [
+     "#1a9641",
+     "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+    ],
+    [
+     "#ccc",
+     "표본 없음"
+    ]
+   ],
+   "popup": [
+    "ROAD_NAME",
+    "wd_mean",
+    "wd_min",
+    "wd_worst_hour",
+    "n_obs_hist",
+    "MAX_SPD",
+    "LANES",
+    "LINK_ID"
+   ]
+  },
+  {
+   "id": "traffic",
+   "title": "교통소통 (ITS 실시간, 5분)",
+   "file": "traffic.geojson",
+   "type": "line",
+   "visible": true,
+   "source_note": "국가교통정보센터 trafficInfo × 표준노드링크(2026-09-14) · 1,528링크 · 색 = 현재 속도의 소통등급 · 스냅샷 누적으로 시간대별 평균 생성 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+   "paint": {
+    "line-width": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     12,
+     [
+      "match",
+      [
+       "get",
+       "ROAD_RANK"
+      ],
+      "101",
+      3,
+      "103",
+      2.5,
+      1.2
+     ],
+     16,
+     [
+      "match",
+      [
+       "get",
+       "ROAD_RANK"
+      ],
+      "101",
+      8,
+      "103",
+      6,
+      3.5
+     ]
+    ],
+    "line-opacity": 0.9,
+    "line-color": [
+     "case",
+     [
+      "!",
+      [
+       "has",
+       "speed"
+      ]
+     ],
+     "#bbb",
+     [
+      "<",
+      [
+       "get",
+       "speed"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "thr_c"
+       ],
+       15
+      ]
+     ],
+     "#d7191c",
+     [
+      "<",
+      [
+       "get",
+       "speed"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "thr_f"
+       ],
+       25
+      ]
+     ],
+     "#fdae61",
+     "#1a9641"
+    ]
+   },
+   "legend": [
+    [
+     "#d7191c",
+     "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+    ],
+    [
+     "#fdae61",
+     "서행"
+    ],
+    [
+     "#1a9641",
+     "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+    ],
+    [
+     "#bbb",
+     "자료 없음"
+    ]
+   ],
+   "popup": [
+    "ROAD_NAME",
+    "road_its",
+    "speed",
+    "speed_avg",
+    "ratio",
+    "level",
+    "MAX_SPD",
+    "LANES",
+    "ROAD_RANK",
+    "LENGTH",
+    "n_obs",
+    "LINK_ID"
+   ],
+   "group": "교통",
+   "short": "교통소통 (실시간 5분)"
+  },
+  {
+   "id": "busstops",
+   "title": "버스정류장 (경주BIS 1,951)",
+   "file": "busstops.geojson",
+   "type": "circle",
+   "visible": false,
+   "minzoom": 13,
+   "source_note": "국토교통부 전국 버스정류장 위치정보 2025-10-31 파일 · 경주시 1,951개 · 경주시 버스 API(노선·실시간)는 서버 504로 대기",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     13,
+     2,
+     16,
+     5,
+     18,
+     8
+    ],
+    "circle-color": "#1565c0",
+    "circle-opacity": 0.9,
+    "circle-stroke-width": 1,
+    "circle-stroke-color": "#fff"
+   },
+   "legend": [
+    [
+     "#1565c0",
+     "정류장"
+    ]
+   ],
+   "popup": [
+    "name",
+    "stop_id",
+    "short_no",
+    "bis",
+    "date"
+   ],
+   "group": "교통",
+   "short": "버스정류장"
+  },
+  {
+   "id": "blocks",
+   "title": "획지·공원·주차장 (고시 2026-8호)",
+   "file": "blocks.geojson",
+   "type": "fill",
+   "visible": true,
+   "source_note": "지형도면고시도 11·12장 벡터화 · 고시 결정조서 면적 대비 ±4%",
+   "paint": {
+    "fill-opacity": 0.55,
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "cls"
+     ],
+     "commercial",
+     "#e879c9",
+     "civic",
+     "#5db4e6",
+     "culture",
+     "#f2b25b",
+     "park",
+     "#3fae4a",
+     "parking",
+     "#8d8d8d",
+     "#999"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a2a3a",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "name",
+    "size": 13
+   },
+   "legend": [
+    [
+     "#e879c9",
+     "상업(상1~3)"
+    ],
+    [
+     "#5db4e6",
+     "공공청사"
+    ],
+    [
+     "#f2b25b",
+     "문화"
+    ],
+    [
+     "#3fae4a",
+     "근린공원"
+    ],
+    [
+     "#8d8d8d",
+     "주차장"
+    ]
+   ],
+   "popup": [
+    "name",
+    "cls",
+    "area_m2",
+    "gosi_area_m2",
+    "note"
+   ],
+   "group": "계획",
+   "short": "획지·공원·주차장"
+  },
+  {
+   "id": "zone",
+   "title": "지구단위계획구역 (구역 27)",
+   "file": "zone.geojson",
+   "type": "line",
+   "visible": true,
+   "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+   "paint": {
+    "line-color": "#d81e1e",
+    "line-width": 2.5,
+    "line-dasharray": [
+     4,
+     2,
+     1,
+     2
+    ]
+   },
+   "legend": [
+    [
+     "#d81e1e",
+     "구역 경계"
+    ]
+   ],
+   "popup": [
+    "name",
+    "area_m2",
+    "gosi_area_m2"
+   ],
+   "group": "계획",
+   "short": "지구단위계획구역"
+  },
+  {
+   "id": "stores",
+   "title": "상가 업소 (소진공 2026-03 + 게스트하우스)",
+   "file": "stores.geojson",
+   "type": "circle",
+   "visible": false,
+   "minzoom": 14,
+   "source_note": "소진공 상가정보 API 10,314 (원도심+황성·동천·용강·보문 창) + 게스트하우스 18 · 영업 중 스냅샷",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     14,
+     1.5,
+     17,
+     4,
+     19,
+     7
+    ],
+    "circle-opacity": 0.85,
+    "circle-stroke-width": 0.4,
+    "circle-stroke-color": "#fff",
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "indsLclsNm"
+     ],
+     "음식",
+     "#e05a3a",
+     "소매",
+     "#3a7bd5",
+     "숙박",
+     "#8e44ad",
+     "수리·개인",
+     "#7f8c8d",
+     "과학·기술",
+     "#16a085",
+     "시설관리·임대",
+     "#a67c52",
+     "예술·스포츠",
+     "#f39c12",
+     "교육",
+     "#27ae60",
+     "부동산",
+     "#95a5a6",
+     "보건의료",
+     "#c0392b",
+     "#555"
+    ]
+   },
+   "legend": [],
+   "popup": [
+    "bizesNm",
+    "indsLclsNm",
+    "indsMclsNm",
+    "indsSclsNm",
+    "lnoAdr",
+    "bldNm",
+    "flrNo",
+    "src"
+   ],
+   "subfilter": {
+    "field": "indsLclsNm",
+    "values": [
+     "음식",
+     "소매",
+     "숙박",
+     "수리·개인",
+     "과학·기술",
+     "시설관리·임대",
+     "예술·스포츠",
+     "교육",
+     "부동산",
+     "보건의료"
+    ],
+    "colors": {
+     "음식": "#e05a3a",
+     "소매": "#3a7bd5",
+     "숙박": "#8e44ad",
+     "수리·개인": "#7f8c8d",
+     "과학·기술": "#16a085",
+     "시설관리·임대": "#a67c52",
+     "예술·스포츠": "#f39c12",
+     "교육": "#27ae60",
+     "부동산": "#95a5a6",
+     "보건의료": "#c0392b"
+    }
+   },
+   "group": "상권·관광",
+   "short": "상가 업소 (10,332)"
+  },
+  {
+   "id": "tourism_complex",
+   "title": "관광단지 (관광진흥법)",
+   "short": "관광단지 (보문·감포·북경주·마우나오션)",
+   "group": "상권·관광",
+   "file": "tourism_complex.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "V-World LT_C_UO601(관광단지 지정 경계, 토지이용규제 원본). 속성에 이름이 없어 마지막 고시번호(dyear-dnum)를 토지이음 고시정보로 대조해 이름 확정: 보문 2008-128 / 감포해양 2021-172 / 북경주 웰니스 2021-233 / 마우나오션 2026-202(모두 경상북도 고시, T1). 면적은 폴리곤 계산값.",
+   "paint": {
+    "fill-opacity": 0.28,
+    "fill-color": "#0e8a7a"
+   },
+   "outline": {
+    "line-color": "#0e8a7a",
+    "line-width": 1.6,
+    "line-dasharray": [
+     3,
+     2
+    ]
+   },
+   "label": {
+    "field": "lbl",
+    "size": 11.5
+   },
+   "legend": [
+    [
+     "#0e8a7a",
+     "관광단지 지정 경계"
+    ]
+   ],
+   "popup": [
+    "name",
+    "area_ha",
+    "gosi",
+    "basis",
+    "src"
+   ]
+  },
+  {
+   "id": "tour_sites",
+   "title": "관광지 (경주시 현황 159)",
+   "file": "tour_sites.geojson",
+   "type": "circle",
+   "visible": false,
+   "source_note": "경주시 관광지 현황 API · 주소만 제공 → V-World 지오코딩 153/159 (권역 TURSM_DSTRCT)",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     11,
+     3,
+     15,
+     6,
+     18,
+     9
+    ],
+    "circle-color": "#c0392b",
+    "circle-opacity": 0.9,
+    "circle-stroke-width": 1.2,
+    "circle-stroke-color": "#fff"
+   },
+   "legend": [
+    [
+     "#c0392b",
+     "관광지"
+    ]
+   ],
+   "popup": [
+    "name",
+    "TURSM_DSTRCT",
+    "addr",
+    "TELNO",
+    "geocode"
+   ],
+   "group": "상권·관광",
+   "short": "관광지"
+  },
+  {
+   "id": "footfall_areas",
+   "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+   "file": "footfall_areas.geojson",
+   "type": "fill",
+   "visible": true,
+   "group": "유동·활동",
+   "short": "유동인구 8구역 (ha당)",
+   "source_note": "소상공인시장진흥공단 소상공인365 상권분석 리포트 — 통신사 통화량 기반 50m 셀 추정 유동인구, 월별 일평균 13개월 평균 (T2). A 황오동=SGIS 100m 격자 32셀(보고서 정의) · B 행복황촌=활성화계획 위치도 디지타이징(근사) · C/D=고시 구역 · E~H=반경 원. 채움은 ha당 일평균. 클릭하면 분석 탭의 시간대 프로필이 그 구역으로 바뀐다",
+   "paint": {
+    "fill-opacity": 0.55,
+    "fill-color": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "get",
+      "per_ha"
+     ],
+     50,
+     "#f1f5f0",
+     100,
+     "#d9e8d3",
+     300,
+     "#a3c9a8",
+     500,
+     "#5f9f7a",
+     750,
+     "#2c6a5c",
+     1200,
+     "#0f3d34"
+    ]
+   },
+   "outline": {
+    "line-color": "#0f3d34",
+    "line-width": 1.4,
+    "line-dasharray": [
+     3,
+     2
+    ]
+   },
+   "label": {
+    "field": "lbl",
+    "size": 11
+   },
+   "legend": [
+    [
+     "#f1f5f0",
+     "≤50/ha"
+    ],
+    [
+     "#d9e8d3",
+     "100"
+    ],
+    [
+     "#a3c9a8",
+     "300"
+    ],
+    [
+     "#5f9f7a",
+     "500"
+    ],
+    [
+     "#2c6a5c",
+     "750"
+    ],
+    [
+     "#0f3d34",
+     "1,200/ha"
+    ],
+    [
+     "transparent",
+     "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+    ]
+   ],
+   "popup": [
+    "name",
+    "per_ha",
+    "footfall_avg",
+    "pct_18_23",
+    "weekend_ratio",
+    "pct_60plus",
+    "resident",
+    "worker",
+    "life_stores",
+    "tour_stores",
+    "life_chg",
+    "tour_chg",
+    "area_ha",
+    "source"
+   ]
+  },
+  {
+   "id": "decline",
+   "title": "법정 쇠퇴진단 2022 — 노후건축물 비율 (도시재생특별법 §13)",
+   "file": "decline_2022.geojson",
+   "type": "fill",
+   "visible": false,
+   "group": "인구",
+   "short": "쇠퇴진단 2022 (노후·인구·사업체)",
+   "source_note": "경주시 도시재생 전략계획(변경) 최종보고서 2022.01 인쇄쪽 251 (T1). 3지표(인구 20%↓ 또는 3년 연속 감소 / 사업체 5%↓ 또는 3년 연속 감소 / 20년↑ 노후건축물 50%↑) 중 2개 이상 충족 = 활성화지역 지정 가능. 기준연도 미기재 → 2026 공모용은 재산출 필요. 황오동은 중부동 흡수 이전 값",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "get",
+      "old_pct"
+     ],
+     "#f7f4ef",
+     50,
+     "#f5d9b8",
+     65,
+     "#e9a56d",
+     75,
+     "#d0672f",
+     85,
+     "#8f3410"
+    ]
+   },
+   "outline": {
+    "line-color": "#6b4a2b",
+    "line-width": 0.8
+   },
+   "label": {
+    "field": "lbl",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f7f4ef",
+     "노후 <50%"
+    ],
+    [
+     "#f5d9b8",
+     "50–65"
+    ],
+    [
+     "#e9a56d",
+     "65–75"
+    ],
+    [
+     "#d0672f",
+     "75–85"
+    ],
+    [
+     "#8f3410",
+     "85%↑"
+    ],
+    [
+     "transparent",
+     "황오 87.9 · 중부 84.5 · 황남 82.0 · 감포 74.2 · 성건 72.4"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "old_pct",
+    "pop_chg",
+    "pop_5y",
+    "biz_chg",
+    "biz_5y",
+    "met",
+    "n_criteria",
+    "note",
+    "source"
+   ]
+  },
+  {
+   "id": "landprice_pts",
+   "title": "공시지가 29필지 2018→2025 변화 (황오동 모니터링 지점)",
+   "file": "landprice_pts.geojson",
+   "type": "circle",
+   "visible": false,
+   "group": "건물·필지",
+   "short": "공시지가 추이 지점 (29필지)",
+   "source_note": "2024년 황오동 원도심 도시재생뉴딜 성과지표·모니터링 결과보고서(공공도시, 2025.09) 인쇄쪽 60 전사 — 토지이음 개별공시지가 매년 1.1 기준 (T2). 좌표는 카카오 주소검색. 2022년 피크(+18.7%) 후 2023 −7.8%. 화랑로 140-1은 2022 급등(7.5배) — 지목·용도 변경 의심",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     13,
+     3,
+     16,
+     7,
+     18,
+     10
+    ],
+    "circle-color": [
+     "step",
+     [
+      "get",
+      "chg_18_25_pct"
+     ],
+     "#3b6ea5",
+     5,
+     "#9ecae1",
+     10,
+     "#fdd49e",
+     15,
+     "#fc8d59",
+     30,
+     "#b30000"
+    ],
+    "circle-opacity": 0.9,
+    "circle-stroke-width": 1,
+    "circle-stroke-color": "#fff"
+   },
+   "legend": [
+    [
+     "#3b6ea5",
+     "<+5%"
+    ],
+    [
+     "#9ecae1",
+     "+5–10"
+    ],
+    [
+     "#fdd49e",
+     "+10–15"
+    ],
+    [
+     "#fc8d59",
+     "+15–30"
+    ],
+    [
+     "#b30000",
+     "+30%↑ (140-1: +597%)"
+    ]
+   ],
+   "popup": [
+    "addr",
+    "jiga_2018",
+    "jiga_2022",
+    "jiga_2025",
+    "chg_18_25_pct",
+    "chg_21_22_pct",
+    "note",
+    "source"
+   ]
+  },
+  {
+   "id": "heritage_pts",
+   "title": "매장유산 — 부지 내 유적·기조사 지점 (2022 지표조사)",
+   "file": "heritage_pts.geojson",
+   "type": "circle",
+   "visible": false,
+   "group": "계획근거·유산",
+   "short": "매장유산 유적·기조사 (부지)",
+   "source_note": "성림문화재연구원 2022.05 경주역부지 임시활용 문화재지표조사 → 김권일(신라문화유산연구원) 2026.02.27 혁신포럼 발표자료 (T2). 지표조사 148,770㎡ 중 시굴 필요 145,879㎡(성동동 유물산포지 104,997 + 성동동사지Ⅱ 40,882), 기조사 3,396㎡. 시굴 3.06억·54일 / 정밀발굴 63~80억·630~700일. 규정상 2m 미만 성토·성토 후 공원·주차장은 발굴 유예. 성동동 117·118 지점은 지오코딩 불가로 114 인근 근사",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     13,
+     4,
+     16,
+     9,
+     18,
+     13
+    ],
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "kind"
+     ],
+     "발굴(정밀)",
+     "#7b1fa2",
+     "시굴",
+     "#ab47bc",
+     "지정유산",
+     "#c62828",
+     "유존지역",
+     "#ef6c00",
+     "#999"
+    ],
+    "circle-opacity": 0.85,
+    "circle-stroke-width": 1.2,
+    "circle-stroke-color": "#fff"
+   },
+   "legend": [
+    [
+     "#7b1fa2",
+     "정밀발굴 (2002·2004)"
+    ],
+    [
+     "#ab47bc",
+     "시굴 (2003)"
+    ],
+    [
+     "#c62828",
+     "지정유산 (황오동 삼층석탑)"
+    ],
+    [
+     "#ef6c00",
+     "유존지역 (성동동사지Ⅱ)"
+    ],
+    [
+     "transparent",
+     "시굴 필요 145,879㎡ = 구역 대부분"
+    ]
+   ],
+   "popup": [
+    "name",
+    "kind",
+    "year",
+    "area_m2",
+    "finds",
+    "addr",
+    "source"
+   ],
+   "label": {
+    "field": "kind",
+    "size": 10,
+    "minzoom": 15
+   }
+  },
+  {
+   "id": "plan_routes",
+   "title": "계획·제안 순환노선 (개략)",
+   "file": "plan_routes.geojson",
+   "type": "line",
+   "visible": false,
+   "group": "계획근거·유산",
+   "short": "순환노선 — 2030 제1순환선 · 417 셔틀",
+   "source_note": "2030 경주도시기본계획 §교통 제1순환선(터미널→성건동→황성공원→경주역(성동시장)→중앙시장→대릉원→터미널, T1) · 경주시 원도심 미래구상 기획연구(2025.07) 순환 무인셔틀(서경주역–황성공원–시청–(옛)경주역/성동시장–서라벌문화회관–터미널–동국대병원, T2). 정거장을 직선으로 이은 개략선 — 실제 노선 아님",
+   "paint": {
+    "line-width": 2.5,
+    "line-dasharray": [
+     4,
+     3
+    ],
+    "line-color": [
+     "match",
+     [
+      "get",
+      "tier"
+     ],
+     "T1",
+     "#1f5e42",
+     "T2",
+     "#8e44ad",
+     "#999"
+    ],
+    "line-opacity": 0.85
+   },
+   "label": {
+    "field": "name",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#1f5e42",
+     "2030 기본계획 제1순환선"
+    ],
+    [
+     "#8e44ad",
+     "417쪽 연구 순환 셔틀"
+    ]
+   ],
+   "popup": [
+    "name",
+    "stops",
+    "note",
+    "tier"
+   ]
+  },
+  {
+   "id": "plan_nodes",
+   "title": "계획·제안 교통 거점 — 2030 기본계획 / 417쪽 연구 / 사용자안",
+   "file": "plan_nodes.geojson",
+   "type": "circle",
+   "visible": false,
+   "group": "계획근거·유산",
+   "short": "교통 거점 (환승센터·터미널·P+R)",
+   "source_note": "T1 2030 경주도시기본계획: 복합환승센터 3개소(경주역·시외버스터미널·KTX역), 종합터미널 적정입지 = 고속철도 역세권. T2 417쪽 연구(2025.07): 터미널 현 위치 통합(목표 3a), (옛)경주역 교통거점 부활(3b), P+R 4곳, 서경주역 관문. 사용자안(2026-09): 구경주역에 시청 본청+터미널+트램 기점 — 터미널 입지가 상위계획 2건과 불일치",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     11,
+     4,
+     14,
+     7,
+     17,
+     10
+    ],
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "tier"
+     ],
+     "T1",
+     "#1f5e42",
+     "T2",
+     "#8e44ad",
+     "방향",
+     "#e07b39",
+     "#999"
+    ],
+    "circle-opacity": 0.9,
+    "circle-stroke-width": 1.5,
+    "circle-stroke-color": "#fff"
+   },
+   "legend": [
+    [
+     "#1f5e42",
+     "2030 기본계획 (T1)"
+    ],
+    [
+     "#8e44ad",
+     "417쪽 연구 (T2)"
+    ],
+    [
+     "#e07b39",
+     "사용자안 (방향)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "role",
+    "source",
+    "tier"
+   ],
+   "label": {
+    "field": "name",
+    "size": 10.5,
+    "minzoom": 12
+   }
+  }
+ ],
+ "groups": [
+  "인구",
+  "외국인·다문화",
+  "계획",
+  "규제",
+  "건물·필지",
+  "상권·관광",
+  "교통",
+  "유동·활동",
+  "계획근거·유산"
+ ]
 }

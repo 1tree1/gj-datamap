@@ -22,10 +22,17 @@ FILES = {
     "processed/hadm_pop_4326.geojson":         "hadm_pop.geojson",
     "raw/sbiz_zones.geojson":                   "sbiz_zones.geojson",
     "raw/vworld_uq111.geojson":                 "landuse.geojson",
+    # 2026-09-20 전수조사·소상공인365 (pipeline/build_web_extras.py)
+    "processed/footfall_areas_web_4326.geojson": "footfall_areas.geojson",
+    "processed/decline_2022_4326.geojson":      "decline_2022.geojson",
+    "processed/landprice_pts_4326.geojson":     "landprice_pts.geojson",
+    "processed/heritage_pts_4326.geojson":      "heritage_pts.geojson",
+    "processed/plan_nodes_4326.geojson":        "plan_nodes.geojson",
+    "processed/plan_routes_4326.geojson":       "plan_routes.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/web_extras.json": "web_extras.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s

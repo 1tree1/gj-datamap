@@ -33,6 +33,37 @@
       </section>
 
       <section id="pane-analysis" class="pane">
+        <div class="card">
+          <h2>유동인구 8구역 — ha당 일평균 (소상공인365)</h2>
+          <div id="chart-ff"></div>
+          <p class="note" id="ff-note"></p>
+        </div>
+        <div class="card">
+          <h2>시간대 프로필 — <span id="ffh-name">A 황오동 · D 구역 · F 시청 · H 황리단길</span></h2>
+          <div id="chart-ffh"></div>
+          <p class="note">6개 시간대 비율(%). 지도에서 유동인구 구역을 클릭하면 그 구역이 강조된다. 야간(23–05시) 4~6%, 저녁(18–23시) 20~27%는 구역 간 차이가 작다 — 차이는 비율이 아니라 절대치</p>
+        </div>
+        <div class="card">
+          <h2>업종 지문 — 생활 vs 관광·체류 업소수 (13개월 변화)</h2>
+          <div id="chart-biz"></div>
+          <p class="note" id="biz-note"></p>
+        </div>
+        <div class="card">
+          <h2>황오동 원도심 KPI 2018–2024 (모니터링 보고서 전사)</h2>
+          <div id="chart-kpi"></div>
+          <p class="note" id="kpi-note"></p>
+        </div>
+        <div class="card">
+          <h2>공시지가 추이 — 원도심 29필지 · 행복황촌 44개소</h2>
+          <div id="chart-lp"></div>
+          <p class="note" id="lp-note"></p>
+        </div>
+        <div class="card">
+          <h2>시민 선호 — 경주역 부지 활용 (설문 3건)</h2>
+          <div id="chart-survey"></div>
+          <p class="note">표본·방법이 달라 수치 비교 불가, 방향만. 2030 기본계획 설문(복합위락 44.5 / 행정복합타운 26.2 / 공원 22.9) → 2023 폐철도 기본구상(시청 이전 63.7, T4 원문 미확보) → 2025 417쪽 연구(문화쇼핑 거점 + 교통거점, n=63)</p>
+        </div>
+        <div class="card small" id="fact-card"></div>
         <div class="card" id="pop-card">
           <h2>행정동 인구 — <span id="pop-name">경주시</span></h2>
           <div id="chart-pyr"></div>
@@ -79,7 +110,7 @@
 
     <footer>
       <span id="basemap-ctl"></span>
-      <span class="fine">처리본 EPSG:5187 → 웹 4326 · T1 경주시·경북 고시 / V-World / 건축HUB · T2 KOSIS(행안부·법무부) / 소진공 / ITS / 관광공사 / 국토부 정류장 · 단계구분도 급간은 임의 설정</span>
+      <span class="fine">처리본 EPSG:5187 → 웹 4326 · T1 경주시·경북 고시 / V-World / 건축HUB · T2 KOSIS(행안부·법무부) / 소진공·소상공인365 / ITS / 관광공사 / 국토부 정류장 / 경주시 모니터링·전략계획 전사 / 417쪽 미래구상 연구 · 단계구분도 급간은 임의 설정</span>
     </footer>
   </aside>
   <div id="map"></div>

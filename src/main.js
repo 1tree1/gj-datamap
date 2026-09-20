@@ -36,7 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
-const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
@@ -69,6 +69,12 @@ map.on("load", async () => {
       }
     } else if (L.type === "circle") {
       map.addLayer({ id: L.id, type: "circle", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
+      if (L.label) {
+        map.addLayer({ id: `${L.id}-lb`, type: "symbol", source: srcId, minzoom: L.label.minzoom ?? 13,
+          layout: { visibility: vis, "text-field": ["get", L.label.field], "text-size": L.label.size, "text-font": ["Open Sans Semibold"], "text-offset": [0, 1.1], "text-anchor": "top", "text-allow-overlap": false },
+          paint: { "text-color": "#1d2320", "text-halo-color": "#fff", "text-halo-width": 1.4 } });
+        ids.push(`${L.id}-lb`);
+      }
     } else {
       map.addLayer({ id: L.id, type: "line", source: srcId, paint: L.paint, layout: { visibility: vis }, minzoom: L.minzoom ?? 0 }); ids.push(L.id);
       if (L.label) {
@@ -87,6 +93,7 @@ map.on("load", async () => {
       document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p).filter((k) => !["age", "yearly", "bjd"].includes(k)));
       if (p.age) drawPop(p);
       if (p.fr_total !== undefined) drawForeign(p);
+      if (p.per_ha !== undefined && window.__extras) { drawFFHourly(window.__extras, p.id); showTab("analysis"); }
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -137,7 +144,8 @@ map.on("load", async () => {
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
   ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  updateStats(); drawChart(); drawVisitors(); drawTraffic();
+  ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
   drawNationality();
@@ -330,4 +338,83 @@ function renderCong(c, h) {
     li.onclick = () => { const f = (dataCache.traffic?.features || []).find((x) => x.properties.LINK_ID === t.linkId); if (!f) return; const cs = f.geometry.type === "LineString" ? f.geometry.coordinates : f.geometry.coordinates[0]; map.flyTo({ center: cs[Math.floor(cs.length / 2)], zoom: 16.5 }); };
     ol.appendChild(li);
   }
+}
+
+
+// ---- 2026-09-20 추가: 소상공인365 유동·업종, 모니터링 전사, 공시지가, 설문, 매장유산 (web_extras.json) --------------
+const AREA_COLORS = { A_hwango_grid32: "#2c6a5c", B_haengbok_hwangchon_digitized: "#8fa3ad", C_zone_buffer300: "#5f9f7a", D_zone: "#d7191c", E_center_r300: "#a3c9a8", F_cityhall_r500: "#1f5e42", G_seongdong_market_r200: "#e07b39", H_hwangridan_r300: "#8e44ad" };
+const FF_ORDER = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
+const HOUR_BANDS = ["05–09", "09–12", "12–14", "14–18", "18–23", "23–05"];
+const mk = (id) => echarts.getInstanceByDom(document.getElementById(id)) || echarts.init(document.getElementById(id));
+async function drawExtras() {
+  let x; try { x = await fetch(`${base}data/web_extras.json`, { cache: "no-cache" }).then((r) => r.json()); } catch { return; }
+  window.__extras = x;
+  // 1. ha당 일평균
+  const ff = FF_ORDER.map((k) => x.footfall[k]);
+  mk("chart-ff").setOption({
+    grid: { left: 84, right: 56, top: 4, bottom: 4 }, tooltip: { trigger: "axis", formatter: (ps) => { const d = ff[ps[0].dataIndex]; return `${d.name}<br>ha당 ${d.per_ha.toLocaleString()} · 일평균 ${d.avg.toLocaleString()}명 · ${d.area_ha}ha<br>주거 ${d.resident.toLocaleString()} · 직장 ${d.worker.toLocaleString()}`; } },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: ff.map((d) => d.short), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: ff.map((d, i) => ({ value: d.per_ha, itemStyle: { color: AREA_COLORS[FF_ORDER[i]] } })), label: { show: true, position: "right", fontSize: 10, formatter: (d) => d.value.toLocaleString() + "/ha" }, barCategoryGap: "28%" }],
+  }, true);
+  document.getElementById("ff-note").textContent = "통신사 추정 유동인구 월별 일평균, 2025.06~2026.06 13개월 평균 ÷ 면적(ha). B 행복황촌(80)·D 폐역 구역(79)은 G 성동시장(1,175)의 1/15. F 시청 500m는 저녁 18–23시 27%로 최고. 소상공인365 (T2)";
+  drawFFHourly(x, null);
+  // 3. 업종 지문
+  const ba = FF_ORDER.map((k) => x.biz_area[k]);
+  mk("chart-biz").setOption({
+    grid: { left: 84, right: 40, top: 22, bottom: 4 }, tooltip: { trigger: "axis", formatter: (ps) => { const b = ba[ps[0].dataIndex]; return `${x.footfall[FF_ORDER[ps[0].dataIndex]].name}<br>생활 ${b.life_stores_2606} (${b.life_chg_13mo >= 0 ? "+" : ""}${b.life_chg_13mo}) · 관광·체류 ${b.tour_stores_2606} (${b.tour_chg_13mo >= 0 ? "+" : ""}${b.tour_chg_13mo})<br>생활 비중 ${b.life_share_pct}%`; } },
+    legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 11 } },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: ff.map((d) => d.short), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ name: "생활(슈퍼·편의점·미용·정육·반찬·약국·백반)", type: "bar", stack: "s", data: ba.map((b) => +b.life_stores_2606), itemStyle: { color: "#2c6a5c" }, label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", formatter: (d) => d.value || "" } },
+             { name: "관광·체류(카페·여관·호텔·펜션)", type: "bar", stack: "s", data: ba.map((b) => +b.tour_stores_2606), itemStyle: { color: "#e07b39" }, label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", formatter: (d) => d.value || "" } }],
+  }, true);
+  document.getElementById("biz-note").textContent = "11개 업종만의 지문(전체 상권 아님). 13개월 변화: C 구역+300m 펜션 32→45(+13), H 황리단길 카페 51→40(−11), 백반은 전 구역 증가, 슈퍼·미용·정육·약국은 ±1. 소상공인365 (T2)";
+  // 4. 황오동 KPI
+  const yrs = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"];
+  const ffk = x.hwango_kpi["주요 상권 유동인구(명, 소상공인365 통신사 추정)"] || {}; const o = x.startup_closure["황오동 사업대상지|창업 건수"] || {}; const c_ = x.startup_closure["황오동 사업대상지|폐업 건수"] || {};
+  mk("chart-kpi").setOption({
+    grid: { left: 40, right: 44, top: 24, bottom: 20 }, tooltip: { trigger: "axis" }, legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 11 } },
+    xAxis: { type: "category", data: yrs, axisLabel: { fontSize: 10 } },
+    yAxis: [{ type: "value", name: "건", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10 }, splitLine: { lineStyle: { color: "#eee" } } }, { type: "value", name: "유동", nameTextStyle: { fontSize: 9 }, axisLabel: { fontSize: 10, formatter: (v) => v / 1000 + "k" }, splitLine: { show: false }, scale: true }],
+    series: [{ name: "창업", type: "bar", data: yrs.map((y) => o[y]), itemStyle: { color: "#5f9f7a" } }, { name: "폐업", type: "bar", data: yrs.map((y) => c_[y]), itemStyle: { color: "#d7191c" } },
+             { name: "유동인구(일평균)", type: "line", yAxisIndex: 1, data: yrs.map((y) => ffk[y] ?? null), itemStyle: { color: "#1d2320" }, lineStyle: { width: 2 }, connectNulls: true }],
+  }, true);
+  document.getElementById("kpi-note").textContent = "황오동 원도심 활성화구역(격자 32셀). 유동인구 2020 26,536 → 2024 22,646 (−15%), 2026 재추출 22,874로 재현됨. 창업 +46%·폐업 +94%(2018→24)는 전 업종 인허가(localdata) 기준. 공공도시(주) 2025.09 보고서 전사 (T2)";
+  // 5. 공시지가
+  const ly = Object.keys(x.landprice_avg);
+  mk("chart-lp").setOption({
+    grid: { left: 48, right: 48, top: 22, bottom: 20 }, tooltip: { trigger: "axis", valueFormatter: (v) => (v == null ? "–" : v.toLocaleString() + "원/㎡") }, legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 11 } },
+    xAxis: { type: "category", data: ly, axisLabel: { fontSize: 10 } },
+    yAxis: [{ type: "value", axisLabel: { fontSize: 10, formatter: (v) => (v / 1e6).toFixed(1) + "백만" }, splitLine: { lineStyle: { color: "#eee" } }, scale: true }, { type: "value", axisLabel: { fontSize: 10, formatter: (v) => (v / 1e4).toFixed(0) + "만" }, splitLine: { show: false }, scale: true }],
+    series: [{ name: "원도심 29필지 평균", type: "line", data: ly.map((y) => x.landprice_avg[y]), itemStyle: { color: "#2c6a5c" }, lineStyle: { width: 2 } },
+             { name: "행복황촌 44개소 평균", type: "line", yAxisIndex: 1, data: ly.map((y) => x.landprice_hwangchon44[y] ?? null), itemStyle: { color: "#8e44ad" }, lineStyle: { width: 2, type: "dashed" } }],
+  }, true);
+  document.getElementById("lp-note").textContent = "개별공시지가 매년 1.1 기준. 원도심 29필지 2018 대비 2022 +18.7% → 2025 +10.8%. 행복황촌 44개소 2021 +9.1% → 2023 −5.6%. 두 모니터링 보고서 전사 (T2, 토지이음)";
+  // 6. 시민 선호 (부지 활용·미래상 문항)
+  const sv = x.surveys.filter((r) => /부지|경주역 활용|미래상/.test(r.q) && /\d/.test(r.v));
+  const rows = [];
+  for (const r of sv) { const vals = r.v.split("/").map((t) => parseFloat(t)); const labs = r.a.split("/").map((t) => t.trim()); if (vals.length > 1) labs.forEach((l, i) => rows.push([`${r.when.slice(0, 4)} ${l}`, vals[i], r.survey])); else rows.push([`${r.when.slice(0, 4)} ${r.a.replace(/\(.*?\)/, "")}`, vals[0], r.survey]); }
+  mk("chart-survey").setOption({
+    grid: { left: 150, right: 40, top: 4, bottom: 4 }, tooltip: { trigger: "axis", formatter: (ps) => `${rows[ps[0].dataIndex][0]}<br>${ps[0].value}<br>${rows[ps[0].dataIndex][2]}` },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: rows.map((r) => r[0]), axisLabel: { fontSize: 10.5 }, axisTick: { show: false }, axisLine: { show: false } },
+    series: [{ type: "bar", data: rows.map((r) => ({ value: r[1], itemStyle: { color: /2030/.test(r[2]) ? "#1f5e42" : /폐철도/.test(r[2]) ? "#8fa3ad" : "#8e44ad" } })), label: { show: true, position: "right", fontSize: 10, formatter: (d) => d.value }, barCategoryGap: "26%" }],
+  }, true);
+  // 7. 사실 카드
+  const H = Object.fromEntries(x.heritage.map((h) => [h.k, h]));
+  document.getElementById("fact-card").innerHTML = `<dl>
+    <dt>매장유산 시굴 필요 면적</dt><dd>${(+H["시굴조사 필요 면적"].v).toLocaleString()} ㎡</dd>
+    <dt>시굴 비용 · 기간 (추정)</dt><dd>${(+H["시굴조사 비용 추정"].v / 1e8).toFixed(2)}억 · 54일</dd>
+    <dt>정밀발굴 비용 · 기간 (추정)</dt><dd>63~80억 · 630~700일</dd>
+    <dt>1단계 시굴(안) 면적</dt><dd>${(+H["시굴조사 1단계(안) 면적"].v).toLocaleString()} ㎡</dd>
+    <dt>2030 계획인구 vs 2026.08 실제</dt><dd>${x.plan_pop.plan_2030.toLocaleString()} → ${x.plan_pop.actual_2026_08.toLocaleString()} (${((x.plan_pop.actual_2026_08 / x.plan_pop.plan_2030 - 1) * 100).toFixed(0)}%)</dd>
+    <div class="src">매장유산: ${x.sources.heritage} · 규정상 2m 미만 성토·성토 후 공원·주차장은 발굴 유예 / 계획인구: ${x.plan_pop.src}</div></dl>`;
+  window.addEventListener("resize", () => ["chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey"].forEach((id) => echarts.getInstanceByDom(document.getElementById(id))?.resize()));
+}
+function drawFFHourly(x, focus) {
+  const show = focus ? [...new Set(["A_hwango_grid32", "D_zone", "F_cityhall_r500", "H_hwangridan_r300", focus])] : ["A_hwango_grid32", "D_zone", "F_cityhall_r500", "H_hwangridan_r300"];
+  document.getElementById("ffh-name").textContent = focus ? `${x.footfall[focus].name} 강조` : "A 황오동 · D 구역 · F 시청 · H 황리단길";
+  mk("chart-ffh").setOption({
+    grid: { left: 34, right: 10, top: 24, bottom: 20 }, tooltip: { trigger: "axis", valueFormatter: (v) => v + "%" }, legend: { top: 0, right: 0, itemWidth: 10, itemHeight: 10, textStyle: { fontSize: 10.5 } },
+    xAxis: { type: "category", data: HOUR_BANDS, axisLabel: { fontSize: 10 } }, yAxis: { type: "value", axisLabel: { fontSize: 10, formatter: (v) => v + "%" }, splitLine: { lineStyle: { color: "#eee" } } },
+    series: show.map((k) => ({ name: x.footfall[k].short, type: "line", data: x.footfall[k].hourly_pct, showSymbol: k === focus, lineStyle: { width: k === focus ? 3.5 : 1.6, color: AREA_COLORS[k], opacity: focus && k !== focus ? 0.45 : 1 }, itemStyle: { color: AREA_COLORS[k] } })),
+  }, true);
 }

@@ -48,7 +48,7 @@ h1{font-size:16px;margin:0;letter-spacing:-.02em}
 .card h3{font-size:11px;letter-spacing:.08em;color:var(--ink3);margin:10px 0 4px;font-family:var(--mono);font-weight:500}
 .card .note{margin:6px 0 0;font-size:11px;color:var(--ink3);line-height:1.45}
 .card.small{font-size:12px;padding:8px 12px}
-#chart{height:210px}#chart-fr{height:200px}#chart-nat{height:270px}#chart-pyr{height:220px}#chart-yr{height:120px}#chart-inds{height:190px}#chart-vis{height:160px}#chart-traffic{height:170px}
+#chart{height:210px}#chart-ff{height:200px}#chart-ffh{height:170px}#chart-biz{height:210px}#chart-kpi{height:190px}#chart-lp{height:150px}#chart-survey{height:230px}#fact-card dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:3px 10px}#fact-card dt{color:var(--ink3);font-size:11px}#fact-card dd{margin:0;font-variant-numeric:tabular-nums;font-weight:600;text-align:right}#fact-card .src{grid-column:1/-1;color:var(--ink3);font-size:10.5px;margin-top:4px}#chart-fr{height:200px}#chart-nat{height:270px}#chart-pyr{height:220px}#chart-yr{height:120px}#chart-inds{height:190px}#chart-vis{height:160px}#chart-traffic{height:170px}
 #cong-list{margin:0;padding-left:18px;font-size:12px;color:var(--ink2)}
 #cong-list li{cursor:pointer;padding:1px 0}#cong-list li:hover{color:var(--accent)}
 /* selected */
