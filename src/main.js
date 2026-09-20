@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL;
 const groupsEl = document.getElementById("layer-groups");
 const groupBox = {};   // 그룹명 → <details>
 for (const g of cfg.groups) {
-  const d = document.createElement("details"); d.className = "group"; d.open = true;
+  const d = document.createElement("details"); d.className = "group"; d.open = !cfg.groups_open || cfg.groups_open.includes(g);   // 상위 그룹만 펼침, 나머지는 접어 둠
   d.innerHTML = `<summary>${g}<span class="cnt"></span></summary>`;
   groupsEl.appendChild(d); groupBox[g] = d;
 }
@@ -165,6 +165,9 @@ map.on("load", async () => {
     }
     (groupBox[L.group] || groupsEl).appendChild(li);
   }
+  // 패널 표시 순서는 panel_order(우선순위)로, 지도 z-order(배열 순서)와 분리
+  if (cfg.panel_order) { const rank = (el) => { const i = cfg.panel_order.indexOf(el.dataset.id); return i < 0 ? 999 : i; };
+    for (const d of Object.values(groupBox)) [...d.querySelectorAll(":scope > .layer")].sort((x, y) => rank(x) - rank(y)).forEach((el) => d.appendChild(el)); }
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");

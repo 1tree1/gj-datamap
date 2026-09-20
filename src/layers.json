@@ -9,7 +9,7 @@
    "id": "emd",
    "title": "법정동 경계 (경주시 56)",
    "short": "법정동 경계",
-   "group": "계획",
+   "group": "대상지·계획",
    "file": "emd.geojson",
    "type": "line",
    "visible": false,
@@ -45,7 +45,7 @@
    "group": "인구",
    "file": "hadm_pop.geojson",
    "type": "fill",
-   "visible": true,
+   "visible": false,
    "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 라벨 = 인구 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
    "paint": {
     "fill-opacity": 0.6,
@@ -790,7 +790,7 @@
     "dyear",
     "dnum"
    ],
-   "group": "계획",
+   "group": "대상지·계획",
    "short": "용도지역"
   },
   {
@@ -864,14 +864,14 @@
     "dyear",
     "dnum"
    ],
-   "group": "계획",
+   "group": "대상지·계획",
    "short": "도시계획시설"
   },
   {
    "id": "parks_upis",
    "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
    "short": "공원·녹지·광장 (도시계획시설)",
-   "group": "계획",
+   "group": "대상지·계획",
    "file": "parks_upis.geojson",
    "type": "fill",
    "visible": false,
@@ -964,7 +964,7 @@
     "stdrDt",
     "trarNo"
    ],
-   "group": "상권·관광",
+   "group": "상권·유동",
    "short": "상권영역 (소진공)",
    "label": {
     "field": "mainTrarNm",
@@ -1609,7 +1609,7 @@
    "title": "획지·공원·주차장 (고시 2026-8호)",
    "file": "blocks.geojson",
    "type": "fill",
-   "visible": true,
+   "visible": false,
    "source_note": "지형도면고시도 11·12장 벡터화 · 고시 결정조서 면적 대비 ±4%",
    "paint": {
     "fill-opacity": 0.55,
@@ -1669,7 +1669,7 @@
     "gosi_area_m2",
     "note"
    ],
-   "group": "계획",
+   "group": "대상지·계획",
    "short": "획지·공원·주차장"
   },
   {
@@ -1677,7 +1677,7 @@
    "title": "지구단위계획구역 (구역 27)",
    "file": "zone.geojson",
    "type": "line",
-   "visible": true,
+   "visible": false,
    "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
    "paint": {
     "line-color": "#d81e1e",
@@ -1700,7 +1700,7 @@
     "area_m2",
     "gosi_area_m2"
    ],
-   "group": "계획",
+   "group": "대상지·계획",
    "short": "지구단위계획구역"
   },
   {
@@ -1797,7 +1797,7 @@
      "보건의료": "#c0392b"
     }
    },
-   "group": "상권·관광",
+   "group": "상권·유동",
    "short": "상가 업소 (10,332)"
   },
   {
@@ -1805,8 +1805,8 @@
    "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
    "file": "footfall_areas.geojson",
    "type": "fill",
-   "visible": true,
-   "group": "유동·활동",
+   "visible": false,
+   "group": "상권·유동",
    "short": "유동인구 8구역 (ha당)",
    "source_note": "소상공인시장진흥공단 소상공인365 상권분석 리포트 — 통신사 통화량 기반 50m 셀 추정 유동인구, 월별 일평균 13개월 평균 (T2). A 황오동=SGIS 100m 격자 32셀(보고서 정의) · B 행복황촌=활성화계획 위치도 디지타이징(근사) · C/D=고시 구역 · E~H=반경 원. 채움은 ha당 일평균. 클릭하면 분석 탭의 시간대 프로필이 그 구역으로 바뀐다",
    "paint": {
@@ -1974,7 +1974,7 @@
    "file": "landprice_pts.geojson",
    "type": "circle",
    "visible": false,
-   "group": "건물·필지",
+   "group": "상권·유동",
    "short": "공시지가 추이 지점 (29필지)",
    "source_note": "2024년 황오동 원도심 도시재생뉴딜 성과지표·모니터링 결과보고서(공공도시, 2025.09) 인쇄쪽 60 전사 — 토지이음 개별공시지가 매년 1.1 기준 (T2). 좌표는 카카오 주소검색. 2022년 피크(+18.7%) 후 2023 −7.8%. 화랑로 140-1은 2022 급등(7.5배) — 지목·용도 변경 의심",
    "paint": {
@@ -2051,7 +2051,7 @@
    "title": "학교 (전국초중등학교위치표준데이터) · 유치원·대학 (카카오)",
    "file": "schools.geojson",
    "type": "circle",
-   "visible": true,
+   "visible": false,
    "group": "교육·문화·종교",
    "short": "학교·유치원 (이름 표시)",
    "source_note": "초·중·고 83곳: 한국교육시설안전원 전국초중등학교위치표준데이터(공공데이터포털 API, 기준일 2026-03-20, T2) — 2030 기본계획 학교 현황(초 44·중 20·고 19)과 일치. 유치원 39·대학 4는 표준데이터에 없어 카카오 로컬(2026-09-21, T4)로 보조. 팝업 src 필드로 구분. 특성화·특목고는 표준데이터 학교급이 \"고등학교\"라 구분 없음",
@@ -2273,7 +2273,7 @@
    "group": "교육·문화·종교",
    "file": "facilities.geojson",
    "type": "circle",
-   "visible": true,
+   "visible": false,
    "minzoom": 10,
    "source_note": "V-World 장소검색(bbox 경주시, 카테고리 필터: 공공·작은·대학도서관 / 국립·사립·대학박물관·전시관·기념관 / 공립·사립미술관·화랑 / 공원>근린·어린이·소·체육·문화공원 등, 국립공원·사무소·진출입시설·정류장 제외). 공식 시설 목록이 아닌 POI(T2)라 누락·중복 가능 — 도서관·박물관미술관·도시공원 표준데이터 API 활용신청 후 교체 예정. 공원 폴리곤은 '도시계획 공간시설' 레이어.",
    "paint": {
@@ -2427,7 +2427,7 @@
    "group": "시청·교통거점",
    "file": "cityhall_sites.geojson",
    "type": "circle",
-   "visible": true,
+   "visible": false,
    "source_note": "경주시 홈페이지 청사안내(2026-09-02 갱신, T1). 본청 과 중 15개 과가 단지 밖 5개소 — 기린빌딩 9개 과·동원빌딩 3개 과는 민간 임차. 본관은 1995 통합 전 옛 경주군청. 좌표 V-World 지오코딩(건물 대표점).",
    "paint": {
     "circle-radius": [
@@ -2525,7 +2525,7 @@
    "group": "시청·교통거점",
    "file": "rail_stations.geojson",
    "type": "circle",
-   "visible": true,
+   "visible": false,
    "source_note": "위치 OSM·위키(T4). 신 서경주역 일평균 173명(2024)→309명(2025)은 나무위키 전재 — 철도통계연보로 치환 필요.",
    "paint": {
     "circle-radius": [
@@ -2578,10 +2578,10 @@
    "id": "urban_roads",
    "title": "도심 가로망 — 간선·보조간선 (전략계획 2022 서술)",
    "short": "간선·보조간선",
-   "group": "시청·교통거점",
+   "group": "교통",
    "file": "urban_roads.geojson",
    "type": "line",
-   "visible": true,
+   "visible": false,
    "source_note": "경주시 도시재생전략계획(변경, 2022) 기초조사 §2) 도심 가로망: 동서 간선 국도4호·태종로 / 남북 간선 원화로·강변로·서라벌대로~산업로 / 보조간선 포석로·일정로·용당로·알천남로·알천북로 (T1 서술). 도로명으로 표준노드링크(2026-09-14) 링크를 골라 그림 — 원문은 도면 없음.",
    "paint": {
     "line-color": [
@@ -2628,10 +2628,10 @@
    "id": "commerce_zones",
    "title": "상권 4구역 — 전략계획 2022 「중심지 상권 분석도」(인쇄쪽 42) 디지타이징",
    "short": "상권 4구역 (전략계획 도면)",
-   "group": "시청·교통거점",
+   "group": "상권·유동",
    "file": "commerce_strat.geojson",
    "type": "fill",
-   "visible": true,
+   "visible": false,
    "source_note": "경주시 도시재생 전략계획(변경, 2022.01) 기초조사 인쇄쪽 42 항공사진 위 상권 4개 폴리곤을 300dpi 렌더 → 라벨 핀 6개(성동시장·중앙시장·고속버스터미널·황남시장·황리단길·문화의거리) ↔ V-World 장소 좌표로 아핀 → 색상 마스크 추출. GCP 잔차 24~64m, 그림 자체가 개략도 → 경계 ±50m로 읽을 것. ① 경주중심상권 102ha ② 관광상권 40ha ③ 도심배후상권 19ha ④ 동천근린상권 4ha. (이전 버전은 서술 기반 개략 반경 9개)",
    "paint": {
     "fill-opacity": 0.35,
@@ -2709,7 +2709,7 @@
    "group": "시청·교통거점",
    "file": "parking_pub.geojson",
    "type": "circle",
-   "visible": true,
+   "visible": false,
    "source_note": "경주시시설관리공단 교통운영 시설안내 gjfmc.or.kr (2026-09-21 열람, T2) 17개소 + 시청사공영주차장(면수 미공개). 노상주차장·민영·읍면 제외. 좌표 V-World 지오코딩. 전략계획은 공영주차장 접근성 1등급 향유 8.6%로 '추가 공급 필요'(인쇄쪽 232).",
    "paint": {
     "circle-radius": [
@@ -2786,7 +2786,7 @@
   {
    "group": "시청·교통거점",
    "type": "line",
-   "visible": true,
+   "visible": false,
    "popup": [
     "name",
     "railway",
@@ -2844,14 +2844,57 @@
  ],
  "groups": [
   "시청·교통거점",
+  "대상지·계획",
+  "규제",
   "인구",
   "외국인·다문화",
-  "계획",
-  "규제",
+  "상권·유동",
   "건물·필지",
-  "교육·문화·종교",
-  "상권·관광",
   "교통",
-  "유동·활동"
+  "교육·문화·종교"
+ ],
+ "panel_order": [
+  "cityhall_sites",
+  "rail_stations",
+  "rail_abandoned",
+  "rail_active",
+  "parking_pub",
+  "zone",
+  "blocks",
+  "upis",
+  "parks_upis",
+  "landuse",
+  "emd",
+  "godo",
+  "reg_areas",
+  "reg",
+  "pop_total",
+  "pop_65",
+  "pop_y2034",
+  "pop_youth",
+  "pop_chg",
+  "pop_density",
+  "lifezone",
+  "decline",
+  "fr_pct",
+  "mc_hh",
+  "commerce_zones",
+  "footfall_areas",
+  "stores",
+  "sbiz_zones",
+  "landprice_pts",
+  "parcels",
+  "energy",
+  "urban_roads",
+  "busstops",
+  "traffic_hist",
+  "schools",
+  "facilities",
+  "religion"
+ ],
+ "groups_open": [
+  "시청·교통거점",
+  "대상지·계획",
+  "규제"
  ]
 }

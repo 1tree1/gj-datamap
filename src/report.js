@@ -321,6 +321,8 @@ function chartInto(el, opt, small) {
   ch.setOption({ animationDuration: reduced ? 0 : 500, ...opt, ...(small ? { legend: opt.legend ? { ...opt.legend, textStyle: { fontSize: 10.5 } } : undefined } : {}) });
   charts.push(ch); return ch;
 }
+// 썸네일 차트는 카드가 문서에 붙고 화면 근처에 왔을 때 만든다 — 붙기 전에 init하면 0×0 캔버스가 되고, 92장을 한 번에 그리면 첫 화면이 느리다
+const lazy = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting && e.target._opt) { chartInto(e.target, e.target._opt, true); e.target._opt = null; lazy.unobserve(e.target); } }, { rootMargin: "600px 0px" });
 function render(R, X, MS, Y) {
   const main = document.getElementById("main"); const chips = document.getElementById("chips");
   const p26 = R.pop_actual.pop_2026_08;
@@ -382,7 +384,7 @@ function render(R, X, MS, Y) {
       const art = $(`<article class="cn ${c.size || ""}" data-card="${c.id}" tabindex="0" role="button"><div class="k">${TIER(c.tier)}${G.title}</div><h3>${c.t}</h3><p class="take">${c.take || ""}</p><div class="thumb ${c.html && !c.opt ? "htm" : ""}"></div><p class="more">자세히 보기 →</p></article>`);
       grid.appendChild(art);
       const th = art.querySelector(".thumb");
-      if (c.opt) chartInto(th, c.opt, true); else if (c.html) th.innerHTML = c.html;
+      if (c.opt) { th._opt = c.opt; lazy.observe(th); } else if (c.html) th.innerHTML = c.html;
     }
     main.appendChild(sec);
   }
