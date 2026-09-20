@@ -32,6 +32,9 @@ FILES = {
     "processed/rail_stations_4326.geojson":     "rail_stations.geojson",
     "processed/urban_roads_4326.geojson":       "urban_roads.geojson",
     "processed/commerce_zones_4326.geojson":    "commerce_zones.geojson",
+    "processed/commerce_strat_4326.geojson":    "commerce_strat.geojson",
+    "processed/facilities_4326.geojson":        "facilities.geojson",
+    "processed/parks_upis_4326.geojson":        "parks_upis.geojson",
     "processed/parking_pub_4326.geojson":       "parking_pub.geojson",
 }
 DST.mkdir(exist_ok=True)
