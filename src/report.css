@@ -144,3 +144,9 @@ dialog .src{margin-top:12px}
 .hero .plan .plan-t td:nth-child(2),.hero .plan .plan-t td:nth-child(3),.hero .plan .plan-t td:nth-child(5){white-space:nowrap;text-align:right}
 .hero .plan .plan-t td:nth-child(4){line-height:1.5}
 .hero .plan .sub{margin-top:8px}
+
+/* 데이터 출처 카드 — 원천/방법/처리/그린 곳/한계 */
+.prov{display:grid;grid-template-columns:78px 1fr;gap:6px 12px;font-size:13px;line-height:1.55;color:var(--ink-2)}
+.prov .pk{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);padding-top:3px}
+.cn .thumb.htm .prov{font-size:12px;gap:4px 10px;grid-template-columns:70px 1fr;max-height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+#dlg-html .prov{margin:6px 0 14px;font-size:14px}

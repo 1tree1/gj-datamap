@@ -93,3 +93,5 @@ footer{flex:none;padding:8px 16px 10px;border-top:1px solid var(--line);font-siz
 .indbox select{font:inherit;font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
 
 #chart-yd{height:290px}#chart-yind{height:200px}#chart-ymig{height:220px}
+
+.layer .desc b{color:var(--ink)}
