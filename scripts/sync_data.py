@@ -31,10 +31,13 @@ FILES = {
     "processed/poi_schools_4326.geojson":       "schools.geojson",
     "processed/poi_religion_4326.geojson":      "religion.geojson",
     "processed/lifezone_4326.geojson":          "lifezone.geojson",
+    # 2026-09-21 황오동 모니터링 보고서 (pipeline/build_hwango_report.py)
+    "processed/hwango_grid_4326.geojson":       "hwango_grid.geojson",
+    "processed/hwango_biz2024_4326.geojson":    "hwango_biz2024.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json", "processed/hwango_report.json": "hwango_report.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s

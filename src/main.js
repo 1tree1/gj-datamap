@@ -36,7 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
-const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
+const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
 
@@ -94,6 +94,7 @@ map.on("load", async () => {
       if (p.age) drawPop(p);
       if (p.fr_total !== undefined) drawForeign(p);
       if (p.per_ha !== undefined && window.__extras) { drawFFHourly(window.__extras, p.id); showTab("analysis"); }
+      if (p.code && p.pop_2018 !== undefined) { drawHwCell(p); showTab("analysis"); }
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -138,14 +139,36 @@ map.on("load", async () => {
         ev.target.textContent = "■ 정지"; timer = setInterval(() => { const r = box.querySelector("#hs-hour"); r.value = (+r.value + 1) % 24; applyHour(); }, 700); });
       applyHour();
     }
+    if (L.indicator) {
+      const I = L.indicator; const box = document.createElement("div"); box.className = "subfilter indbox";
+      box.innerHTML = `<select id="ind-f">${Object.entries(I.fields).map(([k, t]) => `<option value="${k}" ${k === I.default ? "selected" : ""}>${t}</option>`).join("")}</select>
+        <select id="ind-y">${I.years.map((y) => `<option value="${y}" ${y === I.years.at(-1) ? "selected" : ""}>${y}</option>`).join("")}<option value="chg">2018→2023 변화율</option></select><span id="ind-max" class="hs-val"></span>`;
+      li.appendChild(box);
+      const applyInd = () => {
+        const k = box.querySelector("#ind-f").value, y = box.querySelector("#ind-y").value; const fc = dataCache[L.file];
+        if (y === "chg") {
+          const f = `${k}_chg_pct`;
+          map.setPaintProperty(L.id, "fill-color", ["case", ["!", ["has", f]], "#e5e5e5", ["==", ["get", f], null], "#e5e5e5", ["interpolate", ["linear"], ["get", f], -50, "#b30000", -20, "#f4a582", 0, "#f7f7f7", 20, "#92c5de", 50, "#0571b0"]]);
+          map.setLayoutProperty(`${L.id}-lb`, "text-field", ["case", ["==", ["get", f], null], "–", ["concat", ["to-string", ["get", f]], "%"]]);
+          box.querySelector("#ind-max").textContent = `${I.fields[k]} 2018→2023 %`;
+        } else {
+          const f = `${k}_${y}`; const mx = Math.max(...fc.features.map((x) => +x.properties[`${k}_2023`] || 0), ...fc.features.map((x) => +x.properties[`${k}_2018`] || 0));
+          map.setPaintProperty(L.id, "fill-color", ["case", ["==", ["get", f], null], "#e5e5e5", ["interpolate", ["linear"], ["get", f], 0, "#f1f5f0", mx * 0.25, "#a3c9a8", mx * 0.5, "#5f9f7a", mx * 0.75, "#2c6a5c", mx, "#0f3d34"]]);
+          map.setLayoutProperty(`${L.id}-lb`, "text-field", ["case", ["==", ["get", f], null], "–", ["to-string", ["get", f]]]);
+          box.querySelector("#ind-max").textContent = `${I.fields[k]} ${y} · 최대 ${mx.toLocaleString()}`;
+        }
+        window.__hwInd = { k, y };
+      };
+      box.querySelectorAll("select").forEach((el) => el.addEventListener("change", applyInd)); applyInd();
+    }
     (groupBox[L.group] || groupsEl).appendChild(li);
   }
   refreshCounts();
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
   ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts", "religion", "religion-lb", "schools", "schools-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras();
+  ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts", "religion", "religion-lb", "schools", "schools-lb", "hwango_grid", "hwango_grid-ol", "hwango_grid-lb", "hwango_biz2024", "hwango_biz2024-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras(); drawHwango();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
   drawNationality();
@@ -407,7 +430,7 @@ async function drawExtras() {
     <dt>1단계 시굴(안) 면적</dt><dd>${(+H["시굴조사 1단계(안) 면적"].v).toLocaleString()} ㎡</dd>
     <dt>2030 계획인구 vs 2026.08 실제</dt><dd>${x.plan_pop.plan_2030.toLocaleString()} → ${x.plan_pop.actual_2026_08.toLocaleString()} (${((x.plan_pop.actual_2026_08 / x.plan_pop.plan_2030 - 1) * 100).toFixed(0)}%)</dd>
     <div class="src">매장유산: ${x.sources.heritage} · 규정상 2m 미만 성토·성토 후 공원·주차장은 발굴 유예 / 계획인구: ${x.plan_pop.src}</div></dl>`;
-  window.addEventListener("resize", () => ["chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey"].forEach((id) => echarts.getInstanceByDom(document.getElementById(id))?.resize()));
+  window.addEventListener("resize", () => ["chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"].forEach((id) => echarts.getInstanceByDom(document.getElementById(id))?.resize()));
 }
 function drawFFHourly(x, focus) {
   const show = focus ? [...new Set(["A_hwango_grid32", "D_zone", "F_cityhall_r500", "H_hwangridan_r300", focus])] : ["A_hwango_grid32", "D_zone", "F_cityhall_r500", "H_hwangridan_r300"];
@@ -417,4 +440,48 @@ function drawFFHourly(x, focus) {
     xAxis: { type: "category", data: HOUR_BANDS, axisLabel: { fontSize: 10 } }, yAxis: { type: "value", axisLabel: { fontSize: 10, formatter: (v) => v + "%" }, splitLine: { lineStyle: { color: "#eee" } } },
     series: show.map((k) => ({ name: x.footfall[k].short, type: "line", data: x.footfall[k].hourly_pct, showSymbol: k === focus, lineStyle: { width: k === focus ? 3.5 : 1.6, color: AREA_COLORS[k], opacity: focus && k !== focus ? 0.45 : 1 }, itemStyle: { color: AREA_COLORS[k] } })),
   }, true);
+}
+
+// ---------- 황오동 모니터링 보고서 (hwango_report.json)
+const HW_K = { pop: "인구", hh: "가구", biz: "사업체", emp: "종사자", house: "주택" };
+async function drawHwango() {
+  let h; try { h = await fetch(`${base}data/hwango_report.json`, { cache: "no-cache" }).then((r) => r.json()); } catch { return; }
+  window.__hw = h;
+  drawHwCell(null);
+  // 창업·폐업: 보고서 집계 vs 임시영업 제외
+  const b = h.biz2024; const grp = ["숙박·체류", "카페·휴게음식", "음식점·제과", "생활소매·식품제조", "생활서비스·의료", "유흥·오락", "통신판매(무점포)"];
+  mk("chart-hw-biz").setOption({
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: grp, axisLabel: { fontSize: 10, interval: 0, rotate: 28 } }, yAxis: { type: "value" },
+    series: [{ name: "창업(실질)", type: "bar", data: grp.map((g) => b.open.by_group[g] || 0), color: "#1f5e42" }, { name: "폐업(실질)", type: "bar", data: grp.map((g) => -(b.close.by_group[g] || 0)), color: "#c0392b" }],
+  }, true);
+  document.getElementById("hw-biz-note").textContent = `보고서 창업 70·폐업 66건 중 ${b.open.popup}건은 구 경주역 부지(21)·성동시장 상인회(4)·43-5(2)의 30일 내 폐업 임시영업(축제·야시장)으로 양쪽에 중복 계상. 제외하면 창업 ${b.open.real}(점포형 ${b.open_real_storefront.length})·폐업 ${b.close.real}. 실질 순증은 숙박·체류 +${(b.open.by_group["숙박·체류"] || 0) - (b.close.by_group["숙박·체류"] || 0)}, 생활소매·식품제조 ${(b.open.by_group["생활소매·식품제조"] || 0) - (b.close.by_group["생활소매·식품제조"] || 0)}. 폐업 중 30년+ 업력 ${b.closure_age_bins["30년+"]}곳(${b.closed_over30.map((r) => r[0]).join("·")}). 인쇄쪽 82–85 (T2)`;
+  // 황오동 연령구조
+  const P = h.pop_hwango;
+  mk("chart-hw-age").setOption({
+    grid: { left: 8, right: 44, top: 48, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: P.years }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v + "%" }, max: 50 }, { type: "value", scale: true, splitLine: { show: false }, axisLabel: { formatter: (v) => (v / 1000).toFixed(1) + "k" } }],
+    series: [{ name: "65세+ %", type: "line", data: P.share_65, color: "#c0392b", lineStyle: { width: 2.5 } }, { name: "20–39세 %", type: "line", data: P.share_20_39, color: "#2f6db5", lineStyle: { width: 2.5 } }, { name: "0–14세 %", type: "line", data: P.share_0_14, color: "#e8a86b" }, { name: "총인구(우축)", type: "bar", yAxisIndex: 1, data: P.total, color: "rgba(31,94,66,.25)" }],
+  }, true);
+  document.getElementById("hw-age-note").textContent = `황오동 주민등록 ${P.total[0].toLocaleString()}(2018) → ${P.total.at(-1).toLocaleString()}(2025.07), −${(100 - P.total.at(-1) / P.total[0] * 100).toFixed(0)}%. 20–39세는 ${P.n_20_39[0].toLocaleString()}→${P.n_20_39.at(-1).toLocaleString()}명(−${(100 - P.n_20_39.at(-1) / P.n_20_39[0] * 100).toFixed(0)}%), 65세+ 비율 ${P.share_65[0]}→${P.share_65.at(-1)}%. 인쇄쪽 81 (T2)`;
+}
+function drawHwCell(p) {
+  const h = window.__hw; if (!h) return;
+  const yrs = h.series.years; const el = document.getElementById("hw-cell-name");
+  let series;
+  if (p) {
+    el.textContent = `셀 ${p.code} (No.${p.no})`;
+    series = Object.entries(HW_K).map(([k, t]) => ({ name: t, type: "line", data: yrs.map((y) => (p[`${k}_${y}`] == null ? null : p[`${k}_${y}`])), connectNulls: true, yAxisIndex: k === "emp" ? 1 : 0 }));
+  } else {
+    el.textContent = "대상지 32셀 합계 (2018=100)";
+    series = Object.entries(HW_K).map(([k, t]) => ({ name: t, type: "line", data: h.series.site[k].map((v) => +(v / h.series.site[k][0] * 100).toFixed(1)) }));
+    series.push({ name: "황오동 인구", type: "line", data: h.series.dong.pop.map((v) => +(v / h.series.dong.pop[0] * 100).toFixed(1)), lineStyle: { type: "dashed" }, color: "#86868b" });
+  }
+  mk("chart-hw-cell").setOption({
+    grid: { left: 8, right: p ? 40 : 16, top: 48, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: yrs }, yAxis: p ? [{ type: "value" }, { type: "value", splitLine: { show: false } }] : [{ type: "value", scale: true, axisLabel: { formatter: (v) => v } }],
+    color: ["#1f5e42", "#5f9f7a", "#c7641c", "#2f6db5", "#6f4fa3", "#86868b"], series,
+  }, true);
+  document.getElementById("hw-cell-note").textContent = p ? `인구 ${p.pop_2018 ?? "–"}→${p.pop_2023 ?? "–"} · 사업체 ${p.biz_2018}→${p.biz_2023} · 종사자 ${p.emp_2018}→${p.emp_2023}(우축) · 주택 ${p.house_2018 ?? "–"}→${p.house_2023 ?? "–"}. 5명 미만은 비공개. SGIS 100m 격자, 인쇄쪽 78–80 (T2)`
+    : `대상지(격자 32셀) 인구 −14%·가구 −11%·사업체 −3%·종사자 −23%·주택 −13% (2018→2023). 종사자 감소가 가장 크다 — 성동시장 셀(549623) 사업체 264→160, KT 블록(548622) 종사자 816→649. 2020 사업체 급증은 전국사업체조사 방식 변경. 지도에서 격자 셀을 클릭하면 셀별 추이로 바뀐다 (T2)`;
 }

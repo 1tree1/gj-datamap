@@ -19,7 +19,7 @@ const charts = [];
 const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
 const main = document.getElementById("main"); const toc = document.getElementById("toc");
 
-const TOC = { pop: "인구", land: "토지이용", mobility: "교통", tourism: "관광·경관", economy: "경제·주거·재정", survey15: "시민의식 2015", survey25: "시민 인식 2025", now: "지금 · 2026", sources: "출처" };
+const TOC = { pop: "인구", land: "토지이용", mobility: "교통", tourism: "관광·경관", economy: "경제·주거·재정", survey15: "시민의식 2015", survey25: "시민 인식 2025", now: "지금 · 2026", hwango: "황오동 모니터링", sources: "출처" };
 function section(id, eyebrow, title, read) {
   const s = $(`<section class="sec" id="${id}"><div class="eyebrow">${eyebrow}</div><h2>${title}</h2><p class="read">${read}</p></section>`);
   main.appendChild(s); toc.appendChild($(`<a href="#${id}">${TOC[id] || id}</a>`));
@@ -48,6 +48,7 @@ const srcLine = (s) => s.replace(/(T[124])\)/, "$1)");
 
 async function main_() {
   const R = await fetch(`${base}data/report_stats.json`, { cache: "no-cache" }).then((r) => r.json());
+  const HW = await fetch(`${base}data/hwango_report.json`, { cache: "no-cache" }).then((r) => r.json()).catch(() => null);
   const X = R.extras;
   // ---------- 히어로 타일
   const p26 = R.pop_actual.pop_2026_08; const gap = (p26 / 320000 - 1) * 100;
@@ -250,11 +251,101 @@ async function main_() {
   tl.style.marginTop = "14px";
   s.appendChild($(`<p class="src" style="margin-top:8px"><span class="tier t2">T2</span>${X.sources.heritage} · <span class="tier t1">T1</span>${R.heritage_count.src} · ${R.parks.src}</p>`));
 
+
+  // ---------- 8b. 황오동 모니터링 보고서 (2025.09)
+  if (HW) {
+    const B = HW.biz2024, P = HW.pop_hwango, SR = HW.survey_res, SV = HW.survey_vis, K = HW.kpi, T = HW.tenure, SS = HW.sales;
+    s = section("hwango", "황오동 도시재생뉴딜 성과 모니터링 (공공도시, 2025.09 · 수정중)", "‘창업 +45.8%’의 27건은 폐역 부지 축제 임시영업이었다", "2018 선정·2019–2025 시행, 215,000㎡. 보고서의 결론은 ‘인지도·소속감 상승, 창업·고용 증가, 유동인구 감소는 폐역 탓’이다. 원자료(인쇄쪽 77–86)를 다시 읽으면 세 가지가 다르게 보인다. ① 창업 70건 중 <b>27건이 구 경주역 부지(성동동 40)·성동시장 상인회에서 2~23일 만에 폐업한 임시영업</b>이고 같은 27건이 폐업 66건에도 들어 있다 — 빼면 창업 43·폐업 39, 2018(48건)보다 적다. ② 격자 32셀에서 <b>종사자 −23%</b>가 인구 −14%보다 크고, 성동시장 셀은 사업체 264→160. ③ 거점공간 만족도는 준공 후 <b>9.6→6.7→4.4</b>로 매년 떨어졌다. 황오동 20–39세는 7년 새 −44%.");
+    tiles(s, [
+      { k: "황오동 주민등록 2018→2025.07", v: fmt(P.total.at(-1)), u: "명", d: `${fmt(P.total[0])} → −${(100 - P.total.at(-1) / P.total[0] * 100).toFixed(0)}% · 20–39세 −${(100 - P.n_20_39.at(-1) / P.n_20_39[0] * 100).toFixed(0)}%`, cls: "down" },
+      { k: "65세 이상 비율 (황오동)", v: pct(P.share_65.at(-1)), d: `2018 ${pct(P.share_65[0])} → 75세+ ${fmt(P.n_75.at(-1))}명`, cls: "down" },
+      { k: "2024 창업 — 보고서 / 실질", v: `${B.open.n} / ${B.open.real}`, u: "건", d: `임시영업 ${B.open.popup}건 제외 · 점포형 ${B.open_real_storefront.length}건 · 2018년 48건`, cls: "down" },
+      { k: "2024 폐업 — 보고서 / 실질", v: `${B.close.n} / ${B.close.real}`, u: "건", d: `업력 30년+ ${B.closure_age_bins["30년+"]}곳 · 10년+ ${B.closure_age_bins["30년+"] + B.closure_age_bins["10–30년"]}곳` },
+      { k: "격자 32셀 종사자 2018→2023", v: fmt(K ? HW.series.site.emp.at(-1) : 0), u: "명", d: `${fmt(HW.series.site.emp[0])} → −${(100 - HW.series.site.emp.at(-1) / HW.series.site.emp[0] * 100).toFixed(0)}% · 인구 −14% · 사업체 −3%`, cls: "down" },
+      { k: "거점공간 만족도 (청년창업센터·도서관)", v: "4.4", u: "/10", d: "2022 9.6 → 2023 6.7 → 2024 4.4 · 준공 3년", cls: "down" },
+    ]);
+    g = grid(s); g.style.marginTop = "14px";
+    // 1. 창업·폐업 실질
+    const grp = ["숙박·체류", "카페·휴게음식", "음식점·제과", "생활소매·식품제조", "생활서비스·의료", "유흥·오락", "통신판매(무점포)"];
+    card(g, { title: "2024 창업·폐업 — 임시영업 27건을 걷어낸 업종군별 실질", sub: "위 창업 · 아래 폐업 (건)", size: "half", tier: "T2", src: B.src + " · 임시영업 = 2024 인허가 후 30일 내 폐업 + 성동동 40·396-4·43-5", note: `구 경주역 부지 ${B.open.popup_by_site["구 경주역 부지(성동동 40)"]}건은 5·6·9·11월 축제 기간(${Object.keys(B.popup_windows).slice(0, 3).join(", ")} …). 실질 순증은 숙박·체류만 +${(B.open.by_group["숙박·체류"] || 0) - (B.close.by_group["숙박·체류"] || 0)}; 생활소매·식품제조 ${(B.open.by_group["생활소매·식품제조"] || 0) - (B.close.by_group["생활소매·식품제조"] || 0)}, 음식점 ${(B.open.by_group["음식점·제과"] || 0) - (B.close.by_group["음식점·제과"] || 0)}.` }, {
+      grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => Math.abs(v) + "건" },
+      xAxis: { type: "category", data: grp, axisLabel: { fontSize: 10.5, interval: 0, rotate: 24 } }, yAxis: { type: "value", axisLabel: { formatter: (v) => Math.abs(v) } },
+      series: [{ name: "창업(실질)", type: "bar", stack: "a", data: grp.map((k) => B.open.by_group[k] || 0), color: C.green }, { name: "폐업(실질)", type: "bar", stack: "a", data: grp.map((k) => -(B.close.by_group[k] || 0)), color: C.red },
+        { name: "임시영업(창업·폐업 중복)", type: "bar", stack: "a", data: grp.map((k) => (B.open.by_group_all[k] || 0) - (B.open.by_group[k] || 0)), color: C.gray2 }],
+    });
+    // 2. 폐업 업력
+    const ab = B.closure_age_bins;
+    card(g, { title: "2024 실질 폐업 39건의 업력 — 30년 넘은 가게 4곳", sub: "인허가일 → 폐업일", size: "half", tier: "T2", src: B.src, note: `30년+: ${B.closed_over30.map((r) => `${r[0]}(${r[1]}, ${r[2]}~)`).join(" · ")}. 1961년 계림여인숙, 1980년 대원슈퍼, 1982년 고도삼계탕, 1984년 이화순미용실 — 생활업종의 세대 교체 없는 소멸.` },
+      hbar(Object.keys(ab), Object.values(ab), { unit: "건", top: 5, color: C.red }));
+    // 3. 격자 합계 vs 황오동 (2018=100)
+    const yrs6 = HW.series.years; const idx = (a) => a.map((v) => +(v / a[0] * 100).toFixed(1));
+    card(g, { title: "사업구역(격자 32셀) 5지표 — 종사자가 가장 빨리 빠진다", sub: "2018=100 · 점선은 황오동 전체 인구", size: "half", h: "tall", tier: "T2", src: HW.series.src, note: "2020 사업체 +11%는 전국사업체조사 모집단 확대(보고서 각주). 종사자 3,357→2,580: KT 블록(548622) 816→649, 성동시장 셀(549623) 394→194. 지도 ‘황오동 모니터링’ 그룹에서 셀별로 볼 수 있다." }, {
+      grid: { left: 8, right: 16, top: 56, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: yrs6 }, yAxis: { type: "value", scale: true, min: 70 },
+      series: [...Object.entries({ pop: "인구", hh: "가구", biz: "사업체", emp: "종사자", house: "주택" }).map(([k, t], i) => ({ name: t, type: "line", data: idx(HW.series.site[k]), color: [C.green, C.green2, C.orange, C.blue, C.purple][i], lineStyle: { width: k === "emp" ? 3 : 1.8 } })),
+        { name: "황오동 인구", type: "line", data: idx(HW.series.dong.pop), color: C.gray, lineStyle: { type: "dashed" } }],
+    });
+    // 4. 황오동 연령구조 2018 vs 2025
+    const bands = Object.keys(P.age);
+    card(g, { title: "황오동 연령구조 2018 → 2025.07 — 20대·50대가 비고 75세+만 는다", sub: "주민등록 5세 계급 (명)", size: "half", h: "tall", tier: "T2", src: P.src, note: `0–14세 ${pct(P.share_0_14[0])}→${pct(P.share_0_14.at(-1))}, 15–64세 ${pct(P.share_15_64[0])}→${pct(P.share_15_64.at(-1))}, 65세+ ${pct(P.share_65[0])}→${pct(P.share_65.at(-1))}. 25–29세 407→230, 55–59세 798→508, 80–84세 232→376.` }, {
+      grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: bands, axisLabel: { fontSize: 10, interval: 1, rotate: 40 } }, yAxis: { type: "value" },
+      series: [{ name: "2018", type: "bar", data: bands.map((b) => P.age[b]["2018"]), color: C.gray2 }, { name: "2025.07", type: "bar", data: bands.map((b) => P.age[b]["2025.07"]), color: C.green }],
+    });
+    // 5. 월매출
+    card(g, { title: "대표 5업종 월매출 합계 2023.09–2025.04 — 2024.10 점프는 의원이 만든다", sub: "만 원/월 · 슈퍼마켓·백반/한정식·미용실·여관/모텔·피부/비뇨기과의원", size: "half", tier: "T2", src: SS.src, note: SS.note + `. 2024.01–2025.04 평균 ${fmt(Object.values(SS.by_upjong_2024_01_2025_04).reduce((a, b) => a + b, 0))}만 원 중 의원 ${fmt(SS.by_upjong_2024_01_2025_04["피부/비뇨기과의원"])}(${(SS.by_upjong_2024_01_2025_04["피부/비뇨기과의원"] / 15544 * 100).toFixed(0)}%) · 슈퍼마켓 ${fmt(SS.by_upjong_2024_01_2025_04["슈퍼마켓"])}.` }, {
+      grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "만 원" },
+      xAxis: { type: "category", data: SS.months, axisLabel: { fontSize: 10, formatter: (v) => (v.endsWith("-01") || v === "2023-09" ? v : v.slice(5)) } }, yAxis: { type: "value", scale: true, axisLabel: { formatter: (v) => (v / 10000).toFixed(1) + "억" } },
+      series: [{ type: "line", data: SS.total_manwon, color: C.orange, areaStyle: { opacity: .12 }, lineStyle: { width: 2.5 }, markLine: { silent: true, symbol: "none", lineStyle: { type: "dashed", color: C.ink3 }, data: [{ xAxis: "2024-10", label: { formatter: "2024.10" } }] } }],
+    });
+    // 6. 업종별 매출 구성
+    const bu = SS.by_upjong_2024_01_2025_04;
+    card(g, { title: "5업종 월평균 매출 구성 (2024.01–2025.04)", sub: "만 원/월", size: "half", tier: "T2", src: SS.src, note: "‘상권 매출 +15%’는 이 5개 대표업종 합계다. 피부/비뇨기과의원 한 업종이 57%를 차지해 소매·음식 상권의 지표로는 약하다." },
+      hbar(Object.keys(bu), Object.values(bu), { unit: "만 원", top: 5, color: C.orange }));
+    // 7. 설문 — 인지도·만족도·소속감
+    card(g, { title: "주민·상인 설문 2020–2024 — 인지도·소속감은 오르고 보행환경은 내려간다", sub: "10점 척도 · 인지도는 %", size: "half", tier: "T2", src: SR.src, note: SR.note }, {
+      grid: { left: 8, right: 44, top: 56, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: SR.years }, yAxis: [{ type: "value", min: 0, max: 10 }, { type: "value", min: 0, max: 100, axisLabel: { formatter: (v) => v + "%" }, splitLine: { show: false } }],
+      series: [{ name: "전반 만족도", type: "line", data: SR.overall_satis, color: C.green, lineStyle: { width: 2.5 } }, { name: "주거환경", type: "line", data: SR.housing_env, color: C.green2 }, { name: "보행환경", type: "line", data: SR.walk_env, color: C.red }, { name: "소속감(황오동)", type: "line", data: SR.belonging["황오동"], color: C.purple }, { name: "공공기관 신뢰", type: "line", data: SR.trust["공공기관"], color: C.blue }, { name: "인지도(우축)", type: "bar", yAxisIndex: 1, data: SR.awareness, color: "rgba(31,94,66,.18)" }],
+    });
+    // 8. 거점공간 만족도 하락 + 기대
+    const hubs = Object.keys(SR.hub_expect_2024);
+    card(g, { title: "거점공간 — 준공된 곳은 만족도가 매년 하락, 미준공은 보행사업만 기대 7점대", sub: "10점 척도", size: "half", h: "tall", tier: "T2", src: SR.src, note: `청년창업거점센터·작은도서관(2021.03 준공) 9.6→6.7→4.4, 오픈스튜디오 6.6→4.3, 어울림마당 6.7→4.6. 2024 프로그램 만족도도 창업 인큐베이터 4.4·상권 활성화 4.5 vs 안전한 골목길 8.2. 이용자 수는 청년센터·도서관 2,870(2022)→9,697(2023).` }, {
+      grid: { left: 8, right: 16, top: 56, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: [...Object.keys(SR.hub_satis), ...hubs], axisLabel: { fontSize: 10, interval: 0, rotate: 24 } }, yAxis: { type: "value", min: 0, max: 10 },
+      series: [{ name: "2022 만족", type: "bar", data: [...Object.values(SR.hub_satis).map((a) => a[2]), ...hubs.map(() => null)], color: C.gray2 }, { name: "2023 만족", type: "bar", data: [...Object.values(SR.hub_satis).map((a) => a[3]), ...hubs.map(() => null)], color: C.gray },
+        { name: "2024 만족", type: "bar", data: [...Object.values(SR.hub_satis).map((a) => a[4]), ...hubs.map(() => null)], color: C.red }, { name: "2024 기대(미준공)", type: "bar", data: [...Object.keys(SR.hub_satis).map(() => null), ...hubs.map((h) => SR.hub_expect_2024[h])], color: C.green }],
+    });
+    // 9. 방문객 이전 방문지
+    const pp = SV.prev_place;
+    card(g, { title: "방문객 ‘직전 방문지’ 2020–2024 — 황리단길 54%→12%, 성동시장 9%→48%", sub: "% · 표본·조사장소가 매년 다름(2024는 축제 현장)", size: "half", tier: "T2", src: SV.src, note: SV.note }, {
+      grid: { left: 8, right: 16, top: 56, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+      xAxis: { type: "category", data: SV.years }, yAxis: { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } },
+      series: Object.entries(pp).map(([k, a], i) => ({ name: k, type: "bar", stack: "p", data: a.map((v) => v ?? 0), color: [C.orange, C.green2, C.blue2, C.purple, C.blue, C.gray, C.gray2][i] })),
+    });
+    // 10. 방문 계기·체류
+    card(g, { title: "방문 계기 — 2024는 축제 50%, 체류 3시간 미만 79%, 1만 원 이상 지출 2.7%", sub: "%", size: "half", tier: "T2", src: SV.src, note: `방문객 인지도 26.8→66.0%, 만족도 7.4→7.9. 오후 방문 ${SV.time_pm.at(-1)}%. 경주시민 비율 ${pct(SV.resident_gj_2024, 1)} — ‘관광객’ 지표가 아니라 주민 행사 지표에 가깝다.` }, {
+      grid: { left: 8, right: 16, top: 56, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 11 } }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+      xAxis: { type: "category", data: SV.years }, yAxis: { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } },
+      series: [...Object.entries(SV.motive).map(([k, a], i) => ({ name: k, type: "bar", stack: "m", data: a.map((v) => v ?? 0), color: [C.green, C.blue, C.purple, C.green2, C.orange, C.gray2][i] })), { name: "1만 원 이상 지출", type: "line", data: SV.spend_over_10, color: C.red, lineStyle: { width: 2.5 } }],
+    });
+    // 11. 업력 10년+
+    card(g, { title: "업력 10년 이상 311곳의 업종 — 방앗간·참기름·식육·여인숙·다방", sub: "영업 중 628곳 (2025.05) 중 · 세부업종별 곳", size: "half", h: "tall", tier: "T2", src: T.src, note: `최장 ${T.oldest.slice(0, 5).map((r) => `${r[0]} ${r[1]}년`).join(" · ")}. 2018 이후 폐업 상위: 한식 44·즉석판매 36·다방 17·휴게음식 16.` },
+      hbar(Object.keys(T.over10y_by_upjong), Object.values(T.over10y_by_upjong), { unit: "곳", top: 12, color: C.green }));
+    // 12. 창업·폐업 비교군 (대상지/황오동/경주시/경북 2018=100)
+    const cmpk = ["대상지", "황오동", "경주시", "경상북도"]; const cmpv = { 대상지: { startups: K.startups, closures: K.closures }, ...K.compare };
+    card(g, { title: "폐업 건수 지수 — 대상지·황오동·경주시·경북 (2018=100)", sub: "지방행정인허가 전 업종 · 대상지 2024 = 194(임시영업 포함)", size: "half", tier: "T2", src: K.src, note: "경북 폐업은 2020부터 6년 연속 증가(+29%). 대상지 2024의 급등(+83%)은 임시영업 27건이 만든 것으로, 실질 39건은 2021년(57건)보다 적다." }, {
+      grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: K.years }, yAxis: { type: "value", scale: true },
+      series: cmpk.map((k, i) => ({ name: k, type: "line", data: idx(cmpv[k].closures), color: [C.red, C.orange, C.blue, C.gray][i], lineStyle: { width: k === "대상지" ? 3 : 1.8 } })),
+    });
+  }
+
   // ---------- 9. 데이터 카탈로그
   s = section("sources", "출처", "이 페이지가 쓴 문서와 등급", "숫자를 인용할 때는 여기 적힌 쪽과 등급을 그대로 옮긴다. 전사본(모니터링 보고서 표를 손으로 옮긴 것)은 원문 대조 전 인용 금지.");
   const tbl = $(`<div class="card"><table class="t"><tr><th>등급</th><th>문서</th><th>쓰인 곳</th></tr></table></div>`);
   const rows = [["T1", "2030 경주도시기본계획 (승인, 475쪽 → 45절 마크다운, 표 697)", "인구·토지·교통·관광·경제·주거·재정·시민의식 2015"], ["T1", "2030 경주시 경관계획 재정비 (2025.04)", "경관의식조사"], ["T1", "경주시 도시재생 전략계획(변경) (2022.01)", "쇠퇴진단 — 지도"], ["T1", "경주시 고시 제2026-8호 지구단위계획 · 경북 고시 2020-479호 고도지구", "지도 레이어"],
-    ["T2", "경주시 원도심 미래구상 기획연구 (동국대·가천대, 2025.07, 417쪽)", "시민설문 2025 · 인지지도 · 2025 예산"], ["T2", "황오동 원도심·행복황촌 도시재생 성과지표 모니터링 (2025.09 / 2025.12)", "유동인구 2020–24 · 창업폐업 · 공시지가"], ["T2", "소상공인365 (소진공) 상권분석 리포트", "유동인구 8구역 · 업종·매출"], ["T2", "KOSIS 주민등록 · 관광데이터랩 · ITS · 건축HUB · V-World", "지도 현황 레이어"], ["T2", "김권일(신라문화유산연구원) 2026.02 혁신포럼 · 시굴조사 추진계획", "매장유산"], ["T4", "2023 폐철도 기본구상 설문 (언론 경유)", "시청 이전 63.7% — 원문 미확보"]];
+    ["T2", "경주시 원도심 미래구상 기획연구 (동국대·가천대, 2025.07, 417쪽)", "시민설문 2025 · 인지지도 · 2025 예산"], ["T2", "황오동 원도심·행복황촌 도시재생 성과지표 모니터링 (2025.09 / 2025.12)", "유동인구 2020–24 · 창업폐업 · 공시지가 · 격자 32셀 · 연령구조 · 설문 2020–24 · 2024 창업·폐업 목록"], ["T2", "소상공인365 (소진공) 상권분석 리포트", "유동인구 8구역 · 업종·매출"], ["T2", "KOSIS 주민등록 · 관광데이터랩 · ITS · 건축HUB · V-World", "지도 현황 레이어"], ["T2", "김권일(신라문화유산연구원) 2026.02 혁신포럼 · 시굴조사 추진계획", "매장유산"], ["T4", "2023 폐철도 기본구상 설문 (언론 경유)", "시청 이전 63.7% — 원문 미확보"]];
   for (const [t, d, u] of rows) tbl.querySelector("table").appendChild($(`<tr><td><span class="tier ${t.toLowerCase()}">${t}</span></td><td>${d}</td><td>${u}</td></tr>`));
   s.appendChild(tbl);
 
