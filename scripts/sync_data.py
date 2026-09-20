@@ -36,6 +36,9 @@ FILES = {
     "processed/facilities_4326.geojson":        "facilities.geojson",
     "processed/parks_upis_4326.geojson":        "parks_upis.geojson",
     "processed/parking_pub_4326.geojson":       "parking_pub.geojson",
+    # 2026-09-21 경관축 (pipeline/build_landscape_axes.py)
+    "processed/landscape_axes_lines_4326.geojson": "ls_axes.geojson",
+    "processed/landscape_axes_green_4326.geojson": "ls_green.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
