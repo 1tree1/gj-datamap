@@ -1,0 +1,267 @@
+import * as echarts from "echarts";
+
+const base = import.meta.env.BASE_URL;
+const C = { green: "#1f5e42", green2: "#5f9f7a", green3: "#a8cbb6", orange: "#c7641c", orange2: "#e8a86b", red: "#c0392b", blue: "#2f6db5", blue2: "#8fb4e0", purple: "#6f4fa3", gray: "#9aa0a6", gray2: "#d3d6da", ink: "#1d1d1f", ink2: "#515154", ink3: "#86868b" };
+const FONT = getComputedStyle(document.documentElement).getPropertyValue("--font");
+echarts.registerTheme("gj", {
+  color: [C.green, C.orange, C.blue, C.purple, C.red, C.gray],
+  textStyle: { fontFamily: FONT, color: C.ink2 },
+  title: { textStyle: { color: C.ink, fontWeight: 600, fontSize: 13 } },
+  legend: { textStyle: { color: C.ink2, fontSize: 12 }, itemWidth: 12, itemHeight: 8, icon: "roundRect" },
+  tooltip: { backgroundColor: "rgba(255,255,255,.96)", borderColor: "rgba(0,0,0,.1)", borderWidth: 1, textStyle: { color: C.ink, fontSize: 12.5 }, padding: [8, 10], extraCssText: "box-shadow:0 6px 24px rgba(0,0,0,.08);border-radius:10px" },
+  categoryAxis: { axisLine: { lineStyle: { color: "rgba(0,0,0,.12)" } }, axisTick: { show: false }, axisLabel: { color: C.ink3, fontSize: 11.5 }, splitLine: { show: false } },
+  valueAxis: { axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: C.ink3, fontSize: 11.5 }, splitLine: { lineStyle: { color: "rgba(0,0,0,.06)" } } },
+  line: { symbolSize: 5, smooth: false }, bar: { barMaxWidth: 34 },
+});
+const fmt = (v) => (v == null ? "–" : Number(v).toLocaleString("ko-KR"));
+const pct = (v, d = 1) => (v == null ? "–" : Number(v).toFixed(d) + "%");
+const charts = [];
+const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
+const main = document.getElementById("main"); const toc = document.getElementById("toc");
+
+const TOC = { pop: "인구", land: "토지이용", mobility: "교통", tourism: "관광·경관", economy: "경제·주거·재정", survey15: "시민의식 2015", survey25: "시민 인식 2025", now: "지금 · 2026", sources: "출처" };
+function section(id, eyebrow, title, read) {
+  const s = $(`<section class="sec" id="${id}"><div class="eyebrow">${eyebrow}</div><h2>${title}</h2><p class="read">${read}</p></section>`);
+  main.appendChild(s); toc.appendChild($(`<a href="#${id}">${TOC[id] || id}</a>`));
+  return s;
+}
+function tiles(host, items) {
+  const g = $(`<div class="tiles"></div>`);
+  for (const t of items) g.appendChild($(`<div class="tile"><div class="k">${t.k}</div><div class="v">${t.v}${t.u ? `<small>${t.u}</small>` : ""}</div>${t.d ? `<div class="d ${t.cls || ""}">${t.d}</div>` : ""}</div>`));
+  host.appendChild(g); return g;
+}
+function grid(host) { const g = $(`<div class="grid"></div>`); host.appendChild(g); return g; }
+function card(host, { title, sub, size = "", h = "", src, tier, note }, opt) {
+  const c = $(`<div class="card ${size}"><h3>${title}</h3>${sub ? `<p class="sub">${sub}</p>` : ""}<div class="chart ${h}"></div>${note ? `<p class="note">${note}</p>` : ""}${src ? `<p class="src">${tier ? `<span class="tier ${tier.toLowerCase()}">${tier}</span>` : ""}${src}</p>` : ""}</div>`);
+  host.appendChild(c);
+  if (opt) { const ch = echarts.init(c.querySelector(".chart"), "gj"); ch.setOption({ animationDuration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 500, ...opt }); charts.push(ch); }
+  return c;
+}
+const hbar = (cats, vals, { color = C.green, unit = "", top = 8, max, fmtV } = {}) => ({
+  grid: { left: 4, right: 44, top: 4, bottom: 4, containLabel: true },
+  tooltip: { trigger: "axis", axisPointer: { type: "none" }, valueFormatter: (v) => (fmtV ? fmtV(v) : fmt(v) + unit) },
+  xAxis: { type: "value", show: false, max },
+  yAxis: { type: "category", inverse: true, data: cats.slice(0, top), axisLine: { show: false }, axisLabel: { color: C.ink, fontSize: 12, width: 150, overflow: "truncate" } },
+  series: [{ type: "bar", data: vals.slice(0, top), itemStyle: { color, borderRadius: [0, 4, 4, 0] }, barCategoryGap: "32%", label: { show: true, position: "right", fontSize: 11.5, color: C.ink2, formatter: (d) => (fmtV ? fmtV(d.value) : fmt(d.value) + unit) } }],
+});
+const srcLine = (s) => s.replace(/(T[124])\)/, "$1)");
+
+async function main_() {
+  const R = await fetch(`${base}data/report_stats.json`, { cache: "no-cache" }).then((r) => r.json());
+  const X = R.extras;
+  // ---------- 히어로 타일
+  const p26 = R.pop_actual.pop_2026_08; const gap = (p26 / 320000 - 1) * 100;
+  tiles(document.getElementById("hero-tiles"), [
+    { k: "2030 계획인구 (T1)", v: fmt(320000), u: "명", d: "자연증가 262,490 + 사회적증가 53,769" },
+    { k: "실제 주민등록 2026.08 (T2)", v: fmt(p26), u: "명", d: `계획 대비 ${gap.toFixed(0)}%`, cls: "down" },
+    { k: "65세 이상", v: pct(R.aging.pct65_2026), d: `2013년 ${pct(R.aging.pct65.at(-1))} → 계획의 2030 전망 ${pct(R.age_projection.p65.at(-1))}을 이미 근접`, cls: "down" },
+    { k: "폐역 구역 유동인구", v: fmt(X.footfall.D_zone.per_ha), u: "/ha", d: `성동시장 200m ${fmt(X.footfall.G_seongdong_market_r200.per_ha)}/ha의 1/15` },
+  ]);
+
+  // ---------- 1. 인구
+  let s = section("pop", "인구 · 2030 기본계획 vs 주민등록", "계획된 성장과 실제 감소 — 한 그래프에", "기본계획은 2013년 270,493명에서 2030년 320,000명으로 <b>+18%</b>를 그렸다. 주민등록 인구는 같은 기간 계속 줄어 2026년 8월 242,512명이다. 두 통계는 기준(통계연보 vs 주민등록·외국인 포함 여부)이 달라 2011~13년에 약 1만 명 차이가 나므로 <b>수준이 아니라 방향</b>을 읽는다.");
+  let g = grid(s);
+  const yrsAll = [...new Set([...R.pop_doc.years, ...R.pop_actual.years, ...R.pop_plan.years, "2026"])].sort();
+  const ser = (yrs, vals) => yrsAll.map((y) => { const i = yrs.indexOf(y); return i < 0 ? null : vals[i]; });
+  card(g, { title: "경주시 인구 — 통계연보(2003–13) · 주민등록(2011–25) · 계획인구(2013→2030)", sub: "명. 계획인구는 2015·2020·2025·2030 단계 목표", size: "", h: "tall", tier: "T1", src: `${R.pop_doc.src} / ${R.pop_actual.src}` }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+    xAxis: { type: "category", data: yrsAll, axisLabel: { interval: 2 } }, yAxis: { type: "value", min: 230000, max: 330000, axisLabel: { formatter: (v) => v / 1000 + "k" } },
+    series: [
+      { name: "통계연보 (기본계획 수록)", type: "line", data: ser(R.pop_doc.years, R.pop_doc.total), color: C.gray, lineStyle: { width: 2 }, connectNulls: true },
+      { name: "주민등록 KOSIS", type: "line", data: ser(R.pop_actual.years, R.pop_actual.total), color: C.ink, lineStyle: { width: 2.5 }, connectNulls: true, endLabel: { show: true, formatter: (d) => fmt(d.value), fontSize: 11, color: C.ink } },
+      { name: "2030 계획인구", type: "line", data: ser(R.pop_plan.years, R.pop_plan.total), color: C.green, lineStyle: { width: 2, type: "dashed" }, symbolSize: 7, connectNulls: true, endLabel: { show: true, formatter: (d) => fmt(d.value), fontSize: 11, color: C.green } },
+      { name: "2026.08", type: "scatter", data: [[String(2026), p26]], color: C.red, symbolSize: 10, label: { show: true, position: "right", formatter: fmt(p26), fontSize: 11, color: C.red } },
+    ],
+  });
+  card(g, { title: "고령화 — 65세 이상 비율", sub: "2004–2013 통계연보 · 2026.08 주민등록 · 계획의 자연증가 전망(2015–2030)", size: "half", tier: "T1", src: `${R.aging.src} / ${R.age_projection.src}` }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: [...R.aging.years, "2015", "2020", "2025", "2026", "2030"] }, yAxis: { type: "value", axisLabel: { formatter: (v) => v + "%" }, max: 40 },
+    series: [{ name: "실적", type: "line", data: [...R.aging.pct65, null, null, null, R.aging.pct65_2026, null], color: C.ink, lineStyle: { width: 2.5 }, connectNulls: true },
+             { name: "계획 전망", type: "line", data: [...Array(9).fill(null), R.age_projection.p65[0], ...R.age_projection.p65.slice(1, 4), null, R.age_projection.p65[4]], color: C.green, lineStyle: { type: "dashed" }, connectNulls: true },
+             { name: "2026.08 실제", type: "scatter", data: [["2026", R.aging.pct65_2026]], color: C.red, symbolSize: 10, label: { show: true, position: "top", formatter: pct(R.aging.pct65_2026), color: C.red, fontSize: 11 } }],
+  });
+  card(g, { title: "연령구조 전망(자연증가 기준) — 부양률 42% → 83%", sub: "0–14 / 15–64 / 65+ 구성비(%)와 부양률 [(0–14 + 65+)/15–64]", size: "half", tier: "T1", src: R.age_projection.src }, {
+    grid: { left: 8, right: 40, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: R.age_projection.years }, yAxis: [{ type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } }, { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" }, splitLine: { show: false } }],
+    series: [{ name: "0–14", type: "bar", stack: "a", data: R.age_projection.p0_14, color: C.blue2 }, { name: "15–64", type: "bar", stack: "a", data: R.age_projection.p15_64, color: C.green3 }, { name: "65+", type: "bar", stack: "a", data: R.age_projection.p65, color: C.orange },
+             { name: "부양률", type: "line", yAxisIndex: 1, data: R.age_projection.dependency, color: C.ink, lineStyle: { width: 2 }, label: { show: true, position: "top", formatter: (d) => d.value + "%", fontSize: 11 } }],
+  });
+  const lz = Object.keys(R.pop_plan.by_lifezone);
+  card(g, { title: "생활권별 인구배분계획 — 중심생활권 178,973 → 200,000", sub: "2013 현재 vs 2030 목표(명). 중심생활권 순밀도 116인/ha(시가화용지 기준)", size: "half", tier: "T1", src: `${R.pop_plan.src} / ${R.lifezone_density.src}` }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+    xAxis: { type: "category", data: lz }, yAxis: { type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } },
+    series: [{ name: "2013", type: "bar", data: lz.map((z) => R.pop_plan.by_lifezone[z][0]), color: C.gray2 }, { name: "2030 계획", type: "bar", data: lz.map((z) => R.pop_plan.by_lifezone[z][4]), color: C.green, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => (d.value / 1000).toFixed(0) + "k" } }],
+  });
+  const sc = R.pop_plan_components.social;
+  card(g, { title: "계획인구 320,000의 구성 — 사회적증가 53,769명은 어디서 오나", sub: "자연증가 262,490(내국인 252,490 + 외국인 10,000) + 사회적증가(신규사업)", size: "half", tier: "T1", src: R.pop_plan_components.src },
+    hbar(["자연증가(내국인)", "일반산업단지", "도시개발사업", "주택건설사업", "신경주역세권", "자연증가(외국인)"], [252490, sc["일반산업단지"], sc["도시개발사업"], sc["주택건설사업"], sc["신경주역세권"], 10000], { unit: "명", color: C.green2 }));
+
+  // ---------- 2. 토지
+  s = section("land", "토지이용 · 용도지역", "1,325㎢ 중 시가지는 5%, 상업지역은 0.22%", "경주시 전체의 <b>42%가 농림지역, 31%가 녹지지역</b>이고 주거·상업·공업을 합친 시가지는 46.96㎢(3.5%)다. 2030 계획은 시가화용지를 44.67→67.36㎢로 늘리는데 그 절반 이상(+11.73㎢)이 <b>공업용지</b>다. 상업용지 증가 0.28㎢는 전부 중심생활권.");
+  g = grid(s);
+  card(g, { title: "용도지역 구성 (2014 통계연보)", sub: "면적 ㎢ · 비율 %", size: "half", tier: "T1", src: R.landuse.src }, {
+    tooltip: { trigger: "item", formatter: (d) => `${d.name} ${fmt(d.value)}㎢ · ${d.percent}%` },
+    series: [{ type: "pie", radius: ["48%", "78%"], center: ["50%", "50%"], data: R.landuse.items.map((i) => ({ name: i.name, value: i.km2 })), color: [C.orange, C.red, C.purple, C.green3, C.gray2, C.blue2, C.blue, C.gray, C.green, C.green2],
+               label: { fontSize: 11.5, color: C.ink2, formatter: (d) => (d.percent >= 2 ? `${d.name} ${d.percent}%` : "") }, labelLine: { length: 8, length2: 6 }, itemStyle: { borderColor: "#fff", borderWidth: 2 } }],
+  });
+  const lpr = R.landuse_plan.rows.filter((r) => !/계|미지정|보전용지/.test(r.name));
+  card(g, { title: "2030 토지이용계획 — 기정 → 변경 (㎢)", sub: "시가화용지·시가화예정용지 내역. 공업 +11.73, 관리용지 +9.45, 지구단위계획 +7.92", size: "half", tier: "T1", src: R.landuse_plan.src }, {
+    grid: { left: 4, right: 40, top: 30, bottom: 4, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "㎢" },
+    xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: lpr.map((r) => r.name), axisLabel: { color: C.ink, fontSize: 12 } },
+    series: [{ name: "기정", type: "bar", data: lpr.map((r) => r.before), color: C.gray2, barGap: "-55%", barCategoryGap: "35%" }, { name: "변경", type: "bar", data: lpr.map((r) => r.after), color: C.green, label: { show: true, position: "right", fontSize: 11, color: C.ink2, formatter: (d) => d.value } }],
+  });
+
+  // ---------- 3. 교통
+  s = section("mobility", "교통 · 수단분담 · 자동차", "2007년 통행의 36%가 버스였다. 계획은 2015년부터 승용차 40%를 전제한다", "기본계획이 인용한 2007년 조사에서 버스 36.2%·승용차 26.5%·도보 15.1%였던 분담률이, 같은 계획의 2015~2030 예측표에서는 <b>승용차 40%·버스 15.6%</b>로 뒤집힌다. 천 명당 차량은 2009 403대 → 2013 449대(+2.8%/년). 주차 51,880면의 <b>99%가 부설주차장</b>이고, 시내버스 수송은 5년간 1,500만 명 수준에서 정체.");
+  g = grid(s);
+  const modes2007 = R.mode_share_2007.modes; const f = R.mode_forecast;
+  card(g, { title: "수단분담률 — 2007 조사 vs 2015·2030 계획 예측", sub: "% · 예측표는 도보와 자전거를 합산", size: "half", tier: "T1", src: `${R.mode_share_2007.src} / ${f.src}` }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: ["도보(·자전거)", "승용차", "택시", "버스", "철도", "기타"] }, yAxis: { type: "value", axisLabel: { formatter: (v) => v + "%" }, max: 45 },
+    series: [{ name: "2007 조사", type: "bar", data: R.mode_share_2007.pct, color: C.gray }, { name: "2015 예측", type: "bar", data: ["도보/자전거", "승용차", "택시", "버스", "철도", "기타"].map((m) => f.pct[m][0]), color: C.green2 }, { name: "2030 예측", type: "bar", data: ["도보/자전거", "승용차", "택시", "버스", "철도", "기타"].map((m) => f.pct[m][3]), color: C.green, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => d.value } }],
+  });
+  card(g, { title: "목적별 수단분담 (2007) — 등교의 52%는 버스, 업무의 50%는 승용차", sub: "%", size: "half", tier: "T1", src: R.mode_share_2007.src }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: Object.keys(R.mode_share_2007.by_purpose) }, yAxis: { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } },
+    series: modes2007.map((m, i) => ({ name: m, type: "bar", stack: "s", data: Object.values(R.mode_share_2007.by_purpose).map((v) => v[i]), color: [C.green3, C.orange, C.orange2, C.green, C.purple, C.gray2][i] })),
+  });
+  card(g, { title: "인구 천 명당 차량 등록", sub: "대/천 명 · 2009–2013", size: "third", tier: "T1", src: R.cars.src }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: R.cars.years }, yAxis: { type: "value", min: 250, max: 470 },
+    series: [{ name: "전체", type: "line", data: R.cars.per_1000_total, color: C.ink, lineStyle: { width: 2.5 }, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => d.value.toFixed(0) } }, { name: "승용차", type: "line", data: R.cars.per_1000_car, color: C.orange }],
+  });
+  card(g, { title: "철도 승차 — 신경주역(KTX) vs 경주역(일반)", sub: "명/년 · 경주역은 2021.12 폐역", size: "third", tier: "T1", src: R.rail.src }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+    xAxis: { type: "category", data: R.rail.years }, yAxis: { type: "value", axisLabel: { formatter: (v) => v / 1e6 + "M" } },
+    series: [{ name: "신경주역", type: "bar", data: R.rail.ktx_board, color: C.green }, { name: "구 경주역", type: "bar", data: R.rail.gj_board, color: C.orange }],
+  });
+  card(g, { title: "주차시설 51,880면 — 부설 99%", sub: "면수 · 개소", size: "third", tier: "T1", src: R.parking.src },
+    hbar(R.parking.rows.filter((r) => r.kind !== "합계").map((r) => `${r.kind} (${fmt(r.sites)}개소)`), R.parking.rows.filter((r) => r.kind !== "합계").map((r) => r.spaces), { unit: "면", color: C.gray }));
+  card(g, { title: "시내버스 수송인원 — 5년간 정체", sub: "명/년 · 등록대수 163→169", size: "half", tier: "T1", src: R.bus.src }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+    xAxis: { type: "category", data: R.bus.years }, yAxis: { type: "value", min: 0, axisLabel: { formatter: (v) => v / 1e6 + "M" } },
+    series: [{ name: "시내버스", type: "line", data: R.bus.city_pax, color: C.green, areaStyle: { opacity: .12 }, lineStyle: { width: 2.5 } }, { name: "전세버스", type: "line", data: R.bus.charter_pax, color: C.orange }],
+  });
+  const vcs = R.road_vc.rows.filter((r) => /국도7|국도4|국도35|국도20|지방도/.test(r.road) || r.vc >= 0.6).sort((a, b) => b.vc - a.vc).slice(0, 10);
+  card(g, { title: "주요 도로 V/C — 용량 대비 교통량 상위", sub: "V/C (1.0 = 용량 도달) · 국도 위주 상위 10구간", size: "half", tier: "T1", src: R.road_vc.src },
+    hbar(vcs.map((r) => `${r.road} ${r.seg}`), vcs.map((r) => r.vc), { color: C.orange, top: 10, max: 1, fmtV: (v) => v.toFixed(2) }));
+
+  // ---------- 4. 관광·경관
+  s = section("tourism", "관광 · 경관 인식", "지정관광지 방문객 889만(2013). 시민이 꼽는 대표 경관은 불국사가 아니라 황리단길", "기본계획의 관광객 통계는 보문·양남·감포 <b>지정관광지 입장객</b>만 센다(2013년 889만, 외국인 19만). 관광데이터랩의 2026년 8월 순방문자(18일간 626만)는 정의가 달라 합칠 수 없다. 2030 경관계획 의식조사에서 시민 36.4%가 대표 경관으로 <b>황리단길</b>을 꼽았고(불국사 24.2%), 관광객은 여전히 불국사 53.3%. 2025년 417쪽 연구에서도 상징적 중심 1위는 황리단길(59명 중 25).");
+  g = grid(s);
+  card(g, { title: "지정(법정) 관광지 방문객", sub: "명/년 · 내국인 + 외국인 · 보문·양남·감포만", size: "half", tier: "T1", src: R.tourists.src, note: `참고: 관광데이터랩 2026.08.01~18 순방문자 현지인 ${fmt(R.visitors_2026.sum_local)} · 외지인 ${fmt(R.visitors_2026.sum_ext)} · 외국인 ${fmt(R.visitors_2026.sum_foreign)} (KT, 시군구, T2) — 정의가 다르므로 위 그래프와 비교 금지` }, {
+    grid: { left: 8, right: 40, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+    xAxis: { type: "category", data: R.tourists.years }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1e6 + "M" } }, { type: "value", axisLabel: { formatter: (v) => v / 1e3 + "k" }, splitLine: { show: false } }],
+    series: [{ name: "합계", type: "bar", data: R.tourists.total, color: C.green }, { name: "외국인(우축)", type: "line", yAxisIndex: 1, data: R.tourists.foreign, color: C.orange, lineStyle: { width: 2 } }],
+  });
+  const ls = R.landscape_survey;
+  card(g, { title: "경주의 대표 경관은? — 시민·공무원·관광객", sub: "% · 2030 경관계획 재정비 경관의식조사 (시민 330·관광객 60·공무원 168)", size: "half", tier: "T1", src: ls.src }, {
+    grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: ["시민", "공무원", "관광객"] }, yAxis: { type: "value", max: 60, axisLabel: { formatter: (v) => v + "%" } },
+    series: [{ name: "황리단길", type: "bar", data: ["시민", "공무원", "관광객"].map((k) => ls.representative["황리단길"][k]), color: C.orange, label: { show: true, position: "top", fontSize: 11, formatter: (d) => d.value } }, { name: "불국사", type: "bar", data: ["시민", "공무원", "관광객"].map((k) => ls.representative["불국사"][k]), color: C.green, label: { show: true, position: "top", fontSize: 11, formatter: (d) => d.value } }],
+  });
+  const pp = ls.priority_projects;
+  card(g, { title: "우선 경관사업 — 시민 vs 공무원 (복수응답)", sub: "%", size: "half", tier: "T1", src: ls.src, note: `가장 개선이 필요한 경관: 옥외광고물(시민 ${ls.worst_ad["시민"]}% · 공무원 ${ls.worst_ad["공무원"]}%), 장소로는 황리단길(시민 ${ls.worst_hwangridan["시민"]}%). 정체성은 "신라왕경을 품은 역사도시" 시민 ${ls.identity_silla["시민"]}%.` }, {
+    grid: { left: 4, right: 40, top: 30, bottom: 4, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "value", show: false, max: 70 }, yAxis: { type: "category", inverse: true, data: Object.keys(pp), axisLabel: { color: C.ink, fontSize: 12, width: 190, overflow: "break" } },
+    series: [{ name: "시민", type: "bar", data: Object.values(pp).map((v) => v["시민"]), color: C.green, barCategoryGap: "35%" }, { name: "공무원", type: "bar", data: Object.values(pp).map((v) => v["공무원"]), color: C.gray, label: { show: true, position: "right", fontSize: 11, color: C.ink2 } }],
+  });
+  const s25 = R.survey_2025;
+  card(g, { title: "2025 시민이 그린 경주의 중심 (417쪽 연구, n=59)", sub: "상징적 중심부 3곳 응답 수 — 황리단길 25 · 첨성대 16 · 보문 12 · 불국사 12", size: "half", tier: "T2", src: s25.meta, note: `교류 중심: ${Object.entries(s25.social_center).map(([k, v]) => `${k} ${v}`).join(" · ")} / 쇼핑 중심: ${Object.entries(s25.shopping_center).map(([k, v]) => `${k} ${v}`).join(" · ")} / 친한 도시: ${Object.entries(s25.friendly_cities).map(([k, v]) => `${k} ${v}`).join(" · ")}` },
+    hbar(Object.keys(s25.symbolic_center), Object.values(s25.symbolic_center), { unit: "명", color: C.orange }));
+
+  // ---------- 5. 경제·주거·재정
+  s = section("economy", "경제 · 주거 · 재정", "사업체의 84%가 3차산업이지만 종사자의 42%는 2차산업", "2009→2013 사업체 19,454→21,841(+12%), 종사자 94,917→110,882(+17%). 종사자 기준 2차산업 41.8%는 경북 평균(38.0%)보다 높다 — 경주는 관광도시이면서 <b>제조업 고용 도시</b>다. 전력의 48%가 산업용. 주택보급률은 2013년 114.8%, 단독주택 60%. 일반회계 세입은 2006 6,571억 → 2013 1조 309억 → 2025 예산 2조 2,500억.");
+  g = grid(s);
+  card(g, { title: "사업체·종사자 추이", sub: "개 · 명", size: "third", tier: "T1", src: R.business.src }, {
+    grid: { left: 8, right: 44, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) },
+    xAxis: { type: "category", data: R.business.years }, yAxis: [{ type: "value", min: 18000, axisLabel: { formatter: (v) => v / 1000 + "k" } }, { type: "value", min: 90000, axisLabel: { formatter: (v) => v / 1000 + "k" }, splitLine: { show: false } }],
+    series: [{ name: "사업체", type: "bar", data: R.business.firms, color: C.green3 }, { name: "종사자(우축)", type: "line", yAxisIndex: 1, data: R.business.workers, color: C.ink, lineStyle: { width: 2.5 } }],
+  });
+  const ind = R.industry_2013;
+  card(g, { title: "산업구조 2013 — 사업체 vs 종사자 vs 경북 종사자", sub: "%", size: "third", tier: "T1", src: ind.src }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: ["경주 사업체", "경주 종사자", "경북 종사자"] }, yAxis: { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } },
+    series: ["1차", "2차", "3차"].map((k, i) => ({ name: k + "산업", type: "bar", stack: "s", data: [ind.firms_pct[k], ind.workers_pct[k], ind.gb_workers_pct[k]], color: [C.green3, C.orange, C.blue2][i], label: { show: i > 0, position: "inside", fontSize: 10.5, color: "#fff", formatter: (d) => d.value.toFixed(0) } })),
+  });
+  card(g, { title: "용도별 전력사용 — 산업용 48%", sub: "MWh · 2013", size: "third", tier: "T1", src: R.electricity.src }, {
+    tooltip: { trigger: "item", formatter: (d) => `${d.name} ${fmt(d.value)} MWh · ${d.percent}%` },
+    series: [{ type: "pie", radius: ["50%", "78%"], data: [{ name: "산업용", value: R.electricity.industry.at(-1) }, { name: "서비스업", value: R.electricity.service.at(-1) }, { name: "가정용", value: R.electricity.home.at(-1) }, { name: "공공용", value: R.electricity.total.at(-1) - R.electricity.industry.at(-1) - R.electricity.service.at(-1) - R.electricity.home.at(-1) }], color: [C.orange, C.green, C.blue, C.gray2], label: { fontSize: 11.5, color: C.ink2, formatter: "{b} {d}%" }, itemStyle: { borderColor: "#fff", borderWidth: 2 } }],
+  });
+  card(g, { title: "주택보급률과 주택 유형", sub: "% · 2013 유형 구성: 단독 60.3 · 아파트 33.0 · 다세대 4.8 · 연립 1.8", size: "half", tier: "T1", src: R.housing.src }, {
+    grid: { left: 8, right: 44, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: R.housing.years }, yAxis: [{ type: "value", min: 90000, axisLabel: { formatter: (v) => v / 1000 + "k" } }, { type: "value", min: 100, max: 120, axisLabel: { formatter: (v) => v + "%" }, splitLine: { show: false } }],
+    series: [{ name: "가구", type: "bar", data: R.housing.households, color: C.gray2 }, { name: "주택", type: "bar", data: R.housing.units, color: C.green3 }, { name: "보급률(우축)", type: "line", yAxisIndex: 1, data: R.housing.supply_rate, color: C.ink, lineStyle: { width: 2.5 }, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => d.value + "%" } }],
+  });
+  card(g, { title: "일반회계 세입 결산 → 2025 예산", sub: "억원 · 2006–2013 결산(기본계획) · 2025 예산(417쪽 연구 인용)", size: "half", tier: "T1", src: R.finance.src }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "억" },
+    xAxis: { type: "category", data: [...R.finance.years, "2025(예산)"] }, yAxis: { type: "value", axisLabel: { formatter: (v) => (v / 10000).toFixed(1) + "조" } },
+    series: [{ type: "bar", data: [...R.finance.general_revenue.map((v) => Math.round(v / 100)), { value: R.finance.budget_2025_100M, itemStyle: { color: C.orange } }], color: C.green, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => (d.value / 10000).toFixed(2) + "조" } }],
+  });
+
+  // ---------- 6. 시민의식 2015
+  s = section("survey15", "시민의식 · 2015 (기본계획 설문, n=1,408)", "시민이 꼽은 문제 1위는 편익시설 부족, 교통 1위는 주차, 경주역 부지는 복합위락 44.5%", `${R.survey_2015.meta}. 문항별 1순위만이 아니라 분포 전체를 둔다 — 2위와의 격차가 논거의 세기다. "무응답·기타"는 제외.`);
+  const sm = $(`<div class="sm"></div>`); s.appendChild(sm);
+  for (const q of R.survey_2015.questions) card(sm, { title: q.q, sub: `인쇄쪽 ${q.page}`, size: "" }, hbar(q.items.map((i) => i.a), q.items.map((i) => i.v), { unit: "%", top: 6, color: q.q.includes("경주역") ? C.orange : C.green }));
+
+  // ---------- 7. 2025 설문
+  s = section("survey25", "시민 인식 · 2025 (원도심 미래구상 연구 설문, n=63)", "대중교통 2.7점, 원하는 것은 자율주행 무료버스와 걷는 길", `${R.survey_2025.meta}. 표본이 작아(63명) 비율이 아니라 <b>응답 수</b>로 둔다. 2023년 폐철도 기본구상 설문(3,151명)의 '시청 이전 63.7%·도시숲 65.3%'는 언론 경유(T4)라 원문 확보 전까지 참고만.`);
+  const sm2 = $(`<div class="sm"></div>`); s.appendChild(sm2);
+  for (const [k, t] of [["transit_alt", "대중교통 대안 선호 (명)"], ["future_image", "경주의 미래상 (명)"], ["needed_facility", "원도심에 필요한 시설 (명)"], ["friendly_cities", "경주와 친한 도시 (명, n=56)"]])
+    card(sm2, { title: t, size: "" }, hbar(Object.keys(s25[k]), Object.values(s25[k]), { unit: "", top: 9, color: C.purple }));
+
+  // ---------- 8. 지금 (2026)
+  s = section("now", "지금 · 2026 (소상공인365 · 모니터링 전사)", "폐역 구역 79/ha, 성동시장 200m 1,175/ha — 낙차 15배가 200m 안에 있다", "통신사 추정 유동인구를 <b>같은 정의</b>로 8구역에서 재추출했다(2025.06~2026.06 일평균). 행복황촌은 폐선 부지만큼 비어 있고(80/ha), 시청 500m는 저녁 18–23시 비율 27%로 유일하게 저녁이 긴 생활권이다. 황오동 원도심의 유동은 2020→2026 −14%. 지도에서 구역을 클릭하면 시간대 프로필을 볼 수 있다.");
+  g = grid(s);
+  const FF = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
+  const AC = { A_hwango_grid32: C.green, B_haengbok_hwangchon_digitized: C.gray, C_zone_buffer300: C.green2, D_zone: C.red, E_center_r300: C.green3, F_cityhall_r500: "#0f3d34", G_seongdong_market_r200: C.orange, H_hwangridan_r300: C.purple };
+  card(g, { title: "유동인구 8구역 — ha당 일평균", sub: "13개월 평균 ÷ 면적 · 클릭·상세는 지도", size: "half", tier: "T2", src: X.sources.footfall },
+    hbar(FF.map((k) => X.footfall[k].short), FF.map((k) => X.footfall[k].per_ha), { unit: "/ha", top: 8, color: C.green }));
+  card(g, { title: "시간대 프로필 — 시청 500m만 저녁이 길다", sub: "6개 시간대 비율 %", size: "half", tier: "T2", src: X.sources.footfall }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+    xAxis: { type: "category", data: ["05–09", "09–12", "12–14", "14–18", "18–23", "23–05"] }, yAxis: { type: "value", axisLabel: { formatter: (v) => v + "%" } },
+    series: ["A_hwango_grid32", "D_zone", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"].map((k) => ({ name: X.footfall[k].short, type: "line", data: X.footfall[k].hourly_pct, color: AC[k], lineStyle: { width: k === "F_cityhall_r500" ? 3 : 1.8 } })),
+  });
+  card(g, { title: "업종 지문 — 생활 vs 관광·체류 업소수 (11개 업종)", sub: "2026.06 · 13개월 변화는 툴팁", size: "half", tier: "T2", src: X.sources.biz }, {
+    grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", formatter: (ps) => { const b = X.biz_area[FF[ps[0].dataIndex]]; return `${X.footfall[FF[ps[0].dataIndex]].name}<br>생활 ${b.life_stores_2606} (${b.life_chg_13mo >= 0 ? "+" : ""}${b.life_chg_13mo}) · 관광·체류 ${b.tour_stores_2606} (${b.tour_chg_13mo >= 0 ? "+" : ""}${b.tour_chg_13mo})`; } },
+    xAxis: { type: "category", data: FF.map((k) => X.footfall[k].short), axisLabel: { fontSize: 10.5 } }, yAxis: { type: "value" },
+    series: [{ name: "생활", type: "bar", stack: "s", data: FF.map((k) => +X.biz_area[k].life_stores_2606), color: C.green }, { name: "관광·체류", type: "bar", stack: "s", data: FF.map((k) => +X.biz_area[k].tour_stores_2606), color: C.orange }],
+  });
+  const yrs7 = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"]; const kp = X.hwango_kpi["주요 상권 유동인구(명, 소상공인365 통신사 추정)"] || {}; const o = X.startup_closure["황오동 사업대상지|창업 건수"] || {}; const c_ = X.startup_closure["황오동 사업대상지|폐업 건수"] || {};
+  card(g, { title: "황오동 원도심 2018–2024 — 유동인구 −15%, 창업·폐업은 회전 가속", sub: "건 · 명/일", size: "half", tier: "T2", src: X.sources.hwango }, {
+    grid: { left: 8, right: 44, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+    xAxis: { type: "category", data: yrs7 }, yAxis: [{ type: "value" }, { type: "value", scale: true, axisLabel: { formatter: (v) => v / 1000 + "k" }, splitLine: { show: false } }],
+    series: [{ name: "창업", type: "bar", data: yrs7.map((y) => o[y]), color: C.green2 }, { name: "폐업", type: "bar", data: yrs7.map((y) => c_[y]), color: C.red }, { name: "유동인구(우축)", type: "line", yAxisIndex: 1, data: yrs7.map((y) => kp[y] ?? null), color: C.ink, lineStyle: { width: 2.5 }, connectNulls: true }],
+  });
+  const ly = Object.keys(X.landprice_avg);
+  card(g, { title: "공시지가 — 원도심 29필지 평균, 2022 피크 후 하락", sub: "원/㎡ · 매년 1.1 · 행복황촌 44개소는 우축", size: "half", tier: "T2", src: X.sources.hwango }, {
+    grid: { left: 8, right: 44, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => (v == null ? "–" : fmt(v) + "원") },
+    xAxis: { type: "category", data: ly }, yAxis: [{ type: "value", scale: true, axisLabel: { formatter: (v) => (v / 1e6).toFixed(1) + "M" } }, { type: "value", scale: true, axisLabel: { formatter: (v) => (v / 1e4).toFixed(0) + "만" }, splitLine: { show: false } }],
+    series: [{ name: "원도심 29필지", type: "line", data: ly.map((y) => X.landprice_avg[y]), color: C.green, lineStyle: { width: 2.5 } }, { name: "행복황촌 44개소(우축)", type: "line", yAxisIndex: 1, data: ly.map((y) => X.landprice_hwangchon44[y] ?? null), color: C.purple, lineStyle: { type: "dashed" } }],
+  });
+  const H = Object.fromEntries(X.heritage.map((h) => [h.k, h]));
+  const tl = tiles(s, [
+    { k: "매장유산 시굴 필요", v: fmt(H["시굴조사 필요 면적"].v), u: "㎡", d: "지표조사 148,770㎡ 중 · 기조사 3,396㎡ 제외" },
+    { k: "시굴 비용·기간 (추정)", v: "3.06", u: "억", d: "현장 54일 · 정밀발굴 63~80억 · 630~700일" },
+    { k: "발굴 유예 조건", v: "2m", u: "미만 성토", d: "성토 후 공원·주차장 → 발굴 유예 (규정)" },
+    { k: "문화재 지정 건수 (2014)", v: fmt(R.heritage_count.total.at(-1)), u: "건", d: `국가지정 ${fmt(R.heritage_count.national.at(-1))} · 2004년 ${fmt(R.heritage_count.total[0])}건에서 증가` },
+    { k: "도시공원 (2015)", v: fmt(R.parks.total_count), u: "개소", d: `${(R.parks.total_k_m2 / 1000).toFixed(2)}㎢ · 1인당 ${(R.parks.total_k_m2 * 1000 / p26).toFixed(1)}㎡` },
+  ]);
+  tl.style.marginTop = "14px";
+  s.appendChild($(`<p class="src" style="margin-top:8px"><span class="tier t2">T2</span>${X.sources.heritage} · <span class="tier t1">T1</span>${R.heritage_count.src} · ${R.parks.src}</p>`));
+
+  // ---------- 9. 데이터 카탈로그
+  s = section("sources", "출처", "이 페이지가 쓴 문서와 등급", "숫자를 인용할 때는 여기 적힌 쪽과 등급을 그대로 옮긴다. 전사본(모니터링 보고서 표를 손으로 옮긴 것)은 원문 대조 전 인용 금지.");
+  const tbl = $(`<div class="card"><table class="t"><tr><th>등급</th><th>문서</th><th>쓰인 곳</th></tr></table></div>`);
+  const rows = [["T1", "2030 경주도시기본계획 (승인, 475쪽 → 45절 마크다운, 표 697)", "인구·토지·교통·관광·경제·주거·재정·시민의식 2015"], ["T1", "2030 경주시 경관계획 재정비 (2025.04)", "경관의식조사"], ["T1", "경주시 도시재생 전략계획(변경) (2022.01)", "쇠퇴진단 — 지도"], ["T1", "경주시 고시 제2026-8호 지구단위계획 · 경북 고시 2020-479호 고도지구", "지도 레이어"],
+    ["T2", "경주시 원도심 미래구상 기획연구 (동국대·가천대, 2025.07, 417쪽)", "시민설문 2025 · 인지지도 · 2025 예산"], ["T2", "황오동 원도심·행복황촌 도시재생 성과지표 모니터링 (2025.09 / 2025.12)", "유동인구 2020–24 · 창업폐업 · 공시지가"], ["T2", "소상공인365 (소진공) 상권분석 리포트", "유동인구 8구역 · 업종·매출"], ["T2", "KOSIS 주민등록 · 관광데이터랩 · ITS · 건축HUB · V-World", "지도 현황 레이어"], ["T2", "김권일(신라문화유산연구원) 2026.02 혁신포럼 · 시굴조사 추진계획", "매장유산"], ["T4", "2023 폐철도 기본구상 설문 (언론 경유)", "시청 이전 63.7% — 원문 미확보"]];
+  for (const [t, d, u] of rows) tbl.querySelector("table").appendChild($(`<tr><td><span class="tier ${t.toLowerCase()}">${t}</span></td><td>${d}</td><td>${u}</td></tr>`));
+  s.appendChild(tbl);
+
+  // TOC 하이라이트
+  const links = [...toc.querySelectorAll("a")]; const secs = [...document.querySelectorAll("section.sec")];
+  const io = new IntersectionObserver((es) => { for (const e of es) if (e.isIntersecting) links.forEach((a) => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }, { rootMargin: "-20% 0px -70% 0px" });
+  secs.forEach((x) => io.observe(x));
+  window.addEventListener("resize", () => charts.forEach((c) => c.resize()));
+}
+main_();

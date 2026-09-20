@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>구경주역 통계 리포트</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="./src/report.css" />
+</head>
+<body>
+  <div class="topbar"><div class="in">
+    <span class="brand">구경주역 데이터맵</span>
+    <nav><a href="./index.html">지도</a><a class="on" href="./report.html">통계 리포트</a></nav>
+  </div></div>
+
+  <header class="hero">
+    <div class="eyebrow">경주시 · 원도심 · 구경주역 부지 — 계획 문서와 현재 데이터를 한 자로</div>
+    <h1 class="display">계획은 320,000명을 그렸고, 도시는 242,512명이다.</h1>
+    <p class="lede">2030 경주도시기본계획(T1), 2030 경관계획, 도시재생 전략계획, 원도심 미래구상 연구(2025), 두 건의 모니터링 보고서, 그리고 2026년 9월의 유동인구·업종 재추출. 모든 숫자에 출처·쪽·등급을 붙였다. 정의가 다른 수치는 나란히 두되 합치지 않았다.</p>
+    <div class="tiles" id="hero-tiles"></div>
+  </header>
+
+  <div class="wrap">
+    <aside class="toc" id="toc"></aside>
+    <main id="main"></main>
+  </div>
+
+  <footer class="foot">
+    등급 <span class="tier t1">T1</span>법정·승인계획 <span class="tier t2">T2</span>공공발간·원자료·용역보고서 <span class="tier t4">T4</span>언론·2차 · 전사(轉寫)본은 원문 대조 전 인용 금지 · 처리본 EPSG:5187, 웹 4326 · 파이프라인 <code>9_도시/pipeline/build_report_stats.py</code>
+    <div id="foot-src"></div>
+  </footer>
+  <script type="module" src="./src/report.js"></script>
+</body>
+</html>
