@@ -135,3 +135,12 @@ dialog .src{margin-top:12px}
 .dlg-links a{display:inline-block;padding:6px 12px;border-radius:999px;background:var(--green-soft);color:var(--green);font-weight:600;margin-right:6px}
 #dlg-html table.t{margin-top:4px}
 #dlg-html .tiles{margin:4px 0 6px}
+
+/* 부지 구성표 (hero) */
+.hero .plan{margin:18px 0 6px}
+.hero .plan h3{font-size:15px;margin:0 0 8px;font-weight:700}
+.hero .plan .plan-t{width:100%;font-size:12.5px}
+.hero .plan .plan-t td:nth-child(1){white-space:nowrap;font-weight:600}
+.hero .plan .plan-t td:nth-child(2),.hero .plan .plan-t td:nth-child(3),.hero .plan .plan-t td:nth-child(5){white-space:nowrap;text-align:right}
+.hero .plan .plan-t td:nth-child(4){line-height:1.5}
+.hero .plan .sub{margin-top:8px}
