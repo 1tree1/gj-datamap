@@ -13,22 +13,39 @@
     <nav><a href="./index.html">지도</a><a class="on" href="./report.html">통계 리포트</a></nav>
   </div></div>
 
-  <header class="hero">
-    <div class="eyebrow">경주시 · 원도심 · 구경주역 부지 — 계획 문서와 현재 데이터를 한 자로</div>
-    <h1 class="display">계획은 320,000명을 그렸고, 도시는 242,512명이다.</h1>
-    <p class="lede">2030 경주도시기본계획(T1), 2030 경관계획, 도시재생 전략계획, 원도심 미래구상 연구(2025), 두 건의 모니터링 보고서, 그리고 2026년 9월의 유동인구·업종 재추출. 모든 숫자에 출처·쪽·등급을 붙였다. 정의가 다른 수치는 나란히 두되 합치지 않았다.</p>
-    <div class="tiles" id="hero-tiles"></div>
+  <!-- 1. 목표 · 이유 · 근거 -->
+  <header class="hero" id="goal">
+    <div class="eyebrow">구경주역 폐역 부지 156,460㎡ · 경주 원도심 · 계획 방향 2026-09</div>
+    <h1 class="display">옛 경주역 자리에 <em>시청</em>을 되돌리고, <em>모빌리티 허브</em>로 도시를 다시 잇는다.</h1>
+    <p class="lede">원도심 쇠퇴의 첫 번째 원인은 시청이 떠난 것이었고, 폐역은 동서를 가르는 빈 땅이 되었다. 문서가 진단한 원인을 그대로 되돌리는 것 — 행정을 돌려놓고, 철도가 하던 교통거점을 되살리는 것 — 이 이 부지의 계획이다. 아래 근거의 숫자를 누르면 그 그래프가 열린다.</p>
+    <div id="hero-tiles" class="tiles"></div>
+    <div class="why" id="why"></div>
+    <details class="counter" id="counter"><summary>반대 근거와 대응 · 아직 확정되지 않은 것</summary><div id="counter-body"></div></details>
   </header>
 
-  <div class="wrap">
-    <aside class="toc" id="toc"></aside>
-    <main id="main"></main>
-  </div>
+  <!-- 2. 그룹 탐색 -->
+  <nav class="chips" id="chips"></nav>
+
+  <!-- 3. 카드 뉴스 -->
+  <main id="main"></main>
 
   <footer class="foot">
-    등급 <span class="tier t1">T1</span>법정·승인계획 <span class="tier t2">T2</span>공공발간·원자료·용역보고서 <span class="tier t4">T4</span>언론·2차 · 전사(轉寫)본은 원문 대조 전 인용 금지 · 처리본 EPSG:5187, 웹 4326 · 파이프라인 <code>9_도시/pipeline/build_report_stats.py</code>
-    <div id="foot-src"></div>
+    등급 <span class="tier t1">T1</span>법정·승인계획 <span class="tier t2">T2</span>공공발간·원자료·용역보고서 <span class="tier t4">T4</span>언론·2차 · 전사(轉寫)본은 원문 대조 전 인용 금지 · 단계구분·급간은 임의 설정 · 처리본 EPSG:5187, 웹 4326 · 파이프라인 <code>9_도시/pipeline/build_report_stats.py · build_report_map_stats.py</code>
   </footer>
+
+  <!-- 4. 상세 보기 -->
+  <dialog id="dlg">
+    <div class="dlg-head">
+      <div><div class="eyebrow" id="dlg-group"></div><h2 id="dlg-title"></h2></div>
+      <div class="dlg-nav"><button id="dlg-prev" title="이전">‹</button><button id="dlg-next" title="다음">›</button><button id="dlg-close" title="닫기">✕</button></div>
+    </div>
+    <p class="lead" id="dlg-lead"></p>
+    <div id="dlg-chart" class="dlg-chart"></div>
+    <div id="dlg-html"></div>
+    <p class="note" id="dlg-note"></p>
+    <p class="src" id="dlg-src"></p>
+    <p class="dlg-links" id="dlg-links"></p>
+  </dialog>
   <script type="module" src="./src/report.js"></script>
 </body>
 </html>

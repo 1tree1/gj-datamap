@@ -1,0 +1,1439 @@
+{
+ "bldg_age": {
+  "n": 2152,
+  "bins": [
+   [
+    "10년 미만",
+    60
+   ],
+   [
+    "10–20년",
+    114
+   ],
+   [
+    "20–30년",
+    174
+   ],
+   [
+    "30–40년",
+    324
+   ],
+   [
+    "40년 이상",
+    1480
+   ]
+  ],
+  "pct20": 91.9,
+  "pct30": 83.8,
+  "n_parcels": 7616,
+  "n_unknown": 12,
+  "src": "건축HUB 건축물대장 표제부(성동·황오·노서·노동·성건, 2026-09) × 연속지적 PNU 조인 — 사용승인일 있는 필지만"
+ },
+ "reg_layers": {
+  "dist": [
+   [
+    1,
+    2266
+   ],
+   [
+    2,
+    4019
+   ],
+   [
+    3,
+    1183
+   ],
+   [
+    4,
+    148
+   ]
+  ],
+  "flags": {
+   "reg_godo": 5116,
+   "reg_special": 815,
+   "reg_boyuk": 386,
+   "reg_heritage": 4275,
+   "reg_boho": 831,
+   "reg_fire": 1837,
+   "reg_scenic": 4945,
+   "reg_cult": 833,
+   "reg_jdp": 586
+  },
+  "n": 7616,
+  "src": "V-World 토지이용계획 속성(getLandUseAttr) 7,616필지 · 포함·저촉만 · 겹 = ①용도지역·지구 ②고도보존육성 ③문화유산법 ④지구단위"
+ },
+ "godo": {
+  "rows": [
+   [
+    "36m",
+    226.9
+   ],
+   [
+    "25m",
+    8.4
+   ],
+   [
+    "20m",
+    83.4
+   ],
+   [
+    "15m",
+    24.1
+   ],
+   [
+    "12m",
+    37.6
+   ],
+   [
+    "10m",
+    108.2
+   ],
+   [
+    "7.5m",
+    1.5
+   ],
+   [
+    "최저고도",
+    10.7
+   ],
+   [
+    "미확인",
+    310.4
+   ]
+  ],
+  "src": "V-World LT_C_UQ123 × 경북고시 2020-479호 조서·도면 라벨"
+ },
+ "reg_areas": {
+  "rows": [
+   [
+    "역사문화환경보존지역",
+    44,
+    6891.6,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "국가지정문화유산구역",
+    112,
+    3939.7,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "지구단위계획구역",
+    55,
+    1303.1,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "역사문화환경보호지구",
+    88,
+    1253.0,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "고도지구",
+    40,
+    805.4,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "문화유산 보호구역",
+    62,
+    183.2,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "중점경관관리구역",
+    1,
+    130.9,
+    "필지 외곽 (근사)"
+   ],
+   [
+    "역사문화환경 특별보존지구",
+    1,
+    52.5,
+    "필지 외곽 (근사)"
+   ],
+   [
+    "방화지구",
+    8,
+    46.7,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "역사문화환경 보존육성지구",
+    1,
+    16.9,
+    "필지 외곽 (근사)"
+   ],
+   [
+    "문화유산(지정물)",
+    39,
+    11.0,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "시도지정문화유산구역",
+    7,
+    0.3,
+    "법정 경계 (V-World)"
+   ],
+   [
+    "등록문화유산구역",
+    1,
+    0.0,
+    "법정 경계 (V-World)"
+   ]
+  ],
+  "src": "V-World UO301·UQ126·UQ124·UQ123·UQ141 (법정) + 필지 외곽 근사 3종"
+ },
+ "blocks": {
+  "rows": [
+   [
+    "상1",
+    "commercial",
+    14690,
+    14503
+   ],
+   [
+    "상2",
+    "commercial",
+    13982,
+    14083
+   ],
+   [
+    "상3",
+    "commercial",
+    13296,
+    13445
+   ],
+   [
+    "공청1",
+    "civic",
+    11393,
+    11583
+   ],
+   [
+    "공청2",
+    "civic",
+    13245,
+    13404
+   ],
+   [
+    "문화1",
+    "culture",
+    9421,
+    9770
+   ],
+   [
+    "주1",
+    "parking",
+    5812,
+    5756
+   ],
+   [
+    "공원1",
+    "park",
+    16856,
+    17395
+   ],
+   [
+    "공원2",
+    "park",
+    20013,
+    20150
+   ],
+   [
+    "공원3",
+    "park",
+    17216,
+    17870
+   ]
+  ],
+  "src": "경주시 고시 제2026-8호 지형도면고시도 벡터화 vs 고시문 결정조서"
+ },
+ "stores": {
+  "rows": [
+   [
+    "음식",
+    3742
+   ],
+   [
+    "소매",
+    2426
+   ],
+   [
+    "수리·개인",
+    1151
+   ],
+   [
+    "숙박",
+    836
+   ],
+   [
+    "과학·기술",
+    653
+   ],
+   [
+    "교육",
+    454
+   ],
+   [
+    "시설관리·임대",
+    442
+   ],
+   [
+    "예술·스포츠",
+    365
+   ],
+   [
+    "부동산",
+    200
+   ],
+   [
+    "보건의료",
+    63
+   ]
+  ],
+  "n": 10332,
+  "src": "소상공인시장진흥공단 상가업소 2026-03 (S2 창) + 경주시 게스트하우스 24"
+ },
+ "schools": {
+  "rows": [
+   [
+    "초등학교",
+    44
+   ],
+   [
+    "유치원",
+    37
+   ],
+   [
+    "중학교",
+    20
+   ],
+   [
+    "고등학교",
+    19
+   ],
+   [
+    "대학교",
+    4
+   ]
+  ],
+  "closed": 2,
+  "src": "전국초중등학교위치표준데이터 (한국교육시설안전원, 공공데이터포털 API, 기준일 2026-03-20, T2)"
+ },
+ "religion": {
+  "rows": [
+   [
+    "불교",
+    317
+   ],
+   [
+    "기독교(개신교)",
+    225
+   ],
+   [
+    "천주교",
+    13
+   ],
+   [
+    "기도원·수도원",
+    3
+   ],
+   [
+    "천도교",
+    3
+   ],
+   [
+    "천리교",
+    2
+   ],
+   [
+    "원불교",
+    1
+   ]
+  ],
+  "by_dong": [
+   [
+    "안강읍",
+    69
+   ],
+   [
+    "경북",
+    63
+   ],
+   [
+    "건천읍",
+    45
+   ],
+   [
+    "내남면",
+    45
+   ],
+   [
+    "외동읍",
+    44
+   ],
+   [
+    "강동면",
+    25
+   ],
+   [
+    "현곡면",
+    22
+   ],
+   [
+    "양남면",
+    20
+   ]
+  ],
+  "n": 564,
+  "src": "경상북도 경주시 종교시설현황 2025-02-06 (공공데이터포털 파일, T2) · 좌표 V-World 지오코더"
+ },
+ "decline": {
+  "rows": [
+   {
+    "hadm": "황남동",
+    "pop_chg": "27.2% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "8.2% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 82.0,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "성건동",
+    "pop_chg": "29.0% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "2.2% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 72.4,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "감포읍",
+    "pop_chg": "51.6% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "6.2% 감소",
+    "biz_5y": "3년 연속 감소",
+    "old_pct": 74.2,
+    "met": "충족",
+    "n_criteria": 3,
+    "crit_pop": true,
+    "crit_biz": true,
+    "crit_old": true
+   },
+   {
+    "hadm": "안강읍",
+    "pop_chg": "22.5% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "2.1% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 65.5,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "건천읍",
+    "pop_chg": "38.6% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "3.9% 증가",
+    "biz_5y": "",
+    "old_pct": 67.8,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "외동읍",
+    "pop_chg": "30.1% 감소",
+    "pop_5y": "1년 감소",
+    "biz_chg": "4.2% 증가",
+    "biz_5y": "",
+    "old_pct": 48.5,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": false
+   },
+   {
+    "hadm": "문무대왕면",
+    "pop_chg": "52.6% 감소",
+    "pop_5y": "1년 감소",
+    "biz_chg": "4.6% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 61.4,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "양남면",
+    "pop_chg": "31.8% 감소",
+    "pop_5y": "3년 연속 감소",
+    "biz_chg": "6.5% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 52.6,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "내남면",
+    "pop_chg": "49.6% 감소",
+    "pop_5y": "3년 연속 감소",
+    "biz_chg": "3.5% 증가",
+    "biz_5y": "",
+    "old_pct": 61.8,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "산내면",
+    "pop_chg": "51.2% 감소",
+    "pop_5y": "3년 연속 감소",
+    "biz_chg": "2.7% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 55.2,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "서면",
+    "pop_chg": "53.8% 감소",
+    "pop_5y": "4년 연속 감소",
+    "biz_chg": "1.7% 감소",
+    "biz_5y": "1년 감소",
+    "old_pct": 68.2,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "현곡면",
+    "pop_chg": "3.0% 감소",
+    "pop_5y": "2년 연속 감소",
+    "biz_chg": "8.1% 증가",
+    "biz_5y": "",
+    "old_pct": 49.0,
+    "met": "미충족",
+    "n_criteria": 0,
+    "crit_pop": false,
+    "crit_biz": false,
+    "crit_old": false
+   },
+   {
+    "hadm": "강동면",
+    "pop_chg": "21.1% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "8.5% 증가",
+    "biz_5y": "",
+    "old_pct": 50.4,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "천북면",
+    "pop_chg": "38.2% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "5.7% 증가",
+    "biz_5y": "",
+    "old_pct": 49.8,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": false
+   },
+   {
+    "hadm": "황오동",
+    "pop_chg": "43.0% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "2.7% 감소",
+    "biz_5y": "2년 연속 감소",
+    "old_pct": 87.9,
+    "met": "충족",
+    "n_criteria": 3,
+    "crit_pop": true,
+    "crit_biz": true,
+    "crit_old": true
+   },
+   {
+    "hadm": "월성동",
+    "pop_chg": "9.1% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "3.6% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 73.7,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "선도동",
+    "pop_chg": "4.6% 증가",
+    "pop_5y": "3년 연속 감소",
+    "biz_chg": "",
+    "biz_5y": "1년 감소",
+    "old_pct": 57.3,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "황성동",
+    "pop_chg": "9.9% 감소",
+    "pop_5y": "1년 감소",
+    "biz_chg": "2.6% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 56.8,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": false,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "용강동",
+    "pop_chg": "11.1% 증가",
+    "pop_5y": "2년 연속 감소",
+    "biz_chg": "12.8% 증가",
+    "biz_5y": "2년 연속 감소",
+    "old_pct": 49.0,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": false,
+    "crit_biz": true,
+    "crit_old": false
+   },
+   {
+    "hadm": "동천동",
+    "pop_chg": "5.5% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "",
+    "biz_5y": "1년 감소",
+    "old_pct": 63.8,
+    "met": "충족",
+    "n_criteria": 2,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "불국동",
+    "pop_chg": "5.1% 증가",
+    "pop_5y": "2년 연속 감소",
+    "biz_chg": "3.8% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 53.1,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": false,
+    "crit_biz": false,
+    "crit_old": true
+   },
+   {
+    "hadm": "보덕동",
+    "pop_chg": "49.1% 감소",
+    "pop_5y": "5년 연속 감소",
+    "biz_chg": "2.7% 증가",
+    "biz_5y": "1년 감소",
+    "old_pct": 48.1,
+    "met": "미충족",
+    "n_criteria": 1,
+    "crit_pop": true,
+    "crit_biz": false,
+    "crit_old": false
+   }
+  ],
+  "src": "경주시 도시재생전략계획(변경) 2022.01 인쇄쪽 251 (T1), 기준연도 미기재"
+ },
+ "lifezone": {
+  "rows": [
+   {
+    "name": "중심생활권",
+    "pop_2013": 178973.0,
+    "pop_2030_plan": 200000.0,
+    "pop_2026_actual": 153733,
+    "gap_pct": -23.1,
+    "park_plan_count": 20.0,
+    "unbuilt_park_count": 8.0
+   },
+   {
+    "name": "북부생활권",
+    "pop_2013": 37854.0,
+    "pop_2030_plan": 42000.0,
+    "pop_2026_actual": 27036,
+    "gap_pct": -35.6,
+    "park_plan_count": 10.0,
+    "unbuilt_park_count": 4.0
+   },
+   {
+    "name": "동부생활권",
+    "pop_2013": 16825.0,
+    "pop_2030_plan": 24000.0,
+    "pop_2026_actual": 15118,
+    "gap_pct": -37.0,
+    "park_plan_count": 5.0,
+    "unbuilt_park_count": 6.0
+   },
+   {
+    "name": "서부생활권",
+    "pop_2013": 18865.0,
+    "pop_2030_plan": 23000.0,
+    "pop_2026_actual": 20886,
+    "gap_pct": -9.2,
+    "park_plan_count": 5.0,
+    "unbuilt_park_count": 2.0
+   },
+   {
+    "name": "남부생활권",
+    "pop_2013": 17977.0,
+    "pop_2030_plan": 31000.0,
+    "pop_2026_actual": 25739,
+    "gap_pct": -17.0,
+    "park_plan_count": 9.0,
+    "unbuilt_park_count": 7.0
+   }
+  ]
+ },
+ "tourism_complex": [
+  [
+   "보문관광단지",
+   850.1,
+   "2008-0128"
+  ],
+  [
+   "북경주 웰니스 관광단지",
+   81.0,
+   "2021-0233"
+  ],
+  [
+   "마우나오션 관광단지",
+   639.5,
+   "2026-0202"
+  ],
+  [
+   "감포해양관광단지",
+   180.5,
+   "2021-0172"
+  ]
+ ],
+ "parking_pub": {
+  "rows": [
+   [
+    "경주역공영주차장 (신경주역)",
+    566
+   ],
+   [
+    "쪽샘지구임시공영주차장",
+    496
+   ],
+   [
+    "국립경주박물관공영주차장",
+    264
+   ],
+   [
+    "동천동 공영주차장 (보건소 뒤)",
+    240
+   ],
+   [
+    "성동시장공영주차장",
+    221
+   ],
+   [
+    "중심상가공영주차장",
+    209
+   ],
+   [
+    "제1공영주차장",
+    198
+   ],
+   [
+    "대릉원(황남지구)공영주차장",
+    181
+   ],
+   [
+    "봉황대공영주차장",
+    95
+   ],
+   [
+    "제2공영주차장",
+    78
+   ],
+   [
+    "숭문대공영주차장",
+    69
+   ],
+   [
+    "중앙시장 제2공영주차장",
+    63
+   ],
+   [
+    "황남생활문화센터 공영주차장",
+    34
+   ],
+   [
+    "중앙시장 제1공영주차장",
+    30
+   ],
+   [
+    "성건동 공영주차장",
+    25
+   ],
+   [
+    "터미널옆공영주차장",
+    15
+   ],
+   [
+    "포석로 공영주차장",
+    14
+   ],
+   [
+    "시청사공영주차장",
+    null
+   ]
+  ],
+  "total": 2798,
+  "src": "경주시시설관리공단 교통운영 시설안내 (gjfmc.or.kr, 2026-09-21 열람, T2) · 좌표 V-World 지오코딩. 노상주차장·민영 제외"
+ },
+ "cityhall": {
+  "rows": [
+   {
+    "name": "시청 본관·신관·별관·증축관",
+    "addr": "경주시 양정로 260",
+    "own": "시 소유",
+    "n_depts": 30,
+    "cls": "main"
+   },
+   {
+    "name": "기린빌딩 2~8층 (민간 임차)",
+    "addr": "경주시 양정로 241-1",
+    "own": "민간 임차",
+    "n_depts": 9,
+    "cls": "lease"
+   },
+   {
+    "name": "동원빌딩 2~3층 (민간 임차)",
+    "addr": "경주시 소금강로 39",
+    "own": "민간 임차",
+    "n_depts": 3,
+    "cls": "lease"
+   },
+   {
+    "name": "황룡사 역사문화관 1층",
+    "addr": "경주시 임해로 64-19",
+    "own": "시 소유",
+    "n_depts": 1,
+    "cls": "branch"
+   },
+   {
+    "name": "경주시청소년수련관 1층",
+    "addr": "경주시 알천북로 131",
+    "own": "시 소유",
+    "n_depts": 1,
+    "cls": "branch"
+   },
+   {
+    "name": "경주실내체육관",
+    "addr": "경주시 황성공원로 29",
+    "own": "시 소유",
+    "n_depts": 1,
+    "cls": "branch"
+   },
+   {
+    "name": "경주시보건소 (직속기관, 이전 대상 아님)",
+    "addr": "경주시 양정로 300",
+    "own": "시 소유",
+    "n_depts": 0,
+    "cls": "health"
+   }
+  ],
+  "src": "경주시 홈페이지 청사안내 2026-09-02 (T1) · 좌표 V-World 지오코딩"
+ },
+ "hadm": {
+  "rows": [
+   {
+    "hadm": "황남동",
+    "pop": 3536,
+    "area_km2": 20.3,
+    "density": 174,
+    "n_65": 1772,
+    "pct_65": 50.1,
+    "n_youth": 332,
+    "pct_youth": 9.4,
+    "n_y2034": 247,
+    "pct_y2034": 7.0,
+    "chg_10y_pct": -44.8,
+    "fr_total": 109,
+    "fr_pct": 3.0,
+    "mc_households": 99,
+    "fr_worker": 21,
+    "fr_marriage": 12,
+    "fr_student": 0,
+    "fr_diaspora": 8,
+    "fr_other": 31,
+    "fr_naturalized": 12,
+    "fr_children": 23
+   },
+   {
+    "hadm": "성건동",
+    "pop": 12165,
+    "area_km2": 6.23,
+    "density": 1953,
+    "n_65": 4468,
+    "pct_65": 36.7,
+    "n_youth": 2893,
+    "pct_youth": 23.8,
+    "n_y2034": 2497,
+    "pct_y2034": 20.5,
+    "chg_10y_pct": -29.0,
+    "fr_total": 7170,
+    "fr_pct": 37.5,
+    "mc_households": 473,
+    "fr_worker": 704,
+    "fr_marriage": 92,
+    "fr_student": 593,
+    "fr_diaspora": 3099,
+    "fr_other": 2486,
+    "fr_naturalized": 85,
+    "fr_children": 111
+   },
+   {
+    "hadm": "감포읍",
+    "pop": 4985,
+    "area_km2": 44.58,
+    "density": 112,
+    "n_65": 2339,
+    "pct_65": 46.9,
+    "n_youth": 516,
+    "pct_youth": 10.4,
+    "n_y2034": 392,
+    "pct_y2034": 7.9,
+    "chg_10y_pct": -16.5,
+    "fr_total": 766,
+    "fr_pct": 13.4,
+    "mc_households": 92,
+    "fr_worker": 547,
+    "fr_marriage": 12,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 167,
+    "fr_naturalized": 8,
+    "fr_children": 30
+   },
+   {
+    "hadm": "안강읍",
+    "pop": 21344,
+    "area_km2": 138.38,
+    "density": 154,
+    "n_65": 8036,
+    "pct_65": 37.6,
+    "n_youth": 2755,
+    "pct_youth": 12.9,
+    "n_y2034": 2144,
+    "pct_y2034": 10.0,
+    "chg_10y_pct": -24.5,
+    "fr_total": 851,
+    "fr_pct": 3.9,
+    "mc_households": 684,
+    "fr_worker": 201,
+    "fr_marriage": 87,
+    "fr_student": 0,
+    "fr_diaspora": 42,
+    "fr_other": 216,
+    "fr_naturalized": 106,
+    "fr_children": 198
+   },
+   {
+    "hadm": "건천읍",
+    "pop": 14901,
+    "area_km2": 91.37,
+    "density": 163,
+    "n_65": 4476,
+    "pct_65": 30.0,
+    "n_youth": 3118,
+    "pct_youth": 20.9,
+    "n_y2034": 2214,
+    "pct_y2034": 14.9,
+    "chg_10y_pct": 33.5,
+    "fr_total": 522,
+    "fr_pct": 3.4,
+    "mc_households": 233,
+    "fr_worker": 242,
+    "fr_marriage": 34,
+    "fr_student": 0,
+    "fr_diaspora": 26,
+    "fr_other": 118,
+    "fr_naturalized": 38,
+    "fr_children": 62
+   },
+   {
+    "hadm": "외동읍",
+    "pop": 21466,
+    "area_km2": 109.35,
+    "density": 196,
+    "n_65": 6527,
+    "pct_65": 30.4,
+    "n_youth": 3543,
+    "pct_youth": 16.5,
+    "n_y2034": 2390,
+    "pct_y2034": 11.1,
+    "chg_10y_pct": 29.2,
+    "fr_total": 6100,
+    "fr_pct": 22.8,
+    "mc_households": 1610,
+    "fr_worker": 2591,
+    "fr_marriage": 333,
+    "fr_student": 10,
+    "fr_diaspora": 609,
+    "fr_other": 1801,
+    "fr_naturalized": 324,
+    "fr_children": 432
+   },
+   {
+    "hadm": "문무대왕면",
+    "pop": 3936,
+    "area_km2": 119.74,
+    "density": 33,
+    "n_65": 1701,
+    "pct_65": 43.2,
+    "n_youth": 763,
+    "pct_youth": 19.4,
+    "n_y2034": 581,
+    "pct_y2034": 14.8,
+    "chg_10y_pct": null,
+    "fr_total": 123,
+    "fr_pct": 3.1,
+    "mc_households": 141,
+    "fr_worker": 8,
+    "fr_marriage": 12,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 33,
+    "fr_naturalized": 21,
+    "fr_children": 46
+   },
+   {
+    "hadm": "양남면",
+    "pop": 6197,
+    "area_km2": 84.65,
+    "density": 73,
+    "n_65": 2409,
+    "pct_65": 38.9,
+    "n_youth": 821,
+    "pct_youth": 13.2,
+    "n_y2034": 626,
+    "pct_y2034": 10.1,
+    "chg_10y_pct": -4.8,
+    "fr_total": 150,
+    "fr_pct": 2.4,
+    "mc_households": 166,
+    "fr_worker": 32,
+    "fr_marriage": 23,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 30,
+    "fr_naturalized": 21,
+    "fr_children": 41
+   },
+   {
+    "hadm": "내남면",
+    "pop": 4273,
+    "area_km2": 121.19,
+    "density": 35,
+    "n_65": 2312,
+    "pct_65": 54.1,
+    "n_youth": 346,
+    "pct_youth": 8.1,
+    "n_y2034": 253,
+    "pct_y2034": 5.9,
+    "chg_10y_pct": -15.5,
+    "fr_total": 295,
+    "fr_pct": 6.6,
+    "mc_households": 149,
+    "fr_worker": 134,
+    "fr_marriage": 14,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 78,
+    "fr_naturalized": 22,
+    "fr_children": 43
+   },
+   {
+    "hadm": "산내면",
+    "pop": 3112,
+    "area_km2": 142.71,
+    "density": 22,
+    "n_65": 1871,
+    "pct_65": 60.1,
+    "n_youth": 168,
+    "pct_youth": 5.4,
+    "n_y2034": 114,
+    "pct_y2034": 3.7,
+    "chg_10y_pct": -5.9,
+    "fr_total": 69,
+    "fr_pct": 2.2,
+    "mc_households": 84,
+    "fr_worker": 11,
+    "fr_marriage": 7,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 13,
+    "fr_naturalized": 14,
+    "fr_children": 21
+   },
+   {
+    "hadm": "서면",
+    "pop": 2873,
+    "area_km2": 51.78,
+    "density": 55,
+    "n_65": 1566,
+    "pct_65": 54.5,
+    "n_youth": 229,
+    "pct_youth": 8.0,
+    "n_y2034": 161,
+    "pct_y2034": 5.6,
+    "chg_10y_pct": -20.0,
+    "fr_total": 265,
+    "fr_pct": 8.5,
+    "mc_households": 104,
+    "fr_worker": 158,
+    "fr_marriage": 12,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 53,
+    "fr_naturalized": 14,
+    "fr_children": 23
+   },
+   {
+    "hadm": "현곡면",
+    "pop": 21389,
+    "area_km2": 55.48,
+    "density": 385,
+    "n_65": 4048,
+    "pct_65": 18.9,
+    "n_youth": 4204,
+    "pct_youth": 19.7,
+    "n_y2034": 2851,
+    "pct_y2034": 13.3,
+    "chg_10y_pct": 33.3,
+    "fr_total": 435,
+    "fr_pct": 2.0,
+    "mc_households": 371,
+    "fr_worker": 111,
+    "fr_marriage": 47,
+    "fr_student": 0,
+    "fr_diaspora": 24,
+    "fr_other": 93,
+    "fr_naturalized": 49,
+    "fr_children": 107
+   },
+   {
+    "hadm": "강동면",
+    "pop": 5692,
+    "area_km2": 80.94,
+    "density": 70,
+    "n_65": 2596,
+    "pct_65": 45.6,
+    "n_youth": 666,
+    "pct_youth": 11.7,
+    "n_y2034": 532,
+    "pct_y2034": 9.3,
+    "chg_10y_pct": -19.6,
+    "fr_total": 343,
+    "fr_pct": 5.7,
+    "mc_households": 129,
+    "fr_worker": 138,
+    "fr_marriage": 17,
+    "fr_student": 13,
+    "fr_diaspora": 9,
+    "fr_other": 110,
+    "fr_naturalized": 19,
+    "fr_children": 37
+   },
+   {
+    "hadm": "천북면",
+    "pop": 5310,
+    "area_km2": 58.37,
+    "density": 91,
+    "n_65": 2014,
+    "pct_65": 37.9,
+    "n_youth": 749,
+    "pct_youth": 14.1,
+    "n_y2034": 531,
+    "pct_y2034": 10.0,
+    "chg_10y_pct": 2.6,
+    "fr_total": 492,
+    "fr_pct": 8.6,
+    "mc_households": 134,
+    "fr_worker": 247,
+    "fr_marriage": 18,
+    "fr_student": 0,
+    "fr_diaspora": 10,
+    "fr_other": 152,
+    "fr_naturalized": 19,
+    "fr_children": 46
+   },
+   {
+    "hadm": "황오동",
+    "pop": 9392,
+    "area_km2": 2.26,
+    "density": 4147,
+    "n_65": 4117,
+    "pct_65": 43.8,
+    "n_youth": 1391,
+    "pct_youth": 14.8,
+    "n_y2034": 1070,
+    "pct_y2034": 11.4,
+    "chg_10y_pct": -32.7,
+    "fr_total": 1266,
+    "fr_pct": 12.0,
+    "mc_households": 246,
+    "fr_worker": 133,
+    "fr_marriage": 44,
+    "fr_student": 73,
+    "fr_diaspora": 451,
+    "fr_other": 463,
+    "fr_naturalized": 49,
+    "fr_children": 53
+   },
+   {
+    "hadm": "월성동",
+    "pop": 5168,
+    "area_km2": 38.25,
+    "density": 135,
+    "n_65": 2017,
+    "pct_65": 39.0,
+    "n_youth": 619,
+    "pct_youth": 12.0,
+    "n_y2034": 441,
+    "pct_y2034": 8.5,
+    "chg_10y_pct": -22.3,
+    "fr_total": 116,
+    "fr_pct": 2.2,
+    "mc_households": 155,
+    "fr_worker": 0,
+    "fr_marriage": 16,
+    "fr_student": 0,
+    "fr_diaspora": 6,
+    "fr_other": 30,
+    "fr_naturalized": 18,
+    "fr_children": 46
+   },
+   {
+    "hadm": "선도동",
+    "pop": 13464,
+    "area_km2": 27.83,
+    "density": 484,
+    "n_65": 3179,
+    "pct_65": 23.6,
+    "n_youth": 2526,
+    "pct_youth": 18.8,
+    "n_y2034": 2019,
+    "pct_y2034": 15.0,
+    "chg_10y_pct": -13.9,
+    "fr_total": 688,
+    "fr_pct": 4.9,
+    "mc_households": 320,
+    "fr_worker": 43,
+    "fr_marriage": 45,
+    "fr_student": 223,
+    "fr_diaspora": 47,
+    "fr_other": 199,
+    "fr_naturalized": 42,
+    "fr_children": 89
+   },
+   {
+    "hadm": "황성동",
+    "pop": 27978,
+    "area_km2": 3.88,
+    "density": 7204,
+    "n_65": 4716,
+    "pct_65": 16.9,
+    "n_youth": 6046,
+    "pct_youth": 21.6,
+    "n_y2034": 4597,
+    "pct_y2034": 16.4,
+    "chg_10y_pct": -3.2,
+    "fr_total": 534,
+    "fr_pct": 1.9,
+    "mc_households": 435,
+    "fr_worker": 45,
+    "fr_marriage": 61,
+    "fr_student": 13,
+    "fr_diaspora": 75,
+    "fr_other": 130,
+    "fr_naturalized": 70,
+    "fr_children": 140
+   },
+   {
+    "hadm": "용강동",
+    "pop": 24645,
+    "area_km2": 5.11,
+    "density": 4827,
+    "n_65": 3679,
+    "pct_65": 14.9,
+    "n_youth": 5014,
+    "pct_youth": 20.3,
+    "n_y2034": 3245,
+    "pct_y2034": 13.2,
+    "chg_10y_pct": 32.8,
+    "fr_total": 504,
+    "fr_pct": 2.0,
+    "mc_households": 467,
+    "fr_worker": 24,
+    "fr_marriage": 77,
+    "fr_student": 10,
+    "fr_diaspora": 31,
+    "fr_other": 163,
+    "fr_naturalized": 63,
+    "fr_children": 136
+   },
+   {
+    "hadm": "동천동",
+    "pop": 19727,
+    "area_km2": 5.23,
+    "density": 3770,
+    "n_65": 5132,
+    "pct_65": 26.0,
+    "n_youth": 4159,
+    "pct_youth": 21.1,
+    "n_y2034": 3289,
+    "pct_y2034": 16.7,
+    "chg_10y_pct": -24.5,
+    "fr_total": 1339,
+    "fr_pct": 6.4,
+    "mc_households": 454,
+    "fr_worker": 47,
+    "fr_marriage": 69,
+    "fr_student": 415,
+    "fr_diaspora": 49,
+    "fr_other": 550,
+    "fr_naturalized": 80,
+    "fr_children": 129
+   },
+   {
+    "hadm": "불국동",
+    "pop": 9414,
+    "area_km2": 30.55,
+    "density": 308,
+    "n_65": 3100,
+    "pct_65": 32.9,
+    "n_youth": 1564,
+    "pct_youth": 16.6,
+    "n_y2034": 1039,
+    "pct_y2034": 11.0,
+    "chg_10y_pct": 5.0,
+    "fr_total": 327,
+    "fr_pct": 3.4,
+    "mc_households": 259,
+    "fr_worker": 73,
+    "fr_marriage": 47,
+    "fr_student": 0,
+    "fr_diaspora": 18,
+    "fr_other": 81,
+    "fr_naturalized": 40,
+    "fr_children": 66
+   },
+   {
+    "hadm": "보덕동",
+    "pop": 1545,
+    "area_km2": 80.67,
+    "density": 19,
+    "n_65": 672,
+    "pct_65": 43.5,
+    "n_youth": 195,
+    "pct_youth": 12.6,
+    "n_y2034": 154,
+    "pct_y2034": 10.0,
+    "chg_10y_pct": -24.1,
+    "fr_total": 43,
+    "fr_pct": 2.7,
+    "mc_households": 22,
+    "fr_worker": 20,
+    "fr_marriage": 0,
+    "fr_student": 0,
+    "fr_diaspora": 0,
+    "fr_other": 14,
+    "fr_naturalized": 0,
+    "fr_children": 0
+   }
+  ],
+  "city_age": {
+   "5 - 9세": 6205,
+   "95 - 99세": 434,
+   "100+": 48,
+   "10 - 14세": 8902,
+   "15 - 19세": 9593,
+   "20 - 24세": 8722,
+   "25 - 29세": 10796,
+   "30 - 34세": 11869,
+   "35 - 39세": 11230,
+   "40 - 44세": 13303,
+   "0 - 4세": 4810,
+   "45 - 49세": 16254,
+   "50 - 54세": 20206,
+   "55 - 59세": 23897,
+   "60 - 64세": 23978,
+   "65 - 69세": 24184,
+   "70 - 74세": 18079,
+   "75 - 79세": 12841,
+   "80 - 84세": 8921,
+   "85 - 89세": 5847,
+   "90 - 94세": 2393
+  },
+  "city_yearly": {
+   "2011": 261201,
+   "2012": 259878,
+   "2013": 259164,
+   "2014": 257556,
+   "2015": 255301,
+   "2016": 254667,
+   "2017": 253480,
+   "2018": 252329,
+   "2019": 250956,
+   "2020": 249175,
+   "2021": 251889,
+   "2022": 249607,
+   "2023": 247489,
+   "2024": 244769,
+   "2025": 244055
+  },
+  "src": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) · 외국인주민 2024.11 (DT_110025_A033_A) · 행정동 경계 근사"
+ }
+}
