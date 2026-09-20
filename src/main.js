@@ -36,6 +36,7 @@ for (const g of cfg.groups) {
 }
 const refreshCounts = () => { for (const d of Object.values(groupBox)) { const n = d.querySelectorAll(".layer > label input:checked").length, t = d.querySelectorAll(".layer").length; d.querySelector(".cnt").textContent = `${n}/${t}`; } };
 // 탭
+const HAS_AN = !!document.getElementById("pane-analysis");   // 분석 탭은 통계 리포트로 이관(2026-09-21) — 없으면 카드 갱신 생략
 const showTab = (name) => { document.querySelectorAll("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.tab === name)); document.querySelectorAll(".pane").forEach((p) => p.classList.toggle("on", p.id === `pane-${name}`)); if (name === "analysis") setTimeout(() => { for (const id of ["chart", "chart-inds", "chart-vis", "chart-traffic", "chart-pyr", "chart-yr", "chart-fr", "chart-nat", "chart-yd", "chart-yind", "chart-ymig", "chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"]) echarts.getInstanceByDom(document.getElementById(id))?.resize(); }, 0); };
 document.querySelectorAll("#tabs button").forEach((b) => b.addEventListener("click", () => showTab(b.dataset.tab)));
 const dataCache = {};
@@ -91,9 +92,11 @@ map.on("load", async () => {
         .setHTML(`<div class="pt">${fmt(head)}</div><div class="pl">${rest}</div><div class="pm">전체 속성 보기 →</div>`).addTo(map);
       pop.getElement().querySelector(".pm").onclick = () => showTab("selected");
       document.getElementById("sel-body").innerHTML = `<div class="src">${L.title}</div>` + popupHtml(p, Object.keys(p).filter((k) => !["age", "yearly", "bjd"].includes(k)));
-      if (p.age) drawPop(p);
-      if (p.fr_total !== undefined) drawForeign(p);
-      if (p.per_ha !== undefined && window.__extras) { drawFFHourly(window.__extras, p.id); showTab("analysis"); }
+      if (HAS_AN) {
+        if (p.age) drawPop(p);
+        if (p.fr_total !== undefined) drawForeign(p);
+        if (p.per_ha !== undefined && window.__extras) { drawFFHourly(window.__extras, p.id); showTab("analysis"); }
+      }
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -167,11 +170,12 @@ map.on("load", async () => {
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
   ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_y2034-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places", "facilities", "facilities-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts", "religion", "religion-lb", "schools", "schools-lb", "hwango_grid", "hwango_grid-ol", "hwango_grid-lb", "hwango_biz2024", "hwango_biz2024-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras(); drawHwango();
-  // 인구 카드 초기값: 경주시 전체 = 행정동 합
-  const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
-  drawYouth();
-  drawNationality();
+  updateStats();
+  if (HAS_AN) {   // 그래프 카드는 report.html 로 이관 — 지도에는 KPI만 남긴다
+    drawChart(); drawVisitors(); drawTraffic(); drawExtras(); drawHwango();
+    const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
+    drawYouth(); drawNationality();
+  }
 });
 
 // ---- 청년: 어디 살고(행정동 20–34), 무슨 일(시 단위 취업 구조), 남는가(순이동) ----------
@@ -294,7 +298,7 @@ async function drawVisitors() {
 
 // ---- 화면 통계 (지도 범위 종속) --------------------------------------------
 function updateStats() {
-  document.getElementById("st-zoom").textContent = map.getZoom().toFixed(1);
+  if (document.getElementById("st-zoom")) document.getElementById("st-zoom").textContent = map.getZoom().toFixed(1);
   if (!map.getLayer("parcels-q")) return;
   const feats = map.queryRenderedFeatures({ layers: ["parcels-q"] });
   const seen = new Set(); const jiga = [];
@@ -305,13 +309,13 @@ function updateStats() {
   }
   jiga.sort((a, b) => a - b);
   document.getElementById("st-parcels").textContent = seen.size ? seen.size.toLocaleString() : "–";
-  document.getElementById("st-jiga").textContent = jiga.length ? Math.round(jiga[jiga.length >> 1]).toLocaleString() + "원/㎡" : "–";
+  if (document.getElementById("st-jiga")) document.getElementById("st-jiga").textContent = jiga.length ? Math.round(jiga[jiga.length >> 1]).toLocaleString() + "원/㎡" : "–";
   // 노후도: 건물 있는 필지 중 사용승인 20년↑(쇠퇴진단 기준) / 30년↑ 비율
   const aged = [...new Set(feats.filter((f) => f.properties.bldg_age != null).map((f) => f.properties.pnu + "|" + f.properties.bldg_age))].map((s) => +s.split("|")[1]);
   document.getElementById("st-old").textContent = aged.length ? `${Math.round(aged.filter((a) => a >= 20).length / aged.length * 100)}% / ${Math.round(aged.filter((a) => a >= 30).length / aged.length * 100)}%` : "–";
   if (map.getLayer("busstops")) {
     const bs = new Set(map.queryRenderedFeatures({ layers: ["busstops"] }).map((f) => f.properties.stop_id));
-    document.getElementById("st-bus").textContent = bs.size ? bs.size.toLocaleString() : "–";
+    if (document.getElementById("st-bus")) document.getElementById("st-bus").textContent = bs.size ? bs.size.toLocaleString() : "–";
   }
   // 교통: 화면 내 정체 링크 비율
   if (map.getLayer("traffic_hist")) {   // 이력 표본: 시간 슬라이더가 가리키는 시간대 기준
@@ -325,7 +329,7 @@ function updateStats() {
     const st = map.queryRenderedFeatures({ layers: ["stores"] }); const cnt = {}; const ids = new Set();
     for (const f of st) { if (ids.has(f.properties.bizesId)) continue; ids.add(f.properties.bizesId); cnt[f.properties.indsLclsNm] = (cnt[f.properties.indsLclsNm] || 0) + 1; }
     document.getElementById("st-stores").textContent = ids.size ? ids.size.toLocaleString() : "–";
-    drawIndsChart(cnt);
+    if (HAS_AN) drawIndsChart(cnt);
   }
 }
 let indsChart;
