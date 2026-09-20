@@ -29,6 +29,9 @@ FILES = {
     "processed/heritage_pts_4326.geojson":      "heritage_pts.geojson",
     "processed/plan_nodes_4326.geojson":        "plan_nodes.geojson",
     "processed/plan_routes_4326.geojson":       "plan_routes.geojson",
+    "processed/poi_schools_4326.geojson":       "schools.geojson",
+    "processed/poi_religion_4326.geojson":      "religion.geojson",
+    "processed/lifezone_4326.geojson":          "lifezone.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)

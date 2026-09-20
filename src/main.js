@@ -144,7 +144,7 @@ map.on("load", async () => {
   // 질의 전용 투명 레이어: 필지 레이어를 꺼도 KPI(필지 수·노후도·공시지가)는 집계되도록
   if (map.getSource("parcels.geojson")) map.addLayer({ id: "parcels-q", type: "fill", source: "parcels.geojson", paint: { "fill-opacity": 0 }, minzoom: 14 }, "landuse");
   ["pop_total-lb", "pop_density-lb", "pop_65-lb", "pop_youth-lb", "pop_chg-lb", "fr_pct-lb", "mc_hh-lb", "godo-lb", "sbiz_zones-lb", "tourism_complex-lb", "reg_areas", "reg_areas-ol", "reg_areas-lb", "traffic_hist", "traffic", "busstops", "blocks", "blocks-ol", "blocks-lb", "zone", "stores", "tour_sites", "fr_places"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
-  ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
+  ["footfall_areas", "footfall_areas-ol", "footfall_areas-lb", "plan_routes", "plan_routes-lb", "plan_nodes", "plan_nodes-lb", "heritage_pts", "heritage_pts-lb", "landprice_pts", "religion", "religion-lb", "schools", "schools-lb"].forEach((id) => map.getLayer(id) && map.moveLayer(id));
   updateStats(); drawChart(); drawVisitors(); drawTraffic(); drawExtras();
   // 인구 카드 초기값: 경주시 전체 = 행정동 합
   const hp = dataCache["hadm_pop.geojson"]; if (hp) { drawPop(null, hp); drawForeign(null, hp); }
