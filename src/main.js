@@ -185,7 +185,7 @@ function drawForeign(p, fc) {
     xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: FR_KINDS.map((k) => k[1]), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
     series: [{ type: "bar", data: vals, itemStyle: { color: "#980043" }, label: { show: true, position: "right", fontSize: 10, formatter: (d) => d.value.toLocaleString() }, barCategoryGap: "30%" }] }, true);
   const tot = vals.reduce((a, b) => a + b, 0);
-  document.getElementById("fr-note").textContent = `외국인주민 ${tot.toLocaleString()}명 · 다문화가구 ${mc.toLocaleString()}가구 — 행안부 2024.11 기준(KOSIS), 읍면동 단위`;
+  document.getElementById("fr-note").textContent = `외국인주민 ${tot.toLocaleString()}명, 다문화가구 ${mc.toLocaleString()}가구입니다. 출처: 행정안전부 외국인주민 현황 2024.11(KOSIS), 읍면동 단위 (T2)`;
 }
 // ---- 국적별 등록외국인 (경주시, 법무부) — 읍면동 단위 국적 통계는 없음 ----------------
 async function drawNationality() {
@@ -195,7 +195,7 @@ async function drawNationality() {
   ch.setOption({ grid: { left: 92, right: 40, top: 4, bottom: 4 }, tooltip: { trigger: "axis", valueFormatter: (v) => v.toLocaleString() + "명" },
     xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: rows.map((r) => r[0].replace("(연방)", "")), axisLabel: { fontSize: 10.5 }, axisTick: { show: false }, axisLine: { show: false } },
     series: [{ type: "bar", data: rows.map((r) => r[1]), itemStyle: { color: "#5b3a8a" }, label: { show: true, position: "right", fontSize: 10, formatter: (x) => x.value.toLocaleString() }, barCategoryGap: "28%" }] });
-  document.getElementById("nat-note").textContent = `경주시 등록외국인 ${(+d.nationality["계"]).toLocaleString()}명 — 법무부 ${d.prd || ""} (시군구 단위, 상위 12개국)`;
+  document.getElementById("nat-note").textContent = `경주시에 등록된 외국인은 ${(+d.nationality["계"]).toLocaleString()}명이고, 위는 상위 12개국입니다. 출처: 법무부 등록외국인 통계 ${d.prd || ""}, 시군구 단위 (T2)`;
 }
 
 // ---- 행정동 인구: 연령 피라미드 + 10년 추이 -----------------------------------
@@ -224,7 +224,7 @@ function drawPop(p, fc) {
     series: [{ type: "line", data: ys.map((y) => yearly[y]), showSymbol: false, lineStyle: { width: 2, color: "#2c6a5c" }, areaStyle: { opacity: .12, color: "#2c6a5c" } }],
   }, true);
   const o65 = keys.filter((k) => lo(k) >= 65).reduce((s, k) => s + age[k], 0);
-  document.getElementById("pop-note").textContent = `총 ${tot.toLocaleString()}명 · 65세↑ ${(o65 / tot * 100).toFixed(1)}% · 주민등록 2026-08 (KOSIS DT_1B04005N) · 연도별 추이 2011–2025${p && p.yearly_note ? " · " + p.yearly_note : ""}`;
+  document.getElementById("pop-note").textContent = `인구 ${tot.toLocaleString()}명, 그중 65세 이상이 ${(o65 / tot * 100).toFixed(1)}%입니다. 출처: 주민등록 인구 2026-08 (KOSIS DT_1B04005N), 연도별 추이 2011–2025 (T2)${p && p.yearly_note ? " · " + p.yearly_note : ""}`;
 }
 
 // ---- 방문자 시계열 (시군구 = S3, 지도와 독립) ---------------------------------
@@ -242,7 +242,7 @@ async function drawVisitors() {
     series: [ser("현지인", "#8fa3ad"), ser("외지인", "#2c6a5c"), ser("외국인", "#e0a23a")],
   });
   const last = days[days.length - 1];
-  document.getElementById("vis-note").textContent = `KT 이동통신 기반 순방문자 · ${days[0].slice(0,4)}.${days[0].slice(4,6)}.${days[0].slice(6)}~${last.slice(4,6)}.${last.slice(6)} · 공표 지연 약 3주 · 시군구 단위라 부지(S1) 정당화에 쓰지 않음`;
+  document.getElementById("vis-note").textContent = `${days[0].slice(0,4)}.${days[0].slice(4,6)}.${days[0].slice(6)}~${last.slice(4,6)}.${last.slice(6)} 기간의 하루 방문자입니다. 통계가 약 3주 늦게 나옵니다. 출처: 한국관광데이터랩(KT 이동통신 기반), 시군구 단위 (T2)`;
   window.addEventListener("resize", () => ch.resize());
 }
 
@@ -345,7 +345,7 @@ async function drawTraffic() {
     const hs = await fetch(`${base}data/traffic_hist_summary.json`, { cache: "no-cache" }).then((r) => r.json());
     const line = (k, name, color) => ({ name, type: "line", data: hs.hourly[k].map((r) => r.speed_avg), showSymbol: false, lineStyle: { width: 2, color }, itemStyle: { color } });
     ch.setOption({ series: [line("wd", `평일 평균 (${hs.days.wd.length}일)`, "#1f5e42"), line("we", `주말 평균 (${hs.days.we.length}일)`, "#8e44ad")] });
-    document.getElementById("traffic-note").textContent = `이력 표본 ${hs.n_days}일 (평일 ${hs.days.wd.length}·주말 ${hs.days.we.length}, ${hs.days.wd.concat(hs.days.we).sort()[0]}~) · 링크 ${hs.links.toLocaleString()} · 실시간 스냅샷 ${h.snapshots}개`;
+    document.getElementById("traffic-note").textContent = `${hs.n_days}일치 표본(평일 ${hs.days.wd.length}일·주말 ${hs.days.we.length}일, ${hs.days.wd.concat(hs.days.we).sort()[0]}부터)으로 도로 구간 ${hs.links.toLocaleString()}개의 시간대별 평균속도를 냈습니다. 출처: 국가교통정보센터 ITS (T2)`;
     window.addEventListener("resize", () => ch.resize());
     renderCong(c, h); return;
   } catch { /* 이력 없음 */ }
@@ -379,7 +379,7 @@ async function drawExtras() {
     xAxis: { type: "value", show: false }, yAxis: { type: "category", inverse: true, data: ff.map((d) => d.short), axisLabel: { fontSize: 11 }, axisTick: { show: false }, axisLine: { show: false } },
     series: [{ type: "bar", data: ff.map((d, i) => ({ value: d.per_ha, itemStyle: { color: AREA_COLORS[FF_ORDER[i]] } })), label: { show: true, position: "right", fontSize: 10, formatter: (d) => d.value.toLocaleString() + "/ha" }, barCategoryGap: "28%" }],
   }, true);
-  document.getElementById("ff-note").textContent = "통신사 추정 유동인구 월별 일평균, 2025.06~2026.06 13개월 평균 ÷ 면적(ha). B 행복황촌(80)·D 폐역 구역(79)은 G 성동시장(1,175)의 1/15. F 시청 500m는 저녁 18–23시 27%로 최고. 소상공인365 (T2)";
+  document.getElementById("ff-note").textContent = "성동시장 주변(G)이 1ha에 하루 약 1,175명으로 가장 붐비고, 옛 경주역 부지(D)와 행복황촌(B)은 약 80명으로 그 15분의 1입니다. 부지는 지금 ‘비어 있는 땅’이 맞습니다. 출처: 소상공인시장진흥공단 소상공인365, 2025.06~2026.06 13개월 평균 (T2)";
   drawFFHourly(x, null);
   // 3. 업종 지문
   const ba = FF_ORDER.map((k) => x.biz_area[k]);
@@ -390,7 +390,7 @@ async function drawExtras() {
     series: [{ name: "생활(슈퍼·편의점·미용·정육·반찬·약국·백반)", type: "bar", stack: "s", data: ba.map((b) => +b.life_stores_2606), itemStyle: { color: "#2c6a5c" }, label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", formatter: (d) => d.value || "" } },
              { name: "관광·체류(카페·여관·호텔·펜션)", type: "bar", stack: "s", data: ba.map((b) => +b.tour_stores_2606), itemStyle: { color: "#e07b39" }, label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", formatter: (d) => d.value || "" } }],
   }, true);
-  document.getElementById("biz-note").textContent = "11개 업종만의 지문(전체 상권 아님). 13개월 변화: C 구역+300m 펜션 32→45(+13), H 황리단길 카페 51→40(−11), 백반은 전 구역 증가, 슈퍼·미용·정육·약국은 ±1. 소상공인365 (T2)";
+  document.getElementById("biz-note").textContent = "13개월 사이 옛 경주역 주변(C)에서 펜션이 32곳→45곳으로 13곳 늘었고, 황리단길(H)은 카페가 51곳→40곳으로 줄었습니다. 슈퍼·미용실·정육점·약국은 거의 그대로입니다. 관광객 가게만 늘고 동네 가게가 줄면 상권이 ‘살아나는’ 게 아니라 ‘바뀌는’(치환) 것이라서 두 축을 늘 같이 봅니다. 출처: 소상공인365 (T2)";
   // 4. 황오동 KPI
   const yrs = ["2018", "2019", "2020", "2021", "2022", "2023", "2024"];
   const ffk = x.hwango_kpi["주요 상권 유동인구(명, 소상공인365 통신사 추정)"] || {}; const o = x.startup_closure["황오동 사업대상지|창업 건수"] || {}; const c_ = x.startup_closure["황오동 사업대상지|폐업 건수"] || {};
@@ -401,7 +401,7 @@ async function drawExtras() {
     series: [{ name: "창업", type: "bar", data: yrs.map((y) => o[y]), itemStyle: { color: "#5f9f7a" } }, { name: "폐업", type: "bar", data: yrs.map((y) => c_[y]), itemStyle: { color: "#d7191c" } },
              { name: "유동인구(일평균)", type: "line", yAxisIndex: 1, data: yrs.map((y) => ffk[y] ?? null), itemStyle: { color: "#1d2320" }, lineStyle: { width: 2 }, connectNulls: true }],
   }, true);
-  document.getElementById("kpi-note").textContent = "황오동 원도심 활성화구역(격자 32셀). 유동인구 2020 26,536 → 2024 22,646 (−15%), 2026 재추출 22,874로 재현됨. 창업 +46%·폐업 +94%(2018→24)는 전 업종 인허가(localdata) 기준. 공공도시(주) 2025.09 보고서 전사 (T2)";
+  document.getElementById("kpi-note").textContent = "유동인구는 2020년 하루 26,536명에서 2024년 22,646명으로 15% 줄었습니다(2026년에 같은 방법으로 다시 재어 22,874명 — 보고서 수치가 맞습니다). 창업과 폐업이 둘 다 늘어 가게가 자주 바뀌는 구조입니다. 단, 2024년 ‘창업 70건’에는 아래 카드에서 설명하는 축제용 임시 가게 27건이 섞여 있습니다. 출처: 황오동 도시재생 성과 모니터링 보고서, 공공도시 2025.09 (T2)";
   // 5. 공시지가
   const ly = Object.keys(x.landprice_avg);
   mk("chart-lp").setOption({
@@ -411,7 +411,7 @@ async function drawExtras() {
     series: [{ name: "원도심 29필지 평균", type: "line", data: ly.map((y) => x.landprice_avg[y]), itemStyle: { color: "#2c6a5c" }, lineStyle: { width: 2 } },
              { name: "행복황촌 44개소 평균", type: "line", yAxisIndex: 1, data: ly.map((y) => x.landprice_hwangchon44[y] ?? null), itemStyle: { color: "#8e44ad" }, lineStyle: { width: 2, type: "dashed" } }],
   }, true);
-  document.getElementById("lp-note").textContent = "개별공시지가 매년 1.1 기준. 원도심 29필지 2018 대비 2022 +18.7% → 2025 +10.8%. 행복황촌 44개소 2021 +9.1% → 2023 −5.6%. 두 모니터링 보고서 전사 (T2, 토지이음)";
+  document.getElementById("lp-note").textContent = "원도심 29필지 평균은 2018년보다 2022년에 18.7% 올랐다가 2025년에는 +10.8%로 내려왔습니다. 행복황촌 44곳은 2021년 +9.1%에서 2023년 −5.6%. 2023년의 하락은 정부가 공시가격 현실화 계획을 수정한 영향이 큽니다. 출처: 황오동·행복황촌 모니터링 보고서, 토지이음 (T2)";
   // 6. 시민 선호 (부지 활용·미래상 문항)
   const sv = x.surveys.filter((r) => /부지|경주역 활용|미래상/.test(r.q) && /\d/.test(r.v));
   const rows = [];
@@ -423,13 +423,13 @@ async function drawExtras() {
   }, true);
   // 7. 사실 카드
   const H = Object.fromEntries(x.heritage.map((h) => [h.k, h]));
-  document.getElementById("fact-card").innerHTML = `<dl>
+  document.getElementById("fact-card").innerHTML = `<h2>부지의 숫자 몇 가지 — 땅속 유물 조사와 계획인구</h2><p class="lead">옛 경주역 부지는 땅속에 신라 유적이 있을 수 있어 건물을 짓기 전에 시굴(시험 발굴) 조사를 해야 합니다. 그 면적·비용·기간 추정과, 2030 도시기본계획이 그린 인구와 실제 인구의 차이입니다.</p><dl>
     <dt>매장유산 시굴 필요 면적</dt><dd>${(+H["시굴조사 필요 면적"].v).toLocaleString()} ㎡</dd>
     <dt>시굴 비용 · 기간 (추정)</dt><dd>${(+H["시굴조사 비용 추정"].v / 1e8).toFixed(2)}억 · 54일</dd>
     <dt>정밀발굴 비용 · 기간 (추정)</dt><dd>63~80억 · 630~700일</dd>
     <dt>1단계 시굴(안) 면적</dt><dd>${(+H["시굴조사 1단계(안) 면적"].v).toLocaleString()} ㎡</dd>
     <dt>2030 계획인구 vs 2026.08 실제</dt><dd>${x.plan_pop.plan_2030.toLocaleString()} → ${x.plan_pop.actual_2026_08.toLocaleString()} (${((x.plan_pop.actual_2026_08 / x.plan_pop.plan_2030 - 1) * 100).toFixed(0)}%)</dd>
-    <div class="src">매장유산: ${x.sources.heritage} · 규정상 2m 미만 성토·성토 후 공원·주차장은 발굴 유예 / 계획인구: ${x.plan_pop.src}</div></dl>`;
+    <div class="src">흙을 2m 미만으로 덮고 공원·주차장으로 쓰면 규정상 발굴을 미룰 수 있습니다. 출처 — 매장유산: ${x.sources.heritage} / 계획인구: ${x.plan_pop.src}</div></dl>`;
   window.addEventListener("resize", () => ["chart-ff", "chart-ffh", "chart-biz", "chart-kpi", "chart-lp", "chart-survey", "chart-hw-cell", "chart-hw-biz", "chart-hw-age"].forEach((id) => echarts.getInstanceByDom(document.getElementById(id))?.resize()));
 }
 function drawFFHourly(x, focus) {
@@ -455,7 +455,7 @@ async function drawHwango() {
     xAxis: { type: "category", data: grp, axisLabel: { fontSize: 10, interval: 0, rotate: 28 } }, yAxis: { type: "value" },
     series: [{ name: "창업(실질)", type: "bar", data: grp.map((g) => b.open.by_group[g] || 0), color: "#1f5e42" }, { name: "폐업(실질)", type: "bar", data: grp.map((g) => -(b.close.by_group[g] || 0)), color: "#c0392b" }],
   }, true);
-  document.getElementById("hw-biz-note").textContent = `보고서 창업 70·폐업 66건 중 ${b.open.popup}건은 구 경주역 부지(21)·성동시장 상인회(4)·43-5(2)의 30일 내 폐업 임시영업(축제·야시장)으로 양쪽에 중복 계상. 제외하면 창업 ${b.open.real}(점포형 ${b.open_real_storefront.length})·폐업 ${b.close.real}. 실질 순증은 숙박·체류 +${(b.open.by_group["숙박·체류"] || 0) - (b.close.by_group["숙박·체류"] || 0)}, 생활소매·식품제조 ${(b.open.by_group["생활소매·식품제조"] || 0) - (b.close.by_group["생활소매·식품제조"] || 0)}. 폐업 중 30년+ 업력 ${b.closure_age_bins["30년+"]}곳(${b.closed_over30.map((r) => r[0]).join("·")}). 인쇄쪽 82–85 (T2)`;
+  document.getElementById("hw-biz-note").textContent = `임시 가게 ${b.open.popup}건(옛 경주역 부지 21, 성동시장 상인회 4, 그 외 2)은 창업에도 폐업에도 똑같이 세어져 있습니다. 빼면 창업 ${b.open.real}건(온라인 판매 12건을 더 빼면 실제 점포는 ${b.open_real_storefront.length}건), 폐업 ${b.close.real}건으로, 창업은 2018년(48건)보다 오히려 적습니다. 진짜로 늘어난 업종은 숙박(스테이·게스트하우스, +${(b.open.by_group["숙박·체류"] || 0) - (b.close.by_group["숙박·체류"] || 0)})뿐이고, 반찬가게·정육점·슈퍼 같은 생활 가게는 ${Math.abs((b.open.by_group["생활소매·식품제조"] || 0) - (b.close.by_group["생활소매·식품제조"] || 0))}곳 줄었습니다. 닫은 가게 중 ${b.closure_age_bins["30년+"]}곳은 30년 넘은 가게입니다(${b.closed_over30.map((r) => r[0] + " " + r[2] + "년~").join(", ")}). 출처: 행정안전부 지방행정인허가 데이터, 보고서 인쇄쪽 82–85 (T2)`;
   // 황오동 연령구조
   const P = h.pop_hwango;
   mk("chart-hw-age").setOption({
@@ -463,7 +463,7 @@ async function drawHwango() {
     xAxis: { type: "category", data: P.years }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v + "%" }, max: 50 }, { type: "value", scale: true, splitLine: { show: false }, axisLabel: { formatter: (v) => (v / 1000).toFixed(1) + "k" } }],
     series: [{ name: "65세+ %", type: "line", data: P.share_65, color: "#c0392b", lineStyle: { width: 2.5 } }, { name: "20–39세 %", type: "line", data: P.share_20_39, color: "#2f6db5", lineStyle: { width: 2.5 } }, { name: "0–14세 %", type: "line", data: P.share_0_14, color: "#e8a86b" }, { name: "총인구(우축)", type: "bar", yAxisIndex: 1, data: P.total, color: "rgba(31,94,66,.25)" }],
   }, true);
-  document.getElementById("hw-age-note").textContent = `황오동 주민등록 ${P.total[0].toLocaleString()}(2018) → ${P.total.at(-1).toLocaleString()}(2025.07), −${(100 - P.total.at(-1) / P.total[0] * 100).toFixed(0)}%. 20–39세는 ${P.n_20_39[0].toLocaleString()}→${P.n_20_39.at(-1).toLocaleString()}명(−${(100 - P.n_20_39.at(-1) / P.n_20_39[0] * 100).toFixed(0)}%), 65세+ 비율 ${P.share_65[0]}→${P.share_65.at(-1)}%. 인쇄쪽 81 (T2)`;
+  document.getElementById("hw-age-note").textContent = `7년 사이 황오동 인구는 ${P.total[0].toLocaleString()}명(2018)에서 ${P.total.at(-1).toLocaleString()}명(2025.07)으로 ${(100 - P.total.at(-1) / P.total[0] * 100).toFixed(0)}% 줄었습니다. 20~39세는 ${P.n_20_39[0].toLocaleString()}명→${P.n_20_39.at(-1).toLocaleString()}명으로 거의 반이 빠졌고, 65세 이상 비율은 ${P.share_65[0]}%→${P.share_65.at(-1)}%가 됐습니다. 주민 10명 중 4명이 노인입니다. 출처: 행정안전부 주민등록 인구통계, 보고서 인쇄쪽 81 (T2)`;
 }
 function drawHwCell(p) {
   const h = window.__hw; if (!h) return;
@@ -482,6 +482,6 @@ function drawHwCell(p) {
     xAxis: { type: "category", data: yrs }, yAxis: p ? [{ type: "value" }, { type: "value", splitLine: { show: false } }] : [{ type: "value", scale: true, axisLabel: { formatter: (v) => v } }],
     color: ["#1f5e42", "#5f9f7a", "#c7641c", "#2f6db5", "#6f4fa3", "#86868b"], series,
   }, true);
-  document.getElementById("hw-cell-note").textContent = p ? `인구 ${p.pop_2018 ?? "–"}→${p.pop_2023 ?? "–"} · 사업체 ${p.biz_2018}→${p.biz_2023} · 종사자 ${p.emp_2018}→${p.emp_2023}(우축) · 주택 ${p.house_2018 ?? "–"}→${p.house_2023 ?? "–"}. 5명 미만은 비공개. SGIS 100m 격자, 인쇄쪽 78–80 (T2)`
-    : `대상지(격자 32셀) 인구 −14%·가구 −11%·사업체 −3%·종사자 −23%·주택 −13% (2018→2023). 종사자 감소가 가장 크다 — 성동시장 셀(549623) 사업체 264→160, KT 블록(548622) 종사자 816→649. 2020 사업체 급증은 전국사업체조사 방식 변경. 셀별 값은 archive/C_data/processed/hwango_grid_4326.geojson (T2)`;
+  document.getElementById("hw-cell-note").textContent = p ? `이 칸은 2018→2023년에 인구 ${p.pop_2018 ?? "–"}→${p.pop_2023 ?? "–"}명, 사업체 ${p.biz_2018}→${p.biz_2023}개, 종사자 ${p.emp_2018}→${p.emp_2023}명(오른쪽 눈금), 주택 ${p.house_2018 ?? "–"}→${p.house_2023 ?? "–"}호입니다. ‘–’는 5명 미만이라 통계청이 공개하지 않은 값입니다. 출처: 통계청 SGIS 100m 격자, 보고서 인쇄쪽 78–80 (T2)`
+    : `5년 동안 인구 −14%, 가구 −11%, 사업체 −3%, 종사자 −23%, 주택 −13%. 가게 수는 거의 그대로인데 거기서 일하는 사람은 4분의 1이 줄었습니다 — 가게마다 고용이 줄었다는 뜻이고, 성동시장 칸은 가게 264→160개로 특히 큽니다. 2020년에 사업체가 잠깐 늘어 보이는 것은 통계 조사 방식이 바뀐 탓입니다. 회색 점선은 황오동 전체 인구로, 사업구역이 동 전체보다 조금 덜 줄었습니다. 출처: 통계청 SGIS, 보고서 인쇄쪽 78–80 (T2)`;
 }
