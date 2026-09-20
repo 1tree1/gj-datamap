@@ -11,10 +11,7 @@ FILES = {
     "raw/busstops_gj.geojson":                  "busstops.geojson",
     "raw/vworld_upis.geojson":                  "upis.geojson",
     "processed/parcels_energy_4326.geojson":   "energy.geojson",
-    "raw/gj_tour_sites.geojson":                "tour_sites.geojson",
-    "processed/traffic_links_4326.geojson":    "traffic.geojson",
     "processed/traffic_hist_links_4326.geojson": "traffic_hist.geojson",
-    "processed/tourism_complex_4326.geojson":  "tourism_complex.geojson",
     "processed/reg_areas_4326.geojson":        "reg_areas.geojson",
     "raw/vworld_emd_gj.geojson":                "emd.geojson",
     "processed/godo_4326.geojson":            "godo.geojson",
@@ -25,15 +22,9 @@ FILES = {
     "processed/footfall_areas_web_4326.geojson": "footfall_areas.geojson",
     "processed/decline_2022_4326.geojson":      "decline_2022.geojson",
     "processed/landprice_pts_4326.geojson":     "landprice_pts.geojson",
-    "processed/heritage_pts_4326.geojson":      "heritage_pts.geojson",
-    "processed/plan_nodes_4326.geojson":        "plan_nodes.geojson",
-    "processed/plan_routes_4326.geojson":       "plan_routes.geojson",
     "processed/poi_schools_4326.geojson":       "schools.geojson",
     "processed/poi_religion_4326.geojson":      "religion.geojson",
     "processed/lifezone_4326.geojson":          "lifezone.geojson",
-    # 2026-09-21 황오동 모니터링 보고서 (pipeline/build_hwango_report.py)
-    "processed/hwango_grid_4326.geojson":       "hwango_grid.geojson",
-    "processed/hwango_biz2024_4326.geojson":    "hwango_biz2024.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)

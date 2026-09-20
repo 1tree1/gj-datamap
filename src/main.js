@@ -94,7 +94,6 @@ map.on("load", async () => {
       if (p.age) drawPop(p);
       if (p.fr_total !== undefined) drawForeign(p);
       if (p.per_ha !== undefined && window.__extras) { drawFFHourly(window.__extras, p.id); showTab("analysis"); }
-      if (p.code && p.pop_2018 !== undefined) { drawHwCell(p); showTab("analysis"); }
       document.getElementById("tab-selected").innerHTML = `선택<span class="badge">1</span>`;
     });
     map.on("mouseenter", L.id, () => (map.getCanvas().style.cursor = "pointer"));
@@ -132,7 +131,7 @@ map.on("load", async () => {
       li.appendChild(box);
       const colorExpr = (k, h) => { const f = `${k}_${String(h).padStart(2, "0")}`; return ["case", ["!", ["has", f]], "#ccc", ["<", ["get", f], ["coalesce", ["get", "thr_c"], 15]], "#d7191c", ["<", ["get", f], ["coalesce", ["get", "thr_f"], 25]], "#fdae61", "#1a9641"]; };  // 도로등급별 임계(thr_c/thr_f)
       const applyHour = () => { const h = +box.querySelector("#hs-hour").value, k = box.querySelector("input[name=hs-kind]:checked").value;
-        box.querySelector("#hs-label").textContent = `${String(h).padStart(2, "0")}시 · ${k === "wd" ? "평일" : "주말"}`; map.setPaintProperty(L.id, "line-color", colorExpr(k, h)); window.__histHour = { h, k }; };
+        box.querySelector("#hs-label").textContent = `${String(h).padStart(2, "0")}시 · ${k === "wd" ? "평일" : "주말"}`; map.setPaintProperty(L.id, "line-color", colorExpr(k, h)); window.__histHour = { h, k }; updateStats(); };
       box.querySelector("#hs-hour").addEventListener("input", applyHour); box.querySelectorAll("input[name=hs-kind]").forEach((r) => r.addEventListener("change", applyHour));
       let timer = null; box.querySelector("#hs-play").addEventListener("click", (ev) => {
         if (timer) { clearInterval(timer); timer = null; ev.target.textContent = "▶ 재생"; return; }
@@ -269,9 +268,10 @@ function updateStats() {
     document.getElementById("st-bus").textContent = bs.size ? bs.size.toLocaleString() : "–";
   }
   // 교통: 화면 내 정체 링크 비율
-  if (map.getLayer("traffic")) {
-    const tf = map.queryRenderedFeatures({ layers: ["traffic"] }); const ids = new Set(); let cong = 0, tot = 0;
-    for (const f of tf) { if (ids.has(f.properties.LINK_ID)) continue; ids.add(f.properties.LINK_ID); if (f.properties.speed != null) { tot++; if (f.properties.speed < (f.properties.thr_c ?? 15)) cong++; } }
+  if (map.getLayer("traffic_hist")) {   // 이력 표본: 시간 슬라이더가 가리키는 시간대 기준
+    const { h, k } = window.__histHour || { h: 8, k: "wd" }; const fld = `${k}_${String(h).padStart(2, "0")}`;
+    const tf = map.queryRenderedFeatures({ layers: ["traffic_hist"] }); const ids = new Set(); let cong = 0, tot = 0;
+    for (const f of tf) { if (ids.has(f.properties.LINK_ID)) continue; ids.add(f.properties.LINK_ID); if (f.properties[fld] != null) { tot++; if (f.properties[fld] < (f.properties.thr_c ?? 15)) cong++; } }
     document.getElementById("st-cong").textContent = tot ? `${cong}/${tot} (${Math.round(cong / tot * 100)}%)` : "–";
   }
   // 업종 분포 (화면 내 업소)
@@ -483,5 +483,5 @@ function drawHwCell(p) {
     color: ["#1f5e42", "#5f9f7a", "#c7641c", "#2f6db5", "#6f4fa3", "#86868b"], series,
   }, true);
   document.getElementById("hw-cell-note").textContent = p ? `인구 ${p.pop_2018 ?? "–"}→${p.pop_2023 ?? "–"} · 사업체 ${p.biz_2018}→${p.biz_2023} · 종사자 ${p.emp_2018}→${p.emp_2023}(우축) · 주택 ${p.house_2018 ?? "–"}→${p.house_2023 ?? "–"}. 5명 미만은 비공개. SGIS 100m 격자, 인쇄쪽 78–80 (T2)`
-    : `대상지(격자 32셀) 인구 −14%·가구 −11%·사업체 −3%·종사자 −23%·주택 −13% (2018→2023). 종사자 감소가 가장 크다 — 성동시장 셀(549623) 사업체 264→160, KT 블록(548622) 종사자 816→649. 2020 사업체 급증은 전국사업체조사 방식 변경. 지도에서 격자 셀을 클릭하면 셀별 추이로 바뀐다 (T2)`;
+    : `대상지(격자 32셀) 인구 −14%·가구 −11%·사업체 −3%·종사자 −23%·주택 −13% (2018→2023). 종사자 감소가 가장 크다 — 성동시장 셀(549623) 사업체 264→160, KT 블록(548622) 종사자 816→649. 2020 사업체 급증은 전국사업체조사 방식 변경. 셀별 값은 archive/C_data/processed/hwango_grid_4326.geojson (T2)`;
 }
