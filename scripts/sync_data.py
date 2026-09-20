@@ -39,10 +39,13 @@ FILES = {
     # 2026-09-21 경관축 (pipeline/build_landscape_axes.py)
     "processed/landscape_axes_lines_4326.geojson": "ls_axes.geojson",
     "processed/landscape_axes_green_4326.geojson": "ls_green.geojson",
+    # 2026-09-21 도시축 변천 개념도 (pipeline/georef_axis_diagram.py)
+    "processed/urban_axes_4326.geojson":        "urban_axes.geojson",
+    "processed/urban_axes_pts_4326.geojson":    "urban_axes_pts.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/youth_city.json": "youth.json", "processed/report_map_stats.json": "map_stats.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json", "processed/hwango_report.json": "hwango_report.json", "processed/arts_stats.json": "arts_stats.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/urban_axes_meta.json": "urban_axes_meta.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/youth_city.json": "youth.json", "processed/report_map_stats.json": "map_stats.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json", "processed/hwango_report.json": "hwango_report.json", "processed/arts_stats.json": "arts_stats.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s

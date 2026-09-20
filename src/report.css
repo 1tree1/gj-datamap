@@ -150,3 +150,6 @@ dialog .src{margin-top:12px}
 .prov .pk{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-3);padding-top:3px}
 .cn .thumb.htm .prov{font-size:12px;gap:4px 10px;grid-template-columns:70px 1fr;max-height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 #dlg-html .prov{margin:6px 0 14px;font-size:14px}
+
+.axes-t td small{color:var(--ink-3);font-family:var(--mono);font-size:11px}
+.cn .thumb.htm .axes-t{font-size:11.5px}
