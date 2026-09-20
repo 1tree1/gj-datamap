@@ -25,10 +25,18 @@ FILES = {
     "processed/poi_schools_4326.geojson":       "schools.geojson",
     "processed/poi_religion_4326.geojson":      "religion.geojson",
     "processed/lifezone_4326.geojson":          "lifezone.geojson",
+    # 2026-09-21 시청 분산·철도·가로망·상권·주차장 (pipeline/build_web_civic_transit.py)
+    "processed/cityhall_sites_4326.geojson":    "cityhall_sites.geojson",
+    "processed/rail_abandoned_4326.geojson":    "rail_abandoned.geojson",
+    "processed/rail_active_4326.geojson":       "rail_active.geojson",
+    "processed/rail_stations_4326.geojson":     "rail_stations.geojson",
+    "processed/urban_roads_4326.geojson":       "urban_roads.geojson",
+    "processed/commerce_zones_4326.geojson":    "commerce_zones.geojson",
+    "processed/parking_pub_4326.geojson":       "parking_pub.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)
-for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json", "processed/hwango_report.json": "hwango_report.json"}.items():
+for s_, d_ in {"raw/visitors_gyeongju_daily.json": "visitors.json", "processed/traffic_hourly.json": "traffic_hourly.json", "processed/traffic_congested.json": "traffic_congested.json", "processed/traffic_hist_summary.json": "traffic_hist_summary.json", "raw/kosis_nationality_gj.json": "nationality.json", "processed/youth_city.json": "youth.json", "processed/web_extras.json": "web_extras.json", "processed/report_stats.json": "report_stats.json", "processed/hwango_report.json": "hwango_report.json", "processed/arts_stats.json": "arts_stats.json"}.items():
     if (SRC / s_).exists(): shutil.copy(SRC / s_, DST / d_); print(f"{d_:18s} (표)")
 for s, d in FILES.items():
     src = SRC / s

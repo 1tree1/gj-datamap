@@ -19,7 +19,7 @@ const charts = [];
 const $ = (h) => { const t = document.createElement("template"); t.innerHTML = h.trim(); return t.content.firstElementChild; };
 const main = document.getElementById("main"); const toc = document.getElementById("toc");
 
-const TOC = { pop: "인구", land: "토지이용", mobility: "교통", tourism: "관광·경관", economy: "경제·주거·재정", survey15: "시민의식 2015", survey25: "시민 인식 2025", now: "지금 · 2026", hwango: "황오동 모니터링", sources: "출처" };
+const TOC = { pop: "인구", land: "토지이용", mobility: "교통", tourism: "관광·경관", economy: "경제·주거·재정", survey15: "시민의식 2015", survey25: "시민 인식 2025", now: "지금 · 2026", hwango: "황오동 모니터링", arts: "예술인", sources: "출처" };
 function section(id, eyebrow, title, read) {
   const s = $(`<section class="sec" id="${id}"><div class="eyebrow">${eyebrow}</div><h2>${title}</h2><p class="read">${read}</p></section>`);
   main.appendChild(s); toc.appendChild($(`<a href="#${id}">${TOC[id] || id}</a>`));
@@ -49,6 +49,7 @@ const srcLine = (s) => s.replace(/(T[124])\)/, "$1)");
 async function main_() {
   const R = await fetch(`${base}data/report_stats.json`, { cache: "no-cache" }).then((r) => r.json());
   const HW = await fetch(`${base}data/hwango_report.json`, { cache: "no-cache" }).then((r) => r.json()).catch(() => null);
+  const AR = await fetch(`${base}data/arts_stats.json`, { cache: "no-cache" }).then((r) => r.json()).catch(() => null);
   const X = R.extras;
   // ---------- 히어로 타일
   const p26 = R.pop_actual.pop_2026_08; const gap = (p26 / 320000 - 1) * 100;
@@ -341,11 +342,62 @@ async function main_() {
     });
   }
 
+
+  // ---------- 8c. 예술인
+  if (AR) {
+    const G = AR.gyeongju, F = AR.fields, A = AR.ages;
+    const fi = (n) => F.labels.indexOf(n);
+    s = section("arts", "경주의 예술인 — 예술활동증명 675명 · 경제총조사 (2026.09)", "예술인이 많은 도시가 아니라, 구성이 특이한 도시다", `한국예술인복지재단에 예술활동증명을 마친 경주 예술인은 <b>${fmt(G.n)}명</b>, 인구 1만 명당 ${G.per10k}명이다. 경북의 시 가운데 1위지만 전국 평균(약 ${AR.nation.per10k})보다 낮고, 8개 도 122개 시군구 중 ${G.rank_in_8do[0]}위다. 대신 구성이 다르다. <b>국악 ${F.pct["경주"][fi("국악")]}%</b>(전국 ${F.pct["전국"][fi("국악")]}%), 미술 ${F.pct["경주"][fi("미술")]}%, 연극·영화·연예는 합쳐 ${(F.pct["경주"][fi("연극")] + F.pct["경주"][fi("영화")] + F.pct["경주"][fi("연예")]).toFixed(1)}%뿐이다. 50–60대가 ${(A.pct["경주"][3] + A.pct["경주"][4]).toFixed(1)}%로 전국(${(A.pct["전국"][3] + A.pct["전국"][4]).toFixed(1)}%)보다 훨씬 늙었다. 사업체 통계로 보면 창작업 종사자는 ${AR.econ[0].create_emp_2020}명인데 <b>사적지·박물관·도서관 종사자는 ${AR.econ[0].heritage_emp_2020}명</b> — 경주의 예술 고용은 창작이 아니라 유산 관리에 있다.`);
+    tiles(s, [
+      { k: "예술활동증명 누적 (2026.09)", v: fmt(G.n), u: "명", d: `여 ${G.female}·남 ${G.male} · 경북 4,297의 15.7%` },
+      { k: "인구 1만 명당", v: G.per10k, u: "명", d: `경북 시 1위 · 전국 약 ${AR.nation.per10k} · 전주 ${AR.compare[1].per10k} · 공주 ${AR.compare[3].per10k}`, cls: "down" },
+      { k: "국악 비중", v: pct(F.pct["경주"][fi("국악")]), d: `전국 ${pct(F.pct["전국"][fi("국악")])}의 3.3배 · ${F.gyeongju_n[fi("국악")]}명`, cls: "up" },
+      { k: "50–60대 비중", v: pct(A.pct["경주"][3] + A.pct["경주"][4]), d: `전국 ${pct(A.pct["전국"][3] + A.pct["전국"][4])} · 30대는 ${pct(A.pct["경주"][1])} (전국 ${pct(A.pct["전국"][1])})`, cls: "down" },
+      { k: "사적지·박물관·도서관 종사자 (2020)", v: fmt(AR.econ[0].heritage_emp_2020), u: "명", d: `1만 명당 ${AR.econ[0].heritage_per10k_2020} · 인구 5만↑ ${AR.heritage_rank[1]}곳 중 ${AR.heritage_rank[0]}위 · 창작업은 ${AR.econ[0].create_emp_2020}명` },
+    ]);
+    g = grid(s); g.style.marginTop = "14px";
+    const hl = (names, key, base_) => names.map((n) => ({ value: key(n), itemStyle: { color: n.name === "경주시" ? C.red : base_ } }));
+    card(g, { title: "인구 1만 명당 예술인 — 비교 도시 10곳", sub: "예술활동증명 누적 ÷ 주민등록 2026.08", size: "half", tier: "T2", src: AR.src.kawf, note: "전주(한옥마을·소리문화, 국립무형유산원)와 강릉·공주는 30 후반~60. 경주는 역사도시 가운데 낮은 편이다. 예술활동증명은 복지사업 신청용 등록이라 등록하지 않은 공예인·귀촌 작가는 빠진다." },
+      { ...hbar(AR.compare.map((x) => x.name), AR.compare.map((x) => x.per10k), { unit: "명", top: 10, color: C.green }), series: [{ type: "bar", data: hl(AR.compare, (x) => x.per10k, C.green), barCategoryGap: "32%", label: { show: true, position: "right", fontSize: 11.5, color: C.ink2, formatter: (d) => d.value } }] });
+    card(g, { title: "경북 10개 시 — 1만 명당 예술인", sub: "절대 수는 포항 764 > 경주 675 > 경산 654", size: "half", tier: "T2", src: AR.src.kawf, note: `경북 전체 4,297명 중 경주 15.7%. 포항은 인구가 2배라 1만 명당 ${AR.gb_cities.find((x) => x.name === "포항시").per10k}에 그친다. 경산(대학 도시)이 근소한 2위.` },
+      { ...hbar(AR.gb_cities.map((x) => x.name), AR.gb_cities.map((x) => x.per10k), { unit: "명", top: 10, color: C.green2 }), series: [{ type: "bar", data: hl(AR.gb_cities, (x) => x.per10k, C.green2), barCategoryGap: "32%", label: { show: true, position: "right", fontSize: 11.5, color: C.ink2, formatter: (d) => d.value } }] });
+    card(g, { title: "분야 구성 — 국악·미술·문학이 크고, 연극·영화·연예가 없다", sub: "각 지역 예술인 중 비율 %", size: "half", h: "tall", tier: "T2", src: AR.src.kawf, note: `경주 국악 ${F.gyeongju_n[fi("국악")]}명은 전주(판소리, ${F.pct["전주"][fi("국악")]}%)보다 비중이 높다. 1991년부터 35년째 이어진 경주국악여행(2025년 19개 팀)·경주시립신라고취대·신라문화제가 만든 제도적 수요. 연극·영화·연예 합 ${(F.pct["경주"][fi("연극")] + F.pct["경주"][fi("영화")] + F.pct["경주"][fi("연예")]).toFixed(1)}%(전국 ${(F.pct["전국"][fi("연극")] + F.pct["전국"][fi("영화")] + F.pct["전국"][fi("연예")]).toFixed(1)}%)는 공연장·제작 산업이 없는 도시의 전형.` }, {
+      grid: { left: 8, right: 16, top: 34, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+      xAxis: { type: "category", data: F.labels.slice(0, 11), axisLabel: { fontSize: 11, interval: 0 } }, yAxis: { type: "value", axisLabel: { formatter: (v) => v + "%" } },
+      series: [{ name: "경주", type: "bar", data: F.pct["경주"].slice(0, 11), color: C.red }, { name: "전주", type: "bar", data: F.pct["전주"].slice(0, 11), color: C.orange2 }, { name: "전국", type: "bar", data: F.pct["전국"].slice(0, 11), color: C.gray2 }],
+    });
+    card(g, { title: "연령 구성 — 경주는 50–60대, 전국은 30대", sub: "각 지역 예술인 중 비율 %", size: "half", h: "tall", tier: "T2", src: AR.src.kawf, note: `경주 30대 ${A.gyeongju_n[1]}명(${A.pct["경주"][1]}%)이 황리단길·황남동 공방 세대에 해당하지만 임대료 상승으로 이탈이 보도되는 층이다. 50–60대 ${A.gyeongju_n[3] + A.gyeongju_n[4]}명은 1946 경주예술학교 계보와 남산 예술인 마을 세대 — 10년 안에 절반이 은퇴한다.` }, {
+      grid: { left: 8, right: 16, top: 34, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+      xAxis: { type: "category", data: A.labels }, yAxis: { type: "value", axisLabel: { formatter: (v) => v + "%" } },
+      series: [{ name: "경주", type: "line", data: A.pct["경주"], color: C.red, lineStyle: { width: 3 }, areaStyle: { opacity: .08 } }, { name: "전주", type: "line", data: A.pct["전주"], color: C.orange2 }, { name: "안동", type: "line", data: A.pct["안동"], color: C.green2 }, { name: "전국", type: "line", data: A.pct["전국"], color: C.ink, lineStyle: { type: "dashed" } }],
+    });
+    const ec = AR.econ;
+    card(g, { title: "사업체 통계로 본 ‘예술 고용’ — 창작업 vs 유산 관리업 종사자", sub: "경제총조사 2020 · 인구 1만 명당 종사자", size: "half", h: "tall", tier: "T2", src: AR.src.econ, note: `경주 901 창작·예술업은 44개소 ${ec[0].create_emp_2020}명(2015년 13개소 ${ec[0].create_emp_2015}명), 902 사적지·박물관·도서관은 81개소 ${ec[0].heritage_emp_2020}명. 국립경주박물관·국립경주문화유산연구소·발굴법인·문화재수리업체가 여기에 있다. 석공·와공·단청·보존과학 기능인이 ‘예술인’으로 등록되는 경로이기도 하다.` }, {
+      grid: { left: 8, right: 16, top: 34, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: ec.map((x) => x.name.replace("시", "").replace("군", "")), axisLabel: { fontSize: 11, interval: 0 } }, yAxis: { type: "value" },
+      series: [{ name: "902 사적지·박물관·도서관", type: "bar", data: ec.map((x) => x.heritage_per10k_2020), color: C.green }, { name: "901 창작·예술", type: "bar", data: ec.map((x) => x.create_per10k_2020), color: C.orange }],
+    });
+    const sd = Object.entries(AR.nation.sido);
+    card(g, { title: "시도별 예술활동증명 — 서울·경기가 61%", sub: "명 · 전국 222,002 (2026.09)", size: "half", h: "tall", tier: "T2", src: AR.src.kawf, note: `경북 4,297명(1.9%)은 17개 시도 중 13위. 누적 증명은 2022년 157,414 → 2026년 222,002로 4년 새 41% 늘었다(신진예술인 특례 확대).` },
+      hbar(sd.map((x) => x[0]), sd.map((x) => x[1]), { unit: "명", top: 17, color: C.gray }));
+    // 왜 — 다섯 겹
+    const why = $(`<div class="card"><h3>왜 경주에 있나 — 다섯 겹</h3><p class="sub">수치(T2)와 달리 ‘이유’는 언론·연재 기사(T4)에 기댄다. 계획 문서에 쓰기 전 1차 자료가 필요하다.</p>
+      <table class="t"><tr><th>겹</th><th>무엇이</th><th>근거·등급</th></tr>
+      <tr><td>① 유산이 소재이자 일자리</td><td>남산동 예술인 마을(석장 윤만걸·도예 권은희·백성일 등)은 “터의 기운과 불적(佛蹟)” 때문에 자발적으로 모였고, 박대성은 2005년 삼릉에 정착. 발굴연구소·박물관·수리업체 종사자 540명</td><td><span class="tier t4">T4</span> 서울신문 2016 · 경주시 관광 / <span class="tier t2">T2</span> 경제총조사</td></tr>
+      <tr><td>② 국악은 제도가 만든 수요</td><td>경주국악여행 1991년~(2025년 19개 팀), 경주시립신라고취대·시립예술단 인큐베이팅, 신라문화제(1962~)</td><td><span class="tier t4">T4</span> 경북일보 2026 · 경주문화재단</td></tr>
+      <tr><td>③ 1946 경주예술학교</td><td>남한 최초 예술전문학교. 최부자·수봉재단 후원, 손일봉(초대 교장)·김만술·윤경렬 교수진, 전국에서 100여 명. <b>교사(校舍)는 옛 경주역사와 철도기관고</b> — 폐역 부지를 예술 교육으로 쓴 선례가 경주 안에 있다</td><td><span class="tier t4">T4</span> 서라벌신문 2017 연재(최용대·경주미술사연구회)</td></tr>
+      <tr><td>④ 문학의 고향</td><td>김동리·박목월 → 동리목월문학관(2006). 문학 ${F.pct["경주"][fi("문학")]}% (전국 ${F.pct["전국"][fi("문학")]}%)</td><td><span class="tier t4">T4</span></td></tr>
+      <tr><td>⑤ 최근 유입과 이탈</td><td>2016년 이후 황리단길·황남동에 도예·금속공방·독립서점 창업자(30대) 유입, 임대료 상승으로 이탈 중. 동국대 WISE캠퍼스 불교미술 전공이 교육 공급</td><td><span class="tier t4">T4</span> 오마이뉴스 · 한국AI부동산신문</td></tr>
+      </table>
+      <p class="note">계획에 쓰는 법: 부지 프로그램은 공연장(연극·영화)이 아니라 공방·작업실·국악 연습실·수리기능 공방 쪽이 지역 예술인 구성과 맞는다. 50–60대 40%와 30대 이탈을 감안하면 부지 내 저가 작업공간의 공급·운영 주체를 명시해야 한다. 성과지표 후보: 예술활동증명 시군구 수(연 1회) + 902 종사자(5년).</p></div>`);
+    s.appendChild(why); why.style.marginTop = "14px";
+  }
+
   // ---------- 9. 데이터 카탈로그
   s = section("sources", "출처", "이 페이지가 쓴 문서와 등급", "숫자를 인용할 때는 여기 적힌 쪽과 등급을 그대로 옮긴다. 전사본(모니터링 보고서 표를 손으로 옮긴 것)은 원문 대조 전 인용 금지.");
   const tbl = $(`<div class="card"><table class="t"><tr><th>등급</th><th>문서</th><th>쓰인 곳</th></tr></table></div>`);
   const rows = [["T1", "2030 경주도시기본계획 (승인, 475쪽 → 45절 마크다운, 표 697)", "인구·토지·교통·관광·경제·주거·재정·시민의식 2015"], ["T1", "2030 경주시 경관계획 재정비 (2025.04)", "경관의식조사"], ["T1", "경주시 도시재생 전략계획(변경) (2022.01)", "쇠퇴진단 — 지도"], ["T1", "경주시 고시 제2026-8호 지구단위계획 · 경북 고시 2020-479호 고도지구", "지도 레이어"],
-    ["T2", "경주시 원도심 미래구상 기획연구 (동국대·가천대, 2025.07, 417쪽)", "시민설문 2025 · 인지지도 · 2025 예산"], ["T2", "황오동 원도심·행복황촌 도시재생 성과지표 모니터링 (2025.09 / 2025.12)", "유동인구 2020–24 · 창업폐업 · 공시지가 · 격자 32셀 · 연령구조 · 설문 2020–24 · 2024 창업·폐업 목록"], ["T2", "소상공인365 (소진공) 상권분석 리포트", "유동인구 8구역 · 업종·매출"], ["T2", "KOSIS 주민등록 · 관광데이터랩 · ITS · 건축HUB · V-World", "지도 현황 레이어"], ["T2", "김권일(신라문화유산연구원) 2026.02 혁신포럼 · 시굴조사 추진계획", "매장유산"], ["T4", "2023 폐철도 기본구상 설문 (언론 경유)", "시청 이전 63.7% — 원문 미확보"]];
+    ["T2", "경주시 원도심 미래구상 기획연구 (동국대·가천대, 2025.07, 417쪽)", "시민설문 2025 · 인지지도 · 2025 예산"], ["T2", "황오동 원도심·행복황촌 도시재생 성과지표 모니터링 (2025.09 / 2025.12)", "유동인구 2020–24 · 창업폐업 · 공시지가 · 격자 32셀 · 연령구조 · 설문 2020–24 · 2024 창업·폐업 목록"], ["T2", "소상공인365 (소진공) 상권분석 리포트", "유동인구 8구역 · 업종·매출"], ["T2", "한국예술인복지재단 예술활동증명 대시보드 (2026.09) · 통계청 경제총조사 2015·2020", "예술인 수·분야·연령 · 창작/유산관리 종사자"], ["T2", "KOSIS 주민등록 · 관광데이터랩 · ITS · 건축HUB · V-World", "지도 현황 레이어"], ["T2", "김권일(신라문화유산연구원) 2026.02 혁신포럼 · 시굴조사 추진계획", "매장유산"], ["T4", "2023 폐철도 기본구상 설문 (언론 경유)", "시청 이전 63.7% — 원문 미확보"]];
   for (const [t, d, u] of rows) tbl.querySelector("table").appendChild($(`<tr><td><span class="tier ${t.toLowerCase()}">${t}</span></td><td>${d}</td><td>${u}</td></tr>`));
   s.appendChild(tbl);
 

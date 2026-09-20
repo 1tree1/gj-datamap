@@ -379,6 +379,89 @@
    ]
   },
   {
+   "id": "pop_y2034",
+   "title": "청년인구 (20–34세 수·비율)",
+   "short": "청년 20–34세 (수·비율)",
+   "group": "인구",
+   "file": "hadm_pop.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) 5세별 합 × 행정동 경계 근사. 20–34세는 청년기본법(19–34세)에 가장 가까운 5세 구간. 경주시 31,387명(12.9%). 황성동 4,597 · 동천동 3,289 · 용강동 3,245 · 현곡면 2,851 · 성건동 2,497(20.5%, 대학). 원도심 4개 동 합 4,255. 급간은 임의 설정.",
+   "paint": {
+    "fill-opacity": 0.6,
+    "fill-color": [
+     "step",
+     [
+      "coalesce",
+      [
+       "get",
+       "pct_y2034"
+      ],
+      0
+     ],
+     "#f7fcfd",
+     6,
+     "#e0ecf4",
+     9,
+     "#bfd3e6",
+     12,
+     "#9ebcda",
+     15,
+     "#8c6bb1",
+     18,
+     "#6e016b"
+    ]
+   },
+   "outline": {
+    "line-color": "#3a4a44",
+    "line-width": 1.2
+   },
+   "label": {
+    "field": "lbl_y2034",
+    "size": 10.5
+   },
+   "legend": [
+    [
+     "#f7fcfd",
+     "<6%"
+    ],
+    [
+     "#e0ecf4",
+     "6–9"
+    ],
+    [
+     "#bfd3e6",
+     "9–12"
+    ],
+    [
+     "#9ebcda",
+     "12–15"
+    ],
+    [
+     "#8c6bb1",
+     "15–18"
+    ],
+    [
+     "#6e016b",
+     "18%↑"
+    ],
+    [
+     "transparent",
+     "※ 급간은 임의 설정(분위수 아님)"
+    ]
+   ],
+   "popup": [
+    "hadm",
+    "pop",
+    "n_y2034",
+    "pct_y2034",
+    "n_youth",
+    "pct_youth",
+    "pct_65",
+    "chg_10y_pct"
+   ]
+  },
+  {
    "id": "pop_chg",
    "title": "10년 인구변화 (2015→2025 %)",
    "short": "10년 인구변화 (2015→2025 %)",
@@ -2191,9 +2274,424 @@
     "dongs",
     "source"
    ]
+  },
+  {
+   "id": "cityhall_sites",
+   "title": "경주시청 분산 현황 (본청 45과 → 6개소 + 보건소)",
+   "short": "시청 분산 현황",
+   "group": "시청·교통거점",
+   "file": "cityhall_sites.geojson",
+   "type": "circle",
+   "visible": true,
+   "source_note": "경주시 홈페이지 청사안내(2026-09-02 갱신, T1). 본청 과 중 15개 과가 단지 밖 5개소 — 기린빌딩 9개 과·동원빌딩 3개 과는 민간 임차. 본관은 1995 통합 전 옛 경주군청. 좌표 V-World 지오코딩(건물 대표점).",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     12,
+     5,
+     15,
+     [
+      "match",
+      [
+       "get",
+       "cls"
+      ],
+      "main",
+      14,
+      "lease",
+      10,
+      7
+     ],
+     18,
+     [
+      "match",
+      [
+       "get",
+       "cls"
+      ],
+      "main",
+      22,
+      "lease",
+      16,
+      11
+     ]
+    ],
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "cls"
+     ],
+     "main",
+     "#1b5e20",
+     "lease",
+     "#e65100",
+     "branch",
+     "#558b2f",
+     "health",
+     "#0277bd",
+     "#666"
+    ],
+    "circle-opacity": 0.85,
+    "circle-stroke-width": 1.5,
+    "circle-stroke-color": "#fff"
+   },
+   "label": {
+    "field": "lbl",
+    "size": 11
+   },
+   "legend": [
+    [
+     "#1b5e20",
+     "시청 단지(본관·신관·별관·증축관, 30개 과+의회)"
+    ],
+    [
+     "#e65100",
+     "민간 임차 (기린빌딩 9과 · 동원빌딩 3과)"
+    ],
+    [
+     "#558b2f",
+     "시 소유 외부 청사 (1개 과씩)"
+    ],
+    [
+     "#0277bd",
+     "보건소 (직속기관, 이전 대상 아님)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "addr",
+    "own",
+    "n_depts",
+    "depts",
+    "source"
+   ]
+  },
+  {
+   "id": "rail_stations",
+   "title": "철도역 — 구경주역·옛 서경주역·신 서경주역·불국사역",
+   "short": "철도역",
+   "group": "시청·교통거점",
+   "file": "rail_stations.geojson",
+   "type": "circle",
+   "visible": true,
+   "source_note": "위치 OSM·위키(T4). 신 서경주역 일평균 173명(2024)→309명(2025)은 나무위키 전재 — 철도통계연보로 치환 필요.",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     11,
+     5,
+     15,
+     9
+    ],
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "status"
+     ],
+     "active",
+     "#1a237e",
+     "#b71c1c"
+    ],
+    "circle-stroke-width": 2,
+    "circle-stroke-color": "#fff"
+   },
+   "label": {
+    "field": "lbl",
+    "size": 11
+   },
+   "legend": [
+    [
+     "#b71c1c",
+     "폐역 (구경주역·옛 서경주·불국사)"
+    ],
+    [
+     "#1a237e",
+     "운영 중 (신 서경주역)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "note",
+    "source"
+   ]
+  },
+  {
+   "id": "urban_roads",
+   "title": "도심 가로망 — 간선·보조간선 (전략계획 2022 서술)",
+   "short": "간선·보조간선",
+   "group": "시청·교통거점",
+   "file": "urban_roads.geojson",
+   "type": "line",
+   "visible": false,
+   "source_note": "경주시 도시재생전략계획(변경, 2022) 기초조사 §2) 도심 가로망: 동서 간선 국도4호·태종로 / 남북 간선 원화로·강변로·서라벌대로~산업로 / 보조간선 포석로·일정로·용당로·알천남로·알천북로 (T1 서술). 도로명으로 표준노드링크(2026-09-14) 링크를 골라 그림 — 원문은 도면 없음.",
+   "paint": {
+    "line-color": [
+     "match",
+     [
+      "get",
+      "cls"
+     ],
+     "보조간선",
+     "#f9a825",
+     "#d84315"
+    ],
+    "line-width": [
+     "match",
+     [
+      "get",
+      "cls"
+     ],
+     "보조간선",
+     2.5,
+     4
+    ],
+    "line-opacity": 0.85
+   },
+   "legend": [
+    [
+     "#d84315",
+     "간선 (태종로 / 원화로·강변로·서라벌대로·산업로)"
+    ],
+    [
+     "#f9a825",
+     "보조간선 (포석로·일정로·용당로·알천남로·알천북로)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "cls",
+    "lanes",
+    "road_no",
+    "source"
+   ]
+  },
+  {
+   "id": "commerce_zones",
+   "title": "상권 분포 — 전략계획 2022 서술 9개 (개략 반경)",
+   "short": "상권 (전략계획)",
+   "group": "시청·교통거점",
+   "file": "commerce_zones.geojson",
+   "type": "fill",
+   "visible": false,
+   "source_note": "전략계획(2022) 기초조사 §3 상권 분포(전통·시청주변·첨성로·황성동·용강동)와 중심지 상권분석(경주중심·관광·도심배후·동천근린) 서술(T1). 원문에 경계 도면이 없어 앵커 주소를 지오코딩하고 개략 반경(250~400m)으로 그림 — 경계는 근사. 소진공 상권영역 레이어와 비교할 것.",
+   "paint": {
+    "fill-color": [
+     "match",
+     [
+      "get",
+      "cls"
+     ],
+     "trad",
+     "#6a1b9a",
+     "center",
+     "#4527a0",
+     "cityhall",
+     "#1b5e20",
+     "tour",
+     "#c62828",
+     "back",
+     "#ef6c00",
+     "#546e7a"
+    ],
+    "fill-opacity": 0.22
+   },
+   "outline": {
+    "line-color": "#333",
+    "line-width": 1
+   },
+   "label": {
+    "field": "lbl",
+    "size": 11
+   },
+   "legend": [
+    [
+     "#6a1b9a",
+     "전통상권 (성동시장·역전)"
+    ],
+    [
+     "#4527a0",
+     "경주중심상권"
+    ],
+    [
+     "#1b5e20",
+     "시청주변 상권 (시청 이전으로 형성)"
+    ],
+    [
+     "#c62828",
+     "관광상권 (첨성로·황리단길)"
+    ],
+    [
+     "#ef6c00",
+     "도심배후상권 (구 대학로)"
+    ],
+    [
+     "#546e7a",
+     "근린상권 (동천·황성·용강)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "note",
+    "r_m",
+    "source"
+   ]
+  },
+  {
+   "id": "parking_pub",
+   "title": "공영주차장 18개소 (시설관리공단, 2,798면)",
+   "short": "공영주차장",
+   "group": "시청·교통거점",
+   "file": "parking_pub.geojson",
+   "type": "circle",
+   "visible": true,
+   "source_note": "경주시시설관리공단 교통운영 시설안내 gjfmc.or.kr (2026-09-21 열람, T2) 17개소 + 시청사공영주차장(면수 미공개). 노상주차장·민영·읍면 제외. 좌표 V-World 지오코딩. 전략계획은 공영주차장 접근성 1등급 향유 8.6%로 '추가 공급 필요'(인쇄쪽 232).",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     12,
+     [
+      "interpolate",
+      [
+       "linear"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "spaces"
+       ],
+       50
+      ],
+      15,
+      3,
+      566,
+      9
+     ],
+     16,
+     [
+      "interpolate",
+      [
+       "linear"
+      ],
+      [
+       "coalesce",
+       [
+        "get",
+        "spaces"
+       ],
+       50
+      ],
+      15,
+      6,
+      566,
+      22
+     ]
+    ],
+    "circle-color": "#00695c",
+    "circle-opacity": 0.75,
+    "circle-stroke-width": 1.5,
+    "circle-stroke-color": "#fff"
+   },
+   "label": {
+    "field": "lbl",
+    "size": 10
+   },
+   "legend": [
+    [
+     "#00695c",
+     "공영주차장 (원 크기 = 주차면수)"
+    ]
+   ],
+   "popup": [
+    "name",
+    "spaces",
+    "area_m2",
+    "hours",
+    "addr",
+    "source"
+   ]
+  },
+  {
+   "group": "시청·교통거점",
+   "type": "line",
+   "visible": true,
+   "popup": [
+    "name",
+    "railway",
+    "cls",
+    "source"
+   ],
+   "id": "rail_abandoned",
+   "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+   "short": "폐선",
+   "file": "rail_abandoned.geojson",
+   "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+   "paint": {
+    "line-color": "#b71c1c",
+    "line-width": 3,
+    "line-dasharray": [
+     3,
+     2
+    ],
+    "line-opacity": 0.9
+   },
+   "legend": [
+    [
+     "#b71c1c",
+     "폐선"
+    ]
+   ]
+  },
+  {
+   "group": "시청·교통거점",
+   "type": "line",
+   "visible": false,
+   "popup": [
+    "name",
+    "railway",
+    "cls",
+    "source"
+   ],
+   "id": "rail_active",
+   "title": "현행 철도 (이설 동해선·중앙선)",
+   "short": "현행 철도",
+   "file": "rail_active.geojson",
+   "source_note": "OSM railway=rail, Overpass 2026-09-21 (T4). 신 서경주역(현곡면 하구리)이 이 선 위에 있음.",
+   "paint": {
+    "line-color": "#455a64",
+    "line-width": 1.8,
+    "line-opacity": 0.9
+   },
+   "legend": [
+    [
+     "#455a64",
+     "현행선"
+    ]
+   ]
   }
  ],
  "groups": [
+  "시청·교통거점",
   "인구",
   "외국인·다문화",
   "계획",
