@@ -3089,6 +3089,110 @@
     "rank_in_type",
     "source"
    ]
+  },
+  {
+   "id": "gateways",
+   "title": "경주 진입 관문 — 고속도로 IC 5 · KTX역 · 서경주역 · 버스터미널 2 · (옛)경주역",
+   "short": "진입 관문 (IC·역·터미널)",
+   "file": "gateways.geojson",
+   "type": "circle",
+   "visible": false,
+   "group": "시청·교통거점",
+   "source_note": "관광객·시민이 경주에 들어오는 관문 10곳. 지정 근거: 2030 경관계획 ‘관문적 경관거점’(경주IC·건천IC·남경주IC·서경주역·신경주역 등, T1) · 전략계획 2022 p.48 광역교통망(경부고속 경주IC·건천IC, 동해고속 남경주IC·동경주IC, T1) · 기본계획 p.201–208 철도·터미널 현황(T1) · 미래구상 2025 p.31 서경주역 관문 제안(T2). 위치는 V-World 장소검색 좌표(IC는 ‘○○나들목’ 지명점). 클릭하면 연결 축의 통행량(기본계획 2015 교통량표 / 도로공사 2025 AADT)·운행횟수·승차 인원이 보인다. <b>주의</b>: 4개 문서 어디에도 ‘경주 방문 관광객의 입경 교통수단 비율’ 통계는 없다. 이 레이어는 관문의 위치와 규모만 보여준다. 전국 평균(국민여행조사 2025 자가용 84.5%)은 리포트 ‘이동’ 카드 참조.",
+   "paint": {
+    "circle-radius": [
+     "interpolate",
+     [
+      "linear"
+     ],
+     [
+      "zoom"
+     ],
+     9,
+     5,
+     13,
+     9,
+     16,
+     13
+    ],
+    "circle-color": [
+     "match",
+     [
+      "get",
+      "kind"
+     ],
+     "고속도로 IC",
+     "#8d6e63",
+     "고속철도역",
+     "#0f62fe",
+     "일반철도역",
+     "#4589ff",
+     "버스터미널",
+     "#e66a00",
+     "폐역",
+     "#c0392b",
+     "#555"
+    ],
+    "circle-stroke-width": 2,
+    "circle-stroke-color": "#fff",
+    "circle-opacity": 0.92
+   },
+   "label": {
+    "field": "lbl",
+    "size": 12,
+    "minzoom": 9
+   },
+   "legend": [
+    [
+     "#8d6e63",
+     "고속도로 IC"
+    ],
+    [
+     "#0f62fe",
+     "고속철도역"
+    ],
+    [
+     "#4589ff",
+     "일반철도역"
+    ],
+    [
+     "#e66a00",
+     "버스터미널"
+    ],
+    [
+     "#c0392b",
+     "폐역"
+    ],
+    [
+     "transparent",
+     "통행량·운행횟수는 팝업 · 북경주IC는 미래구상 연구의 외곽순환 기점"
+    ]
+   ],
+   "subfilter": {
+    "field": "kind",
+    "values": [
+     "고속도로 IC",
+     "고속철도역",
+     "일반철도역",
+     "버스터미널",
+     "폐역"
+    ],
+    "colors": {
+     "고속도로 IC": "#8d6e63",
+     "고속철도역": "#0f62fe",
+     "일반철도역": "#4589ff",
+     "버스터미널": "#e66a00",
+     "폐역": "#c0392b"
+    }
+   },
+   "popup": [
+    "name",
+    "kind",
+    "note",
+    "src_doc",
+    "geocode",
+    "source"
+   ]
   }
  ],
  "groups": [
@@ -3106,6 +3210,7 @@
  "panel_order": [
   "cityhall_sites",
   "rail_stations",
+  "gateways",
   "rail_abandoned",
   "rail_active",
   "parking_pub",

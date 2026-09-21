@@ -46,7 +46,7 @@ function add(c) { c.g = c.g || "site"; CARDS.push(c); byId[c.id] = c; }
 // ---------------------------------------------------------------- 데이터
 async function j(p) { try { return await fetch(`${base}data/${p}`, { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)); } catch { return null; } }
 async function main_() {
-  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json"].map(j));
+  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, AT] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "arrival_transport.json"].map(j));
   const X = R.extras; const p26 = R.pop_actual.pop_2026_08;
   const FF = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
   const AC = { A_hwango_grid32: C.green, B_haengbok_hwangchon_digitized: C.gray, C_zone_buffer300: C.green2, D_zone: C.red, E_center_r300: C.green3, F_cityhall_r500: "#0f3d34", G_seongdong_market_r200: C.orange, H_hwangridan_r300: C.purple };
@@ -272,6 +272,60 @@ async function main_() {
   if (TC) add({ id: "congtop", g: "move", t: "정체 판정 비율이 높은 도로 구간 (실시간 자료)", take: `${TC[0]?.road} 등이다. 5분 간격 자료 중 정체로 판정된 비율이며, 관측 횟수가 적은 구간은 뺐다.`, tier: "T2", src: "국가교통정보센터 trafficInfo 5분 스냅샷 누적 (2026-09-17~) · 관측 6회 이상",
     opt: hbar(TC.slice(0, 10).map((t) => `${t.road || "(무명)"} · ${t.speed_avg}km/h`), TC.slice(0, 10).map((t) => t.congested_pct), { unit: "%", top: 10, color: C.red, max: 100 }), map: "traffic_hist" });
 
+
+  // ======================= 경주에 오는 길 (관광객 입경 수단은 4개 문서에 통계가 없다 — 있는 것만)
+  if (AT) {
+    add({ id: "arrive_none", g: "move", t: "관광객은 어떤 교통수단으로 경주에 오나 — 4개 문서에는 직접 통계가 없다", size: "l", tier: "T2", src: "미래구상 2025 · 전략계획 2022 · 2030 기본계획 · 2030 경관계획 전수 검색(‘교통수단·이용교통·자가용·KTX·고속버스·관광버스·유입경로’) 2026-09-21",
+      take: "네 문서 어디에도 ‘경주 방문 관광객의 입경 교통수단 비율’은 없다. 대신 관문의 위치(경관계획), 진입축의 차량 통행량(기본계획 2015·도로공사 2025), 고속버스 운행횟수(KOBUS 2015), 철도 승차(2013), 시민 설문(2025)이 있고, 전국 평균은 국민여행조사(KOSIS)로 볼 수 있다. 아래 카드가 그 전부다.",
+      lead: "무엇이 있고 무엇이 없는지를 먼저 적는다. 경주만의 입경 수단 비율을 얻으려면 경주시 관광객 실태조사(경북문화관광공사) 원문이나 국민여행조사의 시도별 방문지 교차표(보고서 PDF, API 미제공)가 필요하다 — gaps.md에 기록.",
+      html: `<table class="t"><tr><th>질문</th><th>있는 자료</th><th>없는 자료</th></tr>
+        <tr><td>관광객이 <b>무엇을 타고</b> 오나</td><td>전국 평균: 국민여행조사 2025 관광여행 지역간 이동수단 — 자가용 84.5%(T2, KOSIS) · 방문자 거주지 분포(관광데이터랩, 다른 카드)</td><td>경주 방문자 한정 입경 수단 비율 · 국민여행조사 시도별 교차표(API 미제공)</td></tr>
+        <tr><td><b>어디로</b> 들어오나</td><td>관문 10곳 위치(경관계획 관문적 경관거점 T1 · IC 5·역 2·터미널 2·폐역) · 진입축 통행량 2015(기본계획 p.207 T1) · 고속도로 AADT 2021–25(도로공사 T2) · 지도 ‘진입 관문’ 레이어</td><td>IC 진출입 교통량(영업소별) · 신경주역 연도별 승하차(2014 이후) · 터미널 이용객 수</td></tr>
+        <tr><td>경주 <b>안에서</b> 무엇을 타나</td><td>수단분담 2007(기본계획, 버스 36%·승용차 27%) · 권역별 수단통행 2019(전략계획, 승용차 38~41%) · 행정동별 버스노선 수(전략계획) · 시내버스 이용 2009–13 · 차량 등록 · 주차장 · 시민 설문 2025(대중교통 2.7/5점)</td><td>2007 이후 경주시 자체 수단분담 조사 · 관광객의 시내 이동 수단(렌터카·관광버스·택시 비율)</td></tr></table>`, map: "gateways" });
+    const nt = AT.national_travel?.data; const yrs = nt ? Object.keys(nt).sort() : [];
+    if (yrs.length) { const y = yrs.at(-1); const all = nt[y]["전체"]; const modes = Object.entries(all).filter(([k, v]) => v != null).sort((a, b) => b[1] - a[1]).slice(0, 8);
+      add({ id: "arrive_nat", g: "move", t: `관광여행 갈 때 주로 타는 것 — 전국 평균 ${y}, 자가용 ${all["자가용"]}%`, size: "m", tier: "T2", src: AT.src.national,
+        take: `전국 관광여행(지역 간)의 1순위 이동수단은 자가용 ${all["자가용"]}%다. 20대는 자가용 ${nt[y]["20대"]["자가용"]}%, 버스 ${nt[y]["20대"]["고속/시외/시내버스"]}%, 철도 ${nt[y]["20대"]["철도"]}%로 대중교통 비중이 가장 높다. 경주 방문자만의 값이 아니라 전국 값이다.`,
+        lead: "문화체육관광부 국민여행조사(KOSIS API)의 ‘관광여행 지역간 주요 이동수단(1순위)’. 왼쪽 막대는 전체, 오른쪽 선은 연령대별 자가용 비율이다. 경주는 KTX역이 원도심에서 9km 떨어져 있고 공항이 없어 자가용 비중이 전국보다 낮을 이유가 없다 — 다만 이것은 추정이다.",
+        note: `${yrs.join("·")} 3개년. 시도별 방문지 교차표는 API로 제공되지 않아 경주(경북) 값은 알 수 없다.`,
+        opt: { grid: [{ left: 8, right: "50%", top: 30, bottom: 4, containLabel: true }, { left: "56%", right: 16, top: 30, bottom: 4, containLabel: true }], title: [{ text: `${y} 전체 (%)`, left: 0, top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }, { text: "연령대별 자가용 %", left: "56%", top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }], tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) },
+          xAxis: [{ type: "value", show: false, gridIndex: 0 }, { type: "category", gridIndex: 1, data: ["20대", "30대", "40대", "50대", "60대", "70세 이상"], axisLabel: { fontSize: 10.5 } }], yAxis: [{ type: "category", inverse: true, gridIndex: 0, data: modes.map((m) => m[0].replace("고속/시외/시내버스", "버스").replace("전세/관광버스", "관광버스")), axisLabel: { fontSize: 11, color: C.ink } }, { type: "value", gridIndex: 1, min: 60, max: 100, axisLabel: { formatter: (v) => v + "%" } }],
+          series: [{ type: "bar", xAxisIndex: 0, yAxisIndex: 0, data: modes.map((m) => m[1]), color: C.orange, label: { show: true, position: "right", fontSize: 11, formatter: (d) => d.value + "%" }, barCategoryGap: "30%" }, ...yrs.map((yy, i) => ({ name: yy, type: "line", xAxisIndex: 1, yAxisIndex: 1, data: ["20대", "30대", "40대", "50대", "60대", "70세 이상"].map((g) => nt[yy][g]?.["자가용"] ?? null), color: [C.gray2, C.gray, C.ink][i], lineStyle: { width: yy === y ? 2.5 : 1.5 } }))], legend: { top: 0, right: 0, textStyle: { fontSize: 10.5 } } } }); }
+    { const rows = R.road_vc.rows.filter((r) => /경부고속|국도7|국도4호|국도20|국도35|국도14/.test(r.road) && r.aadt >= 9000).sort((a, b) => b.aadt - a.aadt).slice(0, 12);
+      add({ id: "arrive_axis", g: "move", t: "경주로 들어오는 도로 — 진입축별 하루 교통량 (2015)", size: "m", tier: "T1", src: R.road_vc.src,
+        take: "경부고속도로 언양JCT~경주IC 45,807대/일, 국도7호 경주~울산 39,592, 외동~경주 37,589, 경주~포항 31,548. 남쪽(울산)과 서쪽(경부고속)에서 들어오는 차량이 가장 많고, 동쪽(감포) 국도4호는 7,612대다.",
+        lead: "기본계획 교통량표(2015)에서 시 경계를 넘어 들어오는 축만 골랐다. 관광객과 통근·화물이 섞인 값이며 방향 구분은 없다. 지도 ‘진입 관문’ 레이어의 IC·역 팝업에 같은 수치를 붙였다.",
+        note: "고속도로 본선은 2021→2025년에 경부 활천~경주 47,116→54,887대(+16%), 경주~건천 49,212→55,015대(+12%)로 늘었다(도로공사 AADT, 다음 카드). 통과 교통이 포함되므로 ‘경주 진입 차량 증가’로 읽지 않는다.",
+        opt: hbar(rows.map((r) => `${r.road.replace("호선", "")} ${r.seg}`), rows.map((r) => r.aadt), { unit: "대/일", top: 12, colors: rows.map((r) => (/경부/.test(r.road) ? "#8d6e63" : /국도7/.test(r.road) ? C.orange : C.green2)) }), map: "gateways" }); }
+    if (AT.aadt && Object.keys(AT.aadt).length) { const segs = Object.keys(AT.aadt); const yrs2 = AT.aadt[segs[0]].years;
+      add({ id: "arrive_aadt", g: "move", t: "고속도로 연평균 일교통량 2021–2025 — 경부선 3구간 · 동해선 3구간", tier: "T2", src: AT.src.aadt,
+        take: "경주를 지나는 경부선 구간은 5년간 12~16% 늘어 5.5만 대/일이고, 동해고속도로(울산~포항) 경주 구간은 2.3~2.5만 대/일로 정체다.",
+        lead: "한국도로공사 구간별 AADT(대/일). 본선 통과량이며 경주IC·건천IC로 나가는 차량 수(영업소 진출입량)가 아니다 — 그 자료는 못 받았다.",
+        opt: { grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 10.5 } }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "대" }, xAxis: { type: "category", data: yrs2 }, yAxis: { type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } },
+          series: segs.map((sg, i) => ({ name: `${AT.aadt[sg].line} ${sg}`, type: "line", data: AT.aadt[sg].v, color: ["#5d4037", "#8d6e63", "#bcaaa4", "#1565c0", "#4589ff", "#8fb4e0"][i], lineStyle: { width: 2 } })) } }); }
+    add({ id: "arrive_kobus", g: "move", t: "고속버스 — 하루 약 91회, 부산 40~41회 · 대구 36회 · 서울 17회 (2015)", tier: "T1", src: AT.src.kobus,
+      take: "노서동 고속버스터미널의 노선은 5개다. 부산·대구가 전체의 84%를 차지하고 서울은 17회다. 시외버스(포항·울산·대구 등)는 운행횟수 표가 문서에 없다.",
+      lead: "2030 기본계획 p.202 표(KOBUS). 시외버스터미널은 위치만 있고 운행 통계가 없다 — 미래구상 연구의 현장 관찰(p.68)은 ‘시외터미널 이용률이 고속터미널보다 단연 높다’고 적었다.",
+      opt: hbar(AT.kobus_2015.map((r) => "경주 ↔ " + r[0]), AT.kobus_2015.map((r) => r[1]), { unit: "회/일", top: 5, color: C.orange }), map: "gateways" });
+    add({ id: "arrive_citizen", g: "move", t: "시민이 다른 도시로 갈 때 — 버스터미널 30 · 기차역 22 · 자가용 19 (2025, n=49)", size: "m", tier: "T2", src: AT.src.citizen,
+      take: "원도심 시민 49명(복수응답)은 외부로 갈 때 버스터미널을 가장 많이 꼽았다. 터미널의 불편은 시내 연결성 부족(12)·도로 혼잡(11)·고속·시외 기능 분리(9)순이다. 원도심 대중교통 평가는 5점 만점에 2.7점(청년 2.48·중장년 3.03)이다.",
+      lead: "경주시 원도심 미래구상 기획연구(2025) 시민 설문. 왼쪽은 외부 이동수단(n=49), 오른쪽은 버스터미널 불편 사항(n=46). 시민 응답이지 관광객 응답이 아니다. 표본이 작아 비율이 아니라 응답 수로 표시했다.",
+      note: "연구는 ‘가까운 도시(포항·울산)까지 이동 시간과 기차역(신경주역)까지 이동 시간이 모두 약 30분이라 기차는 장거리, 자가용은 단거리에 쓰인다’고 해석했다(p.68).",
+      opt: { grid: [{ left: 8, right: "58%", top: 26, bottom: 4, containLabel: true }, { left: "48%", right: 40, top: 26, bottom: 4, containLabel: true }], title: [{ text: "외부 이동수단 (n=49)", left: 0, top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }, { text: "버스터미널 불편 (n=46)", left: "48%", top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }], tooltip: { trigger: "axis", valueFormatter: (v) => v + "명" },
+        xAxis: [{ type: "value", show: false, gridIndex: 0 }, { type: "value", show: false, gridIndex: 1 }], yAxis: [{ type: "category", inverse: true, gridIndex: 0, data: AT.citizen_2025.out.map((r) => r[0]), axisLabel: { fontSize: 11.5, color: C.ink } }, { type: "category", inverse: true, gridIndex: 1, data: AT.citizen_2025.term_issue.map((r) => r[0]), axisLabel: { fontSize: 10.5, color: C.ink, width: 150, overflow: "truncate" } }],
+        series: [{ type: "bar", xAxisIndex: 0, yAxisIndex: 0, data: AT.citizen_2025.out.map((r) => r[1]), color: C.purple, label: { show: true, position: "right", fontSize: 11 }, barCategoryGap: "30%" }, { type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: AT.citizen_2025.term_issue.map((r) => r[1]), color: C.gray, label: { show: true, position: "right", fontSize: 11 }, barCategoryGap: "30%" }] } });
+    { const rm = AT.region_mode_2019; const regs = ["부산울산권", "대구광역권", "수도권", "대전세종충청권", "광주광역권"];
+      add({ id: "inside_region", g: "move", t: "권역별 통행 수단 비율 2019 — 경주가 속한 부산울산권은 승용차 38%, 도보 29%, 버스 17%", tier: "T1", src: AT.src.region_mode,
+        take: "부산울산권·대구권 모두 승용차가 1위(38~41%)이고 철도는 5% 안팎이다. 수도권(철도 14%)과의 차이가 경주 대중교통 여건의 배경이다. 권역 통계라 경주시 값은 아니다.",
+        lead: "전략계획 2022가 인용한 2019 국가교통조사 여객 O/D. 경주만 뽑은 수단분담은 2007년 조사(‘통행 수단 비율’ 카드)가 마지막이다.",
+        opt: { grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0, textStyle: { fontSize: 10.5 } }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) }, xAxis: { type: "category", data: regs, axisLabel: { fontSize: 10.5 } }, yAxis: { type: "value", max: 100, axisLabel: { formatter: (v) => v + "%" } },
+          series: rm.modes.map((m, i) => ({ name: m, type: "bar", stack: "s", data: regs.map((r) => rm.rows[r][i]), color: [C.green3, C.orange, C.green, C.purple, C.orange2, C.blue2, C.gray2][i], label: { show: i < 3, position: "inside", fontSize: 10, color: "#fff", formatter: (d) => d.value.toFixed(0) } })) } }); }
+    { const br = Object.entries(AT.bus_routes_2022).sort((a, b) => b[1] - a[1]);
+      add({ id: "inside_busroutes", g: "move", t: "행정동별 시내버스 운행 노선 수 — 황오동 76 · 중부동 75 · 황남동 74 · 성건동 69", tier: "T1", src: AT.src.bus_routes,
+        take: "원도심 4개 동을 지나는 노선이 70개 안팎으로 압도적이고 감포읍 4, 문무대왕면 6, 내남·양남·서면 7이다. 노선은 원도심에 모이는데 원도심 시민의 대중교통 만족도는 2.7점이다 — 문제는 노선 수가 아니라 배차 간격(미래구상 p.66)이다.",
+        lead: "경주시교통정보센터 자료를 전략계획(2022)이 표로 실은 것. 2025년 중부동이 황오동에 통합되기 전 값이다.",
+        opt: hbar(br.map((r) => r[0]), br.map((r) => r[1]), { unit: "개", top: 23, colors: br.map((r) => (["황오동", "중부동", "황남동", "성건동"].includes(r[0]) ? C.red : C.blue2)) }), map: "busstops" }); }
+  }
   // ======================= 관광·경관·예술
   add({ id: "tourists", g: "visit", t: "지정관광지 입장객 — 보문·양남·감포", take: `2013년 889만 명(외국인 19만 명)이다. 관광데이터랩의 2026년 8월 방문자(18일간 626만 명)는 집계 기준이 달라 합칠 수 없다.`, tier: "T1", src: R.tourists.src,
     opt: { grid: { left: 8, right: 40, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" }, xAxis: { type: "category", data: R.tourists.years }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1e6 + "M" } }, { type: "value", axisLabel: { formatter: (v) => v / 1e3 + "k" }, splitLine: { show: false } }], series: [{ name: "합계", type: "bar", data: R.tourists.total, color: C.green }, { name: "외국인(우축)", type: "line", yAxisIndex: 1, data: R.tourists.foreign, color: C.orange, lineStyle: { width: 2 } }] } });
@@ -363,6 +417,8 @@ async function main_() {
     from: "OSM railway=abandoned/disused/rail (Overpass, 2026-09-21) · 역 위치 OSM·위키", how: "Overpass API", proc: "구경주역→황성→석장→금장 노반 연속 구간 확인", viz: "지도 ‘폐선’·‘현행 철도’·‘철도역’ 레이어", lim: "신 서경주역 이용객 수치는 나무위키 전재 → 철도통계연보로 치환 필요" }, { map: "rail_abandoned" });
   P("traffic", "도로 속도 — 표준노드링크 + ITS 실시간 스냅샷 + ITS 이력 표본일", "T2", { take: "속도는 있지만 교통량(대수)은 없다. 정체 판정 기준은 도로 등급별 관행값이며 공식 고시 원문은 확인하지 못했다.",
     from: "국가교통정보센터 표준노드링크(2026-09-14, 경주 창 4,594링크) · ITS trafficInfo API 5분 스냅샷(2026-09-17~) · ITS 교통소통 이력 파일(일별 5분, 1일 741MB → 경주 1~2MB, 매월 둘째 화·토 표본)", how: "zip 다운로드 / 공공데이터포털 키 API / 세션 쿠키 파일 다운로드 배치", proc: "링크 매칭, 시간대·평일/주말 평균. 임계: 고속국도 40/80, 도시고속 30/50, 그 외 15/25 km/h. 12시대 결측", viz: "지도 ‘시간대별 소통’ 레이어(시간 슬라이더·재생), 카드 ‘시간대별 속도·정체 상위 구간’", lim: "표본일에 명절·행사일 없음. VDS 교통량은 못 받음. 기본계획의 V/C 표는 별도 전사값" }, { map: "traffic_hist" });
+  P("arrive", "경주에 오는 길 — 4개 문서 전수 검색 + KOSIS 국민여행조사 + 도로공사 AADT", "T2", { take: "‘관광객 입경 교통수단’은 4개 문서에 없다. 있는 것만 모았다: 관문 위치(경관계획·전략계획 서술 → V-World 좌표), 진입축 교통량(기본계획 표 전사), 고속버스 운행횟수(기본계획 표), 시민 설문(미래구상 전사), 권역별 수단통행·버스노선 수(전략계획 표 전사), 전국 평균(KOSIS API), 고속도로 AADT(도로공사 CSV).",
+    from: "미래구상 2025 p.30–31·66–68 · 전략계획 2022 p.48·51–54 · 2030 기본계획 p.199–208 · 2030 경관계획 관문적 경관거점 · KOSIS 113 DT_113_STBL_1029530(국민여행조사, 2023–2025) · 한국도로공사 AADT 2021–2025 CSV(C-008)", how: "PDF 4권 전문 텍스트 추출 후 정규식 검색(교통수단·이용교통·자가용·KTX·고속버스·관광버스·유입경로·관문·IC) → 해당 쪽 육안 확인·전사 / KOSIS 파라미터 API / CSV 파싱 / 관문 좌표 V-World 장소검색", proc: "pipeline/build_arrival_transport.py → arrival_transport.json · gateways_4326.geojson. IC 좌표는 인접 정류장·전광판 지점(±300m)", viz: "지도 ‘진입 관문’ 레이어(시청·교통거점), 카드 ‘관광객은 어떤 교통수단으로…’ 외 7장(이동 그룹)", lim: "경주 방문자 한정 입경 수단 비율 없음 · 국민여행조사 시도별 교차표 API 미제공 · IC 진출입량·터미널 이용객·2014 이후 신경주역 승하차 미수집 → gaps.md" });
   P("bus", "버스정류장·시내버스 이용", "T2", { take: "정류장 위치는 국토부 파일이고 노선·승하차는 없다. 경주시 버스 API는 발급받았지만 서버가 504를 반환해 못 썼다.",
     from: "국토교통부 전국 버스정류장 위치정보 파일(2025-10-31) 경주시 1,951개 · 시내버스 이용 인원은 기본계획 표(p.208) 전사", how: "파일 다운로드", viz: "지도 ‘버스정류장’ 레이어, 카드 ‘시내버스 연간 이용 인원’", lim: "승하차·노선 없음" }, { map: "busstops" });
   P("visitors", "관광 방문자 — 관광데이터랩(시군구) · 지정관광지 입장객(기본계획)", "T2", { take: "관광데이터랩 방문자는 경주시 전체(S3) 수치이므로 부지(S1) 계획의 근거로는 쓰지 않는다. 기본계획의 입장객과는 정의가 다르다.",
@@ -472,7 +528,9 @@ function open(id) {
   if (dlgChart) { dlgChart.dispose(); dlgChart = null; } ch.innerHTML = ""; hh.innerHTML = c.dlg_html || (c.html && !c.opt ? c.html : "");
   if (!dlg.open) dlg.showModal();
   dlg.scrollTop = 0;
-  if (c.opt) { dlgChart = echarts.init(ch, "gj"); dlgChart.setOption({ animationDuration: reduced ? 0 : 400, ...c.opt }); }
+  if (c.opt) { dlgChart = echarts.init(ch, "gj"); dlgChart.setOption({ animationDuration: reduced ? 0 : 400, ...c.opt });
+    // showModal 직후에는 컨테이너 폭이 0으로 읽혀 캔버스 폭이 0이 된다 → 레이아웃 뒤 한 번 더 크기 맞춤(rAF는 숨은 창에서 멈추므로 setTimeout 병행)
+    const fix = () => { if (dlgChart && dlgChart.getWidth() === 0) dlgChart.resize(); }; requestAnimationFrame(fix); setTimeout(fix, 30); setTimeout(fix, 300); }
 }
 const step = (d) => { const i = CARDS.findIndex((c) => c.id === cur); const n = CARDS[(i + d + CARDS.length) % CARDS.length]; open(n.id); };
 document.getElementById("dlg-prev").onclick = () => step(-1);
