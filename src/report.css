@@ -151,5 +151,5 @@ dialog .src{margin-top:12px}
 .cn .thumb.htm .prov{font-size:12px;gap:4px 10px;grid-template-columns:70px 1fr;max-height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 #dlg-html .prov{margin:6px 0 14px;font-size:14px}
 
-.axes-t td small{color:var(--ink-3);font-family:var(--mono);font-size:11px}
-.cn .thumb.htm .axes-t{font-size:11.5px}
+.axes-thumb{width:100%;height:100%;object-fit:cover;object-position:center 30%;border-radius:10px;display:block}
+.axes-frame{width:100%;height:min(82vh,1100px);border:1px solid var(--line);border-radius:12px;background:#fff}

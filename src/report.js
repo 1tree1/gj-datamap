@@ -46,7 +46,7 @@ function add(c) { c.g = c.g || "site"; CARDS.push(c); byId[c.id] = c; }
 // ---------------------------------------------------------------- 데이터
 async function j(p) { try { return await fetch(`${base}data/${p}`, { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)); } catch { return null; } }
 async function main_() {
-  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, UA] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "urban_axes_meta.json"].map(j));
+  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json"].map(j));
   const X = R.extras; const p26 = R.pop_actual.pop_2026_08;
   const FF = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
   const AC = { A_hwango_grid32: C.green, B_haengbok_hwangchon_digitized: C.gray, C_zone_buffer300: C.green2, D_zone: C.red, E_center_r300: C.green3, F_cityhall_r500: "#0f3d34", G_seongdong_market_r200: C.orange, H_hwangridan_r300: C.purple };
@@ -82,11 +82,11 @@ async function main_() {
       note: "이 수치가 지하층·지하주차장 계획의 상한을 정한다. 1단계에 지하 구조물을 넣기 어렵고, 청사 위치는 시굴 결과가 나온 뒤 확정하는 것이 맞다. 1단계는 지상 광장·공원·기존 철도 노반 활용이 현실적이다.",
       html: `<div class="tiles">${[["시굴조사 대상 면적", fmt(H["시굴조사 필요 면적"].v), "㎡", H["시굴조사 필요 면적"].note], ["기존 조사 면적", fmt(H["기조사 면적(2002~2004 발굴·시굴)"].v), "㎡", "2002~2004 발굴·시굴"], ["시굴 1단계(안)", fmt(H["시굴조사 1단계(안) 면적"].v), "㎡", H["시굴조사 1단계(안) 면적"].note], ["시굴 비용", "3.06", "억 원", "현장 54일"], ["정밀발굴 비용", "63~80", "억 원", "현장 630~700일"], ["발굴 유예 조건", "2m", "미만 성토", "공원·주차장"]].map(([k, v, u, d]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div><div class="d">${d}</div></div>`).join("")}</div>` });
   }
-  if (UA?.eras) add({ id: "axes", g: "site", t: "도시 축의 변천 6단계 — 부지는 어느 축 위에 있나", size: "l", tier: "T2", src: UA.src,
-    take: "왕경 남북축(신라) → 읍성 행정축(고려·조선) → 철도·역세권축(1918–) → 도로·관광축(1950–) → 외곽 관문축(KTX, 2010–) → 폐철도 재연결축(2021–). 옛 경주역 부지는 3단계에서 도시의 중심이 됐다가 4·5단계에서 통과축이 도로와 외곽으로 옮겨 가며 비워진 자리다.",
-    lead: "원도심 미래구상 연구(2025)의 시대별 도시확장 서술(p.17–23)과 방향 2·3·4(p.77–109)를 6개 시대의 개념축으로 그린 도판을 지도 좌표로 옮겼다. 표는 각 시대의 주축과 중심 이동이다. 지도에서는 ‘경관축’ 그룹의 ‘도시축 변천’ 레이어에서 시대별로 켜고 끌 수 있다.",
-    note: `개념축이지 지적선·고고학 확정선이 아니다. 좌표등록 잔차 17~92 m, 거점 점은 도판 저자의 개략 표시라 실제 시설과 100~200 m 어긋난다. 동지 일출 가설축은 다큐가 제시한 가능성(T4)이다.`,
-    html: `<table class="t axes-t"><tr><th>시대</th><th>주축</th><th>중심 · 변화</th></tr>${UA.eras.map((e) => `<tr><td><b>${e.no}</b> ${e.short}<br><small>${e.years.split(" (")[0]}</small></td><td>${e.title}</td><td>${e.changes.slice(0, 2).map((c) => `<b>${c[0]}</b> ${c[1]}`).join("<br>")}</td></tr>`).join("")}</table>`, map: "urban_axes" });
+  add({ id: "axes", g: "site", t: "경주 도시 축의 변천사 — 인터랙티브 도판 (원본 그대로)", size: "l", tier: "T2", src: "「경주 도시 축의 변천사」 인터랙티브 HTML(2026-09). 배경도 = 경주시 원도심 미래구상 기획연구(2025.07) Figure 3d · 축 서술 p.17–23, 77–109(T2) · 동지 일출 가설축은 다큐 요약(T4)",
+    take: "왕경 남북축(신라) → 읍성 행정축(고려·조선) → 철도·역세권축(1918–) → 도로·관광축(1950–) → 외곽 관문축(KTX, 2010–) → 폐철도 재연결축(2021–). 6개 시대 버튼과 ‘전체 축 중첩’으로 축의 이동을 비교하는 도판이다. 클릭하면 원본이 그대로 열린다.",
+    lead: "원본 HTML을 수정 없이 넣었다(← → 키로 시대 이동). 선은 도판 저자가 재구성한 도시설계적 개념축이지 지적선·고고학 확정선이 아니며, 배경도 위 위치도 개략 표시다. 좌표가 없는 그림이라 지도 레이어로는 올리지 않았다.",
+    html: `<img class="axes-thumb" src="${base}urban_axes_thumb.jpg" alt="경주 도시 축의 변천사 도판">`,
+    dlg_html: `<iframe class="axes-frame" src="${base}urban_axes.html" title="경주 도시 축의 변천사" loading="lazy"></iframe><p class="sub"><a href="${base}urban_axes.html" target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a></p>` });
   if (MS?.cityhall) add({ id: "cityhall", g: "site", t: "현재 경주시청 — 본청 45개 과 중 15개 과가 청사 밖에 있다", take: "본관은 1995년 시·군 통합 전의 옛 경주군청 건물이다. 9개 과는 기린빌딩, 3개 과는 동원빌딩을 임차해 쓰고 있다. 문서고는 실내체육관에 있다.", size: "m", tier: "T1", src: MS.cityhall.src,
     lead: "경주시 홈페이지 청사안내(2026-09-02)에서 본청 각 과의 위치를 세었다. 막대는 장소별 과 수, 빨강은 민간 건물 임차다.",
     note: "행정안전부 공유재산 운영기준에 따르면 임차 면적도 청사 기준면적에 포함되고 전세권을 설정해야 한다. 즉 지금은 청사가 부족해 임차로 메우는 상태다. 본청+의회 인원을 800~950명으로 가정하고 1인당 30~35㎡를 적용하면 28,000~33,000㎡, 법정 의무공간과 주민 이용 공간을 더하면 38,000~45,000㎡가 필요하다.",
@@ -357,8 +357,8 @@ async function main_() {
     from: "경주시 홈페이지 청사안내(2026-09-02 갱신) · 경주시시설관리공단 교통운영 시설안내(2026-09-21 열람) · 행정안전부 공유재산 운영기준", how: "웹 열람 수기 정리 → V-World 지오코더(건물 대표점)", proc: "과 수를 장소별로 집계, 임차 여부 표시. 주차장은 노상·민영·읍면 제외", viz: "지도 ‘시청 분산 현황’·‘공영주차장’ 레이어, 카드 ‘현재 경주시청’·‘공영주차장’", lim: "인사통계(정원)는 미공개라 인원은 가정. 시청사공영주차장은 면수 미공개" }, { map: "cityhall_sites" });
   P("facilities", "학교·종교시설·도서관·박물관·미술관·공원 지점·관광단지", "T2", { take: "학교는 표준데이터 API, 종교시설은 시 공개 파일을 지오코딩, 도서관·박물관·미술관·공원은 V-World 장소검색 POI다. 마지막 것은 공식 목록이 아니라 누락·중복이 있을 수 있다.",
     from: "전국초중등학교위치표준데이터(한국교육시설안전원, 2026-03-20) 83곳 + 유치원·대학은 카카오 로컬(T4) · 경주시 종교시설현황 2025-02-06 파일 586건 + 경주이슬람센터 1건(공식 현황에 없어 별도 추가, 주소 원화로281번길 22) · V-World 장소검색(bbox 경주시, 카테고리 정규식 필터) 160건 · 관광단지는 V-World UO601 + 토지이음 고시번호로 이름 확인", how: "공공데이터포털 API / 파일 → V-World 지오코더 541 + 카카오 23 / V-World 검색 API(80m 안 동명 중복 제거)", proc: "종교시설 22건은 좌표 미확인", viz: "지도 ‘학교’·‘종교시설’·‘도서관·박물관·미술관·공원’·‘관광단지’ 레이어, 카드 ‘학교·종교시설·관광단지’", lim: "도서관·박물관미술관·도시공원 표준데이터 API는 활용신청 대기 중 → 승인되면 교체. 시 공식 종교시설 현황에는 이슬람 항목이 없다" }, { map: "facilities" });
-  P("axes", "도시축 변천 개념도 — 도판의 SVG를 좌표에 맞춰 옮겼다", "T2", { take: "「경주 도시 축의 변천사」 인터랙티브 도판(배경 = 미래구상 연구 Figure 3d 원도)의 SVG 선·점을, 배경 이미지의 지형지물 9점으로 좌표등록해 지도에 올렸다. 선은 개념축이고 점 위치는 도판 저자의 개략 표시다.",
-    from: "경주_도시축_변천사_인터랙티브_수정.html (2026-09, 6시대 × 선·거점·라벨) · 축 서술의 원문은 경주시 원도심 미래구상 기획연구(2025.07) p.17–23·77–109(T2), 동지 일출 가설축은 다큐 요약(T4)", how: "HTML에서 배경 PNG(747×755)와 eras 배열 추출 → 배경에서 황남대총·천마총·인왕동 고분 4기(OSM 폴리곤 중심)·서천교·원화로교·폐선의 하천 횡단점(표준노드링크×법정동 경계) 픽셀을 읽어 GCP", proc: "EPSG:5187 상사변환(4.92 m/px, 회전 −0.55°), 잔차 17~92 m. SVG path를 6 px 간격으로 샘플 → LineString, circle → 거점 점, text → 라벨 점. 원 도판의 점선·파선 구분은 재현하지 않음", viz: "지도 ‘경관축’ 그룹 ‘도시축 변천 (선)’·‘(거점·라벨)’ 레이어(시대 하위토글), 카드 ‘도시 축의 변천 6단계’", lim: "개념축 ±100 m. 거점 점은 실제 시설과 100~200 m 차이((옛)경주역 점은 역사보다 약 190 m 북동). 시대 구분과 해석은 도판 저자의 것이며 이 사이트가 검증한 사실이 아니다" }, { map: "urban_axes" });
+  P("axes", "도시축 변천 인터랙티브 도판 — 원본 HTML을 그대로 넣었다", "T2", { take: "「경주 도시 축의 변천사」 HTML을 수정 없이 리포트 안에 iframe으로 넣었다. 좌표가 없는 개념도라 지도 레이어로는 올리지 않았다(좌표등록 시도는 거점 점이 실제와 100~200 m 어긋나 철회).",
+    from: "경주_도시축_변천사_인터랙티브_수정.html (2026-09, 배경 = 미래구상 연구 2025 Figure 3d 원도 + 시대별 원도판 4장 내장) · 축 서술 원문 미래구상 연구 p.17–23·77–109(T2), 동지 일출 가설축은 다큐 요약(T4)", how: "파일 복사(public/urban_axes.html), 썸네일은 내장 배경 PNG 축소", proc: "없음(원본 그대로)", viz: "카드 ‘경주 도시 축의 변천사’(부지와 규제) — 클릭하면 도판이 열리고 새 창 링크 제공", lim: "선은 도판 저자의 개념축, 위치는 개략. 시대 구분과 해석은 도판 저자의 것이며 이 사이트가 검증한 사실이 아니다" });
   P("rail", "철도역·폐선·현행선 — 지금은 OSM", "T4", { take: "폐선 3.5km와 현행선은 OpenStreetMap에서 받은 선이다. T4이므로 지형도면 벡터화로 바꿀 예정이고, 그 전에는 위치 참고용이다.",
     from: "OSM railway=abandoned/disused/rail (Overpass, 2026-09-21) · 역 위치 OSM·위키", how: "Overpass API", proc: "구경주역→황성→석장→금장 노반 연속 구간 확인", viz: "지도 ‘폐선’·‘현행 철도’·‘철도역’ 레이어", lim: "신 서경주역 이용객 수치는 나무위키 전재 → 철도통계연보로 치환 필요" }, { map: "rail_abandoned" });
   P("traffic", "도로 속도 — 표준노드링크 + ITS 실시간 스냅샷 + ITS 이력 표본일", "T2", { take: "속도는 있지만 교통량(대수)은 없다. 정체 판정 기준은 도로 등급별 관행값이며 공식 고시 원문은 확인하지 못했다.",
@@ -469,7 +469,7 @@ function open(id) {
   document.getElementById("dlg-src").innerHTML = c.src ? `${TIER(c.tier)}${c.src}` : "";
   const links = document.getElementById("dlg-links"); links.innerHTML = c.map ? `<a href="./index.html#layer=${c.map}">지도에서 이 자료 보기 →</a>` : "";
   const ch = document.getElementById("dlg-chart"), hh = document.getElementById("dlg-html");
-  if (dlgChart) { dlgChart.dispose(); dlgChart = null; } ch.innerHTML = ""; hh.innerHTML = c.html && !c.opt ? c.html : "";
+  if (dlgChart) { dlgChart.dispose(); dlgChart = null; } ch.innerHTML = ""; hh.innerHTML = c.dlg_html || (c.html && !c.opt ? c.html : "");
   if (!dlg.open) dlg.showModal();
   dlg.scrollTop = 0;
   if (c.opt) { dlgChart = echarts.init(ch, "gj"); dlgChart.setOption({ animationDuration: reduced ? 0 : 400, ...c.opt }); }
