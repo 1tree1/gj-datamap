@@ -2971,7 +2971,7 @@
    "id": "visitor_origin",
    "title": "경주 방문자 유입 시군구 (관광데이터랩, 2025.09~2026.08)",
    "short": "방문자 유입 시군구",
-   "group": "상권·관광",
+   "group": "상권·유동",
    "file": "visitor_origin.geojson",
    "type": "fill",
    "visible": false,

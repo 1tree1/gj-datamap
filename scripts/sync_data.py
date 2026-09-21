@@ -39,6 +39,7 @@ FILES = {
     # 2026-09-21 경관축 (pipeline/build_landscape_axes.py)
     "processed/landscape_axes_lines_4326.geojson": "ls_axes.geojson",
     "processed/landscape_axes_green_4326.geojson": "ls_green.geojson",
+    "processed/visitor_origin_sigg_4326.geojson": "visitor_origin.geojson",
 }
 DST.mkdir(exist_ok=True)
 # 비공간 표(사이드바용)

@@ -1,0 +1,199 @@
+{
+ "period": "2025.09~2026.08",
+ "total_visitors": 8092340,
+ "total_spend": 86333484568,
+ "by_sido": {
+  "경기도": {
+   "visitors": 1254845,
+   "spend": 11514680113,
+   "share_pct": 15.5
+  },
+  "경상북도": {
+   "visitors": 1062973,
+   "spend": 17599793371,
+   "share_pct": 13.1
+  },
+  "부산광역시": {
+   "visitors": 956742,
+   "spend": 8145149096,
+   "share_pct": 11.8
+  },
+  "서울특별시": {
+   "visitors": 902376,
+   "spend": 7543300762,
+   "share_pct": 11.2
+  },
+  "대구광역시": {
+   "visitors": 885241,
+   "spend": 8145065694,
+   "share_pct": 10.9
+  },
+  "울산광역시": {
+   "visitors": 821196,
+   "spend": 14586058712,
+   "share_pct": 10.1
+  },
+  "경상남도": {
+   "visitors": 662894,
+   "spend": 6128516681,
+   "share_pct": 8.2
+  },
+  "전남광주통합특별시": {
+   "visitors": 288690,
+   "spend": 1733760438,
+   "share_pct": 3.6
+  },
+  "인천광역시": {
+   "visitors": 263976,
+   "spend": 2989638407,
+   "share_pct": 3.3
+  },
+  "충청북도": {
+   "visitors": 186087,
+   "spend": 1876594682,
+   "share_pct": 2.3
+  },
+  "대전광역시": {
+   "visitors": 185082,
+   "spend": 1470506210,
+   "share_pct": 2.3
+  },
+  "충청남도": {
+   "visitors": 183009,
+   "spend": 1628783800,
+   "share_pct": 2.3
+  },
+  "강원특별자치도": {
+   "visitors": 175247,
+   "spend": 1374016569,
+   "share_pct": 2.2
+  },
+  "전북특별자치도": {
+   "visitors": 147026,
+   "spend": 875940028,
+   "share_pct": 1.8
+  },
+  "제주특별자치도": {
+   "visitors": 61270,
+   "spend": 310309616,
+   "share_pct": 0.8
+  },
+  "세종특별자치시": {
+   "visitors": 55686,
+   "spend": 411370389,
+   "share_pct": 0.7
+  }
+ },
+ "top10": [
+  {
+   "sigg": "경상북도 포항시 북구",
+   "origin": "경북 포항시 북구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 2,
+   "visitors": 279084,
+   "spend_krw": 5397046331,
+   "share_pct": 3.45
+  },
+  {
+   "sigg": "울산광역시 북구",
+   "origin": "울산 북구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 3,
+   "visitors": 222549,
+   "spend_krw": 4653389477,
+   "share_pct": 2.75
+  },
+  {
+   "sigg": "경상북도 포항시 남구",
+   "origin": "경북 포항시 남구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 1,
+   "visitors": 221878,
+   "spend_krw": 5634733744,
+   "share_pct": 2.74
+  },
+  {
+   "sigg": "울산광역시 남구",
+   "origin": "울산 남구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 4,
+   "visitors": 217314,
+   "spend_krw": 3728437188,
+   "share_pct": 2.69
+  },
+  {
+   "sigg": "대구광역시 수성구",
+   "origin": "대구 수성구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 11,
+   "visitors": 188963,
+   "spend_krw": 1514470158,
+   "share_pct": 2.34
+  },
+  {
+   "sigg": "대구광역시 달서구",
+   "origin": "대구 달서구",
+   "dist": "원거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 1,
+   "visitors": 175072,
+   "spend_krw": 1587857913,
+   "share_pct": 2.16
+  },
+  {
+   "sigg": "대구광역시 북구",
+   "origin": "대구 북구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 9,
+   "visitors": 157346,
+   "spend_krw": 1607682700,
+   "share_pct": 1.94
+  },
+  {
+   "sigg": "울산광역시 중구",
+   "origin": "울산 중구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 6,
+   "visitors": 146954,
+   "spend_krw": 2427603104,
+   "share_pct": 1.82
+  },
+  {
+   "sigg": "대구광역시 동구",
+   "origin": "대구 동구",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 10,
+   "visitors": 146797,
+   "spend_krw": 1555173883,
+   "share_pct": 1.81
+  },
+  {
+   "sigg": "경상북도 경산시",
+   "origin": "경북 경산시",
+   "dist": "근거리",
+   "type": "Platinum Class",
+   "type_kr": "방문 많음·지출 많음",
+   "rank_in_type": 7,
+   "visitors": 141509,
+   "spend_krw": 1899102372,
+   "share_pct": 1.75
+  }
+ ]
+}
