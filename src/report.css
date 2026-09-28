@@ -151,5 +151,53 @@ dialog .src{margin-top:12px}
 .cn .thumb.htm .prov{font-size:12px;gap:4px 10px;grid-template-columns:70px 1fr;max-height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 #dlg-html .prov{margin:6px 0 14px;font-size:14px}
 
-.axes-thumb{width:100%;height:100%;object-fit:cover;object-position:center 30%;border-radius:10px;display:block}
 .axes-frame{width:100%;height:min(82vh,1100px);border:1px solid var(--line);border-radius:12px;background:#fff}
+
+/* ===== 2026-09-28 도시 조직 그룹 · 도시 축 변천사(도판 + 층위도) 병합 카드 ===== */
+.tier.t3{background:#f3eefa;border-color:transparent;color:var(--purple)}
+.fig-thumb{width:100%;height:100%;object-fit:cover;object-position:center;border-radius:10px;display:block;background:#f0f1ef}
+.fig-link{display:block;cursor:zoom-in}
+.fig-full{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px;background:#fff}
+#dlg-html{overflow-x:auto}
+#dlg-html .dh{font-size:14px;font-weight:700;letter-spacing:-.01em;margin:22px 0 6px}
+#dlg-html .sub{font-size:12.5px;color:var(--ink-3);line-height:1.55;margin:6px 0 0}
+#dlg-html .sub a{color:var(--green);font-weight:600}
+#dlg-html table.t th{line-height:1.35}
+/* 카드 썸네일 안의 표·타일 — 넘치는 아래쪽은 흐리게 */
+.cn .thumb.htm>table.t{font-size:11.5px;-webkit-mask-image:linear-gradient(#000 72%,transparent);mask-image:linear-gradient(#000 72%,transparent)}
+.cn .thumb.htm>table.t td,.cn .thumb.htm>table.t th{padding:4px 6px 4px 0}
+.tiles.compact{gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.tiles.compact .tile{padding:10px 12px 9px}
+.tiles.compact .tile .v{font-size:22px}
+.tiles.compact .tile .d{font-size:11.5px;margin-top:3px}
+/* 두 그림 나란히 (도판 + 층위도) */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:8px;height:100%}
+.duo figure{margin:0;position:relative;min-height:0;border-radius:10px;overflow:hidden;background:#f0f1ef}
+.duo img{width:100%;height:100%;object-fit:cover;display:block}
+.duo figcaption{position:absolute;left:8px;bottom:8px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.9);font-size:11.5px;color:var(--ink-2)}
+@media (max-width:640px){.duo{grid-template-columns:1fr}.duo figure:nth-child(2){display:none}}
+/* 판정 4개 */
+.verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:2px 0 16px}
+.vd{border:1px solid var(--line);border-left:4px solid var(--gray);border-radius:12px;padding:12px 14px;background:var(--surface-2)}
+.vd .vk{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-bottom:4px}
+.vd .vh{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
+.vd .vt{font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.vd.ok{border-left-color:var(--green)}.vd.maybe{border-left-color:var(--blue)}.vd.no{border-left-color:var(--gray)}.vd.cut{border-left-color:var(--red)}
+/* 탭 — 다이얼로그 안의 HTML은 스크립트가 돌지 않으므로 라디오로 만든다 */
+.tabs>input{position:absolute;opacity:0;pointer-events:none}
+.tabs>label{display:inline-block;margin:0 6px 10px 0;padding:7px 14px;border-radius:999px;border:1px solid var(--line-2);background:var(--surface-2);font-size:13px;color:var(--ink-2);cursor:pointer}
+.tabs>label:hover{border-color:var(--ink)}
+.tabs>input:checked+label{background:var(--ink);border-color:var(--ink);color:#fff}
+.tabs>input:focus-visible+label{outline:2px solid var(--green);outline-offset:2px}
+.tabs>.tab-p{display:none}
+#axtab1:checked~.p1,#axtab2:checked~.p2{display:block}
+/* 긴 표 */
+#dlg-html table.t.sidet td:first-child,#dlg-html table.t.prt td:first-child{color:var(--ink);white-space:nowrap}
+#dlg-html table.t.prt td:nth-child(2){white-space:nowrap}
+#dlg-html table.t.evt td:first-child{white-space:nowrap}
+#dlg-html ol.use{margin:4px 0 0;padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+#dlg-html ol.use li{margin:4px 0}
+@media (max-width:760px){#dlg-html table.t.sidet td:first-child,#dlg-html table.t.prt td:first-child,#dlg-html table.t.prt td:nth-child(2),#dlg-html table.t.evt td:first-child{white-space:normal}}
+/* 카드 안 타일의 라벨은 카드 머리(.cn .k, 고정폭 글꼴)와 다른 스타일이다 */
+.cn .tiles.compact .tile .k{display:block;font-family:var(--font);font-size:11.5px;letter-spacing:0;color:var(--ink-3);margin-bottom:4px}
+.verdicts .vd .vk{letter-spacing:0}

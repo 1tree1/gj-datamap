@@ -29,10 +29,16 @@ const hbar = (cats, vals, { color = C.green, unit = "", top = 8, max, fmtV, colo
   series: [{ type: "bar", data: vals.slice(0, top).map((v, i) => (colors ? { value: v, itemStyle: { color: colors[i] } } : v)), itemStyle: { color, borderRadius: [0, 4, 4, 0] }, barCategoryGap: "32%", label: { show: true, position: "right", fontSize: 11.5, color: C.ink2, formatter: (d) => (fmtV ? fmtV(d.value) : fmt(d.value) + unit) } }],
 });
 const TIER = (t) => (t ? `<span class="tier ${t.toLowerCase()}">${t}</span>` : "");
+const p0 = (v) => (v == null ? "–" : Math.round(v * 100) + "%");
+const f2 = (v) => (v == null ? "–" : Number(v).toFixed(2));
+const tbl = (head, rows, cls = "") => `<table class="t ${cls}">${head ? `<tr>${head.map((h) => `<th>${h}</th>`).join("")}</tr>` : ""}${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join("")}</tr>`).join("")}</table>`;
+const h4 = (t) => `<h4 class="dh">${t}</h4>`;
+const tl = (rows, cls = "") => `<div class="tiles ${cls}">${rows.map(([k, v, u, d]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div><div class="d">${d}</div></div>`).join("")}</div>`;
 
 // ---------------------------------------------------------------- 카드 레지스트리
 const GROUPS = [
   { id: "site", title: "부지와 규제", read: "부지 156,460㎡에 이미 정해져 있는 것(획지·높이 제한·문화유산 보호구역)과 건물 노후 상태, 현재 시청 건물의 상황." },
+  { id: "fabric", title: "도시 조직", read: "콘타 모형이 덮는 땅(연속수치지도 3.4 × 3.2 km, 11.06㎢)의 가로·필지·건물을 쟀다. 앞의 4장은 이 범위에서 무엇을 어디까지 잴 수 있는지(범위·신뢰 반경·폐선 단절·분석 계획), 다음 3장은 부지 경계 바깥과 안쪽의 스케일, 그다음 3장은 동이 달라도 반복되는 조직, 마지막 6장은 네 가지 읽기(층 스택·가시 영역·걷기·다익스트라)와 생성 원리다. 입력은 국토지리정보원 연속수치지도와 V-World 연속지적(T2)이고 계산은 모두 자체 분석이다. 과거와의 관계(층위도)는 ‘부지와 규제’의 도시 축 변천사 카드에 합쳤다." },
   { id: "people", title: "사람", read: "인구는 계획과 달리 줄고 있고 고령 비율은 높다. 청년이 어디 살고 몇 명이 빠져나가는지, 외국인 주민은 어떤 사람들인지." },
   { id: "work", title: "일과 상권", read: "경주는 제조업 고용 비중이 높은 도시이면서 관광 도시다. 원도심의 유동인구, 가게 수 변화, 땅값." },
   { id: "move", title: "이동", read: "통행 수단 비율의 변화, 주차장 구성, 버스 이용, 시간대별 도로 속도." },
@@ -46,7 +52,7 @@ function add(c) { c.g = c.g || "site"; CARDS.push(c); byId[c.id] = c; }
 // ---------------------------------------------------------------- 데이터
 async function j(p) { try { return await fetch(`${base}data/${p}`, { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)); } catch { return null; } }
 async function main_() {
-  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, AT] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "arrival_transport.json"].map(j));
+  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, AT, FR] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "arrival_transport.json", "fabric_report.json"].map(j));
   const X = R.extras; const p26 = R.pop_actual.pop_2026_08;
   const FF = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
   const AC = { A_hwango_grid32: C.green, B_haengbok_hwangchon_digitized: C.gray, C_zone_buffer300: C.green2, D_zone: C.red, E_center_r300: C.green3, F_cityhall_r500: "#0f3d34", G_seongdong_market_r200: C.orange, H_hwangridan_r300: C.purple };
@@ -82,11 +88,40 @@ async function main_() {
       note: "이 수치가 지하층·지하주차장 계획의 상한을 정한다. 1단계에 지하 구조물을 넣기 어렵고, 청사 위치는 시굴 결과가 나온 뒤 확정하는 것이 맞다. 1단계는 지상 광장·공원·기존 철도 노반 활용이 현실적이다.",
       html: `<div class="tiles">${[["시굴조사 대상 면적", fmt(H["시굴조사 필요 면적"].v), "㎡", H["시굴조사 필요 면적"].note], ["기존 조사 면적", fmt(H["기조사 면적(2002~2004 발굴·시굴)"].v), "㎡", "2002~2004 발굴·시굴"], ["시굴 1단계(안)", fmt(H["시굴조사 1단계(안) 면적"].v), "㎡", H["시굴조사 1단계(안) 면적"].note], ["시굴 비용", "3.06", "억 원", "현장 54일"], ["정밀발굴 비용", "63~80", "억 원", "현장 630~700일"], ["발굴 유예 조건", "2m", "미만 성토", "공원·주차장"]].map(([k, v, u, d]) => `<div class="tile"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div><div class="d">${d}</div></div>`).join("")}</div>` });
   }
-  add({ id: "axes", g: "site", t: "경주 도시 축의 변천사 — 인터랙티브 도판 (원본 그대로)", size: "l", tier: "T2", src: "「경주 도시 축의 변천사」 인터랙티브 HTML(2026-09). 배경도 = 경주시 원도심 미래구상 기획연구(2025.07) Figure 3d · 축 서술 p.17–23, 77–109(T2) · 동지 일출 가설축은 다큐 요약(T4)",
-    take: "왕경 남북축(신라) → 읍성 행정축(고려·조선) → 철도·역세권축(1918–) → 도로·관광축(1950–) → 외곽 관문축(KTX, 2010–) → 폐철도 재연결축(2021–). 6개 시대 버튼과 ‘전체 축 중첩’으로 축의 이동을 비교하는 도판이다. 클릭하면 원본이 그대로 열린다.",
-    lead: "원본 HTML을 수정 없이 넣었다(← → 키로 시대 이동). 선은 도판 저자가 재구성한 도시설계적 개념축이지 지적선·고고학 확정선이 아니며, 배경도 위 위치도 개략 표시다. 좌표가 없는 그림이라 지도 레이어로는 올리지 않았다.",
-    html: `<img class="axes-thumb" src="${base}urban_axes_thumb.jpg" alt="경주 도시 축의 변천사 도판">`,
-    dlg_html: `<iframe class="axes-frame" src="${base}urban_axes.html" title="경주 도시 축의 변천사" loading="lazy"></iframe><p class="sub"><a href="${base}urban_axes.html" target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a></p>` });
+  {
+    // 도시 축의 변천사 도판(원본 그대로) + 층위도(수치지도 실측·문헌 판정)를 한 카드로 합쳤다. 다이얼로그 안의 HTML은 스크립트가 돌지 않으므로 탭은 CSS(라디오)로 만든다
+    const PL = FR?.palimpsest, LT = FR?.literature;
+    const VD = [["ok", "이어졌다 · 실측+문헌", "방위", "원도심 도로중심선의 57%, 긴 건물의 66%가 한 축(N0.8°E)에 선다. 발굴된 신라 도로도 진북에 정렬하고(황인호 2011), 읍성 동벽 현존 구간도 N0.0–2.3°E다. 1915년 본정통과 1936년 화랑로도 같은 축이라 방위만으로는 시대를 가를 수 없다."],
+      ["maybe", "있다 · 읍성에서 번졌을 가능성", "약 150 m 동서선", "동서 가로가 147.5 m 간격으로 반복되고, 읍성 권역과 성동·황오동의 위상 차가 3 m다. 읍성 사각형(남북 약 600 m) 안 북문로·북성로·화랑로(남벽선)가 이 간격 안팎(±10–16 m)에 놓인다. 읍성의 선이 1936년 역 쪽으로 이어진 층으로 읽힌다."],
+      ["no", "원도심 전체로는 입증 안 됨", "신라 방리의 위치 계승", "신라 모듈(1단계 163.3 m, 2단계 156.2 m)이 원도심 전체에 일관되게 나오지 않는다. 황룡사·인왕동 쪽 남북 가로 간격 161.5 m는 1단계 모듈과 1.1% 차지만, 유적 정비로 다시 놓인 길일 수 있어 1913년 지적원도로 확인해야 한다."],
+      ["cut", "끊었다 · 실측+문헌", "근대의 사선과 장벽", "태종로(N79°E, 1909 신작로·1918 협궤선이라는 주장), 철도(1918·1936), 북천 변 알천로, 1980년 산업로에 직교하는 동천동 격자(N47.5°E)가 축을 벗어난 큰 선이다. 폐선 부지를 가로지르는 최단 경로는 직선의 2.55배다."]];
+    const verdicts = `<div class="verdicts">${VD.map(([c, k, h, d]) => `<div class="vd ${c}"><div class="vk">${k}</div><div class="vh">${h}</div><div class="vt">${d}</div></div>`).join("")}</div>`;
+    const tabs = `<div class="tabs">` +
+      `<input type="radio" name="axtab" id="axtab1" checked><label for="axtab1">층위도 — 실측·문헌 판정</label>` +
+      `<input type="radio" name="axtab" id="axtab2"><label for="axtab2">도시 축의 변천사 — 원본 도판</label>` +
+      `<div class="tab-p p1"><iframe class="axes-frame" src="${base}strata.html" title="경주 원도심 층위도" loading="lazy"></iframe><p class="sub"><a href="${base}strata.html" target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a> · 연표를 누르면 그 시대의 선이 지도에서 떠오른다. 지도는 Ctrl/⌘ + 휠로 확대하고 끌어서 옮긴다.</p></div>` +
+      `<div class="tab-p p2"><iframe class="axes-frame" src="${base}urban_axes.html" title="경주 도시 축의 변천사" loading="lazy"></iframe><p class="sub"><a href="${base}urban_axes.html" target="_blank" rel="noopener">새 창에서 크게 보기 ↗</a> · 원본 HTML을 수정 없이 넣었다. 도판을 누른 뒤 ← → 키로 시대를 옮긴다.</p></div></div>`;
+    let ev = "";
+    if (PL) {
+      const EW = PL.phase_by_region["ew_147.5"], NS = PL.phase_by_region["ns_161.5"];
+      const pv = (p) => (p === 0 ? "< 0.002" : p.toFixed(3));
+      const rows = Object.keys(PL.out_of_sample).map((k) => { const o = PL.out_of_sample[k], sp = PL.spectrum[k];
+        return [k + (k.includes("대조군") ? "" : o.in_sample ? " · 위상 추정" : " · 표본 외"), `${sp.ew.best_T} / ${sp.ns.best_T} m`,
+          EW[k] ? `${EW[k].phase_m} m (R ${f2(EW[k].R)})` : "–", NS[k] ? `${NS[k].phase_m} m (R ${f2(NS[k].R)})` : "–",
+          `${pv(sp.ew.p_module)} / ${pv(sp.ns.p_module)}`, `×${f2(o.ew_y.lift)} / ×${f2(o.ns_x.lift)}`]; });
+      ev = h4("판정에 쓴 수치 — 권역별 가로 간격") +
+        tbl(["권역", "가장 강한 주기 100–200 m<br>동서 가로 / 남북 가로", "동서 가로 147.5 m<br>위상 (R)", "남북 가로 161.5 m<br>위상 (R)", `모듈 ${PL.module_m[1]} / ${PL.module_m[0]} m<br>무작위 대비 p`, "표본 외 배율<br>동서 / 남북"], rows, "evt") +
+        `<p class="sub">R = 그 간격의 주기 강도(1이면 완전 주기), 위상 = 격자선이 놓인 자리(주기 안에서의 위치, m). p = 가로 위치를 무작위로 흔든 500회 가운데 실측 이상으로 주기가 강하게 나온 비율이며, 모듈 간격(동서 가로 ${PL.module_m[1]} m, 남북 가로 ${PL.module_m[0]} m)에 대한 값이다. 가장 강한 주기에는 p를 붙이지 않았다(100–200 m를 훑어 고른 값이라 같은 방식으로 검정할 수 없다). 표본 외 배율 = 중앙 3권역(읍성 권역, 노동·노서동, 성동·황오동)에서 위상을 잡은 ${PL.module_m[0]} × ${PL.module_m[1]} m 격자선 ±6 m 안에 드는 가로 길이 비율 ÷ 무작위 기대치다(1보다 크면 격자선에 붙어 있다). 동천동은 대조군이다. 동서 147.5 m 위상의 세 권역(${PL.coherence_regions.map((r) => r.replace(/\(.*\)/, "")).join(", ")}) 일관성은 ${PL.phase_by_region["ew_147.5_coherence_3regions"]}이다(1이면 같은 위상). 모듈 크기 출처: ${PL.module_source}.</p>`;
+    }
+    const lit = LT ? h4("문헌 대조") + tbl(["신라 왕경 방 모듈", "크기"], LT.silla_modules) + `<p class="sub">${LT.silla_src}</p>` + tbl(["읍성의 선", "지금의 도로"], LT.eupseong_roads) + `<p class="sub">${LT.eupseong_src}</p>` : "";
+    add({ id: "axes", g: "site", t: "경주 도시 축의 변천사 — 인터랙티브 도판과 층위도(실측·문헌 판정)", size: "l", tier: "T2",
+      src: "층위도 — 국토지리정보원 연속수치지도 (2026-09-13 취득, T2) · 황인호(2008·2011) 奈良文化財研究所学報 77·87, Hwang(2009) IJKH 14, 김신재(2013) 『신라문화』 41 초록, 한국민족문화대백과 「경주읍성」 (T3) · 채미옥(2026.9.12) LOWCA 워크숍 발표 p10 모듈, 박정호(2026) 도시재생 강연, 도로–성벽 대응 위키·언론 (T4) · 자체 계산 9_도시/pipeline/build_palimpsest_layers.py · build_palimpsest_evidence.py · build_palimpsest_page.py │ 도판 — 「경주 도시 축의 변천사」 인터랙티브 HTML(2026-09), 배경도 = 경주시 원도심 미래구상 기획연구(2025.07) Figure 3d · 축 서술 p.17–23, 77–109 (T2) · 동지 일출 가설축은 다큐 요약 (T4)",
+      take: "도판은 시대별 축의 이동(왕경 남북축 → 읍성 행정축 → 철도·역세권축 → 도로·관광축 → 외곽 관문축 → 폐철도 재연결축)을 그린 개념도이고, 층위도는 그중 무엇이 지금 가로에 남았는지 수치지도로 판정한 지도다. 방위는 이어졌고, 약 150 m 동서선은 읍성에서 역 쪽으로 번졌을 가능성이 있으며, 신라 방리의 위치 계승은 원도심 전체로는 입증되지 않았다.",
+      lead: "아래 판정 4개가 층위도의 결론이고, 탭으로 두 자료를 오간다. ‘층위도’는 국토지리정보원 수치지도로 가로 방위 분포·가로 간격 스펙트럼·표본 외 위상 검정을 계산해 실측과 문헌을 나눠 판정한 지도다. ‘도시 축의 변천사’는 원본 HTML을 수정 없이 넣은 도판이며, 선은 도판 저자가 재구성한 도시설계적 개념축이지 지적선·고고학 확정선이 아니다(좌표가 없어 지도 레이어로는 올리지 않았다).",
+      note: "두 자료를 겹쳐 읽으면, 도판의 앞 세 축(왕경 남북축·읍성 행정축·철도축) 가운데 지금 가로에서 실측으로 확인되는 것은 진북 방위와 읍성의 선(147.5 m 동서선, 네 변이 된 도로)이고, 철도는 그 격자를 끊은 층이다. 신라 왕경 남북축의 ‘위치’가 남았는지는 아직 판정하지 못했고, 나머지 세 축(도로·관광축, 외곽 관문축, 폐철도 재연결축)은 이번 실측의 대상이 아니다. 가장 그럴듯한 해석은 진북 격자가 경지와 필지선으로 오래 남았고, 읍성이 그 위에 앉았으며, 근대 도로가 읍성의 네 변과 십자축을 따라 넓혀지며 역 쪽으로 이어졌다는 것이다. 부지 계획으로는 147.5 m 동서선 가운데 부지 양쪽에 가로가 있는 세 선이 횡단축 후보가 된다(‘도시 조직’ 그룹의 ‘끊긴 틀선’ 카드). 한계: 수치지도는 현재 상태라 유적 정비로 다시 놓인 길과 원래 길을 구별하지 못한다. 신라 방이 제자리에 남았는지는 1913년 지적원도(국가기록원), 1916년 1:10,000 「경주」 지도, 발굴 도로 좌표를 겹쳐야 판정할 수 있다. 도로–성벽 대응은 위키·언론(T4)과 좌표 대조이고, 147.5 m ↔ 읍성 대응은 ±10–16 m 근사다.",
+      html: `<div class="duo"><figure><img src="${base}urban_axes_thumb.jpg" alt="경주 도시 축의 변천사 도판" loading="lazy"><figcaption>도판 — 시대별 개념축</figcaption></figure><figure><img src="${base}fabric/strata_t.jpg" alt="경주 원도심 층위도" loading="lazy"><figcaption>층위도 — 실측 가로와 규칙선</figcaption></figure></div>`,
+      dlg_html: verdicts + tabs + ev + lit });
+  }
   if (MS?.cityhall) add({ id: "cityhall", g: "site", t: "현재 경주시청 — 본청 45개 과 중 15개 과가 청사 밖에 있다", take: "본관은 1995년 시·군 통합 전의 옛 경주군청 건물이다. 9개 과는 기린빌딩, 3개 과는 동원빌딩을 임차해 쓰고 있다. 문서고는 실내체육관에 있다.", size: "m", tier: "T1", src: MS.cityhall.src,
     lead: "경주시 홈페이지 청사안내(2026-09-02)에서 본청 각 과의 위치를 세었다. 막대는 장소별 과 수, 빨강은 민간 건물 임차다.",
     note: "행정안전부 공유재산 운영기준에 따르면 임차 면적도 청사 기준면적에 포함되고 전세권을 설정해야 한다. 즉 지금은 청사가 부족해 임차로 메우는 상태다. 본청+의회 인원을 800~950명으로 가정하고 1인당 30~35㎡를 적용하면 28,000~33,000㎡, 법정 의무공간과 주민 이용 공간을 더하면 38,000~45,000㎡가 필요하다.",
@@ -97,6 +132,302 @@ async function main_() {
   if (MS?.tourism_complex) add({ id: "tcomplex", g: "site", t: "관광단지 4곳 — 지정 면적", take: "보문(850ha)·마우나오션·감포해양·북경주 웰니스. 모두 원도심 밖에 있다. 관광 숙박 수요는 이 단지들이 받고 있다.", tier: "T1", src: "V-World LT_C_UO601 · 이름은 경북 고시번호를 토지이음 고시정보와 대조해 확인",
     lead: "관광진흥법에 따른 관광단지 지정 경계의 면적(ha)이다. V-World 자료에는 이름이 없어 마지막 고시번호로 확인했다.",
     opt: hbar(MS.tourism_complex.map((r) => r[0]), MS.tourism_complex.map((r) => r[1]), { unit: "ha", top: 4, color: "#0e8a7a" }) });
+
+  // ======================= 도시 조직 — 콘타 모형 범위(연속수치지도 11.06㎢) 실측. 수치는 9_도시/pipeline/build_report_fabric.py 가 fabric_report.json 한 파일로 묶는다
+  if (FR) {
+    const FB = FR.fabric, RD = FR.reading, DT = FR.detour, ZL = FR.zone_layers, OR = FB.orientation;
+    const E0 = Object.fromEntries(FR.edge.filter((r) => r.band.startsWith("경계")).map((r) => [r.side, r]));
+    const E1 = Object.fromEntries(FR.edge.filter((r) => r.band.startsWith("배후")).map((r) => [r.side, r]));
+    const NGII = "국토지리정보원 연속수치지도 (2026-09-13 취득, T2)";
+    const REF = "기법은 사용자가 준 레퍼런스(steinforthstudio의 도시 비교 그래픽)에서 옮겼다";
+    const thumb = (k, alt) => `<img class="fig-thumb" src="${base}fabric/${k}_t.jpg" alt="${alt}" loading="lazy">`;
+    const fig = (k, alt) => `<a class="fig-link" href="${base}fabric/${k}.jpg" target="_blank" rel="noopener" title="원본 크기로 열기"><img class="fig-full" src="${base}fabric/${k}.jpg" alt="${alt}" loading="lazy"></a>`;
+    const SIDES = ["서", "동", "남", "북"];
+    const SNAME = { "서": "서 (원화로·성동시장)", "동": "동 (황오동)", "남": "남 (원효로·고분)", "북": "북 (북천)" };
+
+    // ---- 1. 범위와 방법
+    add({ id: "f_extent", g: "fabric", t: "콘타 모형 범위 — 실측 3,427 × 3,226 m와 믿을 수 있는 분석 반경", size: "m", tier: "T2", map: "zone",
+      take: `최종콘타모델_v2의 땅은 연속수치지도 범위(${FR.model.area_km2}㎢)를 x·y·z 모두 0.5배로 줄인 1:2000 제작 모형이다. 반경 R 지표는 구역만 볼 때 약 1,100 m, 구역 중심 1 km 권역(S2)을 볼 때 약 560 m까지 가장자리 효과 없이 잴 수 있다.`,
+      lead: "반경 R 지표(통합도·선택도 등)는 계산 네트워크가 보고 대상 바깥으로 R 이상 뻗어 있어야 가장자리 값이 왜곡되지 않는다(Gil 2017의 보수적 기준). 지도의 색 점선 사각형은 범위를 R만큼 안으로 줄인 영역이고, 이 안의 계산점만 반경 R 값이 온전하다. 오른쪽 곡선은 폐선 양쪽의 우회율이다(다음 카드).",
+      note: `3dm 솔리드는 측정에 쓰지 않는다. Rhino에서 재면 면적은 1/4, 거리는 1/2로 나온다. 그래서 분석은 같은 범위의 원 SHP에서 하고(모델 건물 ${fmt(FR.model.bldg_n)}동 = SHP 건물 ${fmt(FR.model.bldg_n)}동), 결과를 모형에 겹칠 때만 5187 → 5179 → 범위 중심 기준 0.5배 → z식을 적용한다. 구역만 보고할 때는 R1200까지 충분하지만, 원도심 보행권(S2) 전체를 R800·R1200으로 계산하려면 구역 중심 기준 한 변 4.8 km(약 23㎢)로 수치지도를 다시 받아야 한다(무료). 현재 범위와 확장 범위의 S2 선분 지표 순위상관이 0.95 이상이면 현재 범위 값을 인용한다.`,
+      src: `${NGII} · 최종콘타모델_v2.3dm · 고시 제2026-8호 구역계 (T1) · 자체 계산 9_도시/pipeline/build_extent_diagnosis.py · 가장자리 효과 기준 Gil(2017) EPB 44(5) (T3)`,
+      html: thumb("map10", "모델 범위와 분석 신뢰 반경"),
+      dlg_html: fig("map10", "모델 범위·분석 신뢰 반경·폐선 횡단 현황") + h4("3dm 모형 확인") + tbl(["항목", "확인값", "근거"], [
+        ["솔리드 좌표", "EPSG:5179 좌표를 범위 중심 기준 0.5배로 축소", "모델 박스 1,718.6 × 1,618.0 m = 실범위의 0.5015배, 두 범위 중심이 0.2 m 안에서 일치"],
+        ["1:1 대응", `모델 건물 ${fmt(FR.model.bldg_n)}동 = SHP 건물 ${fmt(FR.model.bldg_n)}동`, "2배로 되돌리면 중심 거리 중앙값 0.04 m, p95 0.67 m"],
+        ["건물 높이", "층수 × 1.75 (층고 3.5 m × 0.5)", "전 건물에서 높이/층수의 p5 = p50 = p95 = 1.750"],
+        ["표고 z", "z = 0.499 × 표고 + 233.85", "건물 바닥 4,000개 회귀, r = 0.9998"],
+        ["문서 단위", "mm (모형 1 mm = 실제 2 m)", "1:2000"]]) +
+        h4("보고 단위별로 쓸 수 있는 반경") + tbl(["보고 단위", "크기", "최대 반경", "부족할 때"], [
+        ["S1 지구단위계획구역", "남북 923 × 동서 약 280 m", `약 1,100 m (구역 → 범위 끝 최소 ${fmt(FR.margins.zone_m)} m)`, "충분하다"],
+        ["S2 구역 중심 반경 1 km", "3.14㎢", `약 560 m (S2 원 → 범위 끝 최소 ${fmt(FR.margins.s2_m)} m) — R400·R500만`, "한 변 4.8 km로 다시 받으면 R1200까지"],
+        ["모델 범위 전체", `${FR.model.area_km2}㎢`, "가장자리에서 0", "표시용. 수치는 안쪽 코어만 인용"],
+        ["S3 도시 (Rn, R2000 이상)", "경주시", "불가", "표준노드링크 전국판(보유)과 접합. 이면도로가 없다는 점을 명기"]]) });
+
+    {
+      const z0 = DT.zone_y[0], zl = DT.zone_y[1] - z0;
+      const lo = DT.profile[0].y - z0, hi = DT.profile[DT.profile.length - 1].y - z0;
+      const prof = []; let prev = null;
+      for (const p of DT.profile) { const x = p.y - z0; if (prev != null && x - prev > 60) prof.push([Math.round((x + prev) / 2), "-"]); prof.push([x, p.ratio]); prev = x; } // 값이 없는 단면은 선을 끊는다
+      const xs = [];
+      if (DT.rail_gap) xs.push({ xAxis: DT.rail_gap.y - z0, name: "횡단(원효로 추정)" });
+      for (const c of DT.crossings) { const x = c.y - z0; if (x > 0 && x <= hi) xs.push({ xAxis: x, name: `횡단 ${c.width_m} m` }); }
+      for (const o of DT.overpass) xs.push({ xAxis: o.y - z0, name: `육교 ${o.width_m} m`, lineStyle: { type: "dashed", color: C.orange } });
+      add({ id: "f_barrier", g: "fabric", t: `폐선 단절 — 구역 구간 ${fmt(DT.no_road_gap_m)} m에 도로 횡단이 없다`, size: "m", tier: "T2", map: "rail_abandoned",
+        take: `구역(남북 923 m)은 두 도로 횡단 사이에 통째로 들어 있고, 그 사이 ${fmt(DT.no_road_gap_m)} m에는 폭 3.2 m 육교 1개뿐이다. 폐선 양쪽 60 m 지점을 도로로 이으면 구역 구간에서 직선거리의 중앙값 ${DT.zone_median}배, 최대 ${DT.zone_max}배를 돌아간다.`,
+        lead: "철도중심선을 따라 50 m마다, 폐선 양쪽 60 m 지점을 도로중심선 그래프로 이은 거리를 직선거리로 나눴다(차량 기준, 육교 미포함). 가로축은 구역 남단에서 북쪽으로 잰 거리이고, 붉은 띠가 지구단위계획구역, 세로선이 도로 횡단과 육교다.",
+        note: `구역 구간 18개 단면의 우회율은 중앙값 ${DT.zone_median}, 최대 ${DT.zone_max}다. 남쪽 횡단(원효로 추정)과 북쪽 횡단(폭 20 m) 사이 ${fmt(DT.no_road_gap_m)} m에 도로 횡단이 없다. 폐선 가장자리 ±20 m 안의 가로 끝점·교차점은 서측 49개, 동측 77개이고 그중 막다른 끝점이 20개다(엔진 anchors[] 후보). 계획안 v1·v2는 ‘양정로·원효로가 부지를 가로지른다’고 적었다. 수치지도에서 원효로는 구역 남단 밖 횡단과 맞지만, 양정로는 구역 중앙에서 철도중심선과 교차하지 않는다(북단 폭 20 m 횡단이 양정로일 가능성). 우회율은 예비치다 — 육교가 지금도 개방돼 있는지, 폐선 뒤 임시 통로가 있는지, 원화로 횡단보도 위치는 현장 확인 전이다.`,
+        src: `${NGII} 도로중심선 A002·철도중심선 A017·육교 A006 · 고시 제2026-8호 구역계 (T1) · 자체 계산 9_도시/pipeline/build_extent_diagnosis.py`,
+        opt: { grid: { left: 8, right: 16, top: 34, bottom: 30, containLabel: true },
+          tooltip: { trigger: "axis", formatter: (ps) => { const p = ps.find((q) => q.value[1] !== "-"); return p ? `구역 남단에서 ${fmt(p.value[0])} m<br>우회율 <b>${p.value[1]}</b>배` : ""; } },
+          xAxis: { type: "value", min: lo, max: hi, name: "구역 남단에서 북쪽으로 (m)", nameLocation: "middle", nameGap: 24, nameTextStyle: { color: C.ink3, fontSize: 11 } },
+          yAxis: { type: "value", min: 0, name: "우회율 (도로 ÷ 직선)", nameLocation: "middle", nameRotate: 90, nameGap: 26, nameTextStyle: { color: C.ink3, fontSize: 11 } },
+          series: [{ type: "line", data: prof, color: C.red, symbolSize: 5, lineStyle: { width: 2 },
+            markArea: { silent: true, itemStyle: { color: "rgba(192,57,43,.08)" }, label: { color: C.red, fontSize: 11, position: "insideTopLeft" }, data: [[{ xAxis: 0, name: "지구단위계획구역" }, { xAxis: zl }]] },
+            markLine: { silent: true, symbol: "none", label: { formatter: "{b}", fontSize: 10.5, color: C.ink2, position: "end" }, lineStyle: { color: C.ink2, type: "solid", width: 1.2 },
+              data: [...xs, { yAxis: 1, name: "직선 = 1", lineStyle: { color: C.gray, type: "dotted" }, label: { position: "insideStartTop" } }] } }] },
+        dlg_html: h4("구역 주변 횡단 지점 (구역 남단 기준 거리, 북쪽 +)") + tbl(["위치", "종류", "폭"], [
+          ...(DT.rail_gap ? [[`${fmt(DT.rail_gap.y - z0)} m`, "도로 횡단 — 철도 선형이 도로 면에 끊김(원효로 추정)", "틈 84.5 m"]] : []),
+          ...DT.overpass.map((o) => [`${fmt(o.y - z0)} m`, `육교 A006 (연장 ${Math.round(o.length_m)} m)`, `${o.width_m} m`]),
+          ...DT.crossings.filter((c) => c.y - z0 > 0 && c.y - z0 <= hi).map((c) => [`${fmt(c.y - z0)} m`, "도로 × 철도중심선 교차", `${c.width_m} m`])]) });
+    }
+
+    {
+      const PLAN = [["A", "폐선 단절 기준선", "S1–S2", "보유", "S0 anchors[] · f₁ 기준선 · 교훈 8 현황값", "1일"],
+        ["B", "segment angular 분석 (현황) — NACH·NAIN, R400·R800·R1200", "S2 (+S3)", "보유 + 확장 범위 재취득", "f₁ 계산기", "2일"],
+        ["C", "검증 — 1층 상가 입지 검정 / 게이트 카운트", "S2", "상가업소 보유 / 현장", "f₁ 반경 결정", "1일 + 현장 1–2일"],
+        ["D", "Spacematrix — 필지·가구·조직 (GSI·FSI·L·OSR·N)", "S2", "보유 + 건축물대장 조인", "f₄ 목표 분포 · v2 획지 검정", "1–2일"],
+        ["E", "결합 — 접근 밀도 × 중심성 → 유형·불일치 지도", "S2", "B + D", "횡단축 앵커 근거 · 시청 유/무 비교", "2일"],
+        ["F", "시각·3D — VGA / 유산 조망", "S1 / S1–S2", "1:1 재구성 필요", "f₂ 조망 항 · 광장 설계", "2–3일"],
+        ["G", "시간축 — 핵의 이동 (선택)", "S2", "과거 항공사진 디지타이즈", "논거 보강", "크다"],
+        ["H", "출입구·가로면·CPTED (선택)", "S1–S2", "출입구 DB 미확보, 담장 보유", "교훈 7 기준선 · 선형공원 감시", "1일 + 키 발급"]];
+      add({ id: "f_plan", g: "fabric", t: "분석 계획 A–H — 공간구문론 × Spacematrix를 이 범위에서", size: "m",
+        take: "A 폐선 단절 기준선을 먼저 확정하고 B segment 분석 → C 검증 → D Spacematrix → E 결합 → F 시각·3D 순서로 간다. 엔진에는 f₁ 회복률, anchors[], f₄ 목표 분포 세 곳으로 들어간다.",
+        lead: "붙여 준 공간구문론·Spacematrix·K-means 글을 검토해 이 모델 범위에서 할 수 있는 분석을 여덟 가지로 나눴다. 도구 비용은 0원이다(cityseer·depthmapX·momepy·QGIS Space Syntax Toolkit·Place Syntax Tool).",
+        note: "A(폐선 단절)가 가장 먼저다 — 교훈 8의 현황값이자 f₁의 기준선이고, 이 현황을 조사한 자료는 아직 없다. f₁ 제안: NAIN_R 회복률 = (대안 − 현황) / (상한 − 현황). R은 C 검증에서 정한다(예상 R800). 평가 집합은 S2 안의 기존 선분이다 — 부지 안 가로를 많이 그린 대안이 평균을 올려 이기는 편향을 막는다. 최약점 통과폭은 목적함수가 아니라 제약으로 둔다(주축 12 m, 보조축 4–6 m). 결정이 필요한 것: f₁ 정의, 15분 등시선 항을 f₁에서 뗄지, 보행 네트워크 (a) 모든 교차로 횡단 / (b) 폭 20 m 이상 간선은 횡단보도에서만 중 무엇을 공식값으로 할지, 비교 대상 수(문서마다 15/16/18/24).",
+        src: "work/20260928_모델범위_공간구문_Spacematrix_분석계획_v1.md · 엔진 연결은 docs/40_engine/구경주역_최적화엔진_Part5.md",
+        html: tbl(["", "분석", "스케일", "소요"], PLAN.map((r) => [`<b>${r[0]}</b>`, r[1], r[2], r[5]])),
+        dlg_html: tbl(["", "분석", "스케일", "데이터", "엔진·문서 연결", "소요"], PLAN.map((r) => [`<b>${r[0]}</b>`, ...r.slice(1)])) });
+    }
+
+    {
+      const FIX = [["“Intelligibility = Rn과 R3의 상관”", "Rn–R3 상관은 synergy다", "intelligibility는 connectivity와 global integration의 상관이다(Hillier 1996)"],
+        ["axial R3(위상 3단계)와 segment NAIN·NACH를 한 흐름으로 서술", "axial과 segment를 섞었다. segment 분석은 미터 반경을 쓴다", "도로중심선 기반 segment + 미터 반경 R400·R800·R1200으로 통일한다(Turner 2007)"],
+        ["“Choice = 최단 경로로 선택될 확률 → 통행로 정밀 예측”", "choice는 반경 안 모든 쌍의 최소각 경로가 그 선분을 지나는 횟수다. 확률도 통행량도 아니다", "통행량 순위를 설명하는 변수로만 쓴다. ‘예측’이라 쓰려면 실측 보정 r²를 함께 낸다"],
+        ["“고립 공간 = 범죄 취약, 벽을 허무는 개보수로 개선”", "통합도 하나로 판정하는 것은 과단순화다", "주거침입 위험은 선분당 주거 수와 출입구가 가로에 면하는지에 더 민감하다(Hillier 2004; Hillier & Sahbaz 2005). 통합도 + 출입구 + 담장을 함께 본다"],
+        ["“지가·임대료 상호작용 → 경제적 타당성”", "경주 원도심 지가는 고도지구·역사문화환경 높이 제한에 크게 교란된다", "규제 겹을 층화하지 않은 통합도–지가 상관은 계획 근거로 쓰지 않는다"],
+        ["“Spacematrix는 공간 간 관계성을 반영 못함”", "절반만 맞다. 네트워크 밀도 N과 tare가 이미 들어 있다(Berghauser Pont & Haupt 2010)", "빠진 것은 네트워크가 아니라 배치(중심성)다"],
+        ["결합: 100 m 버퍼 오버레이 → K-means", "임시방편이다", "Place Syntax(Ståhle 외 2005) → 접근 밀도(Berghauser Pont & Marcus 2014) → 중심성 × 밀도 유형을 보행량으로 검증(Berghauser Pont 외 2019)"],
+        ["K-means 예시 코드", "가짜 데이터에서 유형을 다시 찾는 순환 구조, 실루엣으로 구한 K를 4로 덮어씀, 유형 임계값 하드코딩, 군집 번호를 이름에 고정(번호는 실행마다 바뀜), 치우친 분포에 log 변환 없음, 선분 → 블록 집계 규칙 없음", "공식 문서는 3분위 × 3분위 교차 분류(경계값을 설명할 수 있다). 탐색용으로만 log → GMM(BIC), 부트스트랩 ARI로 안정성 보고"],
+        ["“CRS가 없으면 5179 지정”, “EPSG:3857로 변환”", "3857은 경주 위도에서 길이 약 1.23배, 면적 약 1.52배 과대다. 좌표계를 모르는 채 지정하는 것은 지형도면 EPSG:5176 함정과 같은 종류다", "읽자마자 EPSG:5187로 변환한다. 원본 .prj를 확인한 뒤에만 지정한다"],
+        ["“SHP는 UTF-8로 쓰면 한글 안 깨짐”", "이번 수치지도 DBF는 이중 인코딩이다(.cpg는 utf-8, 실제는 cp949 바이트를 latin-1로 읽어 다시 저장)", "읽을 때 encode('latin-1').decode('cp949')로 복원하고 처리본은 GPKG로 저장한다"],
+        ["“Rhomorph, Spacematrix plugins”", "존재를 확인할 수 없는 이름이다", "확인된 도구: depthmapX(CLI), QGIS Space Syntax Toolkit, Place Syntax Tool, sDNA, cityseer, momepy, DeCodingSpaces·SpiderWeb(GH), UNA(Rhino)"]];
+      add({ id: "f_method", g: "fabric", t: "붙여 준 공간구문론·Spacematrix 글 — 고쳐 쓸 것 11가지와 빠진 것", size: "m", tier: "T3",
+        take: "방향은 맞다. 고칠 것은 11가지다 — intelligibility 정의(Rn–R3 상관은 synergy), axial R3와 segment 미터 반경 혼용, choice를 ‘확률·예측’으로 쓴 것, K-means 예시의 순환 구조, EPSG:3857(경주 위도에서 면적 약 1.52배 과대) 등. 빠진 것은 가장자리 효과와 실측 검증이다.",
+        lead: "그대로 쓰는 것: natural movement(가로망 배치가 통행의 기본값을 만든다, Hillier 외 1993), angular segment 분석과 NACH·NAIN 정규화(Hillier, Yang & Turner 2012), 재개발 전후 비교, Spacematrix 정의(FSI·GSI·L·OSR). 아래 표는 고쳐 쓸 것이다.",
+        note: "빠진 것 다섯 가지: ① 가장자리 효과(Gil 2017) — 범위를 자르면 중앙은 통합도가 부풀고 가장자리는 깎인다 ② 실측 검증 — 게이트 카운트 없이 통합도를 ‘유동’이라 부를 수 없다(보유 자료로 가능한 대체 검정: 1층 상가 입지) ③ 보행 네트워크의 현실 — 폭 29.5 m 원화로는 횡단보도에서만 건널 수 있고 육교·지하도는 비평면 교차인데, 도로중심선 그래프는 모두 ‘어디서나 건널 수 있음’으로 처리한다 ④ 시간축 — 핵의 이동은 과거 네트워크가 있어야 잰다 ⑤ 이 프로젝트 규칙 — Rn은 S3 지표이고, 규제는 페널티가 아니라 buildable 마스크이며, 유형 경계값도 설명할 수 있어야 한다. 방법론 문헌(T3)은 방법 부록과 논문 트랙에서만 인용하고, 공모·계획 본문에는 ‘자체 분석’으로 싣는다. 권·호·쪽수 일부는 기억에 의존해 적었으므로 논문 원고 전에 대조한다.",
+        src: "work/20260928_모델범위_공간구문_Spacematrix_분석계획_v1.md §2 · Hillier & Hanson(1984) · Hillier 외(1993) EPB 20(1) · Hillier(1996) · Turner(2007) EPB 34(3) · Hillier, Yang & Turner(2012) JOSS 3(2) · Gil(2017) EPB 44(5) · Berghauser Pont & Haupt(2010) · Berghauser Pont & Marcus(2014) · Berghauser Pont, Stavroulaki & Marcus(2019) EPB 46(8) · Ståhle, Marcus & Karlström(2005) (T3)",
+        html: tbl(["원문", "바로잡기"], FIX.slice(0, 5).map((r) => [r[0], r[2]])),
+        dlg_html: tbl(["#", "원문", "문제", "바로잡기"], FIX.map((r, i) => [i + 1, ...r]), "fixt") });
+    }
+
+    // ---- 2. 부지 경계의 스케일
+    {
+      const eRow = (lab, fn) => [lab, ...SIDES.map((s) => fn(E0[s]))];
+      add({ id: "f_edge", g: "fabric", t: "부지 경계 바깥 0–150 m — 네 변의 스케일이 서로 다르다", size: "m", tier: "T2", map: "zone",
+        take: `동측(황오동)은 1층 ${p0(E0["동"].f1)}, 교차 간격 ${E0["동"].link_p50} m, 폭 4 m 미만 골목이 연장의 ${p0(E0["동"].lane4)}인 저층 골목 조직이다. 서측(원화로·성동시장)은 3층 이상 ${p0(E0["서"].f3)}, GSI ${f2(E0["서"].gsi)}, 건물 길이 P90 ${E0["서"].blen_p90} m인 상업 가로다.`,
+        lead: "구역 경계 바깥을 가장 가까운 경계점의 방향(서·동·남·북)과 거리띠(0–150 m, 150–400 m)로 나눠 가로·필지·건물 지표를 쟀다. 경주 평균 하나가 아니라 변마다의 분포(P25–P50–P75–P90)로 본다. 오른쪽 곡선은 경계에서 멀어지며 50 m 단위로 잰 값이고, 필지 면적 그래프의 노란 띠가 계획안 v2의 획지 1,000–2,500㎡다.",
+        note: `동서가 비대칭이다 — 동측은 촘촘한 저층 골목 조직, 서측은 3층 이상이 섞인 상업 가로라 부지의 두 긴 변은 서로 다른 규칙을 가져야 한다. 경계 쪽 새 가구의 한 변이 100 m를 넘으면 기존 교차 간격(30–40 m)보다 결이 약 3배 굵어진다. 북측 0–150 m 띠는 북천과 도로가 대부분이라(${E0["북"].bldg}동) 배후 150–400 m 띠(${E1["북"].bldg}동, 필지 중앙값 ${E1["북"].parcel_p50}㎡, 교차 간격 ${E1["북"].link_p50} m, 1층 ${p0(E1["북"].f1)})를 기준으로 삼는다. 남측 배후 띠의 GSI는 ${f2(E1["남"].gsi)}으로 고분·유적 공지다. 켜1 규칙값은 모두 인접 분포에서 뽑은 초기값이고, 높이는 min(규제 4겹 상한, 스케일 규칙)이다 — 규제 상한을 먼저 확정하기 전에는 ‘스케일 쪽 상한’일 뿐이다. 한계: 수치지도 건물에 창고 같은 부속건물이 섞여 바닥면적 P25가 10–20㎡로 나오므로 P75·P90과 건물 길이로 판단했다. 간구는 필지 최소외접사각형의 짧은 변(대리값), 층고는 3.5 m 가정이다.`,
+        src: `${NGII} 건물·도로중심선 · V-World 연속지적 지목 ‘대’ (T2) · 고시 제2026-8호 구역계 (T1) · 자체 계산 9_도시/pipeline/build_edge_scale_profile.py`,
+        html: thumb("map11", "경계띠 스케일 프로파일"),
+        dlg_html: fig("map11", "경계띠 스케일 프로파일") + h4("경계 바깥 0–150 m 띠 실측") + tbl(["지표", ...SIDES.map((s) => SNAME[s])], [
+          eRow("교차 간격 P50 / P75 (m)", (r) => `${r.link_p50} / ${r.link_p75}`),
+          eRow("도로폭 P50 (m, 길이가중)", (r) => r.road_p50),
+          eRow("폭 4 m 미만 연장 비율", (r) => p0(r.lane4)),
+          eRow("대(垈) 필지 면적 P25–P50–P75 (㎡)", (r) => `${r.parcel_p25}–${r.parcel_p50}–${r.parcel_p75}`),
+          eRow("필지 면적 P90 (㎡)", (r) => r.parcel_p90),
+          eRow("필지 간구 / 깊이 P50 (m, 대리값)", (r) => `${r.front_p50} / ${r.depth_p50}`),
+          eRow("건물 바닥면적 P50 / P90 (㎡)", (r) => `${r.fp_p50} / ${r.fp_p90}`),
+          eRow("건물 길이 P90 (m)", (r) => r.blen_p90),
+          eRow("1층 / 3층 이상 비율", (r) => `${p0(r.f1)} / ${p0(r.f3)}`),
+          eRow("GSI · FSI (순대지)", (r) => `${f2(r.gsi)} · ${f2(r.fsi)}`),
+          eRow("가로 단면 H/W P50", (r) => f2(r.hw_p50)),
+          eRow("건물 수", (r) => fmt(r.bldg))], "sidet") +
+          h4("켜1(경계에서 0–40 m) 규칙 초기값") + tbl(["항목", "서측 (원화로·성동시장)", "동측 (황오동)", "남측 (원효로·고분)", "북측 (배후 기준)"], [
+          ["경계를 따라 잰 가로 간격", "≤ 67 m", "≤ 42 m", "≤ 46 m", "≤ 52 m"],
+          ["가로 폭", "원화로변 + 5–8 m", "3–4 m 보행 골목 + 6–7 m 소로", "3–5 m", "4–6 m"],
+          ["획지 면적", "70–180㎡, 상한 270㎡ (큰 획지는 입면 분절 조건부)", "110–210㎡, 상한 280㎡", "70–220㎡, 상한 300㎡", "50–190㎡, 상한 270㎡"],
+          ["건물 길이(입면)", "≤ 22 m, 모듈 6–11 m", "≤ 15 m, 모듈 9–12 m", "≤ 17 m", "≤ 15 m"],
+          ["경계선에서의 층수", "3층", "1–2층", "1–2층", "1–2층"],
+          ["GSI / FSI", "0.5–0.6 / 1.2–1.4", "0.3–0.45 / 0.45–0.6", "약 0.4 / 0.6", "0.3–0.35 / 0.6"],
+          ["가로 단면 H/W", "0.5–0.7", "0.4–0.5", "약 0.45", "약 0.4"]], "sidet") +
+          `<p class="sub">가로 이어받기: 동측은 경계에 닿는 기존 가로·막다른 골목을 모두 켜1 안까지 연장(방향 ±15°, 같은 폭 등급), 서측은 원화로 횡단 지점을 성동시장 골목 축에 정렬, 남·북측은 원효로·고분 방향과 북천 방향 보행 연장. 규정으로는 획지 규모 기준(켜1 합필 제한), 건축선(동측 건축한계선, 원화로변 벽면지정선), 경계거리별 최고층수, 최대 입면 길이, 공공보행통로 지정으로 옮긴다(「지구단위계획수립지침」 원문 확인 후 결정조서에 쓴다).</p>` });
+    }
+
+    add({ id: "f_layers", g: "fabric", t: "구역 안쪽 — 면적의 절반이 경계에서 40 m 안이다", size: "m", tier: "T1", map: "zone",
+      take: `구역 면적의 ${p0(ZL.d0_40)}가 경계에서 40 m 안(켜1 이어받기), ${p0(ZL.d40_90)}가 40–90 m(켜2 전이)이고, 90 m 이상(켜3 새 스케일)은 ${p0(ZL.d90)}(약 ${ZL.d90_ha} ha)뿐이다. 90 m 이상은 모두 중앙부(구 역사 일대)에 있다.`,
+      lead: "고시 구역 안을 2 m 격자로 채우고 각 점에서 구역 경계까지의 최단 거리를 쟀다. 켜의 경계값 40 m와 90 m는 경계 바깥 실측(교차 간격 30–40 m ≈ 필지 깊이 15 m × 2)에서 잡은 초기값이다.",
+      note: `90 m 이상인 곳은 중앙부(5187 y 360,712–361,212)에만 있어, 대형 볼륨은 그곳에서만 기존 결과 부딪치지 않는다. 북단(y 361,212 이북)과 남단(y 360,612 이남)은 최대 경계거리가 18–40 m라 전체가 켜1이다. 토지이용계획(안) v5는 시청(15,000㎡, 5층, 연면적 상한 37,500㎡)을 ‘북측’에 두었는데, 결과 맞추려면 그 자리는 중앙부 북쪽 끝(y 361,012–361,212, 경계거리 116–131 m)이어야 하고 5층 매스는 켜3에 두어야 한다. 켜2의 획지 규모는 켜1 상한 s₁과 켜3 요구값 s₃ 사이를 거리에 대해 로그 보간한다: s(d) = exp(ln s₁ + (ln s₃ − ln s₁)(d − 40)/50). 동측 s₁ = 280㎡, 시청 s₃ = 15,000㎡이면 d = 65 m에서 약 2,050㎡다. 켜2 층수를 켜1 + 1층으로 둔 것은 설계 판단값이다.`,
+      src: "고시 제2026-8호 구역계 (T1 — 지형도면을 좌표에 맞춰 디지타이즈, 면적 오차 +1.3%) · 자체 계산 9_도시/pipeline/build_report_fabric.py · 켜 규칙 work/20260928_경계_스케일전이_규칙_v1.md",
+      html: tl([["켜1 · 0–40 m", Math.round(ZL.d0_40 * 100), "%", "이어받기 — 기존 블록 한 겹"], ["켜2 · 40–90 m", Math.round(ZL.d40_90 * 100), "%", "전이 — 로그 보간"], ["켜3 · 90 m 이상", Math.round(ZL.d90 * 100), "%", `새 스케일 — 약 ${ZL.d90_ha} ha, 중앙부만`], ["최대 경계거리", ZL.dmax_m, "m", "구 역사 일대"]], "compact"),
+      dlg_html: tl([["켜1 · 0–40 m", Math.round(ZL.d0_40 * 100), "%", "이어받기 — 기존 블록 한 겹"], ["켜2 · 40–90 m", Math.round(ZL.d40_90 * 100), "%", "전이 — 로그 보간"], ["켜3 · 90 m 이상", Math.round(ZL.d90 * 100), "%", `새 스케일 — 약 ${ZL.d90_ha} ha, 중앙부만`], ["최대 경계거리", ZL.dmax_m, "m", "구 역사 일대"]]) +
+        h4("켜 정의와 규칙") + tbl(["켜", "경계거리 d", "면적 비율", "뜻", "규칙"], [
+        ["켜1 이어받기", "0–40 m", p0(ZL.d0_40), "기존 블록 한 겹 (교차 간격 30–40 m ≈ 필지 깊이 15 m × 2)", "변마다 경계 바깥 분포(IQR·P90)를 그대로 — ‘부지 경계 바깥 0–150 m’ 카드의 켜1 표"],
+        ["켜2 전이", "40–90 m", p0(ZL.d40_90), "켜1 값에서 켜3 값으로", "획지·건물 길이는 로그 보간, 층수는 켜1 + 1층, 켜1 연장선 가운데 선택된 것만 중심까지(= 횡단축, 엔진 유전자)"],
+        ["켜3 새 스케일", "90 m 이상", `${p0(ZL.d90)} (약 ${ZL.d90_ha} ha)`, "중앙부만. 대형 프로그램·광장", "규제 상한까지. 대형 매스도 켜1 입면 모듈로 분절"]]) });
+
+    {
+      const cats = SIDES.map((s) => (s === "북" ? "북 (배후 150–400 m)" : SNAME[s]));
+      const rows = SIDES.map((s) => (s === "북" ? E1[s] : E0[s]));
+      add({ id: "f_parcel", g: "fabric", t: "계획안 v2 획지 1,000–2,500㎡와 경계 바깥 실제 필지", size: "m", tier: "T2", map: "parcels",
+        take: "경계 바깥 대지 필지의 중앙값은 방향과 관계없이 70–160㎡이고 P90도 310㎡ 이하다. 계획안 v2가 ‘원도심 필지 결’이라 적은 획지 1,000–2,500㎡는 동·남측 중앙값(약 155㎡)의 6–16배, 서측(70㎡)의 14–36배다.",
+        lead: "상자는 필지 면적 P25–P75, 가운데 선은 중앙값, 위 수염은 P90이다(아래 수염은 P25에 붙였다). 세로축은 로그 눈금이다. 주황 띠가 v2의 획지 1,000–2,500㎡, 붉은 선이 v2 표가 비교한 고시안 획지 평균 11,800㎡, 회색 점선이 원도심 대지 필지 전체 중앙값(" + FB.parcels.area_p50 + "㎡)이다.",
+        note: `v2의 획지는 고시안(평균 11,800㎡)보다는 원도심 결에 가깝지만, 실제 인접 필지보다는 여전히 한 자릿수 이상 굵다. 이 규모를 유지하려면 획지는 크게 두되 매스·입면을 인접 모듈(9–12 m)로 분절하는 규칙을 반드시 붙여야 한다. 원도심에서 ‘필지 병합 + 대형 단일 건물’은 상업 중심(노동·노서동) 외에는 선례가 없고, ‘필지 모듈 유지 + 층수 증가’는 성건·동천동 다세대 지구에 실측 선례가 있다(1층 비율 63–67%, 간구 약 11 m × 깊이 약 16 m 유지). 북측은 경계 띠 필지가 20개뿐이라 배후 띠 값을 썼다.`,
+        src: "V-World 연속지적 지목 ‘대’ (T2) · 고시 제2026-8호 구역계 (T1) · 계획안 v2 획지 규모와 고시안 평균은 work/20260921_구경주역_지구단위계획안_v2.md · 자체 계산 9_도시/pipeline/build_edge_scale_profile.py",
+        opt: { grid: { left: 8, right: 16, top: 14, bottom: 8, containLabel: true },
+          tooltip: { trigger: "item", formatter: (p) => { const r = rows[p.dataIndex]; return r && p.seriesType === "boxplot" ? `${cats[p.dataIndex]}<br>P25 ${fmt(r.parcel_p25)} · 중앙값 <b>${fmt(r.parcel_p50)}</b> · P75 ${fmt(r.parcel_p75)} · P90 ${fmt(r.parcel_p90)}㎡` : ""; } },
+          xAxis: { type: "category", data: cats.map((c) => c.replace(" (", "\n(")), axisLabel: { color: C.ink, fontSize: 11, interval: 0 } },
+          yAxis: { type: "log", logBase: 10, min: 10, max: 20000, axisLabel: { showMaxLabel: false, formatter: (v) => fmt(v) + "㎡" } },
+          series: [{ type: "boxplot", data: rows.map((r) => [r.parcel_p25, r.parcel_p25, r.parcel_p50, r.parcel_p75, r.parcel_p90]), itemStyle: { color: C.green3, borderColor: C.green, borderWidth: 1.5 }, boxWidth: [16, 44],
+            markArea: { silent: true, itemStyle: { color: "rgba(199,100,28,.14)" }, label: { position: "insideTopLeft", color: C.orange, fontSize: 11, formatter: "v2 획지 1,000–2,500㎡" }, data: [[{ yAxis: 1000 }, { yAxis: 2500 }]] },
+            markLine: { silent: true, symbol: "none", label: { position: "insideEndTop", formatter: "{b}", fontSize: 10.5, color: C.ink2 },
+              data: [{ yAxis: 11800, name: "고시안 획지 평균 11,800㎡", lineStyle: { color: C.red, width: 1.5, type: "solid" } }, { yAxis: FB.parcels.area_p50, name: `원도심 대지 필지 중앙값 ${FB.parcels.area_p50}㎡`, lineStyle: { color: C.gray, type: "dashed" }, label: { show: false } }] } }] } });
+    }
+
+    // ---- 3. 반복되는 조직
+    {
+      const INV = [["필지 모듈: 간구 약 10 m × 깊이 약 15 m", `대지 필지 중앙값 ${FB.parcels.area_p50}㎡, 간구 ${FB.parcels.front_p50} m, 깊이 ${FB.parcels.depth_p50} m, 깊이/간구 ${FB.parcels.depth_front_p50}`, "주거 동 7개(동천·성건·황오·성동·북부·동부·인왕)의 간구 중앙값 9.5–12.8 m, 깊이 14.8–17.9 m"],
+        ["건물 한 동의 긴 변 ≤ 약 18 m", "건물 길이 중앙값 8–12 m, P90 14.5–19.9 m", "상업 중심(노동·노서동 P90 약 23 m)을 뺀 모든 동"],
+        ["저층", "원도심·남측 동의 1층 비율 80–98%", "동천·성건동(다세대 지구) 63–67%, 상업 중심 57%만 예외"],
+        ["교차 간격 30–45 m, 골목 비율 높음", `동별 교차 간격 중앙값 30–46 m, 통과 링크 중앙값 ${FB.links.through_len_p50} m`, "전 동. 폭 4 m 미만 골목이 도로 연장의 1/3–1/2"],
+        ["깊은 가구 + 막다른 골목", `가구 짧은 변 ${FB.blocks.short_p50} m × 긴 변 ${FB.blocks.long_p50} m, 필지 약 ${FB.blocks.parcels_p50}개, 깊이 필지 ${FB.blocks.rows_p50}겹`, `모든 링크의 ${p0(FB.links.dead_share)}가 막다른 골목이고 길이 중앙값은 ${FB.links.dead_len_p50} m`],
+        ["필지당 여러 채", `건물이 있는 대지 필지의 ${p0(FB.parcels.share_2plus_bldg)}에 2동 이상`, "주거 동 대부분 47–74%. 황남·노동동은 28%"],
+        ["하나의 정남북 격자", `가로 연장의 ${p0(OR.street_share.grid)}, 긴 건물의 ${p0(OR.building_grid_share)}가 한 축(${OR.grid_bearing} / 동서) ±7.5° 안`, "서부 89%, 노서 85%, 동부 82%, 노동 77%, 황오 72%, 사정 70%, 성건 68%, 성동 66%"],
+        ["세립 조직 사이의 큰 비움", `200 m 격자 ${Object.values(FB.cell_types).reduce((a, b) => a + b, 0)}칸 중 ${FB.cell_types["비움(고분·유적·녹지·농지·철도)"]}칸이 비움`, "고분·유적·하천·농지·철도. 부지 남측 배후 띠 순건폐율 0.10"]];
+      add({ id: "f_repeat", g: "fabric", t: "동이 달라도 반복되는 것 — 경주 원도심의 기본 조직", size: "m", tier: "T2",
+        take: `간구 약 10 m × 깊이 약 15 m 필지(중앙값 ${FB.parcels.area_p50}㎡)에 1층 건물 두 채가 서고, 필지 약 ${FB.blocks.parcels_p50}개가 ${FB.blocks.short_p50} × ${FB.blocks.long_p50} m 가구를 이룬다. 안쪽 필지는 약 ${Math.round(FB.links.dead_len_p50)} m 막다른 골목으로 들어가고, 교차 간격은 30–45 m이며, 전체가 거의 정남북인 한 격자 위에 놓인다.`,
+        lead: "모델 범위 전체(건물 23,579동, 도로중심선 212 km, 대지 필지 4,581개)에서 동별·200 m 격자별 지표를 쟀다. 왼쪽은 200 m 격자 조직 유형(규칙 분류), 가운데는 가로 방위 체계, 오른쪽은 동별 분포와 방위 분포·가구 깊이다.",
+        note: `기본 조직은 여덟 가지가 동을 가리지 않고 반복된다(아래 표). 반복이 깨지는 곳 — 덧씌워진 층: 동천동 북동부 회전 격자(${OR.diagA_bearing}), 황성동·북천 따라 가는 사선 간선(${OR.diagB_bearing}), 성건·동천동 다세대(필지 모듈은 그대로 두고 층만 올라감, 1층 63–67%), 원화로·화랑로변과 노동·노서동 상업(건물 길이 P90 약 23 m, 상점 필지 65㎡), 고분·유적·북천·농지·철도의 비움. 200 m 격자 유형: ${Object.entries(FB.cell_types).map(([k, v]) => `${k.replace(/\(.*\)/, "")} ${v}칸`).join(" · ")}. 유형 경계값은 경계띠 실측과 동별 분포에서 정한 판단값이다(그림 하단). 한계: 수치지도 건물 외곽은 처마를 포함할 수 있어 필지 건폐율 중앙값 ${FB.parcels.lot_gsi_p50}은 과대일 수 있고, 필지 자료(V-World)는 부지 주변 동서 약 2.1 km만 덮는다(사정·노서·서부·구황·황성동은 필지 값 없음).`,
+        src: `${NGII} · V-World 연속지적 지목 ‘대’ (T2) · 소상공인시장진흥공단 상가업소 (T2, 법정동명 대조) · 고시 제2026-8호 구역계 (T1) · 자체 계산 9_도시/pipeline/build_fabric_patterns.py`,
+        html: thumb("map12", "경주 조직의 반복 특성"),
+        dlg_html: fig("map12", "경주 조직의 반복 특성") + h4("동이 달라도 반복되는 여덟 가지") + tbl(["반복 특성", "값", "반복의 근거"], INV) });
+    }
+
+    {
+      const D = [...FB.dongs].sort((a, b) => b["주격자_가로비율"] - a["주격자_가로비율"]);
+      const S = (name, vals, color) => ({ name, type: "bar", stack: "o", data: vals.map((v) => Math.round(v * 1000) / 10), itemStyle: { color }, barCategoryGap: "28%" });
+      add({ id: "f_grid", g: "fabric", t: `하나의 정남북 격자 — 가로의 ${p0(OR.street_share.grid)}가 ${OR.grid_bearing} 한 축에 선다`, size: "m", tier: "T2",
+        take: `가로 연장의 ${p0(OR.street_share.grid)}, 긴 건물의 ${p0(OR.building_grid_share)}가 한 축(${OR.grid_bearing} / 동서) ±7.5° 안에 든다. 서부 89%, 노서 85%, 동부 82%. 이 축을 벗어나는 것은 동천동 회전 격자(${OR.diagA_bearing})와 북천 변 사선(${OR.diagB_bearing})이다.`,
+        lead: `법정동별로 도로중심선 연장을 방위에 따라 나눴다(길이가중). 주격자 = ${OR.grid_bearing} 축의 남북·동서 ±7.5°, 사선 A = ${OR.diagA_bearing}(동천동 회전 격자), 사선 B = ${OR.diagB_bearing}(북천 변 간선), 나머지는 기타다. 위에서부터 주격자 비율이 높은 순이다.`,
+        note: `원도심은 하나의 정남북 격자다. 비스듬한 가로(격자와 20° 이상 틀어짐)에 15 m 안으로 면한 긴 건물 ${fmt(OR.oblique_n)}동 가운데 ${p0(OR.oblique_to_street)}는 가로를 따랐고 정남북을 지킨 것은 ${p0(OR.oblique_to_cardinal)}다 — 질서는 건물이 아니라 가로가 나르며, ‘건물이 가로와 무관하게 남향한다’는 가설은 이 범위에서 기각된다. 부지의 서·동·남쪽은 주격자 안에 있고, 북단만 사선 B와 동천동 회전 격자에 가깝다. 격자의 기원(신라 방리·조선 읍성·일제강점기 시가지 정리)은 방위만으로 가를 수 없다. 그 판정은 ‘부지와 규제’ 그룹의 ‘경주 도시 축의 변천사’ 카드(층위도)에 있다.`,
+        src: `${NGII} 도로중심선 212.4 km·건물 · 법정동 코드 (연속수치지도 bjcd) · 자체 계산 9_도시/pipeline/build_fabric_patterns.py`,
+        opt: { grid: { left: 4, right: 12, top: 26, bottom: 4, containLabel: true }, legend: { top: 0, left: 0 },
+          tooltip: { trigger: "axis", axisPointer: { type: "none" }, valueFormatter: (v) => v + "%" },
+          xAxis: { type: "value", max: 100, show: false }, yAxis: { type: "category", inverse: true, data: D.map((d) => d["동"]), axisLabel: { color: C.ink, fontSize: 11.5 } },
+          series: [S("주격자", D.map((d) => d["주격자_가로비율"]), C.red), S("사선 A", D.map((d) => d["사선A_가로비율"]), C.blue), S("사선 B", D.map((d) => d["사선B_가로비율"]), "#2e8b57"),
+            S("기타", D.map((d) => Math.max(0, 1 - d["주격자_가로비율"] - d["사선A_가로비율"] - d["사선B_가로비율"])), C.gray2)] } });
+    }
+
+    add({ id: "f_block", g: "fabric", t: `가구와 골목 — 필지 ${FB.blocks.rows_p50}겹 깊이, 링크의 ${p0(FB.links.dead_share)}가 막다른 골목`, size: "m", tier: "T2",
+      take: `가로망 면(가구) ${FB.blocks.n}개의 짧은 변 중앙값은 ${FB.blocks.short_p50} m, 긴 변 ${FB.blocks.long_p50} m, 필지는 약 ${FB.blocks.parcels_p50}개다. 깊이가 필지 ${FB.blocks.rows_p50}겹이라 안쪽 필지는 짧은 막다른 골목(중앙값 ${FB.links.dead_len_p50} m)으로 들어간다.`,
+      lead: "가구 = 도로중심선 망이 둘러싼 면이다. 막다른 골목은 면을 나누지 않는다. 필지 겹수 = 가구 짧은 변 ÷ 필지 깊이. 면적·겹수는 대지 필지가 4개 이상인 면만 계산했다.",
+      note: `가구는 두 겹이 아니라 약 ${FB.blocks.rows_p50}겹 깊이라서, 둘레 필지 안쪽의 필지는 짧은 막다른 골목으로 들어간다. 이 막다른 골목(모든 링크의 ${p0(FB.links.dead_share)})은 폐선이 만든 단절이 아니라 기본 조직의 접근 방식이므로 재현할 대상이다. 폐선 가장자리에서 끊긴 가로는 이어 줄 대상이다 — 계획에서 둘을 구별한다. 필지 건폐율 중앙값 ${FB.parcels.lot_gsi_p50}은 수치지도 건물 외곽이 처마를 포함할 수 있어 과대일 수 있다(건축물대장 건축면적으로 교차 확인 필요).`,
+      src: `${NGII} 도로중심선·건물 · V-World 연속지적 지목 ‘대’ (T2) · 자체 계산 9_도시/pipeline/build_fabric_patterns.py`,
+      html: tl([["가구 짧은 변 × 긴 변", `${FB.blocks.short_p50} × ${FB.blocks.long_p50}`, "m", `짧은 변 P25–P75 ${FB.blocks.short_p25}–${FB.blocks.short_p75} m`],
+        ["가구 깊이", FB.blocks.rows_p50, "겹", `필지 약 ${FB.blocks.parcels_p50}개 · 가구 ${FB.blocks.n}개`],
+        ["막다른 골목", Math.round(FB.links.dead_share * 100), "%", `길이 중앙값 ${FB.links.dead_len_p50} m`],
+        ["필지 모듈", `${FB.parcels.front_p50} × ${FB.parcels.depth_p50}`, "m", "간구 × 깊이 중앙값"],
+        ["필지당 2동 이상", Math.round(FB.parcels.share_2plus_bldg * 100), "%", "건물 있는 대지 필지"],
+        ["통과 링크 길이", FB.links.through_len_p50, "m", "교차점 사이 중앙값"]], "compact"),
+      dlg_html: tl([["가구 짧은 변 × 긴 변", `${FB.blocks.short_p50} × ${FB.blocks.long_p50}`, "m", `짧은 변 P25–P75 ${FB.blocks.short_p25}–${FB.blocks.short_p75} m · 긴 변 중앙값`],
+        ["가구 깊이", FB.blocks.rows_p50, "겹", `P25–P75 ${FB.blocks.rows_p25}–${FB.blocks.rows_p75}겹 · 필지 약 ${FB.blocks.parcels_p50}개 · 면적 중앙값 ${fmt(FB.blocks.area_p50)}㎡`],
+        ["막다른 골목", Math.round(FB.links.dead_share * 100), "%", `링크 ${fmt(FB.links.n)}개 중 · 길이 중앙값 ${FB.links.dead_len_p50} m`],
+        ["필지 모듈", `${FB.parcels.front_p50} × ${FB.parcels.depth_p50}`, "m", `간구 × 깊이 중앙값 · 대지 ${fmt(FB.parcels.n)}필지 · 면적 중앙값 ${FB.parcels.area_p50}㎡`],
+        ["필지당 건물 2동 이상", Math.round(FB.parcels.share_2plus_bldg * 100), "%", `건물 있는 대지 필지 · 필지 건폐율 중앙값 ${FB.parcels.lot_gsi_p50}`],
+        ["통과 링크 길이", FB.links.through_len_p50, "m", "교차점 사이 중앙값"]]) });
+
+    // ---- 4. 네 가지 읽기와 생성 원리
+    add({ id: "f_stack", g: "fabric", t: "층 분해 스택 — 지형·물·규제·가로·매싱을 한 판씩", size: "m", tier: "T2",
+      take: `원도심은 표고 약 35–58 m의 평지이고 북천·서천이 둘러싼다. 건물은 1–2층이 87%이고, 닫힌 등고선 고리 ${RD.stack.closed_contour_rings}개 중 ${RD.stack.rings_in_heritage}개가 문화유산구역 안에 있다 — 원도심에서 가장 높은 것은 건물이 아니라 고분이다.`,
+      lead: `같은 범위(${RD.stack.extent_km[0]} × ${RD.stack.extent_km[1]} km)를 한 층씩 떼어 아래 판부터 지형 → 물길과 비움 → 규제 → 가로 방위 체계 → 3D 매싱 순으로 20° 평행 투영해 쌓았다.`,
+      note: "지형: 원도심은 표고 약 35–58 m의 평탄한 땅이고 북동쪽에만 구릉(최고 약 120 m)이 있다. 3D 매싱: 1–2층이 87%이고, 가장 높이 솟은 것은 고분이다. 규제: 고도지구가 원도심 대부분을 덮고, 문화유산구역과 역사문화환경 보존지역이 그 남·동쪽을 잇는다 — 땅의 쓰임을 정하는 것은 용도지역보다 유산 규제다. 가로: 주격자(N0.8°E)가 원도심 전체를 덮고 사선(동천동·북천 변)과 철도만 벗어난다. 레퍼런스에서 바꾼 것: 등측 30° 대신 20° 평행 투영(판이 겹치지 않게), 고분은 닫힌 등고선을 표고만큼 들어 올림(콘타 모형 방식), 토지이용 대신 규제 판(경주에서는 규제가 쓰임을 정한다).",
+      src: `${NGII} 등고선·표고점·건물·도로중심선 · V-World 법정 규제 경계 (T1) · UPIS 공원 (T1) · 자체 계산 9_도시/pipeline/build_gyeongju_reading.py · ${REF}`,
+      html: thumb("map13", "경주 층 분해 스택"), dlg_html: fig("map13", "경주 층 분해 스택") });
+
+    {
+      const ISO = [...RD.isovists].sort((a, b) => a.area - b.area);
+      const a0 = ISO[0], a1 = ISO[ISO.length - 1];
+      const dist = Math.round(Math.hypot(a1.x - a0.x, a1.y - a0.y) / 10) * 10;
+      add({ id: "f_isovist", g: "fabric", t: `교차점 가시 영역 6곳 — ${fmt(Math.round(a0.area))}㎡에서 ${fmt(Math.round(a1.area))}㎡까지`, size: "m", tier: "T2",
+        take: `반경 150 m 안에서 눈높이로 보이는 면적이 ${ISO.map((i) => `${i.type} ${fmt(Math.round(i.area))}㎡`).join(", ")}다. 원도심에서 가장 넓은 시야는 폐선 부지 안이다.`,
+        lead: "레퍼런스의 교차점 가시 영역(isovist) 비교를 경주에 옮겼다. 조건: 반경 150 m, 광선 720개, 장애물은 건물 + 담장(수치지도 B002 — 한국 골목의 공간은 담장이 정한다). 개방 = 가시 면적 ÷ 반경 150 m 원 면적, 원형도 = 4πA/P²(1에 가까울수록 둥근 시야, 0에 가까울수록 십자형)이다.",
+        note: `직선 약 ${fmt(dist)} m 떨어진 ${a0.type}(${fmt(Math.round(a0.area))}㎡)과 ${a1.type}(${fmt(Math.round(a1.area))}㎡) 사이에서 가시 면적이 약 ${Math.round(a1.area / a0.area / 10) * 10}배 차이 난다. 원형도는 격자에서 0.05–0.09(십자형), 비움에서 0.22–0.51(둥근 형)이다 — 틀의 교차점, 골목, 막다른 골목, 비움이 서로 다른 크기의 공간을 만든다. 부지가 열리면 원도심에서 가장 큰 비움이 된다. 한계: 가시 영역은 2D이고, 건물 외곽은 도화선이라 처마를 포함할 수 있으며, 대문·필로티·수목은 넣지 않았다. ‘폐선 부지 안’은 지금은 들어갈 수 없는 지점이고, 부지 안 시설 건물은 장애물로 넣었다.`,
+        src: `${NGII} 건물·담장 B002·도로중심선 · 자체 계산 9_도시/pipeline/build_gyeongju_reading.py · ${REF}`,
+        html: thumb("map14", "교차점 가시 영역 6유형"),
+        dlg_html: fig("map14", "교차점 가시 영역 6유형") + tbl(["유형", "가시 면적", "개방", "원형도", "최장 시선", "평균 시선"],
+          RD.isovists.map((i) => [i.type, `${fmt(Math.round(i.area))}㎡`, p0(i.open), f2(i.comp), `${Math.round(i.maxsight)} m`, `${Math.round(i.meansight)} m`])) });
+    }
+
+    {
+      const RT = RD.routes;
+      add({ id: "f_walk", g: "fabric", t: `걷기 가시 면적 리듬 — 부지 동쪽 가장자리는 ${RT[2].peak_gap_median_m} m마다 골목이 열린다`, size: "m", tier: "T2",
+        take: `2 m마다 가시 면적을 쟀다. 화랑로(격자 틀)는 변동계수 ${f2(RT[0].cv)}로 한결같고 약 ${Math.round(RT[0].peak_gap_median_m)} m마다 옆 가로가 열린다. 황오동 골목은 변동계수 ${f2(RT[1].cv)}로 좁다가 빈 땅에서 튄다. 부지 동쪽 가장자리는 봉우리 간격 중앙값 ${RT[2].peak_gap_median_m} m다.`,
+        lead: "경로를 따라 2 m마다 가시 영역(반경 150 m)을 재서 이었다. 세 그래프는 같은 세로축을 쓴다. 흰 점(봉우리)은 시야가 옆으로 열리는 순간이다(돌출도가 250㎡와 경로 중앙값의 8% 가운데 큰 값 이상, 간격 8 m 이상).",
+        note: `격자 틀(화랑로)은 넓고 한결같은 시야에 약 ${Math.round(RT[0].peak_gap_median_m)} m마다 옆 가로가 열린다. 황오동 골목은 평소 1,500–5,000㎡로 좁다가 빈 필지·넓은 길을 만나면 2만㎡까지 튄다 — 세립 조직에 빈 땅이 구멍을 내고 있다는 뜻이며, 빈집·나대지 자료와 대조해 확인해야 한다. 부지 동쪽 가장자리의 ${RT[2].peak_gap_median_m} m 리듬은 황오동 골목이 부지에 닿는 간격이고, 켜1 보행 골목의 연결점 후보다. 경로는 조건 가로를 선호하는 가중 다익스트라(비선호 가로 ×8)로 골랐다.`,
+        src: `${NGII} 건물·담장·도로중심선 · 자체 계산 9_도시/pipeline/build_gyeongju_reading.py · ${REF}`,
+        html: thumb("map15", "걷기 가시 면적 리듬"),
+        dlg_html: fig("map15", "걷기 가시 면적 리듬") + tbl(["경로", "길이", "중앙값", "평균", "변동계수", "봉우리", "봉우리 간격 중앙값 / P75"],
+          RT.map((r) => [r.route, `${fmt(r.length_m)} m`, r.median_area != null ? `${fmt(r.median_area)}㎡` : "–", `${fmt(r.mean_area)}㎡`, f2(r.cv), `${r.peaks_per_100m}개/100 m`, `${r.peak_gap_median_m} / ${r.peak_gap_p75_m} m`])) });
+    }
+
+    {
+      const DJ = [...RD.dijkstra].sort((a, b) => a.detour - b.detour);
+      const bar = DJ.find((d) => /폐선/.test(d.case)), oth = DJ.filter((d) => d !== bar).map((d) => d.nodes_explored);
+      add({ id: "f_dijkstra", g: "fabric", t: `같은 600 m, 다른 탐색 — 부지를 건너면 직선의 ${bar.detour}배`, size: "m", tier: "T2",
+        take: `1.4 km 창, A–B 직선 약 600 m로 통일했다. ${DJ.map((d) => `${d.case} ${d.detour}배`).join(", ")}. 부지를 건너려면 탐색이 다른 조직의 ${(bar.nodes_explored / Math.max(...oth)).toFixed(1)}–${(bar.nodes_explored / Math.min(...oth)).toFixed(1)}배로 번진다.`,
+        lead: "레퍼런스의 다익스트라 탐색 비교를 같은 창·같은 거리로 옮겼다. 네 경우 모두 1.4 km 창에서 직선 약 600 m 떨어진 A–B를 최단 경로로 잇고, 알고리즘이 경로를 찾을 때까지 탐색한 노드를 칠했다. 흰 선은 마지막 10% 탐색 전선이다.",
+        note: `폐선 부지를 건너는 경우는 탐색 노드 ${fmt(bar.nodes_explored)}개, 망거리가 직선의 ${bar.detour}배이고 경로는 부지를 남쪽으로 돌아간다. 격자·세립 조직은 ${DJ[0].detour}–${DJ[DJ.length - 2].detour}배다. 147.5 m 동서 규칙선(자홍 점선)이 부지 양쪽에서 가로와 겹친다 — 다음 카드의 ‘끊긴 틀선’이다. 탐색 노드 수는 네트워크 표현(선분 분할)에 따라 달라지므로 같은 표현 안의 상대 비교로만 읽는다.`,
+        src: `${NGII} 도로중심선 · 자체 계산 9_도시/pipeline/build_gyeongju_reading.py · ${REF}`,
+        html: thumb("map16", "같은 거리 다른 탐색 — 다익스트라"),
+        dlg_html: fig("map16", "같은 거리 다른 탐색 — 다익스트라") + tbl(["경우", "탐색 노드", "망거리", "직선", "망거리 ÷ 직선"],
+          DJ.map((d) => [d.case, fmt(d.nodes_explored), `${fmt(d.network_m)} m`, `${fmt(d.straight_m)} m`, `${d.detour}배`])) });
+    }
+
+    {
+      const FV = { 360511: "이미 연결 (원효로, 구역 남단 밖)", 360659: "<b>양쪽에 가로 — 끊긴 틀선</b>", 360806: "<b>양쪽에 가로 — 끊긴 틀선 (화랑로, v2의 E-W2 주축)</b>", 360954: "<b>양쪽에 가로 — 끊긴 틀선</b>" };
+      const rows = RD.frame_lines_at_site.map((f) => [fmt(f.y_5187), `${f.street_len_west_m} m`, `${f.street_len_east_m} m`, `${f.len_inside_zone_m} m`, FV[f.y_5187] || "서측만"]);
+      add({ id: "f_frame", g: "fabric", t: "끊긴 틀선 3개 — 147.5 m 간격의 횡단축 후보", size: "l", tier: "T2", map: "zone",
+        take: "147.5 m 동서 규칙선 가운데 구역을 지나는 7개 선을 봤다. y 360,659 / 360,806(화랑로) / 360,954 세 선은 부지 양쪽에 이미 같은 선의 가로가 있다. 기존 원효로(360,511)와 합치면 147.5 m 간격의 횡단이 된다.",
+        lead: "층위도에서 찾은 147.5 m 동서 규칙선(읍성 권역과 성동·황오동에서 같은 위상) 가운데 구역을 지나는 선마다, 선 ±6 m 띠 안에 든 가로 길이를 폐선 서측과 동측으로 나눠 쟀다. 표의 y는 EPSG:5187 북좌표다.",
+        note: "세 선은 부지 양쪽에 같은 선의 가로가 이미 있는데 폐선 부지에서만 끊긴 자리다. 여기에 횡단을 열면 경주가 스스로 선을 이어 온 방식(읍성의 선이 역 쪽으로 이어진 것)을 따르게 되므로, 엔진 anchors[]의 우선 후보로 쓴다. 361,101 이북 세 선은 동측 가로가 0–24 m뿐이라 후보에서 뺐다. 147.5 m 주기와 위상의 검정은 ‘부지와 규제’ 그룹의 도시 축 변천사 카드(층위도)에 있다.",
+        src: `${NGII} 도로중심선 · 고시 제2026-8호 구역계 (T1) · 자체 계산 9_도시/pipeline/build_gyeongju_reading.py · 규칙선 9_도시/pipeline/build_palimpsest_evidence.py`,
+        html: tbl(["틀선 y", "서측 가로", "동측 가로", "판정"], rows.map((r) => [r[0], r[1], r[2], r[4]])),
+        dlg_html: tbl(["틀선 y (5187)", "서측 가로", "동측 가로", "구역 안 선 길이", "판정"], rows) });
+    }
+
+    {
+      const PR = [["물이 테를 두르고, 도시는 평지에 앉았다", "확인", "북천·서천·남천이 둘러싼 선상지 위의 원도심(표고 약 35–58 m). 근대 사선 간선 가운데 알천남·북로는 북천 물길 방향(N55°W)을 따른다"],
+        ["한 방위를 여러 시대가 나눠 썼다", "확인 · 방위로는 시대를 가르지 못함", "발굴된 신라 도로 진북 정렬(황인호 2011), 읍성 동벽 현존 구간 N0.0–2.3°E, 현재 가로 57%가 N0.8°E, 1915년 본정통·1936년 화랑로도 같은 방위"],
+        ["틀과 채움, 두 크기로 짜였다", "부분", "틀: 약 150 m 간격의 선 — 동서 147.5 m(읍성 권역과 성동·황오의 위상 차 3 m), 남북 161.5 m(황남·인왕·구황, 신라 1단계 모듈 163.3 m와 1.1% 차). 채움: 교차 30–45 m, 필지 약 10 × 15 m, 3–4겹 가구와 약 27 m 막다른 골목. 가시 영역이 두 크기를 그대로 보여 준다(틀 교차점 13,901㎡, 골목 1,448㎡, 막다른 골목 96㎡)"],
+        ["큰 스케일은 건물이 아니라 비움이다", "확인", "가장 높은 것은 고분(닫힌 등고선 고리 60개), 가장 넓은 시야는 대릉원 가장자리 31,885㎡와 폐선 부지 안 41,664㎡"],
+        ["근대는 사선과 선형 장벽으로 들어왔다", "확인", "태종로 N79°E(1909 신작로·1918 협궤선이라는 주장, T4), 철도 1918·1936(부지 건너기 직선의 2.55배), 1980년 산업로와 그에 직교하는 동천동 회전 격자 N47.5–50°E"],
+        ["층은 끊지 않고 이어서 쌓였다", "부분 · 도로–성벽 대응은 T4 + 좌표 대조", "읍성의 네 변이 길이 되었다 — 북문로(북)·동문로(동)·화랑로(남벽선)·금성로(서쪽 해자). 네 도로 둘레 약 2.44 km ≈ 확인 석축 둘레 2,412 m. 1936년 역 이전 때 남벽 자리에 낸 화랑로가 읍성의 선을 역까지 끌고 왔다(김신재 2013 초록)"]];
+      const USE = ["방위 — 부지 안 가로망은 N0.8°E 격자를 따르고, 북단만 동천동 회전 격자·산업로와 만나는 이음매로 따로 설계한다.",
+        "횡단축 위치 = 끊긴 틀선 — y 360,659 / 360,806(화랑로) / 360,954 세 선. 기존 원효로(360,511)와 합치면 147.5 m 간격의 횡단이 된다(엔진 anchors[] 우선 후보).",
+        "동쪽 가장자리 28 m 리듬 — 황오동 골목이 부지에 닿는 간격이다. 켜1 보행 골목의 연결점으로 쓴다.",
+        "채움 규칙 — 교차 30–45 m, 필지 10 × 15 m 모듈, 3–4겹 가구와 약 27 m 막다른 골목. 막다른 골목은 재현 대상이다.",
+        "큰 비움을 부지의 중심 요소로 — 부지의 가장 큰 자산은 열린 시야(41,664㎡)다. 대형 볼륨보다 광장·선형공원이 원도심의 ‘큰 스케일 = 비움’ 원리에 맞는다.",
+        "신라 남북선 후보 — 황인호의 2단계 기준선인 전랑지 서측 남북도로를 5187로 옮기면 E ≈ 220,040(±100 m, 개략 계산)으로 부지 동측을 지날 수 있다. 매장문화재 고확률 구간이자 남북 앵커 후보이며, GIS 검증이 필요하다."];
+      const prow = PR.map((r, i) => [`<b>${"①②③④⑤⑥"[i]} ${r[0]}</b>`, r[1], r[2]]);
+      add({ id: "f_principles", g: "fabric", t: "경주 원도심의 생성 원리 여섯 가지 — 확인 4 · 부분 2", size: "l", tier: "T3",
+        take: "① 물이 테를 두르고 도시는 평지에 앉았다 ② 한 방위를 여러 시대가 나눠 썼다 ③ 틀(약 150 m)과 채움(30–45 m) 두 크기로 짜였다 ④ 큰 스케일은 건물이 아니라 비움이다 ⑤ 근대는 사선과 선형 장벽으로 들어왔다 ⑥ 층은 끊지 않고 이어서 쌓였다.",
+        lead: "앞의 네 읽기(층 스택·가시 영역·걷기·다익스트라)와 반복 특성, 층위도, 문헌을 합쳐 원리로 정리했다. 확신도: 확인 = 실측과 문헌이 모두 받침, 부분 = 한쪽만 받치거나 국지적, 가설 = 검정이 더 필요.",
+        note: "한계: 147.5 m ↔ 읍성 대응은 ±10–16 m 근사이고 도로–성벽 대응은 T4다. 161.5 m ↔ 신라 163.3 m 일치는 유적 정비로 다시 놓인 길일 수 있다 — 결정 검정은 1913년 지적원도와 1916년 1:10,000 지도, 발굴 도로 좌표의 위상 대조다. 구 역사의 지정 현황은 이번 조사에서 코레일 ‘철도기념물’(2013)만 확인됐다(등록문화유산 여부 미확인). 이 카드의 원리는 실측(T2)과 문헌(T3·T4)을 합친 해석이라 공모·계획 본문에는 실측 수치만 옮긴다.",
+        src: "실측: 연속수치지도 (T2) · V-World 법정 규제 경계 (T1) · 고시 제2026-8호 구역계 (T1) │ 문헌: 황인호(2008·2011) 奈良文化財研究所学報 77·87 · Hwang(2009) IJKH 14 · 小澤毅(2011) 学報 87 · 김신재(2011·2013)·장승엽(2020) 『신라문화』 초록 · 강봉원(2008) 『대구사학』 90 초록(격자 회의론) · 박훈(2012) 초록 · 채미옥(2019) 『국토계획』 54(3) · 한국민족문화대백과 「경주읍성」 (T3) · 경주시(2025) 원도심 미래구상 기획연구 p18–28 · 국가유산청(2026) 신라왕경 핵심유적 복원·정비 종합계획 (T2) │ 발표·2차: 채미옥(2026.9.12)·박정호(2026), 태종로 1909/1918 경북매일 (T4) · 정리 work/20260928_경주_도시생성원리_v1.md",
+        html: tbl(["원리", "확신도", "근거"], prow, "prt"),
+        dlg_html: tbl(["원리", "확신도", "근거"], prow, "prt") + h4("부지 계획에 주는 것") + `<ol class="use">${USE.map((u) => `<li>${u}</li>`).join("")}</ol>` });
+    }
+  }
 
   // ======================= 사람
   {
@@ -411,8 +742,37 @@ async function main_() {
     from: "경주시 홈페이지 청사안내(2026-09-02 갱신) · 경주시시설관리공단 교통운영 시설안내(2026-09-21 열람) · 행정안전부 공유재산 운영기준", how: "웹 열람 수기 정리 → V-World 지오코더(건물 대표점)", proc: "과 수를 장소별로 집계, 임차 여부 표시. 주차장은 노상·민영·읍면 제외", viz: "지도 ‘시청 분산 현황’·‘공영주차장’ 레이어, 카드 ‘현재 경주시청’·‘공영주차장’", lim: "인사통계(정원)는 미공개라 인원은 가정. 시청사공영주차장은 면수 미공개" }, { map: "cityhall_sites" });
   P("facilities", "학교·종교시설·도서관·박물관·미술관·공원 지점·관광단지", "T2", { take: "학교는 표준데이터 API, 종교시설은 시 공개 파일을 지오코딩, 도서관·박물관·미술관·공원은 V-World 장소검색 POI다. 마지막 것은 공식 목록이 아니라 누락·중복이 있을 수 있다.",
     from: "전국초중등학교위치표준데이터(한국교육시설안전원, 2026-03-20) 83곳 + 유치원·대학은 카카오 로컬(T4) · 경주시 종교시설현황 2025-02-06 파일 586건 + 경주이슬람센터 1건(공식 현황에 없어 별도 추가, 주소 원화로281번길 22) · V-World 장소검색(bbox 경주시, 카테고리 정규식 필터) 160건 · 관광단지는 V-World UO601 + 토지이음 고시번호로 이름 확인", how: "공공데이터포털 API / 파일 → V-World 지오코더 541 + 카카오 23 / V-World 검색 API(80m 안 동명 중복 제거)", proc: "종교시설 22건은 좌표 미확인", viz: "지도 ‘학교’·‘종교시설’·‘도서관·박물관·미술관·공원’·‘관광단지’ 레이어, 카드 ‘학교·종교시설·관광단지’", lim: "도서관·박물관미술관·도시공원 표준데이터 API는 활용신청 대기 중 → 승인되면 교체. 시 공식 종교시설 현황에는 이슬람 항목이 없다" }, { map: "facilities" });
-  P("axes", "도시축 변천 인터랙티브 도판 — 원본 HTML을 그대로 넣었다", "T2", { take: "「경주 도시 축의 변천사」 HTML을 수정 없이 리포트 안에 iframe으로 넣었다. 좌표가 없는 개념도라 지도 레이어로는 올리지 않았다(좌표등록 시도는 거점 점이 실제와 100~200 m 어긋나 철회).",
-    from: "경주_도시축_변천사_인터랙티브_수정.html (2026-09, 배경 = 미래구상 연구 2025 Figure 3d 원도 + 시대별 원도판 4장 내장) · 축 서술 원문 미래구상 연구 p.17–23·77–109(T2), 동지 일출 가설축은 다큐 요약(T4)", how: "파일 복사(public/urban_axes.html), 썸네일은 내장 배경 PNG 축소", proc: "없음(원본 그대로)", viz: "카드 ‘경주 도시 축의 변천사’(부지와 규제) — 클릭하면 도판이 열리고 새 창 링크 제공", lim: "선은 도판 저자의 개념축, 위치는 개략. 시대 구분과 해석은 도판 저자의 것이며 이 사이트가 검증한 사실이 아니다" });
+  P("axes", "도시축 변천 도판 + 층위도 — 도판은 원본 그대로, 층위도는 수치지도 실측으로 새로 만들었다", "T2", { take: "‘경주 도시 축의 변천사’ 카드에 두 자료를 탭으로 넣었다. 도판 HTML은 수정 없이 iframe으로 넣었고(좌표 없는 개념도라 지도 레이어로는 올리지 않음), 층위도는 연속수치지도 가로를 측정해 도판의 시대 서술 가운데 무엇이 지금 가로에 남았는지 판정한 별도 페이지다.",
+    from: "도판: 경주_도시축_변천사_인터랙티브_수정.html (2026-09, 배경 = 미래구상 연구 2025 Figure 3d 원도 + 시대별 원도판 4장 내장) · 축 서술 원문 미래구상 연구 p.17–23·77–109(T2), 동지 일출 가설축은 다큐 요약(T4) │ 층위도: 연속수치지도 도로중심선·건물·담장(T2) + 학술 문헌(T3) + 첨부 발표자료 2건(T4)",
+    how: "도판은 파일 복사(public/urban_axes.html, 썸네일은 내장 배경 PNG 축소 — 좌표등록 시도는 거점 점이 실제와 100~200 m 어긋나 철회). 층위도는 9_도시/pipeline/build_palimpsest_layers.py · build_palimpsest_evidence.py · build_palimpsest_page.py가 만든 work/경주_원도심_층위도.html에 문서 골격을 씌워 public/strata.html로 복사(scripts/sync_fabric.py)",
+    proc: "층위도: 도로중심선 방위 분포(길이가중, 1° 간격)로 주격자 축 N0.8°E를 찾음 → 축 ±7.5° 가로만 골라 권역별 가로 위치의 주기 스펙트럼 R(T) = |Σw·e^{2πix/T}|/Σw를 30–260 m에서 계산 → 권역별 위상 비교, 모듈 간격에서 무작위 위치 500회 대비 p → 표본 외 위상 검정(중앙 3권역에서 잡은 164 × 140 m 격자선 ±6 m 안 가로 비율 ÷ 무작위 기대치) → 연표·문헌과 대조해 판정 4개",
+    viz: "카드 ‘경주 도시 축의 변천사’(부지와 규제) — 판정 4개, 탭 2개(층위도·원본 도판), 판정 수치표, 문헌 대조표",
+    lim: "도판의 선은 저자의 개념축이고 위치는 개략이며, 시대 구분과 해석은 도판 저자의 것이다. 층위도는 현재 가로만 재므로 유적 정비로 다시 놓인 길과 원래 길을 구별하지 못한다. 신라 방의 위치 계승은 1913년 지적원도·1916년 지도·발굴 도로 좌표를 겹치기 전에는 판정하지 않는다" });
+  P("ngii", "연속수치지도 — 콘타 모형 범위의 건물·도로·등고선", "T2", { take: "‘도시 조직’ 카드 16장과 층위도의 실측은 모두 이 한 자료에서 나왔다. 콘타 모형(3dm)은 이 범위를 0.5배로 줄인 제작 모형이라 측정에 쓰지 않는다.",
+    from: "국토지리정보원 연속수치지도 (9_도시/대지/(B020)연속수치지도_202609132098, 2026-09-13 취득) — 범위 3,427 × 3,226 m(11.06㎢), EPSG:5179",
+    how: "국토정보플랫폼에서 SHP 다운로드. API 아님",
+    proc: "읽자마자 EPSG:5187로 변환. DBF는 .cpg가 utf-8이지만 실제로는 cp949 바이트를 latin-1로 읽어 다시 저장한 이중 인코딩이라 encode('latin-1').decode('cp949')로 복원. 건물 B001 23,579동 · 도로중심선 A002 10,617개 212.4 km(폭 4 m 미만 골목 70.2 km 포함) · 철도 A016·A017 · 육교 A006 · 담장 B002 866개 · 등고선 F001 175개 · 표고점 F002 1,351개",
+    viz: "‘도시 조직’ 그룹 전 카드, ‘경주 도시 축의 변천사’ 카드의 층위도",
+    lim: "현재 상태만 담는다(과거 가로 없음). 건물 외곽은 항공사진 도화라 처마를 포함할 수 있고 창고 같은 부속건물이 섞여 있다. 높이는 층수 × 3.5 m 가정. 범위가 유한해 반경 R 지표는 신뢰 반경 안에서만 인용한다" });
+  P("konta", "최종콘타모델_v2.3dm — 1:2000 반축척 제작 모형", "T2", { take: "솔리드는 연속수치지도 범위를 x·y·z 모두 0.5배로 줄인 제작 모형이다. 건물 23,579동이 SHP와 1:1로 대응하는 것을 확인했고, 측정은 원 SHP에서 한다.",
+    from: "9_도시/최종콘타모델_v2.3dm (Rhino, 단위 mm)", how: "rhino3dm(Python)으로 파일을 읽음 — Rhino 문서를 열지 않음",
+    proc: "모델 박스 1,718.6 × 1,618.0 = 실범위의 0.5015배, 두 범위 중심이 0.2 m 안에서 일치 → 축척 0.5. 건물 높이/층수 = 1.750(층고 3.5 m × 0.5). 건물 바닥 4,000개 회귀로 z = 0.499 × 표고 + 233.85 (r 0.9998). 숨김 레이어(도로·인도·하천 경계선, 대지 지형면)는 축소되지 않은 실좌표",
+    viz: "카드 ‘콘타 모형 범위’", lim: "Rhino에서 재면 면적 1/4, 거리 1/2. 분석 결과를 모형에 겹칠 때만 5187 → 5179 → 중심 기준 0.5배 → z식을 적용한다" });
+  P("fabric_calc", "도시 조직 지표 — 자체 계산 스크립트", "T2", { take: "‘도시 조직’ 카드의 수치는 모두 9_도시/pipeline의 스크립트가 계산했고, build_report_fabric.py가 fabric_report.json 한 파일로 묶는다.",
+    from: "연속수치지도(T2) · V-World 연속지적 지목 ‘대’ 4,581필지(T2, 부지 주변 동서 약 2.1 km만) · 고시 제2026-8호 구역계(T1) · 소상공인 상가업소 법정동명(T2, 동 이름 대조)",
+    how: "Python (geopandas·shapely·networkx·scipy·matplotlib). 외부 API 호출 없음",
+    proc: "build_extent_diagnosis.py — 신뢰 반경, 철도 횡단, 50 m 간격 우회율 · build_edge_scale_profile.py — 경계 바깥 방향 × 거리띠 지표 · build_fabric_patterns.py — 동별·200 m 격자 지표, 가로 방위, 가구(도로중심선 망의 면) · build_gyeongju_reading.py — 층 스택, 가시 영역(광선 720개, 반경 150 m, 장애물 건물 + 담장), 걷기 가시 면적(2 m 간격), 다익스트라(1.4 km 창, A–B 600 m) · build_report_fabric.py — 구역 안쪽 경계거리(2 m 격자), 요약·그림 내보내기. 네 가지 읽기는 사용자가 준 레퍼런스(steinforthstudio 도시 비교 그래픽)의 기법을 옮기며 바꿨다(20° 평행 투영, 담장 장애물, 가중 다익스트라)",
+    viz: "‘도시 조직’ 그룹 16장 (그림 map10–16)", lim: "200 m 격자 유형 경계값은 경계띠 실측과 동별 분포에서 정한 판단값이다. 간구는 최소외접사각형 짧은 변(대리값). 막다른 골목은 가구 면을 나누지 않는다. 가시 영역은 2D이고 대문·필로티·수목이 없다" });
+  P("literature", "문헌 — 신라 왕경 모듈·경주읍성·철도 이전 (T3)", "T3", { take: "층위도 판정과 생성 원리에 쓴 학술 문헌이다. 일부는 초록만 읽었다. 공모·계획 본문에는 인용하지 않고 방법 부록과 논문 트랙에서만 쓴다.",
+    from: "황인호(2008·2011) 奈良文化財研究所学報 77·87 · Hwang In-ho(2009) IJKH 14 · 小澤毅(2011) 学報 87 · 김신재(2011·2013) 『신라문화』 38·41 (초록) · 박훈(2012) 대한건축학회연합논문집 14(1) (초록) · 장승엽(2020) 『신라문화』 57 (초록) · 강봉원(2008) 『대구사학』 90 (초록, 격자 회의론) · 채미옥(2019) 『국토계획』 54(3) · 한국민족문화대백과 「경주읍성」",
+    how: "웹 검색으로 찾은 원문·초록 열람",
+    proc: "신라 방 모듈을 척에서 m로 환산(고구려척 1척 = 0.355 m: 460척 = 163.3 m, 440척 = 156.2 m)해 실측 가로 간격 스펙트럼의 봉우리와 비교. 읍성 네 변과 지금 도로를 좌표로 대조(네 도로 둘레 약 2.44 km ≈ 확인 석축 둘레 2,412 m)",
+    viz: "‘경주 도시 축의 변천사’ 카드의 판정·문헌 대조표, ‘경주 원도심의 생성 원리’ 카드", lim: "초록만 본 문헌은 수치를 인용하지 않는다. 도로–성벽 대응은 위키·나무위키·언론(T4)과 좌표 대조다. 권·호·쪽수는 논문 원고 전에 대조한다" });
+  P("talks", "첨부 발표자료 2건 — 채미옥·박정호 (T4)", "T4", { take: "사용자가 준 발표자료 두 건은 층위도의 비교 대상으로 썼다. 발표자료라 T4로 두고, 수치는 원 출처로 바꾸기 전에는 공모·계획 문서에 인용하지 않는다.",
+    from: "「천년 고도 경주의 골격구조 변화와 구경주역」 채미옥 이사장 (2026.9.12 LOWCA 워크숍 발표) · 「경주형 도시재생 개요」 박정호 센터장 (2026 도시재생 강연)",
+    how: "사용자 제공 PDF",
+    proc: "채미옥 발표 p10의 신라 방 모듈 164 × 140 m(근거로 채미옥 외 2007 문화재청·국토연구원, 2011 경주시·국토연구원을 듦)를 층위도 표본 외 위상 검정의 격자로 썼다. 두 발표의 골격 변화 서술은 층위도 연표와 판정의 비교 대상으로만 썼다",
+    viz: "‘경주 도시 축의 변천사’ 카드의 층위도(표본 외 위상 검정, 연표)", lim: "발표자료는 2차 정리다. 모듈 크기의 근거 보고서(2007·2011) 원문은 아직 확인하지 않았다" });
   P("rail", "철도역·폐선·현행선 — 지금은 OSM", "T4", { take: "폐선 3.5km와 현행선은 OpenStreetMap에서 받은 선이다. T4이므로 지형도면 벡터화로 바꿀 예정이고, 그 전에는 위치 참고용이다.",
     from: "OSM railway=abandoned/disused/rail (Overpass, 2026-09-21) · 역 위치 OSM·위키", how: "Overpass API", proc: "구경주역→황성→석장→금장 노반 연속 구간 확인", viz: "지도 ‘폐선’·‘현행 철도’·‘철도역’ 레이어", lim: "신 서경주역 이용객 수치는 나무위키 전재 → 철도통계연보로 치환 필요" }, { map: "rail_abandoned" });
   P("traffic", "도로 속도 — 표준노드링크 + ITS 실시간 스냅샷 + ITS 이력 표본일", "T2", { take: "속도는 있지만 교통량(대수)은 없다. 정체 판정 기준은 도로 등급별 관행값이며 공식 고시 원문은 확인하지 못했다.",
@@ -426,7 +786,7 @@ async function main_() {
   P("arts", "예술인 — 예술활동증명 대시보드 열람 + 경제총조사", "T2", { take: "예술인 수는 한국예술인복지재단 대시보드 화면을 읽어 옮긴 값이고, 고용은 KOSIS 경제총조사다. 등록 기반이라 미등록 공예인·귀촌 작가는 빠진다.",
     from: "한국예술인복지재단 예술인경력정보시스템 대시보드(2013~2026.09.21 누적 예술활동증명) · 통계청 경제총조사 2015·2020 (KOSIS DT_1KI1510·DT_2KI2010, 산업소분류 901·902)", how: "대시보드 열람 수기 / KOSIS API", proc: "1만 명당 = 인원 ÷ 주민등록 2026-08. 비교 도시 10곳", viz: "카드 ‘등록 예술인·분야·연령·예술 관련 고용·경북 10개 시’", lim: "복지사업 신청용 등록이라 과소. 1946년 경주예술학교 관련 서술은 언론 연재(T4)" });
   P("meta", "이 사이트가 하는 일과 하지 않는 일", "T2", { size: "l", take: "모든 처리본은 EPSG:5187, 웹 출력만 4326. 색 구간은 전부 임의 설정. API 키는 .env에만 있고 공개 사이트에는 V-World 키를 넣지 않아 배경지도가 OSM이다. 같은 저장소에서 다른 작업 세션이 병행해 일부 레이어(학교·종교·쇠퇴진단·생활권·시청·주차장)는 그쪽이 만들었다.",
-    from: "사용한 키: V-World(도메인 바인딩) · 공공데이터포털 2종 · KOSIS · 법령정보. 키 없이: 토지이음·ITS 파일·국토부 파일·OSM·소상공인365(브라우저)", how: "파이프라인 9_도시/pipeline/*.py → archive/C_data/processed → scripts/sync_data.py → public/data", proc: "아카이브 index.csv에 자료 ID(A-001~, C-001~), sources.yaml에 원천, gaps.md에 못 구한 것 기록", viz: "지도 37개 레이어 · 리포트 카드 92장 + 이 출처 카드", lim: "못 받은 것: 경북고시 2023-449호(보류) · 경주시 버스 API(504) · SGIS 키 · 상가 폐업 이력 · 동별 국적 · ITS VDS 교통량 · 2023 설문 원문 · 표준데이터 API 3종(활용신청 대기) · 동천·인왕동 건축물대장. 아직 지도에 없는 것: 시굴조사 구역 도면, 폐선 지형도면 벡터, 세계유산 완충구역" });
+    from: "사용한 키: V-World(도메인 바인딩) · 공공데이터포털 2종 · KOSIS · 법령정보. 키 없이: 토지이음·ITS 파일·국토부 파일·OSM·소상공인365(브라우저)", how: "파이프라인 9_도시/pipeline/*.py → archive/C_data/processed → scripts/sync_data.py → public/data", proc: "아카이브 index.csv에 자료 ID(A-001~, C-001~), sources.yaml에 원천, gaps.md에 못 구한 것 기록", viz: "지도 37개 레이어 · 리포트 카드 " + CARDS.length + "장 + 이 출처 카드", lim: "못 받은 것: 경북고시 2023-449호(보류) · 경주시 버스 API(504) · SGIS 키 · 상가 폐업 이력 · 동별 국적 · ITS VDS 교통량 · 2023 설문 원문 · 표준데이터 API 3종(활용신청 대기) · 동천·인왕동 건축물대장. 아직 지도에 없는 것: 시굴조사 구역 도면, 폐선 지형도면 벡터, 세계유산 완충구역" });
 
   render(R, X, MS, Y);
 }
@@ -538,7 +898,7 @@ document.getElementById("dlg-next").onclick = () => step(1);
 document.getElementById("dlg-close").onclick = () => dlg.close();
 dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
 dlg.addEventListener("close", () => { if (dlgChart) { dlgChart.dispose(); dlgChart = null; } });
-window.addEventListener("keydown", (e) => { if (!dlg.open) return; if (e.key === "ArrowRight") step(1); if (e.key === "ArrowLeft") step(-1); });
+window.addEventListener("keydown", (e) => { if (!dlg.open || e.target.closest?.("input, select, textarea")) return; if (e.key === "ArrowRight") step(1); if (e.key === "ArrowLeft") step(-1); });
 window.addEventListener("resize", () => dlgChart && dlgChart.resize());
 
 main_();
