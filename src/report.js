@@ -52,7 +52,7 @@ function add(c) { c.g = c.g || "site"; CARDS.push(c); byId[c.id] = c; }
 // ---------------------------------------------------------------- 데이터
 async function j(p) { try { return await fetch(`${base}data/${p}`, { cache: "no-cache" }).then((r) => (r.ok ? r.json() : null)); } catch { return null; } }
 async function main_() {
-  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, AT, FR] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "arrival_transport.json", "fabric_report.json"].map(j));
+  const [R, HW, AR, Y, NAT, VIS, TH, TC, MS, AT, FR, VS, FRV] = await Promise.all(["report_stats.json", "hwango_report.json", "arts_stats.json", "youth.json", "nationality.json", "visitors.json", "traffic_hist_summary.json", "traffic_congested.json", "map_stats.json", "arrival_transport.json", "fabric_report.json", "visitors_summary.json", "foreign_region_visit.json"].map(j));
   const X = R.extras; const p26 = R.pop_actual.pop_2026_08;
   const FF = ["A_hwango_grid32", "B_haengbok_hwangchon_digitized", "C_zone_buffer300", "D_zone", "E_center_r300", "F_cityhall_r500", "G_seongdong_market_r200", "H_hwangridan_r300"];
   const AC = { A_hwango_grid32: C.green, B_haengbok_hwangchon_digitized: C.gray, C_zone_buffer300: C.green2, D_zone: C.red, E_center_r300: C.green3, F_cityhall_r500: "#0f3d34", G_seongdong_market_r200: C.orange, H_hwangridan_r300: C.purple };
@@ -660,10 +660,60 @@ async function main_() {
   // ======================= 관광·경관·예술
   add({ id: "tourists", g: "visit", t: "지정관광지 입장객 — 보문·양남·감포", take: `2013년 889만 명(외국인 19만 명)이다. 관광데이터랩의 2026년 8월 방문자(18일간 626만 명)는 집계 기준이 달라 합칠 수 없다.`, tier: "T1", src: R.tourists.src,
     opt: { grid: { left: 8, right: 40, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" }, xAxis: { type: "category", data: R.tourists.years }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1e6 + "M" } }, { type: "value", axisLabel: { formatter: (v) => v / 1e3 + "k" }, splitLine: { show: false } }], series: [{ name: "합계", type: "bar", data: R.tourists.total, color: C.green }, { name: "외국인(우축)", type: "line", yAxisIndex: 1, data: R.tourists.foreign, color: C.orange, lineStyle: { width: 2 } }] } });
-  if (VIS) { const days = Object.keys(VIS).sort().filter((k) => VIS[k]["현지인"] != null);
-    if (days.length) add({ id: "visitors", g: "visit", t: "경주시 하루 방문자 — 휴대전화 기반 (2026년 8월)", take: `${days[0].slice(4, 6)}/${days[0].slice(6)}~${days.at(-1).slice(4, 6)}/${days.at(-1).slice(6)} 기간이다. 경주시 전체 수치이므로 부지 하나의 계획 근거로는 쓰지 않는다.`, size: "m", tier: "T2", src: "한국관광데이터랩 DataLabService (KT 이동통신, 시군구)",
-      opt: { grid: { left: 8, right: 8, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" }, xAxis: { type: "category", data: days.map((x) => x.slice(4, 6) + "/" + x.slice(6)) }, yAxis: { type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } },
-        series: [["현지인", C.gray], ["외지인", C.green], ["외국인", C.orange]].map(([k, c]) => ({ name: k, type: "line", stack: "v", areaStyle: { opacity: .5 }, showSymbol: false, lineStyle: { width: 1 }, itemStyle: { color: c }, data: days.map((x) => Math.round(VIS[x][k] || 0)) })) } }); }
+  if (VS) {
+    const D = VS.daily, days = Object.keys(D).sort(), M = VS.monthly, mk = Object.keys(M).sort().filter((m) => M[m]["완전한달"]);
+    const A = VS.avg, rg = VS.range.map((x) => `${x.slice(0, 4)}.${x.slice(4, 6)}.${x.slice(6)}`);
+    add({ id: "vis_daily", g: "visit", t: `경주시 하루 방문자 2년치 — 외지인 일평균 ${fmt(A["외지인"])}명 · 외국인 ${fmt(A["외국인"])}명`, size: "l", tier: "T2", src: VS.src,
+      take: `${rg[0]}~${rg[1]} ${VS.days}일. 관광객(외지인+외국인) 일평균 ${fmt(A["관광객"])}명이고 그중 외국인은 ${A["외국인_비율"]}%다. 외지인은 최저 67,900명(2025-03-04 화)에서 최대 416,581명(2025-10-06 추석)까지 6.1배 움직인다.`,
+      lead: "KT 이동통신 기반 추정 방문자를 매일 1콜씩 받아 쌓았다. 현지인(경주 거주자)은 관광객이 아니므로 회색으로 따로 두고, 관광객은 외지인+외국인으로 본다. 외국인은 축이 달라 오른쪽에 있다(스케일 35배 차이).",
+      note: "같은 사람이 3일 머물면 3명으로 세는 연인원이다. 시군구 총량이라 부지(S1) 하나의 근거로는 쓰지 않는다. 데이터랩도 '총량이 아니라 추세로 쓰라'고 명시한다. 최근 2주는 집계 지연으로 비어 있다.",
+      opt: { grid: { left: 8, right: 52, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+        xAxis: { type: "category", data: days.map((d) => `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}`), axisLabel: { interval: 60, formatter: (v) => v.slice(2, 7) } },
+        yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } }, { type: "value", max: 12000, axisLabel: { formatter: (v) => v / 1000 + "k" }, splitLine: { show: false } }],
+        series: [{ name: "현지인", type: "line", data: days.map((d) => D[d]["현지인"]), color: C.gray2, showSymbol: false, lineStyle: { width: 1 } },
+          { name: "외지인", type: "line", data: days.map((d) => D[d]["외지인"]), color: C.green, showSymbol: false, lineStyle: { width: 1 }, areaStyle: { opacity: .12 } },
+          { name: "외국인(우축)", type: "line", yAxisIndex: 1, data: days.map((d) => D[d]["외국인"]), color: C.orange, showSymbol: false, lineStyle: { width: 1.2 } }] }, map: "visitor_origin" });
+    add({ id: "vis_month", g: "visit", t: "월별 관광객과 외국인 — 10월이 최대, 1~2월이 최소", size: "l", tier: "T2", src: VS.src,
+      take: `완전한 달 ${mk.length}개월 중 관광객 일평균이 가장 많은 달은 2025-10(${fmt(M["202510"]["일평균_관광객"])}명), 가장 적은 달은 ${(() => { const m = mk.reduce((a, b) => M[a]["일평균_관광객"] < M[b]["일평균_관광객"] ? a : b); return `${m}(${fmt(M[m]["일평균_관광객"])}명)`; })()}이다. 외국인 비율은 1~2월 1.6%에서 4월·10월 3.3~3.6%로 두 배 움직인다.`,
+      lead: "막대는 월별 관광객 일평균(외지인+외국인), 주황 선은 외국인 일평균, 점선은 관광객 중 외국인 비율이다. 달마다 일수가 달라 총계가 아니라 일평균으로 비교한다.",
+      note: "전년 동월 대비: 2025-10 +27.2%, 2025-11 +15.3%, 2026-02 +29.0%. 2025-10의 급증은 추석 연휴(10/3~9)와 APEC 정상회의(10/31~11/1) 기간이 겹친 달이라는 점을 함께 봐야 한다 — 인과는 이 자료로 확정할 수 없다.",
+      opt: { grid: { left: 8, right: 52, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis" },
+        xAxis: { type: "category", data: mk.map((m) => `${m.slice(2, 4)}.${m.slice(4)}`) },
+        yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } }, { type: "value", max: 8000, axisLabel: { formatter: (v) => v / 1000 + "k" }, splitLine: { show: false } }],
+        series: [{ name: "관광객 일평균", type: "bar", data: mk.map((m) => M[m]["일평균_관광객"]), color: C.green3 },
+          { name: "외국인 일평균(우축)", type: "line", yAxisIndex: 1, data: mk.map((m) => M[m]["일평균_외국인"]), color: C.orange, lineStyle: { width: 2.5 } },
+          { name: "외국인 비율 %(우축×2000)", type: "line", yAxisIndex: 1, data: mk.map((m) => M[m]["외국인_비율"] * 2000), color: C.gray, lineStyle: { type: "dashed", width: 1.5 }, tooltip: { valueFormatter: (v) => (v / 2000).toFixed(2) + "%" } }] } });
+    { const ORD = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"], W_ = VS.dow_avg;
+      add({ id: "vis_dow", g: "visit", t: "요일별 — 외지인은 주말이 평일의 1.7배, 외국인은 요일을 타지 않는다", size: "m", tier: "T2", src: VS.src,
+        take: `외지인 일평균은 수요일 ${fmt(W_["수요일"]["외지인"])}명 → 일요일 ${fmt(W_["일요일"]["외지인"])}명으로 1.7배다. 외국인은 3,746~3,946명으로 요일 차이가 5% 안이다. 관광 수요는 주말에 몰리고, 외국인 수요는 평일에도 유지된다.`,
+        lead: "717일 전체의 요일별 평균이다. 이 차이가 평일 수요(시청·업무)를 따로 만들어야 하는 이유의 수치 근거다.",
+        opt: { grid: { left: 8, right: 52, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+          xAxis: { type: "category", data: ORD.map((w) => w[0]) }, yAxis: [{ type: "value", axisLabel: { formatter: (v) => v / 1000 + "k" } }, { type: "value", min: 3000, max: 4200, axisLabel: { formatter: (v) => v / 1000 + "k" }, splitLine: { show: false } }],
+          series: [{ name: "외지인", type: "bar", data: ORD.map((w) => W_[w]["외지인"]), color: C.green, label: { show: true, position: "top", fontSize: 10.5, formatter: (d) => (d.value / 1000).toFixed(0) + "k" } },
+            { name: "외국인(우축)", type: "line", yAxisIndex: 1, data: ORD.map((w) => W_[w]["외국인"]), color: C.orange, lineStyle: { width: 2.5 } }] } }); }
+    { const topD = [...days].sort((a, b) => D[b]["외지인"] - D[a]["외지인"]).slice(0, 10), topF = [...days].sort((a, b) => D[b]["외국인"] - D[a]["외국인"]).slice(0, 10);
+      add({ id: "vis_peak", g: "visit", t: "최대 방문일 — 내국인은 명절, 외국인은 2025년 10월 말", size: "m", tier: "T2", src: VS.src,
+        take: "외지인 상위 10일은 전부 추석·설·어린이날 연휴다(1위 2025-10-06 416,581명). 외국인 상위 10일은 2025-10-24~11-01에 몰려 있고 1위는 10-30의 10,634명으로 평균의 2.8배다.",
+        lead: "왼쪽은 외지인, 오른쪽은 외국인 상위 10일이다. 외국인 피크 구간은 APEC 정상회의(2025-10-31~11-01) 기간과 겹치지만, 이 자료만으로 인과를 단정하지 않는다.",
+        opt: { grid: [{ left: 8, right: "56%", top: 26, bottom: 4, containLabel: true }, { left: "52%", right: 44, top: 26, bottom: 4, containLabel: true }],
+          title: [{ text: "외지인 상위 10일", left: 0, top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }, { text: "외국인 상위 10일", left: "52%", top: 0, textStyle: { fontSize: 11.5, color: C.ink3, fontWeight: 500 } }],
+          tooltip: { trigger: "axis", valueFormatter: (v) => fmt(v) + "명" },
+          xAxis: [{ type: "value", show: false, gridIndex: 0 }, { type: "value", show: false, gridIndex: 1 }],
+          yAxis: [{ type: "category", inverse: true, gridIndex: 0, data: topD.map((d) => `${d.slice(4, 6)}/${d.slice(6)} ${D[d]["요일"][0]}`), axisLabel: { fontSize: 11 } },
+            { type: "category", inverse: true, gridIndex: 1, data: topF.map((d) => `${d.slice(4, 6)}/${d.slice(6)} ${D[d]["요일"][0]}`), axisLabel: { fontSize: 11 } }],
+          series: [{ type: "bar", xAxisIndex: 0, yAxisIndex: 0, data: topD.map((d) => D[d]["외지인"]), color: C.green, label: { show: true, position: "right", fontSize: 10.5, formatter: (d) => (d.value / 1000).toFixed(0) + "k" }, barCategoryGap: "30%" },
+            { type: "bar", xAxisIndex: 1, yAxisIndex: 1, data: topF.map((d) => D[d]["외국인"]), color: C.orange, label: { show: true, position: "right", fontSize: 10.5, formatter: (d) => fmt(d.value) }, barCategoryGap: "30%" }] } }); }
+  }
+  if (FRV?.data) { const d = FRV.data, nat = ["프랑스", "대만", "호주", "영국", "독일", "캐나다", "태국", "미국", "베트남", "싱가포르", "홍콩", "인도네시아", "일본", "필리핀", "중국", "말레이시아"];
+    const v = (c, col) => d[`2025|${c}`]?.[col] ?? null;
+    add({ id: "vis_frnat", g: "visit", t: "외국인은 어디서 오나 — 경주 단위 국적 통계는 없다, 경북 방문율로 본다", size: "m", tier: "T2", src: FRV.tbl + " (2025)",
+      take: `방한 외래관광객 중 경북을 방문한 비율은 전체 ${v("전체", "경북")}%(2024년 1.9%)다. 국적별로는 프랑스 ${v("프랑스", "경북")}% · 대만 ${v("대만", "경북")}% · 호주 ${v("호주", "경북")}% · 영국 ${v("영국", "경북")}%가 높고, 중국 ${v("중국", "경북")}% · 일본 ${v("일본", "경북")}%는 낮다. 서양 장거리 여행객과 대만이 경북으로 오는 구조다.`,
+      lead: "경주시 단위의 외국인 국적별 방문자 통계는 공개되지 않는다(관광데이터랩 API에 국적 항목 없음). 대신 외래관광객조사의 시도별 방문율(복수응답)을 국적별로 본다. 회색은 비교용 부산 방문율이다.",
+      note: "경북 전체 값이라 경주만의 값이 아니다. 단체여행 8.7% vs 개별여행 1.6%로 단체여행 비중이 높은 것도 특징이다. 월별로는 10~11월 3.0%가 최고, 1·3월 1.7%가 최저다.",
+      opt: { grid: { left: 8, right: 16, top: 30, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (x) => pct(x) },
+        xAxis: { type: "category", data: nat, axisLabel: { fontSize: 10.5, interval: 0, rotate: 32 } }, yAxis: { type: "value", axisLabel: { formatter: (x) => x + "%" } },
+        series: [{ name: "경북 방문율", type: "bar", data: nat.map((c) => v(c, "경북")), color: C.green, label: { show: true, position: "top", fontSize: 10, formatter: (x) => x.value } },
+          { name: "부산 방문율", type: "line", data: nat.map((c) => v(c, "부산")), color: C.gray, lineStyle: { type: "dashed", width: 1.5 } }] } }); }
   { const ls = R.landscape_survey;
     add({ id: "landscape", g: "visit", t: "경주의 대표 경관 — 시민·공무원·관광객 응답", take: "시민의 36%는 황리단길을, 관광객의 53%는 불국사를 꼽았다. 2025년 연구에서도 시민이 꼽은 상징적 중심 1위는 황리단길(59명 중 25명)이었다.", tier: "T1", src: ls.src,
       opt: { grid: { left: 8, right: 16, top: 36, bottom: 8, containLabel: true }, legend: { top: 0, left: 0 }, tooltip: { trigger: "axis", valueFormatter: (v) => pct(v) }, xAxis: { type: "category", data: ["시민", "공무원", "관광객"] }, yAxis: { type: "value", max: 60, axisLabel: { formatter: (v) => v + "%" } }, series: [{ name: "황리단길", type: "bar", data: ["시민", "공무원", "관광객"].map((k) => ls.representative["황리단길"][k]), color: C.orange, label: { show: true, position: "top", fontSize: 11 } }, { name: "불국사", type: "bar", data: ["시민", "공무원", "관광객"].map((k) => ls.representative["불국사"][k]), color: C.green, label: { show: true, position: "top", fontSize: 11 } }] } });
@@ -781,6 +831,8 @@ async function main_() {
     from: "미래구상 2025 p.30–31·66–68 · 전략계획 2022 p.48·51–54 · 2030 기본계획 p.199–208 · 2030 경관계획 관문적 경관거점 · KOSIS 113 DT_113_STBL_1029530(국민여행조사, 2023–2025) · 한국도로공사 AADT 2021–2025 CSV(C-008)", how: "PDF 4권 전문 텍스트 추출 후 정규식 검색(교통수단·이용교통·자가용·KTX·고속버스·관광버스·유입경로·관문·IC) → 해당 쪽 육안 확인·전사 / KOSIS 파라미터 API / CSV 파싱 / 관문 좌표 V-World 장소검색", proc: "pipeline/build_arrival_transport.py → arrival_transport.json · gateways_4326.geojson. IC 좌표는 인접 정류장·전광판 지점(±300m)", viz: "지도 ‘진입 관문’ 레이어(시청·교통거점), 카드 ‘관광객은 어떤 교통수단으로…’ 외 7장(이동 그룹)", lim: "경주 방문자 한정 입경 수단 비율 없음 · 국민여행조사 시도별 교차표 API 미제공 · IC 진출입량·터미널 이용객·2014 이후 신경주역 승하차 미수집 → gaps.md" });
   P("bus", "버스정류장·시내버스 이용", "T2", { take: "정류장 위치는 국토부 파일이고 노선·승하차는 없다. 경주시 버스 API는 발급받았지만 서버가 504를 반환해 못 썼다.",
     from: "국토교통부 전국 버스정류장 위치정보 파일(2025-10-31) 경주시 1,951개 · 시내버스 이용 인원은 기본계획 표(p.208) 전사", how: "파일 다운로드", viz: "지도 ‘버스정류장’ 레이어, 카드 ‘시내버스 연간 이용 인원’", lim: "승하차·노선 없음" }, { map: "busstops" });
+  P("vis2y", "방문자 2년 일별 시계열 — 매일 1콜씩 받아 직접 쌓았다", "T2", { take: "관광데이터랩 API는 지역 파라미터가 없어 하루치 전국(약 750행)을 받아 경주(47130)만 남긴다. 2024-09-01~2026-08-18 717일을 이렇게 모았다. 월별·요일별·평균은 전부 이 일별 값에서 계산한 것이다.",
+    from: "한국관광공사 한국관광 데이터랩 DataLabService/locgoRegnVisitrDDList (KT 이동통신 기반 추정, 시군구 일별) · 외국인 국적은 KOSIS 113 DT_113_STBL_1027417 외래관광객조사 시도별 방문율 · 내국인 출발지는 데이터랩 유입·유출 지역 화면 전사(2025.09~2026.08)", how: "공공데이터포털 키, 1일 1콜(개발계정 1,000콜/일), pipeline/collect_visitors_range.py 로 717일 수집 후 집계", proc: "관광객 = 외지인 + 외국인(현지인은 경주 거주자라 제외). 월별은 일수가 달라 일평균으로 비교. 요일별은 717일 평균", viz: "카드 ‘하루 방문자 2년치·월별·요일별·최대 방문일·외국인 출발지’, 지도 ‘방문자 출발지’ 레이어", lim: "연인원(같은 사람이 3일 머물면 3명)·시군구 총량·추정치 → 데이터랩도 총량 사용을 권장하지 않는다. 최근 2주는 집계 지연. 경주 단위 외국인 국적별은 비공개 → 경북 방문율로 대체" }, { map: "visitor_origin" });
   P("visitors", "관광 방문자 — 관광데이터랩(시군구) · 지정관광지 입장객(기본계획)", "T2", { take: "관광데이터랩 방문자는 경주시 전체(S3) 수치이므로 부지(S1) 계획의 근거로는 쓰지 않는다. 기본계획의 입장객과는 정의가 다르다.",
     from: "한국관광공사 관광데이터랩 DataLabService(KT 이동통신, 시군구, 2026-08 31일) · 2030 기본계획 지정관광지 입장객 표", how: "공공데이터포털 키 API / PDF 전사", proc: "현지인·외지인·외국인 일별 적층", viz: "카드 ‘하루 방문자·지정관광지 입장객’", lim: "S3 통계로 S1을 정당화하지 않는다는 규칙에 따라 체류·규모 참고로만" });
   P("arts", "예술인 — 예술활동증명 대시보드 열람 + 경제총조사", "T2", { take: "예술인 수는 한국예술인복지재단 대시보드 화면을 읽어 옮긴 값이고, 고용은 KOSIS 경제총조사다. 등록 기반이라 미등록 공예인·귀촌 작가는 빠진다.",
