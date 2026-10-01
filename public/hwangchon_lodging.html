@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ko">
+<head><script>if(new URLSearchParams(location.search).has('embed'))document.documentElement.setAttribute('data-theme','light')</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>행복황촌 숙박 현황</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 레이아웃: 계획 보고서 한 단(최대 1080px). 요약 수치 → 시간 → 공간 → 비교 → 사업 → 명단 순으로 읽는다 */
+:root {
+  --bg: #f2f3f3;
+  --surface: #fcfcfb;
+  --ink: #15191c;
+  --ink-2: #4a5257;
+  --ink-3: #737b80;
+  --rule: #dcdfe1;
+  --grid: #e7e9ea;
+  --accent: #2c4a5e;
+  --band: #e9edef;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --other: #b8bdc1;
+  --y0: #86b6ef; --y1: #3987e5; --y2: #256abf; --y3: #104281;
+  --good: #0ca30c; --warn: #fab219; --idle: #9aa1a6;
+  --f-sans: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --f-mono: "IBM Plex Mono", "Courier New", ui-monospace, monospace;
+  --t-xs: 0.75rem; --t-sm: 0.8125rem; --t-md: 0.9375rem; --t-lg: 1.125rem; --t-xl: 1.5rem; --t-2xl: 2.25rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111213; --surface: #1a1a19; --ink: #eef0f1; --ink-2: #c2c6c9; --ink-3: #8b9296;
+    --rule: #2d3033; --grid: #26292b; --accent: #a9c1d3; --band: #212528;
+    --s1: #3987e5; --s2: #d95926; --other: #4a5055;
+    --y0: #184f95; --y1: #256abf; --y2: #3987e5; --y3: #86b6ef;
+    --idle: #6d7479;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111213; --surface: #1a1a19; --ink: #eef0f1; --ink-2: #c2c6c9; --ink-3: #8b9296;
+  --rule: #2d3033; --grid: #26292b; --accent: #a9c1d3; --band: #212528;
+  --s1: #3987e5; --s2: #d95926; --other: #4a5055;
+  --y0: #184f95; --y1: #256abf; --y2: #3987e5; --y3: #86b6ef;
+  --idle: #6d7479;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-sans); font-size: var(--t-md); line-height: 1.65; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 40px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.3; }
+h1 { font-size: var(--t-2xl); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: var(--t-xl); font-weight: 700; }
+h3 { font-size: var(--t-lg); font-weight: 500; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font-size: var(--t-xs); letter-spacing: 0.06em; color: var(--ink-3); font-family: var(--f-mono); }
+.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-2); }
+.small { font-size: var(--t-sm); }
+.tag { font-family: var(--f-mono); font-size: var(--t-xs); color: var(--ink-3); white-space: nowrap; }
+
+header.top { display: grid; gap: 14px; border-bottom: 2px solid var(--accent); padding-bottom: 24px; }
+header.top .answer { font-size: var(--t-lg); line-height: 1.6; max-width: 62ch; }
+header.top .answer strong { font-weight: 700; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.kpi .v { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: 2.125rem; font-weight: 500; line-height: 1.15; }
+.kpi .v small { font-size: var(--t-md); color: var(--ink-2); font-weight: 400; margin-left: 2px; }
+.kpi .l { font-weight: 500; }
+.kpi .d { font-size: var(--t-sm); color: var(--ink-2); line-height: 1.5; }
+
+section { display: grid; gap: 14px; min-width: 0; }
+.sec-head { display: grid; gap: 6px; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; min-width: 0; display: grid; gap: 10px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--t-sm); color: var(--ink-2); align-items: center; }
+.legend .k { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+.sw.dot { border-radius: 50%; }
+.sw.hollow { background: transparent !important; border: 2px solid var(--ink-3); border-radius: 50%; }
+.chart { width: 100%; min-width: 0; position: relative; }
+.chart svg { display: block; overflow: visible; }
+.caption { font-size: var(--t-sm); color: var(--ink-2); }
+
+svg text { font-family: var(--f-sans); fill: var(--ink-2); }
+svg .tick { font-family: var(--f-mono); font-size: 11px; fill: var(--ink-3); }
+svg .ann { font-size: 12px; fill: var(--ink-2); }
+svg .ann-strong { font-size: 12px; fill: var(--ink); font-weight: 500; }
+svg .val { font-family: var(--f-mono); font-size: 12px; fill: var(--ink); }
+svg .grid { stroke: var(--grid); stroke-width: 1; }
+svg .axis { stroke: var(--ink-3); stroke-width: 1; }
+svg .cross { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 16px; align-items: start; }
+.stack { display: grid; gap: 16px; min-width: 0; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) {
+  .split, .duo { grid-template-columns: 1fr; }
+  h1 { font-size: 1.875rem; }
+  .wrap { padding-inline: 16px; padding-block: 28px 48px; gap: 32px; }
+}
+
+.vs { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.vs .cell { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0; }
+.vs .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; border-bottom: 1px dashed var(--rule); padding-bottom: 4px; }
+.vs .row:last-of-type { border-bottom: 0; }
+.vs .row span:last-child { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.vs .verdict { font-size: var(--t-sm); color: var(--ink-2); }
+
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+.tbl-wrap.scroll { max-height: 440px; overflow-y: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--t-sm); }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 500; color: var(--ink-2); background: var(--surface); position: sticky; top: 0; z-index: 1; white-space: nowrap; }
+td.n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: var(--t-xs); border: 1px solid var(--rule); border-radius: 999px; padding: 1px 9px; white-space: nowrap; color: var(--ink); }
+.chip i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; font-style: normal; }
+.chip.done i { background: var(--idle); }
+.chip.live i { background: var(--good); }
+.chip.plan i { background: transparent; border: 1.5px solid var(--ink-3); }
+.chip.thin i { background: var(--warn); }
+.mark { font-family: var(--f-mono); font-size: var(--t-xs); color: var(--ink-2); }
+
+ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; max-width: 72ch; }
+details { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; }
+details summary { cursor: pointer; font-size: var(--t-sm); color: var(--ink-2); }
+details[open] summary { margin-bottom: 10px; }
+details .tbl-wrap { border: 0; }
+:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; }
+
+footer { border-top: 1px solid var(--rule); padding-top: 18px; display: grid; gap: 10px; font-size: var(--t-sm); color: var(--ink-2); }
+footer ul { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; font-size: var(--t-sm); line-height: 1.5; box-shadow: 0 4px 14px rgba(0,0,0,0.12); max-width: 260px; }
+#tip b { font-weight: 500; }
+#tip .r { display: flex; justify-content: space-between; gap: 14px; }
+#tip .r span:last-child { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+#tip .sw { margin-right: 6px; vertical-align: -1px; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">구경주역 지구단위계획 · S2 원도심 · 경주역동편 행복황촌 · 2026-09-30 기준</div>
+  <h1>행복황촌 숙박 현황</h1>
+  <p class="answer">황촌에 숙소를 더 짓는 <strong>공공 사업은 지금 없습니다.</strong> 뉴딜이 직접 만든 공공 숙소는 1곳뿐이고 그 사업은 2024년에 끝났습니다. 숙소는 주민과 민간이 등록하는 <strong>외국인관광 도시민박업</strong>으로 늘고 있고, 2025년 10월 이후 오히려 더 빨라졌습니다. 같은 기간 유동인구는 늘지 않았습니다.</p>
+</header>
+
+<div class="kpis">
+  <div class="kpi">
+    <div class="v">33<small>곳</small></div>
+    <div class="l">영업 중인 도시민박업</div>
+    <div class="d">행복황촌 구역 안. 구역 경계가 근사치라 26~33곳 범위로 인용. 한옥체험업 3곳은 따로.</div>
+  </div>
+  <div class="kpi">
+    <div class="v">12<small>건</small></div>
+    <div class="l">2026년 신규 인허가</div>
+    <div class="d">1–9월 기준이며 모두 3월 이후. 같은 기간 경주시 전체 신규 34건의 35%.</div>
+  </div>
+  <div class="kpi">
+    <div class="v">53<small>%</small></div>
+    <div class="l">황오동·성동동 비중</div>
+    <div class="d">경주시에서 영업 중인 도시민박업 123곳 중 65곳이 두 동에 있음.</div>
+  </div>
+  <div class="kpi">
+    <div class="v">80<small>명/ha</small></div>
+    <div class="l">유동인구 밀도</div>
+    <div class="d">폐역 부지(79명/ha)와 같은 수준. 하루 1,321명으로 2019–23년과 차이 없음.</div>
+  </div>
+</div>
+
+<section id="time">
+  <div class="sec-head">
+    <span class="tag">시간 · 월말 영업 중 재고 · 2019.1–2026.9</span>
+    <h2>숙소는 뉴딜이 끝난 뒤에 늘었다</h2>
+    <p class="muted">뉴딜 기간(2021–2024) 중 3년 동안은 3곳 안팎이었습니다. 2024년 한 해에 9곳이 늘었고, 2026년 3월부터 다시 가파르게 오릅니다. 2024년 3월 현판식 4곳과 2025년 10월 협동조합 발표 21곳은 인허가 대장 값과 그대로 맞습니다.</p>
+  </div>
+  <div class="panel">
+    <div class="legend">
+      <span class="k"><span class="sw" style="background:var(--s1)"></span>외국인관광 도시민박업</span>
+      <span class="k"><span class="sw" style="background:var(--s2)"></span>한옥체험업</span>
+      <span class="k"><span class="sw" style="background:var(--band);border:1px solid var(--rule)"></span>행복황촌 뉴딜 사업기간</span>
+    </div>
+    <div class="chart" id="c-stock"></div>
+    <details>
+      <summary>기준일별 수치 표</summary>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>기준일</th><th>도시민박업</th><th>한옥체험업</th><th>대조</th></tr></thead>
+          <tbody>
+            <tr><td class="n">2020-12-31</td><td class="n">1</td><td class="n">1</td><td></td></tr>
+            <tr><td class="n">2022-12-31</td><td class="n">2</td><td class="n">2</td><td></td></tr>
+            <tr><td class="n">2023-12-31</td><td class="n">3</td><td class="n">2</td><td></td></tr>
+            <tr><td class="n">2024-03-11</td><td class="n">4</td><td class="n">2</td><td>현판식 4곳 (협동조합 발표자료 p.10)</td></tr>
+            <tr><td class="n">2024-12-31</td><td class="n">13</td><td class="n">3</td><td>협동조합 발표 "12개소"</td></tr>
+            <tr><td class="n">2025-10-31</td><td class="n">21</td><td class="n">3</td><td>협동조합 발표 "21개 (도시민박 19 + 한옥 2)"</td></tr>
+            <tr><td class="n">2026-06-30</td><td class="n">27</td><td class="n">3</td><td></td></tr>
+            <tr><td class="n">2026-09-30</td><td class="n">33</td><td class="n">3</td><td>구역 경계 20m 안쪽으로 줄이면 26 + 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="space">
+  <div class="sec-head">
+    <span class="tag">공간 · 인허가 대장 좌표(EPSG:5174 → 5187)</span>
+    <h2>폐역 부지 바로 동쪽에 모여 있다</h2>
+    <p class="muted">행복황촌 숙소는 원효로와 양정로 골목에 붙어 있습니다. 철로가 걷힌 폐역 부지를 사이에 두고 성동시장과 마주 봅니다. 경주시 전체로 보면 도시민박업의 절반이 황오동과 성동동에 있습니다.</p>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <h3>행복황촌 숙소 위치</h3>
+      <div class="legend">
+        <span class="k"><span class="sw dot" style="background:var(--y0)"></span>2023년 이전</span>
+        <span class="k"><span class="sw dot" style="background:var(--y1)"></span>2024</span>
+        <span class="k"><span class="sw dot" style="background:var(--y2)"></span>2025</span>
+        <span class="k"><span class="sw dot" style="background:var(--y3)"></span>2026</span>
+        <span class="k"><span class="sw dot hollow"></span>폐업</span>
+        <span class="k"><span class="sw" style="background:var(--ink-3)"></span>한옥체험업(사각)</span>
+      </div>
+      <div class="chart" id="c-map"></div>
+      <p class="caption">색은 인허가 연도입니다. 행복황촌 경계는 2020 활성화계획 위치도를 디지타이징한 근사선(±20m)입니다.</p>
+    </div>
+    <div class="stack">
+      <div class="panel">
+        <h3>경주시 도시민박업 123곳은 어느 동에 있나</h3>
+        <div class="chart" id="c-dong"></div>
+        <p class="caption">2026-09-30 영업 중. 법정동은 인허가 대장 주소 기준입니다.</p>
+      </div>
+      <div class="panel">
+        <h3>경주시 신규 인허가 중 행복황촌</h3>
+        <div class="legend">
+          <span class="k"><span class="sw" style="background:var(--s1)"></span>행복황촌 구역</span>
+          <span class="k"><span class="sw" style="background:var(--other)"></span>그 외 경주시</span>
+        </div>
+        <div class="chart" id="c-permit"></div>
+        <p class="caption">외국인관광 도시민박업, 인허가 연도 기준. 2024년에는 경주시 신규 23건 중 11건(48%)이 이 16.5ha 안에서 나왔습니다. 2023년은 신규 3건, 폐업 12건으로 경주시 전체가 줄었던 해입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="sec-head">
+    <span class="tag">비교 · 연말 영업 중 재고 · 같은 세로축</span>
+    <h2>황리단길과는 다른 업종으로 늘었다</h2>
+    <p class="muted">황리단길 300m 안에서는 한옥체험업이 2곳에서 40곳으로 늘었고 도시민박업은 6곳에 머물렀습니다. 행복황촌은 반대로 도시민박업이 늘었습니다. 도시민박업은 주민이 거주하는 주택에서만 할 수 있고, 도시재생활성화계획의 마을기업이면 내국인도 받을 수 있습니다.</p>
+  </div>
+  <div class="duo">
+    <div class="panel"><h3>행복황촌 구역</h3><div class="chart" id="c-sm-0"></div></div>
+    <div class="panel"><h3>황리단길 300m</h3><div class="chart" id="c-sm-1"></div></div>
+  </div>
+  <div class="legend">
+    <span class="k"><span class="sw" style="background:var(--s1)"></span>외국인관광 도시민박업</span>
+    <span class="k"><span class="sw" style="background:var(--s2)"></span>한옥체험업</span>
+  </div>
+</section>
+
+<section id="demand">
+  <div class="sec-head">
+    <span class="tag">공급과 수요</span>
+    <h2>숙소는 33배, 사람은 그대로</h2>
+    <p class="muted">공급 지표와 수요 지표를 같은 구역, 같은 정의로 나란히 놓았습니다. 숙소만 늘고 수요가 그대로이면 업소당 매출이 떨어집니다. 황리단길 펜션이 1년 사이 먼저 겪은 일입니다.</p>
+  </div>
+  <div class="vs">
+    <div class="cell">
+      <h3>공급</h3>
+      <div class="row"><span>도시민박업 2020년 말</span><span>1곳</span></div>
+      <div class="row"><span>도시민박업 2026-09-30</span><span>33곳</span></div>
+      <div class="row"><span>객실 수 기재 14곳 합계</span><span>30실</span></div>
+      <p class="verdict">곳당 2실 안팎의 작은 숙소입니다. 19곳은 객실 수가 비어 있습니다.</p>
+    </div>
+    <div class="cell">
+      <h3>수요</h3>
+      <div class="row"><span>유동인구 2019–23 (보고서)</span><span>1,096–1,544명/일</span></div>
+      <div class="row"><span>유동인구 2025.6–26.6 평균</span><span>1,321명/일</span></div>
+      <div class="row"><span>주말/주중 비</span><span>1.15</span></div>
+      <p class="verdict">같은 구역을 다시 뽑은 값입니다. 2024–25년 보고서의 "+396%"는 재현되지 않았습니다.</p>
+    </div>
+    <div class="cell">
+      <h3>업종 구성</h3>
+      <div class="row"><span>생활업종 비중</span><span>34.1%</span></div>
+      <div class="row"><span>13개월 변화 관광·체류 / 생활</span><span>+7 / 0</span></div>
+      <div class="row"><span>펜션 업소당 매출 부지+300m / 황리단길</span><span>281 / 345만원</span></div>
+      <p class="verdict">황리단길 펜션 업소당 매출은 1년 사이 28% 줄었습니다. 생활업종 비중은 황리단길(41.4%)보다 낮습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section id="policy">
+  <div class="sec-head">
+    <span class="tag">사업과 방향 · 지금까지 모은 자료 기준</span>
+    <h2>숙소를 늘리는 공공 사업은 없고, 운영을 키우는 계획만 있다</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>사업·방향</th><th>상태</th><th>숙소에 하는 일</th><th>출처</th></tr></thead>
+      <tbody>
+        <tr><td>행복황촌 도시재생 뉴딜 (2021–2024, 마중물 127.28억 원)</td><td><span class="chip done"><i></i>종료</span></td><td>공공 게스트하우스 1곳(성동동 23-18, 82㎡ 리모델링)과 '경주 살아보기'</td><td class="mark">A-007 활성화계획 · T1</td></tr>
+        <tr><td>거점시설 관리위탁 (협동조합, 2025.4–2028.3)</td><td><span class="chip live"><i></i>진행 중</span></td><td>숙소를 짓지 않음. 마을호텔 프런트·마을부엌 운영</td><td class="mark">B-007 · T2</td></tr>
+        <tr><td>지역재생기업(CRC) 육성, 기업연수·투어 상품</td><td><span class="chip plan"><i></i>계획</span></td><td>운영 고도화</td><td class="mark">B-007 · T2</td></tr>
+        <tr><td>빈집 정비·집수리 지원</td><td><span class="chip done"><i></i>종료</span></td><td>59호 신청 중 9호 선정. 빈집이 숙소로 바뀌는 간접 경로</td><td class="mark">B-007 · T2</td></tr>
+        <tr><td>2030 도시기본계획 "숙박·문화기능 강화로 관광객 도심 유입"</td><td><span class="chip live"><i></i>상위계획</span></td><td>도심 전반의 방향. 황촌을 지목하지 않음 (S3)</td><td class="mark">A-011 · T1</td></tr>
+        <tr><td>구경주역 혁신지구 추진전략 3 "경주Stay 청년 랜드마크 조성"</td><td><span class="chip thin"><i></i>제목만</span></td><td>숙박인지 청년주거인지 정의 없음. 위치는 황촌이 아니라 폐역 부지</td><td class="mark">B-003 · T2</td></tr>
+        <tr><td>관광진흥법 시행령 외국인관광 도시민박업 특례</td><td><span class="chip live"><i></i>시행 중</span></td><td>마을기업이면 내국인 숙박 허용. 민간 숙소 증가의 제도적 이유</td><td class="mark">B-007 전재 · 원문 대조 전</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel">
+    <h3>구경주역 계획에 주는 의미</h3>
+    <ul class="plain">
+      <li><b>공공이 숙소 수를 늘릴 이유는 약합니다.</b> 민간이 이미 늘리고 있습니다. 공공이 할 일은 숙소 수와 유동인구·업소당 매출을 같은 구역, 같은 정의로 매년 나란히 재는 것입니다.</li>
+      <li><b>숙박객이 걸어 나갈 길이 필요합니다.</b> 행복황촌(80명/ha)과 성동시장 200m(1,175명/ha) 사이의 15배 밀도 차이를 폐역 부지 횡단축이 이어야 합니다.</li>
+      <li><b>'경주Stay'를 객실 공급으로 정의하지 않는 편이 낫습니다.</b> 객실은 황촌에 두고, 부지에는 마을호텔이 함께 쓰는 프런트·짐보관·P+R 주차·조식과 청년 장기체류를 두는 안을 권합니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="list">
+  <div class="sec-head">
+    <span class="tag">명단 · 행복황촌 구역 안 38건 (폐업 포함)</span>
+    <h2>숙소 명단</h2>
+    <p class="muted">협동조합 발표 명단(2025.10) 21곳은 모두 인허가 대장에 있습니다. 명단에 없는 곳은 협동조합 비가입 숙소이거나 2025년 10월 이후 등록된 숙소입니다.</p>
+  </div>
+  <div class="tbl-wrap scroll">
+    <table>
+      <thead><tr><th>업종</th><th>사업장명</th><th>인허가일</th><th>폐업일</th><th>객실</th><th>협동조합 명단</th><th>경계 20m 이내</th></tr></thead>
+      <tbody id="t-list"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div><b>출처와 등급</b></div>
+  <ul>
+    <li>C-041 지방행정인허가 개방자료(외국인관광 도시민박업·한옥체험업, 경주시), 행정안전부, 데이터갱신 2026-09-30 · T1</li>
+    <li>A-007 경주역동편 도시재생활성화계획(2020) · T1 / A-011 2030 경주도시기본계획 · T1</li>
+    <li>B-007 행복황촌 협동조합 발표자료(2025.10) · T2, 운영 주체 자체 발표 / B-003 구)경주역 일원 매장유산 시굴조사 추진계획 · T2</li>
+    <li>C-027–029 소상공인365 유동인구·업종 재추출(2025.06–2026.06) · T2</li>
+  </ul>
+  <div><b>한계</b></div>
+  <ul>
+    <li>행복황촌 경계는 근사선(±20m)이라 38건 중 9건이 경계 20m 안에 있습니다. 법정 경계 도면은 아직 확보하지 못했습니다.</li>
+    <li>협동조합 발표자료의 "일평균 유동인구 41,165명"은 같은 구역 재추출값(1,321명)과 31배 차이가 나서 인용하지 않습니다.</li>
+    <li>숙박객 수, 객실 가동률, 2026년 신규 숙소의 협동조합 가입 여부는 자료가 없습니다.</li>
+  </ul>
+  <div class="tag">원자료와 처리 스크립트: archive/C_data/raw/localdata_gyeongju · pipeline/build_lodging_permits.py · work/20261001_황촌_숙박_인허가_시계열_v1.md</div>
+</footer>
+
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const DATA = {"monthly":[["2019-01",0,1],["2019-02",0,1],["2019-03",0,1],["2019-04",0,1],["2019-05",0,1],["2019-06",0,1],["2019-07",0,1],["2019-08",0,1],["2019-09",1,1],["2019-10",1,1],["2019-11",1,1],["2019-12",1,1],["2020-01",1,1],["2020-02",1,1],["2020-03",1,1],["2020-04",1,1],["2020-05",1,1],["2020-06",1,1],["2020-07",1,1],["2020-08",1,1],["2020-09",1,1],["2020-10",1,1],["2020-11",1,1],["2020-12",1,1],["2021-01",1,1],["2021-02",1,1],["2021-03",2,1],["2021-04",2,1],["2021-05",2,1],["2021-06",2,1],["2021-07",2,1],["2021-08",2,1],["2021-09",2,1],["2021-10",2,1],["2021-11",2,1],["2021-12",2,1],["2022-01",2,1],["2022-02",2,1],["2022-03",2,1],["2022-04",2,1],["2022-05",2,2],["2022-06",2,2],["2022-07",2,2],["2022-08",2,2],["2022-09",2,2],["2022-10",2,2],["2022-11",2,2],["2022-12",2,2],["2023-01",3,2],["2023-02",3,2],["2023-03",3,2],["2023-04",3,2],["2023-05",3,2],["2023-06",3,2],["2023-07",3,2],["2023-08",3,2],["2023-09",3,2],["2023-10",3,2],["2023-11",3,2],["2023-12",3,2],["2024-01",3,2],["2024-02",4,2],["2024-03",4,2],["2024-04",4,2],["2024-05",7,2],["2024-06",10,2],["2024-07",11,2],["2024-08",10,2],["2024-09",11,2],["2024-10",11,2],["2024-11",11,2],["2024-12",13,3],["2025-01",13,3],["2025-02",14,3],["2025-03",15,3],["2025-04",15,3],["2025-05",15,3],["2025-06",17,3],["2025-07",19,3],["2025-08",20,3],["2025-09",20,3],["2025-10",21,3],["2025-11",21,3],["2025-12",22,3],["2026-01",22,3],["2026-02",22,3],["2026-03",23,3],["2026-04",25,3],["2026-05",24,3],["2026-06",27,3],["2026-07",31,3],["2026-08",33,3],["2026-09",33,3]],"sm":{"행복황촌":[["2015",0,1],["2016",0,1],["2017",0,1],["2018",0,1],["2019",1,1],["2020",1,1],["2021",2,1],["2022",2,2],["2023",3,2],["2024",13,3],["2025",22,3],["2026.9",33,3]],"황리단길 300m":[["2015",1,2],["2016",2,2],["2017",3,3],["2018",3,4],["2019",1,6],["2020",4,6],["2021",7,10],["2022",7,15],["2023",7,21],["2024",7,26],["2025",6,37],["2026.9",6,40]]},"permits":[["2016",0,4],["2017",0,1],["2018",0,6],["2019",1,7],["2020",0,12],["2021",1,10],["2022",0,15],["2023",1,2],["2024",11,12],["2025",9,24],["2026.1–9",12,22]],"dong":[["황오동",50],["사정동",16],["성동동",15],["황남동",6],["노서동",6],["동부동",6],["성건동",5],["북부동",4],["용강동",4],["그 외",11]],"dongTotal":123,"map":{"w":729.5,"h":1323.2,"B":[[[286.2,164.3],[334.3,164.3],[589.6,397.7],[575.8,682.4],[573.7,773.8],[516.2,773.8],[514.0,868.2],[558.9,868.2],[555.4,1015.7],[560.8,1015.7],[559.5,1068.7],[485.9,1068.8],[483.2,1183.0],[245.7,1183.2],[251.5,1073.0],[271.5,938.5],[425.1,938.3],[439.6,562.7],[424.9,424.4],[427.9,294.7],[290.9,294.8],[286.2,164.3]]],"D":[[[255.5,140.0],[232.0,205.4],[228.7,224.8],[222.2,228.4],[218.0,292.2],[211.5,292.4],[212.3,336.9],[234.8,338.8],[235.0,345.8],[213.0,346.0],[187.8,425.1],[177.9,467.7],[170.4,478.3],[166.2,492.6],[156.8,535.1],[156.6,549.0],[152.4,550.3],[151.9,724.8],[149.4,730.5],[140.8,730.7],[140.0,751.8],[140.0,855.8],[151.3,857.1],[151.3,875.9],[159.7,899.5],[162.8,899.7],[162.9,912.8],[175.2,951.6],[176.7,954.8],[182.8,955.0],[182.8,972.1],[194.7,1001.6],[202.3,1043.4],[209.8,1052.1],[211.5,1061.2],[243.2,1063.3],[262.0,1063.3],[264.6,936.2],[267.5,932.6],[285.9,927.4],[294.1,910.9],[321.0,845.9],[323.7,794.0],[412.0,793.6],[420.5,515.6],[420.5,499.2],[413.2,495.0],[413.2,481.2],[420.6,479.5],[420.8,345.8],[414.7,340.9],[405.9,340.1],[290.8,337.7],[294.7,312.2],[293.1,269.4],[285.9,198.7],[277.5,198.3],[286.8,168.5],[286.8,153.1],[271.9,140.0],[255.5,140.0]]],"pts":[{"x":659.4,"y":1014.8,"n":"월지향","s":"민박","o":"2015-09-14","c":"","r":"1","b":0},{"x":401.3,"y":1031.9,"n":"블루플래닛","s":"민박","o":"2019-09-18","c":"","r":"3","b":1},{"x":348.6,"y":1029.8,"n":"황오여관","s":"민박","o":"2021-03-30","c":"","r":"2","b":1},{"x":649.0,"y":968.6,"n":"숙이's","s":"민박","o":"2021-06-23","c":"","r":"2","b":0},{"x":466.4,"y":691.6,"n":"스테이 황촌","s":"민박","o":"2023-01-06","c":"","r":"","b":1},{"x":541.2,"y":629.7,"n":"행복꿈자리","s":"민박","o":"2024-02-27","c":"2024-08-10","r":"","b":1},{"x":280.8,"y":1170.8,"n":"황오연가","s":"민박","o":"2024-05-02","c":"","r":"","b":1},{"x":285.3,"y":1122.7,"n":"스테이 마음","s":"민박","o":"2024-05-02","c":"","r":"","b":1},{"x":433.9,"y":909.9,"n":"스테이 희","s":"민박","o":"2024-05-02","c":"","r":"","b":1},{"x":401.0,"y":990.1,"n":"호텔프프","s":"민박","o":"2024-06-10","c":"","r":"","b":1},{"x":497.6,"y":655.7,"n":"호경가","s":"민박","o":"2024-06-10","c":"","r":"","b":1},{"x":385.5,"y":1031.3,"n":"경주 호가","s":"민박","o":"2024-06-19","c":"","r":"","b":1},{"x":547.7,"y":646.5,"n":"스테이 시 in","s":"민박","o":"2024-07-04","c":"","r":"","b":1},{"x":518.6,"y":644.7,"n":"스테이눕","s":"민박","o":"2024-09-03","c":"","r":"","b":1},{"x":533.2,"y":694.1,"n":"모모이 황촌","s":"민박","o":"2024-12-03","c":"","r":"","b":1},{"x":456.0,"y":1117.3,"n":"스테이 경주 182-6","s":"민박","o":"2024-12-11","c":"","r":"","b":1},{"x":416.9,"y":946.0,"n":"황오다락","s":"민박","o":"2025-02-28","c":"","r":"","b":1},{"x":499.4,"y":915.0,"n":"넥스트 도어","s":"민박","o":"2025-03-12","c":"","r":"","b":1},{"x":466.4,"y":868.9,"n":"스테이류","s":"민박","o":"2025-06-09","c":"","r":"","b":1},{"x":541.2,"y":629.7,"n":"행복꿈자리","s":"민박","o":"2025-06-27","c":"","r":"","b":1},{"x":464.3,"y":434.2,"n":"옥상1996","s":"민박","o":"2025-07-03","c":"","r":"","b":1},{"x":347.6,"y":1055.0,"n":"황오아담","s":"민박","o":"2025-07-25","c":"","r":"","b":1},{"x":514.8,"y":729.4,"n":"달스테이인황촌","s":"민박","o":"2025-08-17","c":"2026-05-28","r":"","b":1},{"x":405.3,"y":945.6,"n":"해야스테이","s":"민박","o":"2025-10-01","c":"","r":"","b":1},{"x":438.2,"y":867.9,"n":"스테이 1983","s":"민박","o":"2025-12-23","c":"","r":"","b":1},{"x":685.4,"y":966.9,"n":"모온 스테이","s":"민박","o":"2026-01-27","c":"","r":"1","b":0},{"x":483.1,"y":570.4,"n":"이다음 스테이","s":"민박","o":"2026-03-27","c":"","r":"1","b":1},{"x":19.7,"y":419.6,"n":"블루하우스 다운타운","s":"민박","o":"2026-04-02","c":"","r":"3","b":0},{"x":652.2,"y":798.1,"n":"전랑지","s":"민박","o":"2026-04-10","c":"","r":"1","b":0},{"x":486.8,"y":855.4,"n":"호호가","s":"민박","o":"2026-04-28","c":"","r":"2","b":1},{"x":313.2,"y":1089.0,"n":"경주, 데이즈","s":"민박","o":"2026-04-30","c":"","r":"1","b":1},{"x":528.7,"y":892.6,"n":"스테이 문담","s":"민박","o":"2026-06-08","c":"","r":"4","b":1},{"x":514.8,"y":729.4,"n":"흐흐 하우스","s":"민박","o":"2026-06-23","c":"","r":"2","b":1},{"x":293.9,"y":985.3,"n":"포실주택","s":"민박","o":"2026-06-26","c":"","r":"2","b":1},{"x":393.2,"y":1096.2,"n":"황오다움","s":"민박","o":"2026-07-10","c":"","r":"2","b":1},{"x":480.9,"y":924.2,"n":"스테이 선재","s":"민박","o":"2026-07-10","c":"","r":"2","b":1},{"x":444.5,"y":593.0,"n":"스테이 은진슈퍼","s":"민박","o":"2026-07-16","c":"","r":"3","b":1},{"x":495.7,"y":446.8,"n":"헤이경주","s":"민박","o":"2026-07-28","c":"","r":"2","b":1},{"x":439.4,"y":802.3,"n":"황오저택","s":"민박","o":"2026-08-04","c":"","r":"2","b":1},{"x":532.4,"y":684.0,"n":"스테이 호","s":"민박","o":"2026-08-04","c":"","r":"2","b":1},{"x":548.9,"y":910.1,"n":"사랑방서재","s":"한옥","o":"2013-12-17","c":"","r":"1","b":1},{"x":456.5,"y":1105.1,"n":"소여정","s":"한옥","o":"2022-05-09","c":"","r":"1","b":1},{"x":316.1,"y":1220.0,"n":"황오하루","s":"한옥","o":"2023-03-29","c":"","r":"1","b":0},{"x":638.9,"y":882.3,"n":"한옥애","s":"한옥","o":"2023-04-07","c":"","r":"1","b":0},{"x":467.4,"y":1118.4,"n":"스테이 여진여몽","s":"한옥","o":"2024-12-11","c":"","r":"1","b":1},{"x":404.1,"y":679.1,"n":"비로소 한옥","s":"한옥","o":"2025-02-20","c":"","r":"1","b":0},{"x":686.5,"y":857.1,"n":"솔솔한옥스테이","s":"한옥","o":"2025-07-25","c":"","r":"1","b":0}],"lab":{"market":[44.1,670.0]}},"table":[["한옥체험업","사랑방서재","2013-12-17","","1","","Y"],["외국인관광도시민박업","블루플래닛","2019-09-18","","3","Y",""],["외국인관광도시민박업","황오여관","2021-03-30","","2","Y",""],["한옥체험업","소여정","2022-05-09","","1","Y",""],["외국인관광도시민박업","스테이 황촌","2023-01-06","","","Y",""],["외국인관광도시민박업","행복꿈자리","2024-02-27","2024-08-10","","Y",""],["외국인관광도시민박업","스테이 마음","2024-05-02","","","Y",""],["외국인관광도시민박업","스테이 희","2024-05-02","","","Y","Y"],["외국인관광도시민박업","황오연가","2024-05-02","","","","Y"],["외국인관광도시민박업","호경가","2024-06-10","","","Y",""],["외국인관광도시민박업","호텔프프","2024-06-10","","","Y",""],["외국인관광도시민박업","경주 호가","2024-06-19","","","Y",""],["외국인관광도시민박업","스테이 시 in","2024-07-04","","","Y",""],["외국인관광도시민박업","스테이눕","2024-09-03","","","Y",""],["외국인관광도시민박업","모모이 황촌","2024-12-03","","","Y",""],["외국인관광도시민박업","스테이 경주 182-6","2024-12-11","","","Y",""],["한옥체험업","스테이 여진여몽","2024-12-11","","1","Y","Y"],["외국인관광도시민박업","황오다락","2025-02-28","","","Y","Y"],["외국인관광도시민박업","넥스트 도어","2025-03-12","","","Y",""],["외국인관광도시민박업","스테이류","2025-06-09","","","Y",""],["외국인관광도시민박업","행복꿈자리","2025-06-27","","","Y",""],["외국인관광도시민박업","옥상1996","2025-07-03","","","",""],["외국인관광도시민박업","황오아담","2025-07-25","","","Y",""],["외국인관광도시민박업","달스테이인황촌","2025-08-17","2026-05-28","","Y",""],["외국인관광도시민박업","해야스테이","2025-10-01","","","Y","Y"],["외국인관광도시민박업","스테이 1983","2025-12-23","","","","Y"],["외국인관광도시민박업","이다음 스테이","2026-03-27","","1","",""],["외국인관광도시민박업","호호가","2026-04-28","","2","",""],["외국인관광도시민박업","경주, 데이즈","2026-04-30","","1","",""],["외국인관광도시민박업","스테이 문담","2026-06-08","","4","",""],["외국인관광도시민박업","흐흐 하우스","2026-06-23","","2","",""],["외국인관광도시민박업","포실주택","2026-06-26","","2","",""],["외국인관광도시민박업","스테이 선재","2026-07-10","","2","",""],["외국인관광도시민박업","황오다움","2026-07-10","","2","",""],["외국인관광도시민박업","스테이 은진슈퍼","2026-07-16","","3","","Y"],["외국인관광도시민박업","헤이경주","2026-07-28","","2","",""],["외국인관광도시민박업","스테이 호","2026-08-04","","2","",""],["외국인관광도시민박업","황오저택","2026-08-04","","2","","Y"]]};
+const NS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in (attrs || {})) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function t(parent, x, y, str, attrs) { const e = s('text', Object.assign({ x, y }, attrs || {}), parent); e.textContent = str; return e; }
+const tip = document.getElementById('tip');
+function showTip(html, ev) {
+  tip.innerHTML = html; tip.hidden = false;
+  const pad = 14, r = tip.getBoundingClientRect();
+  let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - pad;
+  if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - pad;
+  tip.style.left = Math.max(8, x) + 'px'; tip.style.top = Math.max(8, y) + 'px';
+}
+function hideTip() { tip.hidden = true; }
+const row = (sw, k, v) => `<div class="r"><span>${sw ? `<span class="sw" style="background:${sw}"></span>` : ''}${k}</span><span>${v}</span></div>`;
+const fmtYM = ym => ym.replace('-', '.');
+
+/* 1. 월말 재고 — 누적 계단 면 */
+function drawStock(box) {
+  box.innerHTML = '';
+  const W = box.clientWidth, narrow = W < 560, H = narrow ? 260 : 320;
+  const m = { l: 34, r: narrow ? 30 : 96, t: 30, b: 28 };
+  const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': '행복황촌 구역 월말 영업 중 숙소 수, 2019년 1월부터 2026년 9월' }, box);
+  const D = DATA.monthly, n = D.length, pw = W - m.l - m.r, ph = H - m.t - m.b, ymax = 40;
+  const x = i => m.l + pw * i / n, y = v => m.t + ph - ph * v / ymax;
+  const idx = ym => D.findIndex(d => d[0] === ym);
+  const b0 = idx('2021-01'), b1 = idx('2024-12') + 1;
+  s('rect', { x: x(b0), y: m.t, width: x(b1) - x(b0), height: ph, style: 'fill:var(--band)' }, svg);
+  t(svg, x(b0) + 6, m.t + 15, narrow ? '뉴딜 2021–24' : '행복황촌 뉴딜 2021–2024', { class: 'ann' });
+  [0, 10, 20, 30, 40].forEach(v => { if (v) s('line', { x1: m.l, x2: m.l + pw, y1: y(v), y2: y(v), class: 'grid' }, svg); t(svg, m.l - 8, y(v) + 4, v, { class: 'tick', 'text-anchor': 'end' }); });
+  D.forEach((d, i) => { if (d[0].endsWith('-01')) { const yr = d[0].slice(0, 4); if (narrow && +yr % 2) return; s('line', { x1: x(i), x2: x(i), y1: m.t + ph, y2: m.t + ph + 4, class: 'axis' }, svg); t(svg, x(i) + 3, m.t + ph + 17, yr, { class: 'tick' }); } });
+  const a = D.map(d => d[1]), tot = D.map(d => d[1] + d[2]), zero = D.map(() => 0);
+  const stepTop = vals => vals.map((v, i) => `${i ? 'L' : 'M'}${x(i)},${y(v)}L${x(i + 1)},${y(v)}`).join('');
+  const stepArea = (top, base) => { let p = stepTop(top); for (let i = base.length - 1; i >= 0; i--) p += `L${x(i + 1)},${y(base[i])}L${x(i)},${y(base[i])}`; return p + 'Z'; };
+  s('path', { d: stepArea(tot, a), style: 'fill:var(--s2)' }, svg);
+  s('path', { d: stepArea(a, zero), style: 'fill:var(--s1)' }, svg);
+  s('path', { d: stepTop(a), style: 'fill:none;stroke:var(--surface);stroke-width:2' }, svg);
+  s('line', { x1: m.l, x2: m.l + pw, y1: y(0), y2: y(0), class: 'axis' }, svg);
+  // 주석: 현판식, 협동조합 발표
+  const note = (ym, label, dy) => {
+    const i = idx(ym), cx = x(i + 0.5), cy = y(a[i]);
+    s('line', { x1: cx, x2: cx, y1: cy - 4, y2: cy - dy, class: 'axis' }, svg);
+    s('circle', { cx, cy, r: 4, style: 'fill:var(--ink);stroke:var(--surface);stroke-width:2' }, svg);
+    t(svg, cx - 4, cy - dy - 5, label, { class: 'ann-strong', 'text-anchor': 'end' });
+  };
+  note('2024-03', narrow ? '현판식 4곳' : '2024.3 현판식 4곳', narrow ? 46 : 58);
+  note('2025-10', narrow ? '발표 21곳' : '2025.10 협동조합 발표 21곳', narrow ? 40 : 52);
+  // 끝 값 라벨
+  const L = n - 1;
+  if (!narrow) {
+    t(svg, x(n) + 8, y(a[L] / 2) + 4, `도시민박업 ${a[L]}`, { class: 'val' });
+    t(svg, x(n) + 8, y(a[L] + D[L][2] / 2) - 6, `한옥체험업 ${D[L][2]}`, { class: 'val' });
+  } else {
+    t(svg, x(n) + 4, y(a[L] / 2) + 4, a[L], { class: 'val' });
+  }
+  // 호버
+  const cross = s('line', { x1: 0, x2: 0, y1: m.t, y2: m.t + ph, class: 'cross', visibility: 'hidden' }, svg);
+  const hit = s('rect', { x: m.l, y: m.t, width: pw, height: ph, style: 'fill:transparent;cursor:crosshair' }, svg);
+  hit.addEventListener('pointermove', ev => {
+    const r = svg.getBoundingClientRect(); const i = Math.max(0, Math.min(n - 1, Math.floor((ev.clientX - r.left - m.l) / pw * n)));
+    const cx = x(i + 0.5); cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+    const d = D[i];
+    showTip(`<b>${fmtYM(d[0])} 말</b>` + row('var(--s1)', '도시민박업', d[1]) + row('var(--s2)', '한옥체험업', d[2]) + row('', '합계', d[1] + d[2]), ev);
+  });
+  hit.addEventListener('pointerleave', () => { cross.setAttribute('visibility', 'hidden'); hideTip(); });
+}
+
+/* 2. 지도 */
+function drawMap(box) {
+  box.innerHTML = '';
+  const M = DATA.map, W = box.clientWidth, pad = 14;
+  const sc = Math.min((W - 2 * pad) / M.w, 760 / M.h);
+  const H = M.h * sc + 2 * pad, ox = (W - M.w * sc) / 2;
+  const X = v => ox + v * sc, Y = v => pad + v * sc;
+  const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': '행복황촌 구역과 폐역 부지, 숙소 위치' }, box);
+  const ring = r => r.map((p, i) => `${i ? 'L' : 'M'}${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join('') + 'Z';
+  M.D.forEach(r => s('path', { d: ring(r), style: 'fill:none;stroke:var(--ink-3);stroke-width:1.5;stroke-dasharray:5 4' }, svg));
+  M.B.forEach(r => s('path', { d: ring(r), style: 'fill:var(--band);stroke:var(--accent);stroke-width:2' }, svg));
+  // 구역 라벨: 각 폴리곤 북쪽 끝 근처
+  const top = r => r.reduce((b, p) => p[1] < b[1] ? p : b, r[0]);
+  const bt = top(M.B[0]), dt = top(M.D[0]);
+  const clampLabel = (el, cx) => { const w = el.getComputedTextLength(); el.setAttribute('text-anchor', 'middle'); el.setAttribute('x', Math.min(Math.max(cx, pad + w / 2), W - pad - w / 2)); };
+  clampLabel(t(svg, 0, Y(bt[1]) + 16, '행복황촌 구역', { class: 'ann-strong' }), X(bt[0]));
+  clampLabel(t(svg, 0, Y(bt[1]) + 34, '16.5ha (근사)', { class: 'ann' }), X(bt[0]));
+  clampLabel(t(svg, 0, Y(dt[1]) - 8, '폐역 부지 (지구단위계획구역)', { class: 'ann' }), X(dt[0]));
+  const mk = M.lab.market;
+  if (mk[0] >= 0 && mk[0] <= M.w && mk[1] >= 0 && mk[1] <= M.h) {
+    const mx = X(mk[0]), my = Y(mk[1]);
+    s('path', { d: `M${mx},${my - 6}L${mx + 6},${my}L${mx},${my + 6}L${mx - 6},${my}Z`, style: 'fill:var(--ink-2);stroke:var(--surface);stroke-width:1.5' }, svg);
+    t(svg, mx + 9, my + 4, '성동시장', { class: 'ann' });
+  }
+  // 점: 오래된 것부터, 새것이 위
+  const col = o => o < '2024' ? 'var(--y0)' : o < '2025' ? 'var(--y1)' : o < '2026' ? 'var(--y2)' : 'var(--y3)';
+  const pts = DATA.map.pts.slice().sort((p, q) => (p.c ? 0 : 1) - (q.c ? 0 : 1) || p.o.localeCompare(q.o));
+  pts.forEach(p => {
+    const cx = X(p.x), cy = Y(p.y), c = col(p.o);
+    const style = p.c ? `fill:var(--surface);stroke:${c};stroke-width:2` : `fill:${c};stroke:var(--surface);stroke-width:1.5`;
+    const el = p.s === '한옥' ? s('rect', { x: cx - 5, y: cy - 5, width: 10, height: 10, rx: 1.5, style }, svg) : s('circle', { cx, cy, r: 5.5, style }, svg);
+    const hit = s('circle', { cx, cy, r: 11, style: 'fill:transparent;cursor:pointer', tabindex: 0 }, svg);
+    const html = `<b>${p.n}</b>` + row('', p.s === '한옥' ? '한옥체험업' : '도시민박업', '') + row('', '인허가', p.o) + (p.c ? row('', '폐업', p.c) : '') + (p.r ? row('', '객실', p.r) : '') + row('', '행복황촌 구역', p.b ? '안' : '밖');
+    hit.addEventListener('pointerenter', ev => showTip(html, ev));
+    hit.addEventListener('pointermove', ev => showTip(html, ev));
+    hit.addEventListener('pointerleave', hideTip);
+    hit.addEventListener('focus', () => { const r = hit.getBoundingClientRect(); showTip(html, { clientX: r.right, clientY: r.top }); });
+    hit.addEventListener('blur', hideTip);
+  });
+  // 축척·방위
+  const len = 200 * sc, sx = pad + 4, sy = H - pad - 4;
+  s('line', { x1: sx, x2: sx + len, y1: sy, y2: sy, style: 'stroke:var(--ink-2);stroke-width:2' }, svg);
+  [sx, sx + len].forEach(v => s('line', { x1: v, x2: v, y1: sy - 5, y2: sy, style: 'stroke:var(--ink-2);stroke-width:1.5' }, svg));
+  t(svg, sx + len / 2, sy - 8, '200m', { class: 'tick', 'text-anchor': 'middle' });
+  s('path', { d: `M${W - pad - 10},${pad + 4}L${W - pad - 4},${pad + 20}L${W - pad - 10},${pad + 16}L${W - pad - 16},${pad + 20}Z`, style: 'fill:var(--ink-2)' }, svg);
+  t(svg, W - pad - 10, pad + 34, 'N', { class: 'tick', 'text-anchor': 'middle' });
+}
+
+/* 3. 동별 가로 막대 */
+function drawDong(box) {
+  box.innerHTML = '';
+  const rows = DATA.dong, W = box.clientWidth, rh = 26, lw = 58, vw = 34, H = rows.length * rh + 6;
+  const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': '경주시 도시민박업 법정동별 영업 중 수' }, box);
+  const max = 50, bw = W - lw - vw;
+  rows.forEach(([k, v], i) => {
+    const y0 = i * rh + 4, hi = k === '황오동' || k === '성동동', w = Math.max(2, bw * v / max);
+    t(svg, lw - 8, y0 + 15, k, { 'text-anchor': 'end', style: `font-size:13px;fill:var(${hi ? '--ink' : '--ink-2'});font-weight:${hi ? 500 : 400}` });
+    s('path', { d: `M${lw},${y0 + 3}h${w - 4}a4,4 0 0 1 4,4v${rh - 14}a4,4 0 0 1 -4,4h${-(w - 4)}Z`, style: `fill:var(${hi ? '--s1' : '--other'})` }, svg);
+    t(svg, lw + w + 6, y0 + 15, v, { class: 'val' });
+    const hit = s('rect', { x: 0, y: y0, width: W, height: rh, style: 'fill:transparent' }, svg);
+    const html = `<b>${k}</b>` + row('', '영업 중 도시민박업', v) + row('', '경주시 대비', (v / DATA.dongTotal * 100).toFixed(1) + '%');
+    hit.addEventListener('pointermove', ev => showTip(html, ev));
+    hit.addEventListener('pointerleave', hideTip);
+  });
+}
+
+/* 4. 연도별 신규 인허가 — 누적 막대 */
+function roundTop(x, y, w, h, r) { r = Math.min(r, h, w / 2); return `M${x},${y + h}V${y + r}a${r},${r} 0 0 1 ${r},${-r}h${w - 2 * r}a${r},${r} 0 0 1 ${r},${r}V${y + h}Z`; }
+function drawPermit(box) {
+  box.innerHTML = '';
+  const D = DATA.permits, W = box.clientWidth, narrow = W < 460, H = 230;
+  const m = { l: 30, r: 6, t: 18, b: 34 }, pw = W - m.l - m.r, ph = H - m.t - m.b, ymax = 40;
+  const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': '연도별 도시민박업 신규 인허가, 행복황촌과 그 외 경주시' }, box);
+  const y = v => m.t + ph - ph * v / ymax, band = pw / D.length, bw = Math.min(30, band * 0.62);
+  [0, 10, 20, 30, 40].forEach(v => { if (v) s('line', { x1: m.l, x2: m.l + pw, y1: y(v), y2: y(v), class: 'grid' }, svg); t(svg, m.l - 6, y(v) + 4, v, { class: 'tick', 'text-anchor': 'end' }); });
+  D.forEach(([lab, b, o], i) => {
+    const cx = m.l + band * (i + 0.5), x0 = cx - bw / 2;
+    if (b > 0) {
+      const h = y(0) - y(b);
+      s('path', { d: o > 0 ? `M${x0},${y(0)}V${y(b)}h${bw}V${y(0)}Z` : roundTop(x0, y(b), bw, h, 4), style: 'fill:var(--s1)' }, svg);
+    }
+    if (o > 0) {
+      const yt = y(b + o), yb = y(b) - (b > 0 ? 2 : 0);
+      s('path', { d: roundTop(x0, yt, bw, Math.max(1, yb - yt), 4), style: 'fill:var(--other)' }, svg);
+    }
+    if (i >= D.length - 3) t(svg, cx, y(b + o) - 6, b + o, { class: 'val', 'text-anchor': 'middle' });
+    const short = lab.startsWith('2026') ? '26.1–9' : (narrow ? "'" + lab.slice(2) : lab);
+    if (!narrow || i % 2 === 0 || i === D.length - 1) t(svg, cx, H - m.b + 16, short, { class: 'tick', 'text-anchor': 'middle' });
+    const hit = s('rect', { x: m.l + band * i, y: m.t, width: band, height: ph, style: 'fill:transparent' }, svg);
+    const html = `<b>${lab.startsWith('2026') ? '2026년 1–9월' : lab + '년'}</b>` + row('var(--s1)', '행복황촌 구역', b) + row('var(--other)', '그 외 경주시', o) + row('', '행복황촌 비중', (b + o ? Math.round(b / (b + o) * 100) : 0) + '%');
+    hit.addEventListener('pointermove', ev => showTip(html, ev));
+    hit.addEventListener('pointerleave', hideTip);
+  });
+  s('line', { x1: m.l, x2: m.l + pw, y1: y(0), y2: y(0), class: 'axis' }, svg);
+}
+
+/* 5. 작은 다중 — 행복황촌 vs 황리단길 */
+function drawSM(box, key) {
+  box.innerHTML = '';
+  const D = DATA.sm[key], W = box.clientWidth, H = 220;
+  const m = { l: 28, r: 40, t: 14, b: 28 }, pw = W - m.l - m.r, ph = H - m.t - m.b, ymax = 40, n = D.length;
+  const svg = s('svg', { width: W, height: H, viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': key + ' 연말 영업 중 도시민박업과 한옥체험업' }, box);
+  const x = i => m.l + pw * i / (n - 1), y = v => m.t + ph - ph * v / ymax;
+  [0, 10, 20, 30, 40].forEach(v => { if (v) s('line', { x1: m.l, x2: m.l + pw, y1: y(v), y2: y(v), class: 'grid' }, svg); t(svg, m.l - 6, y(v) + 4, v, { class: 'tick', 'text-anchor': 'end' }); });
+  D.forEach((d, i) => { if (['2015', '2020', '2026.9'].includes(d[0])) t(svg, x(i), H - m.b + 16, d[0], { class: 'tick', 'text-anchor': i === n - 1 ? 'end' : (i === 0 ? 'start' : 'middle') }); });
+  s('line', { x1: m.l, x2: m.l + pw, y1: y(0), y2: y(0), class: 'axis' }, svg);
+  const ends = [];
+  [[1, '--s1'], [2, '--s2']].forEach(([k, c]) => {
+    s('path', { d: D.map((d, i) => `${i ? 'L' : 'M'}${x(i)},${y(d[k])}`).join(''), style: `fill:none;stroke:var(${c});stroke-width:2;stroke-linejoin:round` }, svg);
+    s('circle', { cx: x(n - 1), cy: y(D[n - 1][k]), r: 4, style: `fill:var(${c});stroke:var(--surface);stroke-width:2` }, svg);
+    ends.push([y(D[n - 1][k]), D[n - 1][k]]);
+  });
+  if (Math.abs(ends[0][0] - ends[1][0]) < 14) { const mid = (ends[0][0] + ends[1][0]) / 2, up = ends[0][1] >= ends[1][1] ? 0 : 1; ends[up][0] = mid - 7; ends[1 - up][0] = mid + 7; }
+  ends.forEach(([yy, v]) => t(svg, x(n - 1) + 8, yy + 4, v, { class: 'val' }));
+  const cross = s('line', { x1: 0, x2: 0, y1: m.t, y2: m.t + ph, class: 'cross', visibility: 'hidden' }, svg);
+  const hit = s('rect', { x: m.l - 6, y: m.t, width: pw + 12, height: ph, style: 'fill:transparent;cursor:crosshair' }, svg);
+  hit.addEventListener('pointermove', ev => {
+    const r = svg.getBoundingClientRect(); const i = Math.max(0, Math.min(n - 1, Math.round((ev.clientX - r.left - m.l) / pw * (n - 1))));
+    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
+    const d = D[i];
+    showTip(`<b>${key} · ${d[0] === '2026.9' ? '2026-09-30' : d[0] + '년 말'}</b>` + row('var(--s1)', '도시민박업', d[1]) + row('var(--s2)', '한옥체험업', d[2]), ev);
+  });
+  hit.addEventListener('pointerleave', () => { cross.setAttribute('visibility', 'hidden'); hideTip(); });
+}
+
+/* 6. 명단 표 */
+(function fillTable() {
+  const tb = document.getElementById('t-list');
+  tb.innerHTML = DATA.table.map(r => `<tr><td>${r[0] === '외국인관광도시민박업' ? '도시민박업' : '한옥체험업'}</td><td>${r[1]}</td><td class="n">${r[2]}</td><td class="n">${r[3] || ''}</td><td class="n">${r[4] || ''}</td><td>${r[5] ? '포함' : ''}</td><td>${r[6] ? '예' : ''}</td></tr>`).join('');
+})();
+
+const charts = [['c-stock', drawStock], ['c-map', drawMap], ['c-dong', drawDong], ['c-permit', drawPermit], ['c-sm-0', b => drawSM(b, '행복황촌')], ['c-sm-1', b => drawSM(b, '황리단길 300m')]];
+charts.forEach(([id, fn]) => {
+  const box = document.getElementById(id); let last = 0, raf = 0;
+  const run = () => { const w = box.clientWidth; if (w && w !== last) { last = w; fn(box); } };
+  run();
+  if ('ResizeObserver' in window) new ResizeObserver(() => { cancelAnimationFrame(raf); raf = requestAnimationFrame(run); }).observe(box);
+});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => charts.forEach(([id, fn]) => fn(document.getElementById(id))));
+</script>
+
+</body>
+</html>
