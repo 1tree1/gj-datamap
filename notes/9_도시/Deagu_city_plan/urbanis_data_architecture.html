@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBANIS 데이터 아키텍처</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060810;--s1:#0c1019;--s2:#111827;--s3:#1a2236;--bd:#1e293b;--bd2:#2d3a52;--t1:#e8ecf4;--t2:#94a3b8;--t3:#5e6e85;--g:#00e896;--g2:#00d4aa;--b:#38bdf8;--v:#a78bfa;--o:#fb923c;--r:#f87171;--p:#f472b6;--y:#fbbf24}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t1);font-family:'Noto Sans KR',sans-serif;line-height:1.65}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+.c{max-width:1100px;margin:0 auto;padding:40px 20px 100px}
+h1{font-family:'DM Serif Display',serif;font-size:36px;text-align:center;background:linear-gradient(135deg,var(--g),var(--b));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.sub{text-align:center;color:var(--t3);font-size:12px;font-family:'IBM Plex Mono',monospace;margin-bottom:40px}
+
+/* Key concept box */
+.key{background:linear-gradient(135deg,rgba(0,232,150,.05),rgba(56,189,248,.05));border:1px solid rgba(0,232,150,.15);border-radius:14px;padding:24px 28px;margin-bottom:36px}
+.key-t{font-size:11px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
+.key p{font-size:13px;color:var(--t2);line-height:1.75}
+.key strong{color:var(--g)}
+.key em{color:var(--b);font-style:normal;font-weight:500}
+
+/* Section */
+.sec{margin-top:44px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.sec-n{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--g);background:rgba(0,232,150,.1);padding:3px 9px;border-radius:16px;border:1px solid rgba(0,232,150,.2)}
+.sec-t{font-size:18px;font-weight:700}
+
+/* Flow diagram */
+.flow{display:flex;align-items:center;justify-content:center;gap:0;margin:24px 0;flex-wrap:wrap}
+.flow-step{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;text-align:center;min-width:130px}
+.flow-step .fl-icon{font-size:20px;margin-bottom:4px}
+.flow-step .fl-t{font-size:11px;font-weight:600;color:var(--t1)}
+.flow-step .fl-d{font-size:9px;color:var(--t3);font-family:'IBM Plex Mono',monospace;margin-top:2px}
+.flow-arr{color:var(--t3);font-size:16px;margin:0 4px;flex-shrink:0}
+
+/* Code block */
+.code-block{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:16px 18px;margin:12px 0;overflow-x:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--t2);line-height:1.7;white-space:pre}
+.code-label{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+
+/* Data category cards */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.cat{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:18px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.cat:hover{border-color:var(--bd2);transform:translateY(-1px)}
+.cat.open{grid-column:1/-1}
+.cat-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.cat-icon{font-size:20px}
+.cat-name{font-size:14px;font-weight:600}
+.cat-count{font-size:10px;color:var(--t3);font-family:'IBM Plex Mono',monospace;margin-left:auto}
+.cat-desc{font-size:11px;color:var(--t2);line-height:1.6}
+
+.cat-detail{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)}
+.cat.open .cat-detail{display:block}
+
+/* Source table */
+.src-tbl{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
+.src-tbl th{text-align:left;padding:6px 8px;background:var(--s1);border-bottom:1px solid var(--bd);color:var(--t3);font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px}
+.src-tbl td{padding:6px 8px;border-bottom:1px solid rgba(30,41,59,.5);color:var(--t2);vertical-align:top}
+.src-tbl td:first-child{font-weight:500;color:var(--t1);white-space:nowrap}
+
+.tag{display:inline-block;font-size:8px;padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;margin:1px}
+.tag-api{background:rgba(0,232,150,.1);color:var(--g);border:1px solid rgba(0,232,150,.2)}
+.tag-file{background:rgba(56,189,248,.1);color:var(--b);border:1px solid rgba(56,189,248,.2)}
+.tag-wms{background:rgba(167,139,250,.1);color:var(--v);border:1px solid rgba(167,139,250,.2)}
+.tag-geo{background:rgba(251,146,60,.1);color:var(--o);border:1px solid rgba(251,146,60,.2)}
+.tag-free{background:rgba(0,232,150,.08);color:var(--g2)}
+
+/* Admin code hierarchy */
+.hier{display:flex;align-items:center;gap:0;margin:16px 0;flex-wrap:wrap;justify-content:center}
+.hier-box{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;text-align:center;min-width:100px}
+.hier-box .hb-code{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;letter-spacing:1px}
+.hier-box .hb-label{font-size:9px;color:var(--t3);margin-top:2px}
+.hier-box .hb-ex{font-size:10px;color:var(--t2);margin-top:4px}
+.hier-arr{color:var(--t3);margin:0 6px;font-size:14px}
+
+/* Processing pipeline */
+.pipe{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:20px;margin:14px 0}
+.pipe-title{font-size:12px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.pipe-num{background:rgba(0,232,150,.15);color:var(--g);font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pipe-text{font-size:11px;color:var(--t2);line-height:1.7}
+.pipe-text strong{color:var(--t1)}
+.pipe-tools{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.pipe-tool{font-size:9px;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--t3);font-family:'IBM Plex Mono',monospace}
+
+/* Integration schema */
+.schema{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:20px;margin:16px 0}
+.schema-t{font-size:11px;font-weight:600;color:var(--b);margin-bottom:8px}
+.schema pre{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);line-height:1.6;overflow-x:auto}
+
+/* Layer stack */
+.layer-stack{display:flex;flex-direction:column;gap:3px;margin:16px 0}
+.layer{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;border:1px solid var(--bd)}
+.layer-color{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.layer-name{font-size:12px;font-weight:500;min-width:140px}
+.layer-src{font-size:10px;color:var(--t3);font-family:'IBM Plex Mono',monospace;flex:1}
+.layer-fmt{font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(255,255,255,.04);color:var(--t3);font-family:'IBM Plex Mono',monospace}
+
+@media(max-width:600px){
+  .cat-grid{grid-template-columns:1fr}
+  .hier{flex-direction:column}
+  .hier-arr{transform:rotate(90deg)}
+  .flow{flex-direction:column}
+  .flow-arr{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+<div class="c">
+
+<h1>URBANIS Data Architecture</h1>
+<p class="sub">데이터 수집 · 통합 · 가공 · 시각화 파이프라인 설계</p>
+
+<!-- Core Concept -->
+<div class="key">
+  <div class="key-t">핵심 개념: 행정코드가 만능 열쇠(Universal Key)</div>
+  <p>
+    한국의 모든 공공 데이터는 <strong>법정동코드(10자리)</strong> 또는 <strong>PNU코드(19자리)</strong>로 연결됩니다.
+    사용자가 "대구 중구 삼덕동"을 입력하면 → <em>법정동코드 2711010200</em>이 자동 매핑되고,
+    이 코드 하나로 건물대장, 용도지역, 인구통계, 공시지가 등 <strong>모든 데이터가 자동으로 결합</strong>됩니다.
+    즉, <strong>행정코드 = 데이터 통합의 JOIN 키</strong>입니다.
+  </p>
+</div>
+
+<!-- Section 0: Input System -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">00</span>
+    <h2 class="sec-t">입력 체계: 사용자가 영역을 지정하는 3가지 방법</h2>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step" style="border-color:var(--g)">
+      <div class="fl-icon">🔤</div>
+      <div class="fl-t">텍스트 입력</div>
+      <div class="fl-d">"대구 중구 삼덕동"</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step">
+      <div class="fl-icon">🔑</div>
+      <div class="fl-t">행정코드 변환</div>
+      <div class="fl-d">Kakao/V-World API</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step">
+      <div class="fl-icon">📐</div>
+      <div class="fl-t">경계 GeoJSON 취득</div>
+      <div class="fl-d">SGIS 행정경계 API</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step" style="border-color:var(--b)">
+      <div class="fl-icon">🗺️</div>
+      <div class="fl-t">지도에 영역 표시</div>
+      <div class="fl-d">bbox 내 데이터 수집</div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--t2);margin:12px 0">
+    <strong>방법 ①</strong> 시/도 → 시/군/구 → 읍/면/동 드롭다운 선택 (행정코드 자동 매핑)<br>
+    <strong>방법 ②</strong> 주소 또는 도시명 텍스트 검색 (Kakao Local API → 좌표 → 행정코드 역지오코딩)<br>
+    <strong>방법 ③</strong> 지도에서 직접 폴리곤 드로잉 (사용자 정의 대지 영역, bbox로 데이터 쿼리)
+  </p>
+
+  <!-- Admin code hierarchy -->
+  <h3 style="font-size:13px;font-weight:600;margin:20px 0 10px">행정코드 체계 (법정동코드 10자리)</h3>
+  <div class="hier">
+    <div class="hier-box" style="border-color:var(--g)">
+      <div class="hb-code" style="color:var(--g)">27</div>
+      <div class="hb-label">시·도 (2자리)</div>
+      <div class="hb-ex">대구광역시</div>
+    </div>
+    <span class="hier-arr">→</span>
+    <div class="hier-box" style="border-color:var(--b)">
+      <div class="hb-code" style="color:var(--b)">110</div>
+      <div class="hb-label">시·군·구 (3자리)</div>
+      <div class="hb-ex">중구</div>
+    </div>
+    <span class="hier-arr">→</span>
+    <div class="hier-box" style="border-color:var(--v)">
+      <div class="hb-code" style="color:var(--v)">10200</div>
+      <div class="hb-label">읍·면·동 (5자리)</div>
+      <div class="hb-ex">삼덕동</div>
+    </div>
+    <span class="hier-arr">=</span>
+    <div class="hier-box" style="border-color:var(--y);background:rgba(251,191,36,.05)">
+      <div class="hb-code" style="color:var(--y)">2711010200</div>
+      <div class="hb-label">법정동코드 (완성)</div>
+      <div class="hb-ex">모든 API의 KEY</div>
+    </div>
+  </div>
+
+  <div class="schema">
+    <div class="schema-t">PNU코드 (19자리) = 법정동코드 + 대지구분 + 본번 + 부번</div>
+    <pre>
+PNU:  27110 10200 1 0041 0012
+      ───── ───── ─ ──── ────
+      시군구 읍면동 대지 본번  부번
+                   (1:대지 2:산)
+ → 특정 필지(토지)를 유일하게 식별
+ → 건축물대장, 공시지가, 토지대장의 Primary Key</pre>
+  </div>
+
+  <div class="code-block"><div class="code-label">입력 → 행정코드 변환 Python 예시</div>
+import requests
+
+# 방법1: Kakao Local API (주소 → 좌표 → 행정코드)
+def get_admin_code(address):
+    url = "https://dapi.kakao.com/v2/local/search/address.json"
+    res = requests.get(url, params={"query": address},
+           headers={"Authorization": "KakaoAK {YOUR_KEY}"})
+    doc = res.json()["documents"][0]["address"]
+    return {
+        "법정동코드": doc["b_code"],       # "2711010200"
+        "행정동코드": doc["h_code"],       # "2711051000"
+        "lat": doc["y"], "lng": doc["x"]
+    }
+
+# 방법2: SGIS API (행정코드 → 경계 GeoJSON)
+def get_boundary_geojson(admin_code):
+    url = "https://sgisapi.kostat.go.kr/OpenAPI3/boundary/hadmarea.geojson"
+    res = requests.get(url, params={
+        "accessToken": get_sgis_token(),
+        "year": "2024",
+        "adm_cd": admin_code[:5],  # 시군구 단위
+        "low_search": "2"          # 읍면동 하위 포함
+    })
+    return res.json()  # GeoJSON FeatureCollection
+
+# 방법3: V-World API (PNU → 토지정보)
+def get_land_info(pnu):
+    url = "http://api.vworld.kr/ned/data/getLandCharacteristics"
+    res = requests.get(url, params={
+        "key": "{VWORLD_KEY}",
+        "pnu": pnu,
+        "format": "json",
+        "numOfRows": "10"
+    })
+    return res.json()  # 지목, 면적, 용도지역 등</div>
+</div>
+
+<!-- Section 1: 7 Data Categories -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">01</span>
+    <h2 class="sec-t">7대 데이터 카테고리 & 소스</h2>
+  </div>
+
+  <div class="cat-grid">
+
+    <!-- Cat 1: Spatial Base -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">🗺️</span>
+        <span class="cat-name">공간 기반 데이터</span>
+        <span class="cat-count">기초 레이어 8종</span>
+      </div>
+      <div class="cat-desc">행정경계, 지적도, 도로망, 수계, DEM 등 지도 위에 올라가는 기본 공간 뼈대. 모든 분석의 기초.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>JOIN 키</th></tr>
+          <tr><td>행정경계 (시도/시군구/읍면동)</td><td>SGIS 통계지리정보서비스 <span class="tag tag-api">API</span></td><td><span class="tag tag-geo">GeoJSON</span></td><td>행정동코드</td></tr>
+          <tr><td>연속지적도 (필지 경계)</td><td>V-World <span class="tag tag-wms">WMS/WFS</span></td><td><span class="tag tag-geo">SHP/GeoJSON</span></td><td>PNU (19자리)</td></tr>
+          <tr><td>도로 중심선 / 도로명</td><td>V-World <span class="tag tag-file">다운로드</span></td><td><span class="tag tag-geo">SHP</span></td><td>도로명코드</td></tr>
+          <tr><td>수치지형도 (DEM 5m)</td><td>국토지리정보원 <span class="tag tag-file">다운로드</span></td><td>GeoTIFF</td><td>좌표 기반</td></tr>
+          <tr><td>정사영상 (25cm)</td><td>V-World 타일맵 <span class="tag tag-api">API</span></td><td>XYZ Tiles</td><td>좌표 기반</td></tr>
+          <tr><td>OSM 도로 네트워크</td><td>OpenStreetMap <span class="tag tag-free">무료</span></td><td><span class="tag tag-geo">GeoJSON</span></td><td>좌표 기반</td></tr>
+          <tr><td>수계 (하천, 호수)</td><td>V-World <span class="tag tag-wms">WMS</span></td><td><span class="tag tag-geo">SHP</span></td><td>좌표 기반</td></tr>
+          <tr><td>3D 건물 모델</td><td>V-World 3D <span class="tag tag-api">API</span></td><td>glTF/3D Tiles</td><td>건물 PNU</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cat 2: Building & Land -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">🏢</span>
+        <span class="cat-name">건물 · 토지 · 부동산</span>
+        <span class="cat-count">핵심 분석 7종</span>
+      </div>
+      <div class="cat-desc">건축물대장, 토지특성, 공시지가, 실거래가 등. 건물 연령·용도·구조 분석, 노후도 판별, 개발 가능성 평가의 핵심.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>JOIN 키</th></tr>
+          <tr><td>건축물대장 (표제부/총괄)</td><td>공공데이터포털 (국토부) <span class="tag tag-api">API</span></td><td>JSON/XML</td><td>PNU + 관리번호</td></tr>
+          <tr><td>건물 연령 · 구조 · 용도</td><td>건축물대장 파싱</td><td>→ 가공</td><td>PNU</td></tr>
+          <tr><td>토지특성정보 (지목, 면적)</td><td>V-World 토지API <span class="tag tag-api">API</span></td><td>JSON</td><td>PNU</td></tr>
+          <tr><td>토지이용계획 (용도지역)</td><td>V-World / 토지이음 <span class="tag tag-api">API</span></td><td>JSON</td><td>PNU</td></tr>
+          <tr><td>개별공시지가</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON</td><td>PNU</td></tr>
+          <tr><td>아파트/연립 실거래가</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON</td><td>법정동코드+아파트명</td></tr>
+          <tr><td>건물 에너지 사용량</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON</td><td>건물 관리번호</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cat 3: Zoning & Planning -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">⚖️</span>
+        <span class="cat-name">도시계획 · 용도지역 · 법규</span>
+        <span class="cat-count">지도 레이어 12종</span>
+      </div>
+      <div class="cat-desc">용도지역/지구/구역도, 도시계획시설, 개발제한구역, 지구단위계획 등. 법적 제약과 개발 가능성의 핵심 레이어.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>비고</th></tr>
+          <tr><td>용도지역도 (주거/상업/공업/녹지 등 21종)</td><td>V-World <span class="tag tag-wms">WMS</span> <span class="tag tag-file">SHP</span></td><td><span class="tag tag-geo">SHP/GeoJSON</span></td><td>건폐율·용적률 기준표 매핑 필요</td></tr>
+          <tr><td>용도지구도 (경관/고도/방화 등)</td><td>V-World <span class="tag tag-wms">WMS</span></td><td><span class="tag tag-geo">SHP</span></td><td>높이 제한 등 추가 규제</td></tr>
+          <tr><td>개발제한구역 (그린벨트)</td><td>V-World <span class="tag tag-wms">WMS</span></td><td><span class="tag tag-geo">SHP</span></td><td></td></tr>
+          <tr><td>지구단위계획구역</td><td>V-World / 토지이음 <span class="tag tag-api">API</span></td><td>JSON/SHP</td><td>세부 건축 가이드라인</td></tr>
+          <tr><td>도시계획시설 (공원, 도로 등)</td><td>V-World <span class="tag tag-wms">WMS</span></td><td><span class="tag tag-geo">SHP</span></td><td>미집행 시설 포함</td></tr>
+          <tr><td>도시재생활성화지역</td><td>도시재생 종합정보체계 <span class="tag tag-file">다운로드</span></td><td>SHP</td><td>뉴딜사업 지역</td></tr>
+          <tr><td>정비구역 (재개발/재건축)</td><td>각 시도 도시정비 정보시스템</td><td>다양</td><td>지자체별 상이</td></tr>
+        </table>
+        <p style="font-size:10px;color:var(--t3);margin-top:8px">※ V-World WMS는 OGC 국제표준 → QGIS, OpenLayers에서 직접 로드 가능. SHP 다운로드 후 GeoPandas로 GeoJSON 변환.</p>
+      </div>
+    </div>
+
+    <!-- Cat 4: Demographics & Socioeconomic -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">👥</span>
+        <span class="cat-name">인구 · 사회경제</span>
+        <span class="cat-count">분석 지표 10종+</span>
+      </div>
+      <div class="cat-desc">인구밀도, 연령구성, 가구유형, 사업체, 유동인구 등. 15분도시 분석과 공간정의 분석의 필수 데이터.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>단위</th></tr>
+          <tr><td>주민등록인구 (연령/성별)</td><td>KOSIS 국가통계포털 <span class="tag tag-api">API</span></td><td>JSON</td><td>읍면동</td></tr>
+          <tr><td>인구밀도 격자 (100m)</td><td>SGIS 통계지리정보 <span class="tag tag-api">API</span></td><td><span class="tag tag-geo">GeoJSON</span></td><td>100m 격자</td></tr>
+          <tr><td>가구유형 (1인/고령 등)</td><td>SGIS <span class="tag tag-api">API</span></td><td>JSON</td><td>읍면동</td></tr>
+          <tr><td>사업체 수 · 종사자 수</td><td>KOSIS <span class="tag tag-api">API</span></td><td>JSON</td><td>읍면동/산업분류</td></tr>
+          <tr><td>유동인구 (시간대별)</td><td>SKT GeoVision / KT 빅데이터 <span class="tag tag-api">유료API</span></td><td>JSON</td><td>50m 격자/시간</td></tr>
+          <tr><td>카드 매출 데이터</td><td>서울 열린데이터 / 빅데이터포털 <span class="tag tag-file">다운로드</span></td><td>CSV</td><td>행정동/업종</td></tr>
+          <tr><td>고령화율 · 노후주택 비율</td><td>KOSIS + 건축물대장 조합</td><td>→ 가공</td><td>읍면동</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cat 5: Infrastructure & Amenity -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">🏥</span>
+        <span class="cat-name">생활인프라 · 어메니티</span>
+        <span class="cat-count">POI 15종+</span>
+      </div>
+      <div class="cat-desc">학교, 병원, 공원, 대중교통, 편의시설 등 생활SOC. 15분도시 접근성 분석과 등시선 매핑의 입력 데이터.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>활용</th></tr>
+          <tr><td>학교 (초중고대)</td><td>교육부 NEIS <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>교육 접근성</td></tr>
+          <tr><td>의료기관 (병원/약국)</td><td>건강보험심사평가원 <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>의료 접근성</td></tr>
+          <tr><td>대중교통 정류장 · 노선</td><td>TAGO 교통정보 <span class="tag tag-api">API</span></td><td>JSON/GTFS</td><td>교통 접근성</td></tr>
+          <tr><td>지하철역 · 출입구</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>교통 접근성</td></tr>
+          <tr><td>공원 · 녹지 · 체육시설</td><td>V-World / 공공데이터포털 <span class="tag tag-file">SHP</span></td><td><span class="tag tag-geo">SHP/JSON</span></td><td>녹지 접근성</td></tr>
+          <tr><td>상점 · 음식점 · 카페</td><td>Kakao Local API <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>상업 접근성</td></tr>
+          <tr><td>소방서 · 경찰서 · 119</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>안전 접근성</td></tr>
+          <tr><td>도서관 · 문화시설</td><td>공공데이터포털 <span class="tag tag-api">API</span></td><td>JSON + 좌표</td><td>문화 접근성</td></tr>
+        </table>
+        <p style="font-size:10px;color:var(--o);margin-top:8px">💡 이 데이터들을 OSM 도로 네트워크 + Valhalla 라우팅과 결합하면 → <strong>등시선(isochrone) 기반 15분도시 접근성 지수</strong> 자동 산출</p>
+      </div>
+    </div>
+
+    <!-- Cat 6: Environment -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">🌿</span>
+        <span class="cat-name">환경 · 기후 · 재해</span>
+        <span class="cat-count">분석 레이어 8종</span>
+      </div>
+      <div class="cat-desc">대기질, 소음, 열지도, 침수이력, 산림, 토양 등. 기후복원력 분석과 열섬 효과 진단에 사용.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>활용</th></tr>
+          <tr><td>대기질 (PM2.5/10, O3 등)</td><td>한국환경공단 에어코리아 <span class="tag tag-api">API</span></td><td>JSON</td><td>대기환경 분석</td></tr>
+          <tr><td>소음 지도</td><td>국가소음정보시스템 <span class="tag tag-file">다운로드</span></td><td>SHP/래스터</td><td>소음 레이어</td></tr>
+          <tr><td>지표온도 (열지도)</td><td>Sentinel-2 / ECOSTRESS <span class="tag tag-free">무료</span></td><td>GeoTIFF</td><td>열섬 분석</td></tr>
+          <tr><td>NDVI 녹지 지수</td><td>Sentinel-2 (Copernicus) <span class="tag tag-free">무료</span></td><td>GeoTIFF</td><td>녹지 변화 추적</td></tr>
+          <tr><td>침수 이력 · 재해위험지구</td><td>V-World / 소방청 <span class="tag tag-wms">WMS</span></td><td>SHP</td><td>재해 취약 분석</td></tr>
+          <tr><td>일사량 · 일조시간</td><td>기상청 기상자료개방포털 <span class="tag tag-api">API</span></td><td>JSON</td><td>에너지·일조 분석</td></tr>
+          <tr><td>산림 현황 (수종/밀도)</td><td>산림청 산림공간정보 <span class="tag tag-file">SHP</span></td><td><span class="tag tag-geo">SHP</span></td><td>녹지 분석</td></tr>
+          <tr><td>토양 특성</td><td>흙토람 (농촌진흥청) <span class="tag tag-api">API</span></td><td>JSON</td><td>투수율·스펀지시티</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cat 7: Street View & Image -->
+    <div class="cat" onclick="this.classList.toggle('open')">
+      <div class="cat-top">
+        <span class="cat-icon">📸</span>
+        <span class="cat-name">스트리트뷰 · 영상 · CV</span>
+        <span class="cat-count">시각 분석 3종</span>
+      </div>
+      <div class="cat-desc">네이버 스트리트뷰, 위성영상, 항공사진. 컴퓨터비전 기반 녹시율(GVI), 도시 지각, 노후도 분석의 원본.</div>
+      <div class="cat-detail">
+        <table class="src-tbl">
+          <tr><th>데이터</th><th>소스</th><th>형식</th><th>CV 활용</th></tr>
+          <tr><td>스트리트뷰 파노라마</td><td>네이버 지도 (한국 유일 주요 소스) <span class="tag tag-api">API</span></td><td>이미지</td><td>DeepLab V3+ 세그멘테이션 → GVI, 스카이뷰, 노후도</td></tr>
+          <tr><td>위성영상 (10m, 5일 주기)</td><td>Copernicus Sentinel-2 <span class="tag tag-free">무료</span></td><td>GeoTIFF (13밴드)</td><td>NDVI, NDBI, 변화감지 (BIT/ChangeFormer)</td></tr>
+          <tr><td>항공사진 (25cm)</td><td>V-World 타일맵 <span class="tag tag-api">API</span></td><td>XYZ Tiles</td><td>건물 추출, 변화 비교</td></tr>
+        </table>
+        <p style="font-size:10px;color:var(--v);margin-top:8px">💡 네이버 지도 API는 <strong>파노라마 ID 기반</strong>으로 특정 좌표의 스트리트뷰 이미지를 프로그래매틱하게 수집 가능 (한국의 국가안보 규제로 Google 커버리지 제한적)</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Section 2: Integration Pipeline -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">02</span>
+    <h2 class="sec-t">데이터 통합 파이프라인: 어떻게 합치는가</h2>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step" style="border-color:var(--g)">
+      <div class="fl-icon">📥</div>
+      <div class="fl-t">수집 (Collect)</div>
+      <div class="fl-d">API 호출 / 파일 다운로드</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step" style="border-color:var(--b)">
+      <div class="fl-icon">🔗</div>
+      <div class="fl-t">통합 (Join)</div>
+      <div class="fl-d">행정코드/PNU 기준 병합</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step" style="border-color:var(--v)">
+      <div class="fl-icon">⚙️</div>
+      <div class="fl-t">가공 (Process)</div>
+      <div class="fl-d">지표 산출 / 클리닝</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step" style="border-color:var(--o)">
+      <div class="fl-icon">💾</div>
+      <div class="fl-t">저장 (Store)</div>
+      <div class="fl-d">PostGIS + GeoJSON</div>
+    </div>
+    <span class="flow-arr">→</span>
+    <div class="flow-step" style="border-color:var(--p)">
+      <div class="fl-icon">🗺️</div>
+      <div class="fl-t">시각화 (Render)</div>
+      <div class="fl-d">deck.gl / Mapbox GL</div>
+    </div>
+  </div>
+
+  <!-- Step details -->
+  <div class="pipe">
+    <div class="pipe-title"><span class="pipe-num">1</span> 수집: 행정코드로 배치 API 호출</div>
+    <div class="pipe-text">
+      사용자가 영역을 지정하면, <strong>해당 영역 내 모든 법정동코드 목록</strong>을 추출하고,
+      각 코드로 병렬 API 호출을 수행합니다. V-World 토지API는 PNU 기반이므로,
+      먼저 지적도에서 <strong>영역 내 필지 PNU 목록</strong>을 추출 후 배치 요청합니다.
+      위성영상은 <strong>bbox(bounding box)</strong> 기준으로 STAC API를 통해 Cloud-Optimized GeoTIFF를 부분 로드합니다.
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">aiohttp (비동기 배치)</span>
+      <span class="pipe-tool">pystac-client</span>
+      <span class="pipe-tool">geopandas.sjoin</span>
+      <span class="pipe-tool">rasterio (COG)</span>
+    </div>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-title"><span class="pipe-num">2</span> 통합: 행정코드/PNU를 JOIN 키로 병합</div>
+    <div class="pipe-text">
+      모든 테이블/속성 데이터는 <strong>법정동코드 또는 PNU로 JOIN</strong>합니다.
+      공간 데이터(SHP/GeoJSON)는 <strong>GeoPandas sjoin</strong>(공간 조인)으로 병합합니다.
+      격자 데이터(인구밀도 100m, 유동인구 50m)는 <strong>H3 헥사곤 인덱스</strong>로 통일하여 해상도 차이를 해결합니다.
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">pandas.merge(on='pnu')</span>
+      <span class="pipe-tool">geopandas.sjoin</span>
+      <span class="pipe-tool">h3-py (헥사곤 인덱싱)</span>
+    </div>
+  </div>
+
+  <div class="schema">
+    <div class="schema-t">핵심 JOIN 로직 (Python 의사코드)</div>
+    <pre>
+# 1. 영역 내 법정동코드 추출
+area_codes = get_dong_codes_in_boundary(user_geojson)
+  # → ["2711010200", "2711010300", ...]
+
+# 2. 각 코드로 속성 데이터 수집
+buildings   = fetch_building_ledger(area_codes)    # 건축물대장 API
+land_info   = fetch_land_characteristics(pnu_list) # 토지특성 API
+land_price  = fetch_official_price(pnu_list)       # 공시지가 API
+population  = fetch_population(area_codes)         # KOSIS API
+amenities   = fetch_poi_kakao(center_coord, radius) # Kakao POI
+
+# 3. PNU 기준 병합 → 필지 단위 통합 테이블
+parcel_df = (cadastral_gdf                         # 지적도 (geometry)
+  .merge(buildings, on='pnu')                      # + 건물 정보
+  .merge(land_info, on='pnu')                      # + 토지 특성
+  .merge(land_price, on='pnu')                     # + 공시지가
+)
+
+# 4. 행정동 단위 통합 → 동 단위 집계 테이블
+dong_df = (admin_boundary_gdf                      # 행정경계 (geometry)
+  .merge(population, on='admin_code')              # + 인구통계
+  .merge(parcel_df.groupby('dong_code').agg(...))  # + 건물/토지 집계
+)
+
+# 5. 공간 조인 → 용도지역 오버레이
+parcel_with_zoning = gpd.sjoin(parcel_df, zoning_gdf, how='left')
+
+# 6. 격자 데이터 → H3 인덱싱
+parcel_df['h3_idx'] = parcel_df.apply(
+  lambda r: h3.latlng_to_cell(r.geometry.centroid.y, r.geometry.centroid.x, 9), axis=1)
+merged = parcel_df.merge(population_grid, on='h3_idx')</pre>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-title"><span class="pipe-num">3</span> 가공: 분석 지표 산출</div>
+    <div class="pipe-text">
+      통합된 데이터에서 <strong>도시 분석에 필요한 파생 지표</strong>를 계산합니다:<br>
+      • <strong>건물 노후도</strong>: (현재연도 − 사용승인일) → 30년 이상 = 노후 건축물<br>
+      • <strong>용적률 잔여분</strong>: (법적 최대 용적률 − 현재 용적률) → 개발 잠재력<br>
+      • <strong>녹지접근성</strong>: 각 필지에서 가장 가까운 공원까지 도보 거리 (Valhalla 등시선)<br>
+      • <strong>15분도시 점수</strong>: 6대 기능 접근성 종합 (가중 평균)<br>
+      • <strong>NDVI 변화율</strong>: 연도별 Sentinel-2 NDVI 차이 → 녹지 손실/증가<br>
+      • <strong>열섬 취약도</strong>: NDVI × 불투수면비율 × 건물밀도 복합 지수
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">numpy/pandas</span>
+      <span class="pipe-tool">Valhalla (등시선)</span>
+      <span class="pipe-tool">rasterio (NDVI)</span>
+      <span class="pipe-tool">scikit-learn</span>
+      <span class="pipe-tool">OSMnx (네트워크)</span>
+    </div>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-title"><span class="pipe-num">4</span> 저장 & 시각화: PostGIS + GeoJSON → 지도 렌더링</div>
+    <div class="pipe-text">
+      가공된 데이터를 <strong>PostGIS 데이터베이스</strong>에 저장하거나, 경량화된 <strong>GeoJSON/PMTiles</strong>로 내보내어 프론트엔드에서 직접 렌더링합니다.
+      지도 위 레이어 구성은 아래와 같습니다.
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">PostGIS</span>
+      <span class="pipe-tool">tippecanoe (벡터 타일)</span>
+      <span class="pipe-tool">PMTiles</span>
+      <span class="pipe-tool">deck.gl</span>
+      <span class="pipe-tool">Mapbox GL JS</span>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Map Layer Stack -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">03</span>
+    <h2 class="sec-t">지도 레이어 스택 (아래→위 순서)</h2>
+  </div>
+
+  <div class="layer-stack">
+    <div class="layer" style="background:rgba(56,189,248,.04)">
+      <div class="layer-color" style="background:#1a3a5c"></div>
+      <div class="layer-name">기반: 배경지도</div>
+      <div class="layer-src">V-World 타일 / Mapbox 스타일</div>
+      <div class="layer-fmt">XYZ Tiles</div>
+    </div>
+    <div class="layer" style="background:rgba(0,232,150,.04)">
+      <div class="layer-color" style="background:#0a4a2e"></div>
+      <div class="layer-name">레이어 1: 정사영상</div>
+      <div class="layer-src">V-World 25cm 항공 / Sentinel-2 위성</div>
+      <div class="layer-fmt">Raster Tiles</div>
+    </div>
+    <div class="layer">
+      <div class="layer-color" style="background:#2a2a4a"></div>
+      <div class="layer-name">레이어 2: 지적도 (필지)</div>
+      <div class="layer-src">V-World WFS → GeoJSON 변환</div>
+      <div class="layer-fmt">GeoJSON 폴리곤</div>
+    </div>
+    <div class="layer" style="background:rgba(167,139,250,.04)">
+      <div class="layer-color" style="background:rgba(167,139,250,.5)"></div>
+      <div class="layer-name">레이어 3: 용도지역</div>
+      <div class="layer-src">V-World WMS → SHP → GeoJSON</div>
+      <div class="layer-fmt">색상 코드 폴리곤</div>
+    </div>
+    <div class="layer" style="background:rgba(251,146,60,.04)">
+      <div class="layer-color" style="background:rgba(251,146,60,.5)"></div>
+      <div class="layer-name">레이어 4: 행정경계</div>
+      <div class="layer-src">SGIS 행정경계 GeoJSON</div>
+      <div class="layer-fmt">라인 + 라벨</div>
+    </div>
+    <div class="layer" style="background:rgba(248,113,113,.04)">
+      <div class="layer-color" style="background:rgba(248,113,113,.5)"></div>
+      <div class="layer-name">레이어 5: 건물 (속성 코로플렛)</div>
+      <div class="layer-src">건축물대장 속성 → 필지 geometry 매핑</div>
+      <div class="layer-fmt">Choropleth (노후도/용적률/높이)</div>
+    </div>
+    <div class="layer" style="background:rgba(0,232,150,.04)">
+      <div class="layer-color" style="background:rgba(0,232,150,.5)"></div>
+      <div class="layer-name">레이어 6: 분석 결과 (히트맵)</div>
+      <div class="layer-src">NDVI, 열섬, 접근성 지수 등</div>
+      <div class="layer-fmt">HeatmapLayer / H3 헥사곤</div>
+    </div>
+    <div class="layer" style="background:rgba(56,189,248,.04)">
+      <div class="layer-color" style="background:rgba(56,189,248,.5)"></div>
+      <div class="layer-name">레이어 7: POI 마커</div>
+      <div class="layer-src">학교/병원/공원/교통 등</div>
+      <div class="layer-fmt">ScatterplotLayer + 아이콘</div>
+    </div>
+    <div class="layer" style="background:rgba(244,114,182,.04)">
+      <div class="layer-color" style="background:rgba(244,114,182,.5)"></div>
+      <div class="layer-name">레이어 8: 등시선 (Isochrone)</div>
+      <div class="layer-src">Valhalla 라우팅 → 5/10/15분 경계</div>
+      <div class="layer-fmt">반투명 폴리곤</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Required API Keys -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">04</span>
+    <h2 class="sec-t">필요한 API 키 & 가입처 정리</h2>
+  </div>
+
+  <table class="src-tbl" style="margin-top:12px">
+    <tr><th>서비스</th><th>가입처</th><th>비용</th><th>용도</th><th>호출 제한</th></tr>
+    <tr><td>공공데이터포털</td><td>data.go.kr</td><td><span class="tag tag-free">무료</span></td><td>건축물대장, 공시지가, 실거래가, 교통 등 50+ API</td><td>개발: 1만/일, 운영: 신청 시 증량</td></tr>
+    <tr><td>V-World</td><td>vworld.kr (오픈API)</td><td><span class="tag tag-free">무료</span></td><td>지적도, 용도지역, 토지정보, 배경지도, 3D 건물</td><td>3만/일</td></tr>
+    <tr><td>SGIS (통계지리정보)</td><td>sgis.kostat.go.kr</td><td><span class="tag tag-free">무료</span></td><td>행정경계 GeoJSON, 인구 격자, 가구유형</td><td>AccessToken 갱신 필요</td></tr>
+    <tr><td>KOSIS</td><td>kosis.kr</td><td><span class="tag tag-free">무료</span></td><td>인구통계, 사업체통계, 주택총조사 등</td><td>무제한</td></tr>
+    <tr><td>Kakao Local API</td><td>developers.kakao.com</td><td><span class="tag tag-free">무료</span> (10만/일)</td><td>주소 검색, 좌표변환, 카테고리 장소 검색(POI)</td><td>10만/일</td></tr>
+    <tr><td>Naver Maps API</td><td>developers.naver.com</td><td><span class="tag tag-free">무료</span> (제한적)</td><td>스트리트뷰 파노라마 (한국 유일 대규모 소스)</td><td>이미지 건당 과금 모델</td></tr>
+    <tr><td>Copernicus (Sentinel-2)</td><td>dataspace.copernicus.eu</td><td><span class="tag tag-free">무료</span></td><td>위성영상 (10m, 13밴드, 5일 주기)</td><td>무제한 (STAC API)</td></tr>
+    <tr><td>기상청 기상자료</td><td>data.kma.go.kr</td><td><span class="tag tag-free">무료</span></td><td>기온, 강수, 일사량, 풍속</td><td>개발: 1만/일</td></tr>
+    <tr><td>에어코리아</td><td>airkorea.or.kr</td><td><span class="tag tag-free">무료</span></td><td>대기질 (PM2.5/10, O3, NO2 등)</td><td>500/일</td></tr>
+  </table>
+
+  <div class="key" style="margin-top:16px">
+    <div class="key-t">핵심 요약: 최소 MVP에 필요한 API 4개</div>
+    <p>
+      <strong>① 공공데이터포털</strong> (건축물대장 + 공시지가) +
+      <strong>② V-World</strong> (지적도 + 용도지역 + 배경지도) +
+      <strong>③ SGIS</strong> (행정경계 + 인구) +
+      <strong>④ Kakao</strong> (주소검색 + POI)
+      → 이 4개면 <em>기본 도시 분석 도구의 80%</em>가 구현 가능합니다.
+      나머지는 점진적으로 추가하면 됩니다.
+    </p>
+  </div>
+</div>
+
+<!-- Section 5: Output Formats -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n">05</span>
+    <h2 class="sec-t">최종 출력 포맷 & Grasshopper/Unity 연계</h2>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step" style="border-color:var(--g)">
+      <div class="fl-icon">🌐</div>
+      <div class="fl-t">웹 지도 뷰어</div>
+      <div class="fl-d">deck.gl / Mapbox GL</div>
+    </div>
+    <span class="flow-arr">↔</span>
+    <div class="flow-step" style="border-color:var(--v)">
+      <div class="fl-icon">🦗</div>
+      <div class="fl-t">Grasshopper</div>
+      <div class="fl-d">GeoJSON/CSV → GH 플러그인</div>
+    </div>
+    <span class="flow-arr">↔</span>
+    <div class="flow-step" style="border-color:var(--b)">
+      <div class="fl-icon">🎮</div>
+      <div class="fl-t">Unity XR</div>
+      <div class="fl-d">GeoJSON → CesiumForUnity</div>
+    </div>
+  </div>
+
+  <div class="pipe" style="margin-top:12px">
+    <div class="pipe-title">웹 → Grasshopper 연계</div>
+    <div class="pipe-text">
+      분석 결과를 <strong>GeoJSON + CSV</strong>로 내보내면 Grasshopper의 <strong>Heron / Elk / GHPython</strong> 플러그인으로 직접 로드 가능합니다.
+      특히 <strong>건물 풋프린트 GeoJSON → Heron으로 3D Brep 변환 → Grasshopper 파라메트릭 분석</strong> 파이프라인이 핵심입니다.
+      용적률 잔여분, 일조 시뮬레이션, 볼륨 매스 스터디 등을 Grasshopper에서 수행할 수 있습니다.
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">GeoJSON → Heron GH</span>
+      <span class="pipe-tool">CSV → GHPython</span>
+      <span class="pipe-tool">Elk (OSM 데이터)</span>
+      <span class="pipe-tool">Ladybug (일조/풍)</span>
+    </div>
+  </div>
+
+  <div class="pipe">
+    <div class="pipe-title">웹 → Unity XR 연계</div>
+    <div class="pipe-text">
+      <strong>Cesium for Unity</strong>로 V-World 3D 건물 + 분석 레이어를 Unity 씬에 로드합니다.
+      분석 결과 GeoJSON → <strong>3D Tiles로 변환 (py3dtiles/pg2b3dm)</strong> → Cesium 스트리밍.
+      또는 <strong>Mapbox Unity SDK</strong>로 2D 분석 결과를 Unity 평면에 매핑하고 3D 오브젝트를 올릴 수 있습니다.
+    </div>
+    <div class="pipe-tools">
+      <span class="pipe-tool">Cesium for Unity</span>
+      <span class="pipe-tool">py3dtiles</span>
+      <span class="pipe-tool">pg2b3dm</span>
+      <span class="pipe-tool">3D Tiles</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Simple toggle for category cards
+</script>
+</body>
+</html>

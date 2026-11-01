@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "its-parking",
+      "title": "ITS 소통정보만으로 주차 규모를 확정할 수 없습니다",
+      "queries": [
+        {
+          "id": "its-fields",
+          "source": {
+            "label": "ITS 국가교통정보센터",
+            "links": [
+              {
+                "label": "공식 API 응답 항목",
+                "url": "https://www.its.go.kr/opendata/intro"
+              }
+            ],
+            "caveats": [
+              "API 인증키로 실제 데이터를 호출하지 않았습니다.",
+              "공식 예시의 속도와 통행시간은 주차장 입출차량·체류시간을 제공하지 않습니다."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "existing-parking",
+      "title": "구경주역 기존 주차장과 법정 설치기준을 함께 확인해야 합니다",
+      "queries": [
+        {
+          "id": "city-parking",
+          "source": {
+            "label": "경주시 공식 시정소식",
+            "links": [
+              {
+                "label": "황오황촌 임시주차장 157대 개방",
+                "url": "https://www.gyeongju.go.kr/webzine/GJstory/vol163/html/post/4347.html"
+              }
+            ],
+            "caveats": [
+              "2025년 조성 당시 규모이며 현재 운영과 계획부지 중첩 여부는 확인이 필요합니다."
+            ]
+          }
+        },
+        {
+          "id": "ordinance",
+          "source": {
+            "label": "국가법령정보센터",
+            "files": [
+              {
+                "label": "경주시 주차장 조례, 시행 2026-02-25, 조례 제1954호"
+              }
+            ],
+            "caveats": [
+              "시설별 면적과 용도가 없어 법정 설치대수는 계산하지 않았습니다."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

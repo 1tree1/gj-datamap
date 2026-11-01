@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBANIS — 생성설계 프로토타입 (과천 지구단위계획)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#171b22; --panel2:#1e242e; --line:#2b323d;
+    --txt:#e6e9ef; --mut:#95a0b0; --acc:#4ea1ff; --acc2:#5fd39b;
+    --warn:#ffb454; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Malgun Gothic",sans-serif;}
+  #app{display:grid;grid-template-columns:1fr 420px;grid-template-rows:56px 1fr;height:100vh}
+  header{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:0 18px;
+    background:var(--panel);border-bottom:1px solid var(--line)}
+  header h1{font-size:15px;margin:0;font-weight:650;letter-spacing:.2px}
+  header .tag{font-size:11px;color:var(--mut);background:var(--panel2);
+    padding:3px 8px;border-radius:6px;border:1px solid var(--line)}
+  header .sp{flex:1}
+  .btn{background:var(--acc);color:#04121f;border:none;padding:8px 14px;border-radius:8px;
+    font-weight:650;font-size:13px;cursor:pointer;transition:.15s}
+  .btn:hover{filter:brightness(1.1)}
+  .btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
+  #map{position:relative}
+  .side{background:var(--panel);border-left:1px solid var(--line);overflow-y:auto;padding:14px}
+  .side::-webkit-scrollbar{width:8px}.side::-webkit-scrollbar-thumb{background:#2b323d;border-radius:8px}
+  h2{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);margin:18px 0 8px}
+  h2:first-child{margin-top:2px}
+  .card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;transition:.15s}
+  .card:hover{border-color:#3a4557}
+  .card.active{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+  .card .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .card .name{font-weight:650;font-size:14px}
+  .card .badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600}
+  .card .score{font-size:12px;color:var(--mut)}
+  .card .row{display:flex;gap:10px;align-items:center}
+  .card canvas{width:120px!important;height:120px!important}
+  .kpis{font-size:11px;color:var(--mut);line-height:1.7;flex:1}
+  .kpis b{color:var(--txt);font-weight:600}
+  .wt{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
+  .wt label{width:88px;color:var(--mut)}
+  .wt input{flex:1}
+  .wt .v{width:26px;text-align:right;color:var(--txt);font-variant-numeric:tabular-nums}
+  .legend{position:absolute;bottom:14px;left:14px;z-index:500;background:rgba(20,24,31,.92);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--txt)}
+  .legend .bar{height:10px;width:150px;border-radius:5px;margin:6px 0 3px;
+    background:linear-gradient(90deg,#2ec26b,#e8d84a,#ff8a3d,#ff5d5d)}
+  .legend .lbl{display:flex;justify-content:space-between;color:var(--mut)}
+  .skybox{position:absolute;bottom:14px;right:14px;z-index:500;background:rgba(20,24,31,.95);
+    border:1px solid var(--line);border-radius:10px;padding:8px 10px 4px;width:340px}
+  .skybox .t{font-size:11px;color:var(--mut);margin-bottom:2px;display:flex;justify-content:space-between}
+  .blockinfo{font-size:12px;line-height:1.8}
+  .blockinfo .k{color:var(--mut);display:inline-block;width:78px}
+  .pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;border:1px solid var(--line);color:var(--mut)}
+  .hint{font-size:11px;color:var(--mut);line-height:1.6;margin-top:6px}
+  .leaflet-popup-content{font-size:12px;line-height:1.6}
+  .statline{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .stat{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 9px;flex:1;min-width:70px}
+  .stat .n{font-size:16px;font-weight:700}
+  .stat .l{font-size:10px;color:var(--mut)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>URBANIS · 생성설계 프로토타입</h1>
+    <span class="tag">과천 지구단위계획 (예시 대지)</span>
+    <span class="tag" id="mapstat">지도 로딩…</span>
+    <div class="sp"></div>
+    <button class="btn ghost" id="regen">🎲 다시 생성</button>
+    <button class="btn" id="gen">⚙️ 대안 생성</button>
+  </header>
+
+  <div id="map">
+    <div class="legend">
+      <div id="legTitle">획지 용도지역</div>
+      <div class="bar" id="legBar" style="display:none"></div>
+      <div class="lbl" id="legLbl" style="display:none"><span>저층</span><span>고층</span></div>
+      <div id="legZone" style="margin-top:6px">
+        <div><span class="pill" style="border-color:#4ea1ff;color:#4ea1ff">3종일반</span>
+        <span class="pill" style="border-color:#5fd39b;color:#5fd39b">2종일반</span>
+        <span class="pill" style="border-color:#7d8896;color:#7d8896">공원·공지</span></div>
+      </div>
+    </div>
+    <div class="skybox">
+      <div class="t"><span id="skyTitle">스카이라인 — 대안을 생성하세요</span><span id="skyRidge"></span></div>
+      <svg id="sky" width="322" height="96"></svg>
+    </div>
+  </div>
+
+  <div class="side">
+    <h2>목표 가중치 (강점 정의)</h2>
+    <div id="weights"></div>
+
+    <h2>대상지 요약</h2>
+    <div class="statline">
+      <div class="stat"><div class="n" id="stBlocks">–</div><div class="l">획지 수</div></div>
+      <div class="stat"><div class="n" id="stArea">–</div><div class="l">계획면적(㏊)</div></div>
+      <div class="stat"><div class="n" id="stUnits">–</div><div class="l">추정 세대</div></div>
+    </div>
+
+    <h2>강점별 최적 대안</h2>
+    <div id="alts"><div class="hint">'⚙️ 대안 생성'을 누르면 규제 봉투 안에서 수백 개 대안을 만들어 6대 목표로 평가하고, 강점별 대표안 5개를 추립니다.</div></div>
+
+    <h2>선택 획지 정보</h2>
+    <div id="blockinfo" class="blockinfo"><div class="hint">지도에서 획지를 클릭하세요.</div></div>
+  </div>
+</div>
+
+<script>
+// ---------- 목표 정의 ----------
+const OBJ = [
+  {k:'sun',  label:'일조·채광', color:'#ffcf5c'},
+  {k:'wind', label:'바람길',    color:'#7ad6ff'},
+  {k:'heat', label:'열섬완화',  color:'#5fd39b'},
+  {k:'walk', label:'보행·접근', color:'#c69bff'},
+  {k:'comm', label:'커뮤니티',  color:'#ff9bb0'},
+  {k:'view', label:'조망·리듬', color:'#ff8a3d'},
+];
+let weights = {sun:.7,wind:.6,heat:.6,walk:.7,comm:.6,view:.6};
+
+// ---------- 예시 획지 (과천 지구단위계획 도면 기반, 위치는 예시) ----------
+// far: 용적률(%), bcr: 건폐율(%), maxF: 최고층수, typo: 형태
+const BASE = {lat:37.4258, lng:126.9902};
+const LAT=0.00108, LNG=0.00132;              // 그리드 셀 크기(위경도)
+const SKEW=0.00030;                          // 대각선 스큐
+const BLOCKS = [
+  {id:'3-1', zone:'3종일반', far:250, bcr:20, maxF:25, typo:'탑상형', gx:1.0, gy:0.0, w:1.4, h:1.1},
+  {id:'2-1', zone:'2종일반', far:160, bcr:30, maxF:8,  typo:'판상형', gx:0.0, gy:0.3, w:1.0, h:1.0},
+  {id:'2-2', zone:'2종일반', far:200, bcr:20, maxF:15, typo:'판상형', gx:1.1, gy:1.3, w:1.3, h:1.0},
+  {id:'4',   zone:'3종일반', far:250, bcr:15, maxF:25, typo:'탑상형', gx:1.15,gy:2.4, w:1.5, h:1.2},
+  {id:'5',   zone:'3종일반', far:200, bcr:20, maxF:15, typo:'직각배치',gx:1.9, gy:3.5, w:1.6, h:1.3},
+  {id:'6',   zone:'3종일반', far:230, bcr:20, maxF:25, typo:'탑상형', gx:3.0, gy:3.4, w:1.2, h:1.5},
+  {id:'7-2', zone:'3종일반', far:190, bcr:20, maxF:25, typo:'탑상형', gx:1.7, gy:4.8, w:1.5, h:1.0},
+  {id:'8',   zone:'3종일반', far:230, bcr:20, maxF:25, typo:'탑상형', gx:3.1, gy:4.9, w:1.3, h:1.2},
+  {id:'9',   zone:'3종일반', far:200, bcr:20, maxF:8,  typo:'판상형', gx:3.2, gy:6.1, w:1.6, h:1.1},
+  {id:'11-1',zone:'2종일반', far:200, bcr:20, maxF:15, typo:'판상형', gx:1.6, gy:6.2, w:1.3, h:1.1},
+];
+const PARK = {id:'중앙공원', gx:2.5, gy:2.3, w:1.0, h:1.0};          // 비건축 공지
+const AXIS = [ {gx:2.55,gy:0.3},{gx:2.55,gy:6.8} ];                   // 통경축(대략)
+
+function cellToLatLng(gx,gy){
+  return [ BASE.lat + gy*LAT, BASE.lng + gx*LNG + gy*SKEW ];
+}
+function blockPolygon(b){
+  const p1=cellToLatLng(b.gx,       b.gy);
+  const p2=cellToLatLng(b.gx+b.w,   b.gy);
+  const p3=cellToLatLng(b.gx+b.w,   b.gy+b.h);
+  const p4=cellToLatLng(b.gx,       b.gy+b.h);
+  return [p1,p2,p3,p4];
+}
+function blockAreaHa(b){ // 대략 면적(㏊): 격자셀 실제 크기 환산
+  const mLat=LAT*111000, mLng=LNG*88000; // 위도1°≈111km, 경도1°≈88km(37°N)
+  return (b.w*mLng)*(b.h*mLat)/10000;
+}
+
+// ---------- 지도 ----------
+let map, blockLayers={}, parkLayer, axisLayer, selectedBlock=null;
+function initMap(){
+  const center = cellToLatLng(2.2,3.4);
+  map = L.map('map',{zoomControl:true}).setView(center,16);
+  const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {maxZoom:19, attribution:'© OpenStreetMap'});
+  const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {maxZoom:19, attribution:'Esri World Imagery'});
+  osm.addTo(map);
+  L.control.layers({'거리지도':osm,'위성영상':sat},null,{position:'topright'}).addTo(map);
+  osm.on('load',()=>document.getElementById('mapstat').textContent='지도 연결됨 ✓');
+  setTimeout(()=>document.getElementById('mapstat').textContent='지도 연결됨 ✓',1500);
+
+  // 공원
+  parkLayer=L.polygon(blockPolygon(PARK),{color:'#7d8896',weight:1,fillColor:'#3c4a3e',fillOpacity:.55,dashArray:'4'}).addTo(map);
+  parkLayer.bindTooltip('중앙 커뮤니티 공원 (비건축 공지)',{direction:'center',className:'axlbl'});
+  // 통경축
+  axisLayer=L.polyline(AXIS.map(a=>cellToLatLng(a.gx,a.gy)),{color:'#ffd24a',weight:3,dashArray:'8 6',opacity:.7}).addTo(map);
+  axisLayer.bindTooltip('통경축 (조망 확보·건축 금지)',{sticky:true});
+
+  BLOCKS.forEach(b=>{
+    const poly=L.polygon(blockPolygon(b),{
+      color: b.zone==='3종일반'?'#4ea1ff':'#5fd39b',
+      weight:1.4, fillColor:b.zone==='3종일반'?'#1f3f63':'#1f4d3c', fillOpacity:.5
+    }).addTo(map);
+    poly.bindTooltip(b.id,{permanent:true,direction:'center',className:'blab'});
+    poly.on('click',()=>selectBlock(b));
+    blockLayers[b.id]=poly;
+  });
+}
+
+// ---------- 대안 생성 엔진 ----------
+// 유전자: 획지별 bcrUsed(점유율) → 층수 = FAR/(bcrUsed*100), 남향지수 orient
+// 트레이드오프: 점유율↓ → 오픈스페이스↑(바람·열·커뮤니티↑) 이지만 FAR유지 위해 층수↑(일조·보행 부담)
+let POOL=[], PICKS=[], activeAlt=null;
+
+function clamp(x){return Math.max(0,Math.min(1,x));}
+
+function evalAlt(genes){
+  let W=0, agg={sun:0,wind:0,heat:0,walk:0,comm:0,view:0};
+  let floors=[], totalUnits=0;
+  BLOCKS.forEach(b=>{
+    const g=genes[b.id];
+    const bcrUsed=g.bcr;                       // 0.1 ~ bcr/100
+    let f=Math.round(b.far/(bcrUsed*100));
+    f=Math.max(3,Math.min(b.maxF,f));
+    floors.push({id:b.id,f});
+    const open=1-bcrUsed;                       // 오픈스페이스 비율
+    const isTower=b.typo==='탑상형';
+    const isSlab=b.typo==='판상형';
+    const fN=f/b.maxF;                          // 정규화 층수
+    // 목표별 점수(0~1)
+    const sun = clamp(0.86 - fN*0.34 - (bcrUsed-0.1)*0.5 + (g.orient-0.75)*0.5 + (isSlab?0.10:0));
+    const wind= clamp(0.24 + open*0.62 + (isTower?0.16:0));
+    const heat= clamp(0.18 + open*0.72);
+    const walk= clamp(0.92 - fN*0.42 + g.podium*0.22);
+    const comm= clamp(0.14 + open*0.66 + g.podium*0.12);
+    const viewB=clamp(0.30 + (isTower?0.28:0) + (g.orient-0.7)*0.2);
+    const wgt=blockAreaHa(b);
+    agg.sun+=sun*wgt; agg.wind+=wind*wgt; agg.heat+=heat*wgt;
+    agg.walk+=walk*wgt; agg.comm+=comm*wgt; agg.view+=viewB*wgt; W+=wgt;
+    totalUnits += Math.round(blockAreaHa(b)*bcrUsed*f*10000/85*0.72); // 대략 세대(전용85㎡·효율72%)
+  });
+  Object.keys(agg).forEach(k=>agg[k]/=W);
+  // 스카이라인 리듬: 층수 표준편차가 적당할 때 조망·리듬 가점
+  const fs=floors.map(o=>o.f), mean=fs.reduce((a,c)=>a+c,0)/fs.length;
+  const std=Math.sqrt(fs.reduce((a,c)=>a+(c-mean)**2,0)/fs.length);
+  const ratio=std/mean;                          // 0(평탄)~
+  const rhythm=clamp(1-Math.abs(ratio-0.42)*2.1);
+  agg.view=clamp(agg.view*0.6 + rhythm*0.4);
+  return {genes,scores:agg,floors,units:totalUnits,rhythm};
+}
+
+function randGenes(){
+  const genes={};
+  BLOCKS.forEach(b=>{
+    const bcrMax=Math.min(b.bcr/100,0.6);
+    genes[b.id]={
+      bcr: 0.10 + Math.random()*(bcrMax-0.10),
+      orient: 0.60 + Math.random()*0.40,
+      podium: Math.random(),
+    };
+  });
+  return genes;
+}
+
+function weightedTotal(s){
+  let n=0,d=0;
+  OBJ.forEach(o=>{ n+=s[o.k]*weights[o.k]; d+=weights[o.k]; });
+  return n/d;
+}
+
+function generate(){
+  POOL=[];
+  for(let i=0;i<400;i++) POOL.push(evalAlt(randGenes()));
+  // 강점별 대표 선정
+  const bestBy=(fn)=>POOL.reduce((a,c)=>fn(c.scores)>fn(a.scores)?c:a);
+  const balanced=POOL.reduce((a,c)=>{
+    const md=(x)=>Math.min(...OBJ.map(o=>x[o.k]));      // 최소목표 최대화(니어 유토피아)
+    return md(c.scores)>md(a.scores)?c:a;
+  });
+  PICKS=[
+    {name:'일조 우선형',      badge:'#ffcf5c', alt:bestBy(s=>s.sun)},
+    {name:'바람·열환경형',    badge:'#5fd39b', alt:bestBy(s=>(s.wind+s.heat)/2)},
+    {name:'보행·커뮤니티형',  badge:'#c69bff', alt:bestBy(s=>(s.walk+s.comm)/2)},
+    {name:'조망·스카이라인형',badge:'#ff8a3d', alt:bestBy(s=>s.view)},
+    {name:'가중 균형형',      badge:'#4ea1ff', alt:POOL.reduce((a,c)=>weightedTotal(c.scores)>weightedTotal(a.scores)?c:a)},
+  ];
+  renderAlts();
+  setActive(PICKS[4].alt, 4);
+  const totalHa=BLOCKS.reduce((a,b)=>a+blockAreaHa(b),0);
+  document.getElementById('stBlocks').textContent=BLOCKS.length;
+  document.getElementById('stArea').textContent=totalHa.toFixed(1);
+}
+
+// ---------- 렌더링: 대안 카드 + 레이더 ----------
+let charts=[];
+function renderAlts(){
+  charts.forEach(c=>c.destroy()); charts=[];
+  const box=document.getElementById('alts'); box.innerHTML='';
+  PICKS.forEach((p,i)=>{
+    const s=p.alt.scores;
+    const el=document.createElement('div');
+    el.className='card'; el.dataset.i=i;
+    el.innerHTML=`
+      <div class="top">
+        <span class="name">${p.name}</span>
+        <span class="badge" style="background:${p.badge}22;color:${p.badge}">${(weightedTotal(s)*100|0)}점</span>
+      </div>
+      <div class="row">
+        <canvas id="rc${i}"></canvas>
+        <div class="kpis">
+          <div>세대 <b>${p.alt.units.toLocaleString()}</b> · 리듬 <b>${(p.alt.rhythm*100|0)}</b></div>
+          <div>일조 <b>${(s.sun*100|0)}</b> · 바람 <b>${(s.wind*100|0)}</b> · 열섬 <b>${(s.heat*100|0)}</b></div>
+          <div>보행 <b>${(s.walk*100|0)}</b> · 커뮤 <b>${(s.comm*100|0)}</b> · 조망 <b>${(s.view*100|0)}</b></div>
+        </div>
+      </div>`;
+    el.onclick=()=>setActive(p.alt,i);
+    box.appendChild(el);
+    const ctx=el.querySelector('#rc'+i);
+    charts.push(new Chart(ctx,{type:'radar',
+      data:{labels:OBJ.map(o=>o.label),
+        datasets:[{data:OBJ.map(o=>s[o.k]*100),
+          backgroundColor:p.badge+'33',borderColor:p.badge,borderWidth:1.5,
+          pointRadius:0}]},
+      options:{plugins:{legend:{display:false}},
+        scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},
+          grid:{color:'#2b323d'},angleLines:{color:'#2b323d'},
+          pointLabels:{color:'#95a0b0',font:{size:8}}}},
+        responsive:false,animation:false}}));
+  });
+}
+
+// ---------- 활성 대안 → 지도 채색 + 스카이라인 ----------
+function heightColor(f,maxF){
+  const t=f/maxF; // 0~1
+  const stops=[[46,194,107],[232,216,74],[255,138,61],[255,93,93]];
+  const seg=Math.min(2,Math.floor(t*3)); const lt=(t*3)-seg;
+  const a=stops[seg],b=stops[seg+1];
+  const c=a.map((v,i)=>Math.round(v+(b[i]-v)*lt));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+function setActive(alt,i){
+  activeAlt=alt;
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('active',+c.dataset.i===i));
+  // 지도 채색: 층수 기반
+  document.getElementById('legBar').style.display='block';
+  document.getElementById('legLbl').style.display='flex';
+  document.getElementById('legTitle').textContent='획지 색상 = 건물 높이(층)';
+  document.getElementById('legZone').style.display='none';
+  const fmap={}; alt.floors.forEach(o=>fmap[o.id]=o.f);
+  BLOCKS.forEach(b=>{
+    const f=fmap[b.id];
+    blockLayers[b.id].setStyle({fillColor:heightColor(f,25),fillOpacity:.72,color:'#0e1116'});
+    blockLayers[b.id].unbindTooltip();
+    blockLayers[b.id].bindTooltip(`${b.id} · ${f}층`,{permanent:true,direction:'center',className:'blab'});
+  });
+  drawSkyline(alt);
+}
+
+function drawSkyline(alt){
+  const svg=document.getElementById('sky');
+  const W=322,H=96,pad=4; svg.innerHTML='';
+  // 정렬: 남(gy작음)→북, 건물 실루엣
+  const items=BLOCKS.map(b=>({b,f:alt.floors.find(o=>o.id===b.id).f}))
+    .sort((a,z)=>(a.b.gy+a.b.gx*0.1)-(z.b.gy+z.b.gx*0.1));
+  const maxF=25, bw=(W-pad*2)/items.length;
+  // 배경 능선(관악산)
+  let ridge=`M0,${H} `;
+  for(let x=0;x<=W;x+=18){ const y=H-28-Math.sin(x/60)*10-Math.cos(x/33)*7; ridge+=`L${x},${y.toFixed(1)} `; }
+  ridge+=`L${W},${H} Z`;
+  svg.insertAdjacentHTML('beforeend',`<path d="${ridge}" fill="#233042" opacity="0.6"/>`);
+  // 조망차폐 기준선 70%
+  const ridgeTop=H-46, guard=ridgeTop+ (H-ridgeTop)*0.3;
+  svg.insertAdjacentHTML('beforeend',`<line x1="0" y1="${guard}" x2="${W}" y2="${guard}" stroke="#ffd24a" stroke-dasharray="3 3" opacity="0.5"/>`);
+  let breaches=0;
+  items.forEach((it,idx)=>{
+    const h=(it.f/maxF)*(H-14);
+    const x=pad+idx*bw, y=H-h;
+    if(y<guard) breaches++;
+    const col=heightColor(it.f,25);
+    svg.insertAdjacentHTML('beforeend',
+      `<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" fill="${col}" opacity="0.9" rx="1"/>
+       <text x="${x+bw/2}" y="${H-2}" fill="#6b7686" font-size="7" text-anchor="middle">${it.b.id}</text>`);
+  });
+  document.getElementById('skyTitle').textContent='스카이라인 (남→북) · '+alt.floors.length+'개 획지';
+  document.getElementById('skyRidge').innerHTML= breaches>0
+    ? `<span style="color:#ff8a3d">능선 차폐 ${breaches}동 ⚠</span>`
+    : `<span style="color:#5fd39b">능선 조망 확보 ✓</span>`;
+  document.getElementById('stUnits').textContent=alt.units.toLocaleString();
+}
+
+// ---------- 획지 선택 ----------
+function selectBlock(b){
+  selectedBlock=b;
+  const f=activeAlt?activeAlt.floors.find(o=>o.id===b.id).f:'—';
+  document.getElementById('blockinfo').innerHTML=`
+    <div><span class="k">획지</span><b>${b.id}</b> <span class="pill">${b.typo}</span></div>
+    <div><span class="k">용도지역</span>${b.zone}</div>
+    <div><span class="k">용적률</span>${b.far}% <span class="k" style="width:auto">· 건폐율</span> ${b.bcr}%</div>
+    <div><span class="k">최고층수</span>${b.maxF}층 <span class="k" style="width:auto">· 계획</span> ${f}층</div>
+    <div><span class="k">면적</span>${blockAreaHa(b).toFixed(2)} ㏊</div>
+    <div class="hint">규제 봉투: 건폐율·용적률·최고층수·정북 일조사선 안에서만 매스가 생성됩니다.</div>`;
+  blockLayers[b.id].openTooltip();
+}
+
+// ---------- 가중치 UI ----------
+function initWeights(){
+  const box=document.getElementById('weights');
+  OBJ.forEach(o=>{
+    const row=document.createElement('div'); row.className='wt';
+    row.innerHTML=`<label style="color:${o.color}">${o.label}</label>
+      <input type="range" min="0" max="100" value="${weights[o.k]*100}">
+      <span class="v">${(weights[o.k]*100)|0}</span>`;
+    const inp=row.querySelector('input'), v=row.querySelector('.v');
+    inp.oninput=()=>{ weights[o.k]=inp.value/100; v.textContent=inp.value;
+      if(POOL.length){ // 균형형 재계산
+        PICKS[4].alt=POOL.reduce((a,c)=>weightedTotal(c.scores)>weightedTotal(a.scores)?c:a);
+        renderAlts();
+      }};
+    box.appendChild(row);
+  });
+}
+
+// ---------- init ----------
+window.addEventListener('load',()=>{
+  initMap(); initWeights();
+  document.getElementById('gen').onclick=generate;
+  document.getElementById('regen').onclick=generate;
+  document.getElementById('stArea').textContent=BLOCKS.reduce((a,b)=>a+blockAreaHa(b),0).toFixed(1);
+  document.getElementById('stBlocks').textContent=BLOCKS.length;
+});
+</script>
+<style>
+ .blab{background:transparent!important;border:none!important;box-shadow:none!important;
+   color:#fff!important;font-size:10px!important;font-weight:700;text-shadow:0 1px 3px #000}
+ .axlbl{background:transparent!important;border:none!important;box-shadow:none!important;color:#9fb0a2!important;font-size:10px!important}
+</style>
+</body>
+</html>

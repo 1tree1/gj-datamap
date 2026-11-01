@@ -1,0 +1,102 @@
+[
+ {
+  "dataset": "15141028",
+  "name": "한국철도공사_발권/이동유형 통계정보 · 간선열차 역별 승하차(일별)",
+  "endpoint": "https://apis.data.go.kr/B551457/issueStatistics/mainLineStationPer",
+  "key_name": "DATA_GO_KR_KEY",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15125733",
+  "name": "한국철도공사_열차수송통계정보 · 간선 여객열차 수송실적(일별·역별)",
+  "endpoint": "https://apis.data.go.kr/B551457/carriageStatistics/mainLineTravelerTrain",
+  "key_name": "DATA_GO_KR_KEY",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15142072",
+  "name": "국토교통부_고속시외버스·도시철도이용 OD · 월별(도착 시군구=경주)",
+  "endpoint": "https://apis.data.go.kr/1613000/ODUsageforExpressIntercityBusesandUrbanRail/getMonthlyODUsageforExpressIntercityBusesandUrbanRailways",
+  "key_name": "DATA_GO_KR_KEY",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15098522",
+  "name": "국토교통부_(TAGO)_고속버스정보 · 터미널 목록",
+  "endpoint": "https://apis.data.go.kr/1613000/ExpBusInfo/GetExpBusTrminlList",
+  "key_name": "DATA_GO_KR_KEY",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15098541",
+  "name": "국토교통부_(TAGO)_시외버스정보 · 터미널 목록",
+  "endpoint": "https://apis.data.go.kr/1613000/SuburbsBusInfo/GetSuberbsBusTrminlList",
+  "key_name": "DATA_GO_KR_KEY",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15141028",
+  "name": "한국철도공사_발권/이동유형 통계정보 · 간선열차 역별 승하차(일별)",
+  "endpoint": "https://apis.data.go.kr/B551457/issueStatistics/mainLineStationPer",
+  "key_name": "DATA_GO_KR_KEY_CAR",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15125733",
+  "name": "한국철도공사_열차수송통계정보 · 간선 여객열차 수송실적(일별·역별)",
+  "endpoint": "https://apis.data.go.kr/B551457/carriageStatistics/mainLineTravelerTrain",
+  "key_name": "DATA_GO_KR_KEY_CAR",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15142072",
+  "name": "국토교통부_고속시외버스·도시철도이용 OD · 월별(도착 시군구=경주)",
+  "endpoint": "https://apis.data.go.kr/1613000/ODUsageforExpressIntercityBusesandUrbanRail/getMonthlyODUsageforExpressIntercityBusesandUrbanRailways",
+  "key_name": "DATA_GO_KR_KEY_CAR",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15098522",
+  "name": "국토교통부_(TAGO)_고속버스정보 · 터미널 목록",
+  "endpoint": "https://apis.data.go.kr/1613000/ExpBusInfo/GetExpBusTrminlList",
+  "key_name": "DATA_GO_KR_KEY_CAR",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ },
+ {
+  "dataset": "15098541",
+  "name": "국토교통부_(TAGO)_시외버스정보 · 터미널 목록",
+  "endpoint": "https://apis.data.go.kr/1613000/SuburbsBusInfo/GetSuberbsBusTrminlList",
+  "key_name": "DATA_GO_KR_KEY_CAR",
+  "ok": false,
+  "http": "403",
+  "errMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR",
+  "returnReasonCode": "30"
+ }
+]

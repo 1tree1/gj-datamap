@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBANIS — Intelligent Urban Analysis Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   CSS VARIABLES & RESET
+   ═══════════════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1520;
+  --bg-tertiary: #141c2b;
+  --bg-card: #111827;
+  --bg-hover: #1a2436;
+  --border: #1e293b;
+  --border-active: #0ea5e9;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-cyan: #06d6f2;
+  --accent-cyan-dim: rgba(6, 214, 242, 0.15);
+  --accent-cyan-glow: rgba(6, 214, 242, 0.3);
+  --accent-magenta: #e040fb;
+  --accent-magenta-dim: rgba(224, 64, 251, 0.15);
+  --accent-green: #22c55e;
+  --accent-green-dim: rgba(34, 197, 94, 0.15);
+  --accent-amber: #f59e0b;
+  --accent-amber-dim: rgba(245, 158, 11, 0.15);
+  --accent-red: #ef4444;
+  --accent-red-dim: rgba(239, 68, 68, 0.15);
+  --accent-blue: #3b82f6;
+  --accent-blue-dim: rgba(59, 130, 246, 0.15);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Noto Sans KR', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-glow: 0 0 20px rgba(6, 214, 242, 0.08);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT GRID
+   ═══════════════════════════════════════════════════ */
+.app-shell {
+  display: grid;
+  grid-template-columns: 52px 280px 1fr 320px;
+  grid-template-rows: 48px 1fr 44px;
+  height: 100vh;
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOP BAR
+   ═══════════════════════════════════════════════════ */
+.top-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
+
+.top-bar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar__logo {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.top-bar__title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+}
+
+.top-bar__subtitle {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
+
+.top-bar__center {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.project-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.project-selector:hover { border-color: var(--accent-cyan); }
+
+.project-selector__dot {
+  width: 8px; height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.project-selector__name {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.project-selector__arrow {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.top-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.top-bar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+}
+
+.top-bar__btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+.top-bar__btn--active {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.top-bar__divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.ai-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--accent-cyan-dim);
+  border: 1px solid rgba(6, 214, 242, 0.25);
+  border-radius: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-cyan);
+  margin-right: 8px;
+}
+
+.ai-status__pulse {
+  width: 6px; height: 6px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  animation: pulse-dot 1.5s infinite;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOOLBAR (LEFT ICON BAR)
+   ═══════════════════════════════════════════════════ */
+.toolbar {
+  grid-column: 1;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  gap: 2px;
+}
+
+.toolbar__btn {
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 16px;
+  position: relative;
+}
+
+.toolbar__btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.toolbar__btn--active { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+.toolbar__btn--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--accent-cyan);
+  border-radius: 0 2px 2px 0;
+}
+
+.toolbar__spacer { flex: 1; }
+
+.toolbar__badge {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  border: 1.5px solid var(--bg-secondary);
+}
+
+/* ═══════════════════════════════════════════════════
+   LEFT PANEL
+   ═══════════════════════════════════════════════════ */
+.left-panel {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  min-height: 44px;
+}
+
+.panel-header__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.panel-header__action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-mono);
+}
+
+.panel-header__action:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+.panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* Layer Groups */
+.layer-group {
+  margin-bottom: 4px;
+}
+
+.layer-group__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.layer-group__header:hover { background: var(--bg-hover); }
+
+.layer-group__icon {
+  width: 24px; height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.layer-group__name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.layer-group__count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  padding: 1px 6px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+}
+
+.layer-group__toggle {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.layer-group--open .layer-group__toggle { transform: rotate(90deg); }
+
+.layer-group__items {
+  display: none;
+  padding-left: 16px;
+}
+
+.layer-group--open .layer-group__items { display: block; }
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.layer-item:hover { background: var(--bg-hover); }
+
+.layer-item__toggle {
+  width: 28px; height: 16px;
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.layer-item__toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: var(--transition);
+}
+
+.layer-item__toggle--on {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+}
+
+.layer-item__toggle--on::after {
+  left: 14px;
+  background: var(--accent-cyan);
+}
+
+.layer-item__color {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.layer-item__name {
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.layer-item__name--active { color: var(--text-primary); }
+
+/* Data Source Cards */
+.source-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  transition: var(--transition);
+}
+
+.source-card:hover { border-color: var(--border-active); }
+
+.source-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.source-card__name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.source-card__status {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.source-card__status--live {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+.source-card__status--idle {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+}
+
+.source-card__meta {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.source-card__meta span { display: flex; align-items: center; gap: 3px; }
+
+/* Section Divider */
+.section-divider {
+  padding: 10px 8px 6px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════
+   MAP AREA (CENTER)
+   ═══════════════════════════════════════════════════ */
+.map-area {
+  grid-column: 3;
+  grid-row: 2;
+  position: relative;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+/* Simulated Map Background */
+.map-canvas {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 40% 50%, rgba(6, 214, 242, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(224, 64, 251, 0.02) 0%, transparent 50%),
+    var(--bg-primary);
+}
+
+/* Grid overlay to simulate map */
+.map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.5;
+}
+
+/* Simulated road network */
+.map-roads {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.road {
+  position: absolute;
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.road--h1 { top: 35%; left: 5%; width: 90%; height: 3px; }
+.road--h2 { top: 55%; left: 10%; width: 75%; height: 2px; }
+.road--h3 { top: 72%; left: 15%; width: 60%; height: 2px; }
+.road--v1 { top: 10%; left: 25%; width: 2px; height: 80%; }
+.road--v2 { top: 5%; left: 50%; width: 3px; height: 85%; }
+.road--v3 { top: 15%; left: 70%; width: 2px; height: 70%; }
+.road--d1 { top: 20%; left: 30%; width: 45%; height: 2px; transform: rotate(25deg); transform-origin: left; }
+
+/* Simulated buildings */
+.map-buildings {
+  position: absolute;
+  inset: 0;
+}
+
+.building {
+  position: absolute;
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  border-radius: 2px;
+  opacity: 0.6;
+}
+
+.building--1 { top: 25%; left: 28%; width: 40px; height: 25px; background: rgba(14, 165, 233, 0.08); }
+.building--2 { top: 30%; left: 35%; width: 55px; height: 30px; background: rgba(14, 165, 233, 0.06); }
+.building--3 { top: 40%; left: 52%; width: 35px; height: 45px; background: rgba(14, 165, 233, 0.1); }
+.building--4 { top: 60%; left: 22%; width: 60px; height: 20px; background: rgba(14, 165, 233, 0.07); }
+.building--5 { top: 45%; left: 65%; width: 45px; height: 35px; background: rgba(224, 64, 251, 0.06); }
+.building--6 { top: 65%; left: 55%; width: 30px; height: 50px; background: rgba(14, 165, 233, 0.08); }
+.building--7 { top: 20%; left: 60%; width: 50px; height: 20px; background: rgba(34, 197, 94, 0.06); }
+.building--8 { top: 50%; left: 30%; width: 25px; height: 40px; background: rgba(14, 165, 233, 0.09); }
+
+/* Animated data points */
+.data-points {
+  position: absolute;
+  inset: 0;
+}
+
+.data-point {
+  position: absolute;
+  border-radius: 50%;
+  animation: point-pulse 3s infinite;
+}
+
+.data-point::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: point-ring 3s infinite;
+}
+
+@keyframes point-pulse {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes point-ring {
+  0% { inset: -2px; opacity: 0.4; }
+  100% { inset: -12px; opacity: 0; }
+}
+
+.dp--aircraft { width: 8px; height: 8px; background: var(--accent-amber); color: var(--accent-amber); }
+.dp--vehicle { width: 6px; height: 6px; background: var(--accent-cyan); color: var(--accent-cyan); }
+.dp--pedestrian { width: 5px; height: 5px; background: var(--accent-green); color: var(--accent-green); }
+.dp--alert { width: 7px; height: 7px; background: var(--accent-red); color: var(--accent-red); }
+
+/* Moving aircraft line */
+.flight-path {
+  position: absolute;
+  top: 18%;
+  left: 10%;
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-amber), transparent);
+  transform: rotate(-15deg);
+  animation: flight-move 8s linear infinite;
+}
+
+@keyframes flight-move {
+  0% { left: 10%; top: 18%; }
+  100% { left: 80%; top: 12%; }
+}
+
+/* HUD Overlay */
+.hud {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.hud-card {
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  min-width: 180px;
+}
+
+.hud-card__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.hud-card__value {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.hud-card__unit {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.hud-card__bar {
+  margin-top: 6px;
+  height: 3px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hud-card__bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s ease;
+}
+
+/* System Status HUD */
+.hud-system {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.hud-system__card {
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  min-width: 200px;
+}
+
+.hud-system__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 0;
+}
+
+.hud-system__label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-system__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+
+.hud-system__dot--ok { background: var(--accent-green); }
+.hud-system__dot--warn { background: var(--accent-amber); }
+.hud-system__dot--err { background: var(--accent-red); }
+
+.hud-system__val {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-primary);
+}
+
+/* Zoom Controls */
+.map-controls {
+  position: absolute;
+  bottom: 80px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 10;
+}
+
+.map-controls__btn {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.map-controls__btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+/* Coordinate Display */
+.map-coords {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 10;
+  display: flex;
+  gap: 12px;
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.map-coords span { color: var(--text-secondary); }
+
+/* Scale indicator */
+.map-scale {
+  position: absolute;
+  bottom: 12px;
+  right: 56px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.map-scale__bar {
+  width: 60px;
+  height: 2px;
+  background: var(--text-muted);
+  position: relative;
+}
+
+.map-scale__bar::before, .map-scale__bar::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 6px;
+  background: var(--text-muted);
+  top: -2px;
+}
+
+.map-scale__bar::before { left: 0; }
+.map-scale__bar::after { right: 0; }
+
+/* Analysis zones overlay */
+.analysis-zone {
+  position: absolute;
+  border: 1.5px dashed;
+  border-radius: var(--radius-md);
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+
+.analysis-zone:hover { opacity: 0.7; }
+
+.analysis-zone--a {
+  top: 22%; left: 23%; width: 25%; height: 28%;
+  border-color: var(--accent-cyan);
+  background: rgba(6, 214, 242, 0.03);
+}
+
+.analysis-zone--b {
+  top: 55%; left: 45%; width: 20%; height: 25%;
+  border-color: var(--accent-magenta);
+  background: rgba(224, 64, 251, 0.03);
+}
+
+.zone-label {
+  position: absolute;
+  top: 4px; left: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.zone-label--a { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+.zone-label--b { background: var(--accent-magenta-dim); color: var(--accent-magenta); }
+
+/* ═══════════════════════════════════════════════════
+   RIGHT PANEL
+   ═══════════════════════════════════════════════════ */
+.right-panel {
+  grid-column: 4;
+  grid-row: 2 / 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Tab Navigation */
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 4px;
+  overflow-x: auto;
+}
+
+.tab-nav__item {
+  padding: 10px 12px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.tab-nav__item:hover { color: var(--text-secondary); }
+.tab-nav__item--active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); }
+
+.right-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+/* Analysis Cards */
+.analysis-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: var(--transition);
+}
+
+.analysis-card:hover { border-color: rgba(6, 214, 242, 0.3); }
+
+.analysis-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.analysis-card__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.analysis-card__badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.badge--live { background: var(--accent-green-dim); color: var(--accent-green); }
+.badge--ai { background: var(--accent-magenta-dim); color: var(--accent-magenta); }
+.badge--info { background: var(--accent-blue-dim); color: var(--accent-blue); }
+
+/* Mini Chart */
+.mini-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 40px;
+  margin: 8px 0;
+}
+
+.mini-chart__bar {
+  flex: 1;
+  border-radius: 2px 2px 0 0;
+  min-height: 3px;
+  transition: height 0.5s ease;
+}
+
+/* Stat Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stat-item {
+  padding: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.stat-item__label {
+  font-size: 9px;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.stat-item__value {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.stat-item__change {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.change--up { color: var(--accent-green); }
+.change--down { color: var(--accent-red); }
+
+/* Ontology Viewer */
+.ontology-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  transition: var(--transition);
+}
+
+.ontology-node:hover { background: var(--bg-hover); }
+
+.ontology-node__type {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.ontology-node__name {
+  font-size: 11px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.ontology-node__rel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* Detection Feed */
+.detection-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detection-item {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid;
+}
+
+.detection-item--vehicle { border-left-color: var(--accent-cyan); }
+.detection-item--aircraft { border-left-color: var(--accent-amber); }
+.detection-item--anomaly { border-left-color: var(--accent-red); }
+
+.detection-item__icon {
+  width: 28px; height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.detection-item__body { flex: 1; min-width: 0; }
+
+.detection-item__title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.detection-item__meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.detection-item__confidence {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-green);
+}
+
+/* ═══════════════════════════════════════════════════
+   BOTTOM BAR / COMMAND BAR
+   ═══════════════════════════════════════════════════ */
+.bottom-bar {
+  grid-column: 2 / 5;
+  grid-row: 3;
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  padding: 0 12px;
+  gap: 8px;
+}
+
+/* Time Travel Control */
+.time-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+  margin-right: 4px;
+}
+
+.time-control__btn {
+  width: 24px; height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 10px;
+  transition: var(--transition);
+}
+
+.time-control__btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+.time-control__btn--play {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.time-control__display {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  min-width: 140px;
+}
+
+.time-control__slider {
+  width: 120px;
+  height: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  outline: none;
+}
+
+.time-control__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px; height: 10px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 6px var(--accent-cyan-glow);
+}
+
+/* Command Input */
+.command-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0 12px;
+  height: 30px;
+  transition: var(--transition);
+}
+
+.command-bar:focus-within {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px var(--accent-cyan-dim);
+}
+
+.command-bar__prefix {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.command-bar__input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.command-bar__input::placeholder { color: var(--text-muted); }
+
+.command-bar__shortcut {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  padding: 2px 5px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* AI Model Indicator */
+.ai-model-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 1px solid var(--border);
+}
+
+.ai-model-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-model-tag--claude { background: var(--accent-cyan-dim); color: var(--accent-cyan); }
+.ai-model-tag--gemini { background: var(--accent-magenta-dim); color: var(--accent-magenta); }
+
+/* ═══════════════════════════════════════════════════
+   INTERACTIVE STATES & ANIMATIONS
+   ═══════════════════════════════════════════════════ */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0.15;
+  animation: scan 6s linear infinite;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Heat zones */
+.heat-zone {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.heat-zone--1 { top: 30%; left: 30%; width: 120px; height: 120px; background: rgba(239, 68, 68, 0.06); }
+.heat-zone--2 { top: 55%; left: 50%; width: 80px; height: 80px; background: rgba(245, 158, 11, 0.05); }
+.heat-zone--3 { top: 40%; left: 60%; width: 100px; height: 100px; background: rgba(6, 214, 242, 0.04); }
+
+/* Confidence meter */
+.confidence-meter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.confidence-meter__bars {
+  display: flex;
+  gap: 1px;
+}
+
+.confidence-meter__bar {
+  width: 3px;
+  border-radius: 1px;
+  background: var(--bg-tertiary);
+}
+
+.confidence-meter__bar--filled { background: var(--accent-green); }
+
+/* Tooltip styles */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  padding: 4px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* Glowing accent borders */
+.glow-border {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Sparkline */
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 20px;
+}
+
+.sparkline__dot {
+  width: 3px;
+  border-radius: 1px;
+  background: var(--accent-cyan);
+  opacity: 0.6;
+}
+
+/* Progress ring */
+.progress-ring {
+  width: 36px; height: 36px;
+  position: relative;
+}
+
+.progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.progress-ring__bg { stroke: var(--bg-tertiary); }
+.progress-ring__fill { transition: stroke-dashoffset 0.5s ease; }
+
+.progress-ring__text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══ TOP BAR ═══ -->
+  <header class="top-bar">
+    <div class="top-bar__brand">
+      <div class="top-bar__logo">U</div>
+      <span class="top-bar__title">URBANIS</span>
+      <span class="top-bar__subtitle">Intelligent Urban Analysis Platform v2.4</span>
+    </div>
+
+    <div class="top-bar__center">
+      <div class="project-selector">
+        <div class="project-selector__dot"></div>
+        <span class="project-selector__name">대구광역시 재개발 분석</span>
+        <span class="project-selector__arrow">▾</span>
+      </div>
+    </div>
+
+    <div class="top-bar__actions">
+      <div class="ai-status">
+        <div class="ai-status__pulse"></div>
+        HYBRID AI ONLINE
+      </div>
+      <div class="top-bar__divider"></div>
+      <button class="top-bar__btn" title="Notifications">🔔<span class="toolbar__badge" style="top:4px;right:4px;width:6px;height:6px;"></span></button>
+      <button class="top-bar__btn" title="Settings">⚙</button>
+      <button class="top-bar__btn" title="Full Screen">⛶</button>
+    </div>
+  </header>
+
+  <!-- ═══ TOOLBAR ═══ -->
+  <nav class="toolbar">
+    <button class="toolbar__btn toolbar__btn--active" data-tooltip="레이어">🗺</button>
+    <button class="toolbar__btn" data-tooltip="분석">📊</button>
+    <button class="toolbar__btn" data-tooltip="온톨로지">🔗</button>
+    <button class="toolbar__btn" data-tooltip="AI 탐지">🤖</button>
+    <button class="toolbar__btn" data-tooltip="시나리오">🎬</button>
+    <button class="toolbar__btn" data-tooltip="보고서">📄</button>
+    <div class="toolbar__spacer"></div>
+    <button class="toolbar__btn" data-tooltip="데이터 소스">📡<span class="toolbar__badge"></span></button>
+    <button class="toolbar__btn" data-tooltip="도움말">❓</button>
+  </nav>
+
+  <!-- ═══ LEFT PANEL ═══ -->
+  <aside class="left-panel">
+    <div class="panel-header">
+      <span class="panel-header__title">Data Layers</span>
+      <button class="panel-header__action">+ Add</button>
+    </div>
+    <div class="panel-scroll">
+
+      <!-- Realtime Section -->
+      <div class="section-divider">🔴 Real-time Streams</div>
+
+      <div class="source-card glow-border">
+        <div class="source-card__header">
+          <span class="source-card__name">✈ OpenSky Network</span>
+          <span class="source-card__status source-card__status--live">● LIVE</span>
+        </div>
+        <div class="source-card__meta">
+          <span>⏱ 10s cycle</span>
+          <span>📦 142 objects</span>
+          <span>📶 99.2%</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card__header">
+          <span class="source-card__name">📹 DOT Traffic Cams</span>
+          <span class="source-card__status source-card__status--live">● LIVE</span>
+        </div>
+        <div class="source-card__meta">
+          <span>⏱ 10s cycle</span>
+          <span>📦 38 cams</span>
+          <span>🤖 Gemini</span>
+        </div>
+      </div>
+
+      <div class="source-card">
+        <div class="source-card__header">
+          <span class="source-card__name">🛰 Sentinel Hub</span>
+          <span class="source-card__status source-card__status--idle">IDLE</span>
+        </div>
+        <div class="source-card__meta">
+          <span>⏱ 24h cycle</span>
+          <span>📦 WMS tiles</span>
+          <span>🔄 Last: 14:20</span>
+        </div>
+      </div>
+
+      <!-- Vector Layers -->
+      <div class="section-divider">📐 Analysis Layers</div>
+
+      <div class="layer-group layer-group--open">
+        <div class="layer-group__header" onclick="this.parentElement.classList.toggle('layer-group--open')">
+          <div class="layer-group__icon" style="background:var(--accent-cyan-dim);color:var(--accent-cyan);">🚗</div>
+          <span class="layer-group__name">교통 / Traffic</span>
+          <span class="layer-group__count">4</span>
+          <span class="layer-group__toggle">▸</span>
+        </div>
+        <div class="layer-group__items">
+          <div class="layer-item">
+            <div class="layer-item__toggle layer-item__toggle--on"></div>
+            <div class="layer-item__color" style="background:var(--accent-cyan)"></div>
+            <span class="layer-item__name layer-item__name--active">실시간 차량</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle layer-item__toggle--on"></div>
+            <div class="layer-item__color" style="background:var(--accent-amber)"></div>
+            <span class="layer-item__name layer-item__name--active">항공기 경로</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:var(--accent-red)"></div>
+            <span class="layer-item__name">병목 구간</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:var(--accent-green)"></div>
+            <span class="layer-item__name">보행자 흐름</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-group">
+        <div class="layer-group__header" onclick="this.parentElement.classList.toggle('layer-group--open')">
+          <div class="layer-group__icon" style="background:var(--accent-green-dim);color:var(--accent-green);">🏗</div>
+          <span class="layer-group__name">도시계획 / Zoning</span>
+          <span class="layer-group__count">5</span>
+          <span class="layer-group__toggle">▸</span>
+        </div>
+        <div class="layer-group__items">
+          <div class="layer-item">
+            <div class="layer-item__toggle layer-item__toggle--on"></div>
+            <div class="layer-item__color" style="background:#8b5cf6"></div>
+            <span class="layer-item__name layer-item__name--active">용도지역</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#f97316"></div>
+            <span class="layer-item__name">건폐율/용적률</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#06b6d4"></div>
+            <span class="layer-item__name">지적도</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#84cc16"></div>
+            <span class="layer-item__name">공시지가</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#f43f5e"></div>
+            <span class="layer-item__name">재개발구역</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-group">
+        <div class="layer-group__header" onclick="this.parentElement.classList.toggle('layer-group--open')">
+          <div class="layer-group__icon" style="background:var(--accent-amber-dim);color:var(--accent-amber);">🌡</div>
+          <span class="layer-group__name">환경 / Environment</span>
+          <span class="layer-group__count">4</span>
+          <span class="layer-group__toggle">▸</span>
+        </div>
+        <div class="layer-group__items">
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#ef4444"></div>
+            <span class="layer-item__name">열섬 지수</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#22d3ee"></div>
+            <span class="layer-item__name">풍길 분석</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#a3e635"></div>
+            <span class="layer-item__name">NDVI 식생</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#818cf8"></div>
+            <span class="layer-item__name">대기질 PM2.5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-group">
+        <div class="layer-group__header" onclick="this.parentElement.classList.toggle('layer-group--open')">
+          <div class="layer-group__icon" style="background:var(--accent-magenta-dim);color:var(--accent-magenta);">👥</div>
+          <span class="layer-group__name">인구 · 사회 / Social</span>
+          <span class="layer-group__count">3</span>
+          <span class="layer-group__toggle">▸</span>
+        </div>
+        <div class="layer-group__items">
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#e040fb"></div>
+            <span class="layer-item__name">인구밀도 3D</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#fb923c"></div>
+            <span class="layer-item__name">입지계수(LQ)</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#4ade80"></div>
+            <span class="layer-item__name">15분 도시 접근성</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-group">
+        <div class="layer-group__header" onclick="this.parentElement.classList.toggle('layer-group--open')">
+          <div class="layer-group__icon" style="background:var(--accent-blue-dim);color:var(--accent-blue);">🧠</div>
+          <span class="layer-group__name">Space Syntax</span>
+          <span class="layer-group__count">3</span>
+          <span class="layer-group__toggle">▸</span>
+        </div>
+        <div class="layer-group__items">
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#3b82f6"></div>
+            <span class="layer-item__name">통합도 (Integration)</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#8b5cf6"></div>
+            <span class="layer-item__name">선택도 (Choice)</span>
+          </div>
+          <div class="layer-item">
+            <div class="layer-item__toggle"></div>
+            <div class="layer-item__color" style="background:#06b6d4"></div>
+            <span class="layer-item__name">VGA 시각 분석</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Model Section -->
+      <div class="section-divider">🏙 3D Model</div>
+      <div class="source-card">
+        <div class="source-card__header">
+          <span class="source-card__name">🏛 Vworld 3D Buildings</span>
+          <span class="source-card__status source-card__status--idle">LOADED</span>
+        </div>
+        <div class="source-card__meta">
+          <span>📦 3D Tiles</span>
+          <span>🗺 LOD2</span>
+          <span>📐 CityGML</span>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ═══ MAP AREA ═══ -->
+  <main class="map-area">
+    <div class="map-canvas"></div>
+    <div class="map-grid"></div>
+    <div class="map-roads">
+      <div class="road road--h1"></div>
+      <div class="road road--h2"></div>
+      <div class="road road--h3"></div>
+      <div class="road road--v1"></div>
+      <div class="road road--v2"></div>
+      <div class="road road--v3"></div>
+      <div class="road road--d1"></div>
+    </div>
+    <div class="map-buildings">
+      <div class="building building--1"></div>
+      <div class="building building--2"></div>
+      <div class="building building--3"></div>
+      <div class="building building--4"></div>
+      <div class="building building--5"></div>
+      <div class="building building--6"></div>
+      <div class="building building--7"></div>
+      <div class="building building--8"></div>
+    </div>
+    <div class="heat-zone heat-zone--1"></div>
+    <div class="heat-zone heat-zone--2"></div>
+    <div class="heat-zone heat-zone--3"></div>
+    <div class="data-points">
+      <div class="data-point dp--aircraft" style="top:15%;left:55%;animation-delay:0s"></div>
+      <div class="data-point dp--aircraft" style="top:22%;left:38%;animation-delay:1.2s"></div>
+      <div class="data-point dp--vehicle" style="top:36%;left:50%;animation-delay:0.5s"></div>
+      <div class="data-point dp--vehicle" style="top:35%;left:26%;animation-delay:1.8s"></div>
+      <div class="data-point dp--vehicle" style="top:55%;left:48%;animation-delay:0.3s"></div>
+      <div class="data-point dp--vehicle" style="top:54%;left:70%;animation-delay:2.1s"></div>
+      <div class="data-point dp--pedestrian" style="top:42%;left:52%;animation-delay:0.8s"></div>
+      <div class="data-point dp--pedestrian" style="top:58%;left:30%;animation-delay:1.5s"></div>
+      <div class="data-point dp--alert" style="top:65%;left:55%;animation-delay:0.2s"></div>
+    </div>
+    <div class="flight-path"></div>
+    <div class="analysis-zone analysis-zone--a">
+      <span class="zone-label zone-label--a">ZONE-A 중심상업지구</span>
+    </div>
+    <div class="analysis-zone analysis-zone--b">
+      <span class="zone-label zone-label--b">ZONE-B 재개발구역</span>
+    </div>
+    <div class="scan-line"></div>
+
+    <!-- HUD: Left -->
+    <div class="hud">
+      <div class="hud-card">
+        <div class="hud-card__label">Tracked Objects</div>
+        <div class="hud-card__value">
+          1,847 <span class="hud-card__unit">active</span>
+        </div>
+        <div class="hud-card__bar">
+          <div class="hud-card__bar-fill" style="width:73%;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-magenta))"></div>
+        </div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-card__label">AI Confidence</div>
+        <div class="hud-card__value" style="color:var(--accent-green)">
+          94.2<span class="hud-card__unit">%</span>
+        </div>
+        <div class="hud-card__bar">
+          <div class="hud-card__bar-fill" style="width:94%;background:var(--accent-green)"></div>
+        </div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-card__label">Anomalies</div>
+        <div class="hud-card__value" style="color:var(--accent-red)">
+          3 <span class="hud-card__unit">detected</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD: Right -->
+    <div class="hud-system">
+      <div class="hud-system__card">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:1px;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;">System Status</div>
+        <div class="hud-system__row">
+          <span class="hud-system__label"><span class="hud-system__dot hud-system__dot--ok"></span>WebSocket</span>
+          <span class="hud-system__val">Connected</span>
+        </div>
+        <div class="hud-system__row">
+          <span class="hud-system__label"><span class="hud-system__dot hud-system__dot--ok"></span>Claude 4.6</span>
+          <span class="hud-system__val">Architect</span>
+        </div>
+        <div class="hud-system__row">
+          <span class="hud-system__label"><span class="hud-system__dot hud-system__dot--ok"></span>Gemini 3.1</span>
+          <span class="hud-system__val">Vision Active</span>
+        </div>
+        <div class="hud-system__row">
+          <span class="hud-system__label"><span class="hud-system__dot hud-system__dot--warn"></span>Pydantic</span>
+          <span class="hud-system__val">2 warnings</span>
+        </div>
+        <div class="hud-system__row">
+          <span class="hud-system__label"><span class="hud-system__dot hud-system__dot--ok"></span>Broadcast</span>
+          <span class="hud-system__val" style="color:var(--accent-cyan)">10s cycle</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="map-controls">
+      <button class="map-controls__btn">+</button>
+      <button class="map-controls__btn">−</button>
+      <button class="map-controls__btn" style="margin-top:4px">◎</button>
+      <button class="map-controls__btn">🧭</button>
+      <button class="map-controls__btn" style="margin-top:4px">3D</button>
+    </div>
+
+    <!-- Bottom Map Info -->
+    <div class="map-coords">
+      <span>35.8714°N</span> <span>128.6014°E</span> │ <span>Zoom 14.2</span> │ <span>EPSG:3857</span>
+    </div>
+    <div class="map-scale">
+      <div class="map-scale__bar"></div>
+      500m
+    </div>
+  </main>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <aside class="right-panel">
+    <div class="tab-nav">
+      <div class="tab-nav__item tab-nav__item--active">분석</div>
+      <div class="tab-nav__item">탐지</div>
+      <div class="tab-nav__item">온톨로지</div>
+      <div class="tab-nav__item">보고서</div>
+    </div>
+
+    <div class="right-scroll">
+
+      <!-- Traffic Flow Analysis -->
+      <div class="analysis-card">
+        <div class="analysis-card__header">
+          <span class="analysis-card__title">🚦 교통 흐름 분석</span>
+          <span class="analysis-card__badge badge--live">● LIVE</span>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-chart__bar" style="height:35%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:50%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:42%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:65%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:80%;background:var(--accent-amber)"></div>
+          <div class="mini-chart__bar" style="height:95%;background:var(--accent-red)"></div>
+          <div class="mini-chart__bar" style="height:88%;background:var(--accent-red)"></div>
+          <div class="mini-chart__bar" style="height:72%;background:var(--accent-amber)"></div>
+          <div class="mini-chart__bar" style="height:60%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:45%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:38%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:30%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:55%;background:var(--accent-cyan)"></div>
+          <div class="mini-chart__bar" style="height:70%;background:var(--accent-amber)"></div>
+          <div class="mini-chart__bar" style="height:82%;background:var(--accent-red)"></div>
+          <div class="mini-chart__bar" style="height:90%;background:var(--accent-red)"></div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-item">
+            <div class="stat-item__label">차량 탐지</div>
+            <div class="stat-item__value" style="color:var(--accent-cyan)">2,847</div>
+            <div class="stat-item__change change--up">↑ 12.3%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__label">병목 구간</div>
+            <div class="stat-item__value" style="color:var(--accent-red)">7</div>
+            <div class="stat-item__change change--down">↑ 2 from avg</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__label">평균 속도</div>
+            <div class="stat-item__value" style="color:var(--accent-amber)">34</div>
+            <div class="stat-item__change" style="color:var(--text-muted)">km/h</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__label">보행자</div>
+            <div class="stat-item__value" style="color:var(--accent-green)">1,203</div>
+            <div class="stat-item__change change--up">↑ 5.1%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Space Syntax -->
+      <div class="analysis-card">
+        <div class="analysis-card__header">
+          <span class="analysis-card__title">🧩 Space Syntax 결과</span>
+          <span class="analysis-card__badge badge--ai">AI 분석</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-item">
+            <div class="stat-item__label">통합도 평균</div>
+            <div class="stat-item__value" style="color:var(--accent-blue)">0.84</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-item__label">선택도 피크</div>
+            <div class="stat-item__value" style="color:var(--accent-magenta)">1.47</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;padding:8px;background:var(--bg-tertiary);border-radius:var(--radius-sm);font-size:11px;color:var(--text-secondary);line-height:1.5">
+          <span style="color:var(--accent-cyan);font-family:var(--font-mono);font-size:10px">Claude:</span>
+          ZONE-A의 통합도가 0.84로 도시 평균 대비 32% 높습니다. 상권 활성화 잠재력이 큰 핵심 보행축으로 분류됩니다. sDNA 800m 반경 분석 기준.
+        </div>
+      </div>
+
+      <!-- Gemini Detection Feed -->
+      <div class="analysis-card">
+        <div class="analysis-card__header">
+          <span class="analysis-card__title">👁 Gemini Vision 탐지</span>
+          <span class="analysis-card__badge badge--live">● LIVE</span>
+        </div>
+        <div class="detection-feed">
+          <div class="detection-item detection-item--vehicle">
+            <div class="detection-item__icon" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">🚗</div>
+            <div class="detection-item__body">
+              <div class="detection-item__title">CAM-07 차량 38대 감지</div>
+              <div class="detection-item__meta">35.8702°N, 128.5987°E · 2s ago</div>
+            </div>
+            <div class="detection-item__confidence">98%</div>
+          </div>
+          <div class="detection-item detection-item--aircraft">
+            <div class="detection-item__icon" style="background:var(--accent-amber-dim);color:var(--accent-amber)">✈</div>
+            <div class="detection-item__body">
+              <div class="detection-item__title">KAL1205 고도 8,200m</div>
+              <div class="detection-item__meta">ICAO24: a1b2c3 · OpenSky</div>
+            </div>
+            <div class="detection-item__confidence">99%</div>
+          </div>
+          <div class="detection-item detection-item--anomaly">
+            <div class="detection-item__icon" style="background:var(--accent-red-dim);color:var(--accent-red)">⚠</div>
+            <div class="detection-item__body">
+              <div class="detection-item__title">ZONE-B 비정상 혼잡 감지</div>
+              <div class="detection-item__meta">밀도 +240% from baseline</div>
+            </div>
+            <div class="detection-item__confidence" style="color:var(--accent-red)">87%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ontology Relations -->
+      <div class="analysis-card">
+        <div class="analysis-card__header">
+          <span class="analysis-card__title">🔗 Knowledge Graph</span>
+          <span class="analysis-card__badge badge--info">온톨로지</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="ontology-node" style="border-left-color:var(--accent-cyan)">
+            <span class="ontology-node__type" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">Building</span>
+            <span class="ontology-node__name">중구 상업빌딩 A</span>
+            <span class="ontology-node__rel">isLocatedIn →</span>
+          </div>
+          <div class="ontology-node" style="border-left-color:var(--accent-green);padding-left:20px">
+            <span class="ontology-node__type" style="background:var(--accent-green-dim);color:var(--accent-green)">Zone</span>
+            <span class="ontology-node__name">제2종 일반주거지역</span>
+            <span class="ontology-node__rel">허용 용적률 250%</span>
+          </div>
+          <div class="ontology-node" style="border-left-color:var(--accent-magenta);padding-left:20px">
+            <span class="ontology-node__type" style="background:var(--accent-magenta-dim);color:var(--accent-magenta)">Rule</span>
+            <span class="ontology-node__name">일조 사선 제한 적용</span>
+            <span class="ontology-node__rel">constrains ↑</span>
+          </div>
+          <div class="ontology-node" style="border-left-color:var(--accent-amber)">
+            <span class="ontology-node__type" style="background:var(--accent-amber-dim);color:var(--accent-amber)">Camera</span>
+            <span class="ontology-node__name">CAM-07</span>
+            <span class="ontology-node__rel">observes →</span>
+          </div>
+          <div class="ontology-node" style="border-left-color:var(--accent-blue);padding-left:20px">
+            <span class="ontology-node__type" style="background:var(--accent-blue-dim);color:var(--accent-blue)">Road</span>
+            <span class="ontology-node__name">중앙대로 (4차선)</span>
+            <span class="ontology-node__rel">connectsTo ↔</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Urban Metabolism -->
+      <div class="analysis-card">
+        <div class="analysis-card__header">
+          <span class="analysis-card__title">♻ 도시 신진대사 (MFA)</span>
+          <span class="analysis-card__badge badge--info">시뮬레이션</span>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:1fr 1fr 1fr;">
+          <div class="stat-item" style="text-align:center">
+            <div class="stat-item__label">에너지</div>
+            <div style="display:flex;justify-content:center;margin:4px 0">
+              <div class="progress-ring">
+                <svg width="36" height="36"><circle class="progress-ring__bg" cx="18" cy="18" r="14" fill="none" stroke-width="3"/><circle class="progress-ring__fill" cx="18" cy="18" r="14" fill="none" stroke="var(--accent-amber)" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="22" stroke-linecap="round"/></svg>
+                <div class="progress-ring__text" style="color:var(--accent-amber)">75%</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-item" style="text-align:center">
+            <div class="stat-item__label">수자원</div>
+            <div style="display:flex;justify-content:center;margin:4px 0">
+              <div class="progress-ring">
+                <svg width="36" height="36"><circle class="progress-ring__bg" cx="18" cy="18" r="14" fill="none" stroke-width="3"/><circle class="progress-ring__fill" cx="18" cy="18" r="14" fill="none" stroke="var(--accent-blue)" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="35" stroke-linecap="round"/></svg>
+                <div class="progress-ring__text" style="color:var(--accent-blue)">60%</div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-item" style="text-align:center">
+            <div class="stat-item__label">탄소</div>
+            <div style="display:flex;justify-content:center;margin:4px 0">
+              <div class="progress-ring">
+                <svg width="36" height="36"><circle class="progress-ring__bg" cx="18" cy="18" r="14" fill="none" stroke-width="3"/><circle class="progress-ring__fill" cx="18" cy="18" r="14" fill="none" stroke="var(--accent-green)" stroke-width="3" stroke-dasharray="88" stroke-dashoffset="10" stroke-linecap="round"/></svg>
+                <div class="progress-ring__text" style="color:var(--accent-green)">89%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ═══ BOTTOM BAR ═══ -->
+  <footer class="bottom-bar">
+    <div class="time-control">
+      <button class="time-control__btn">⏮</button>
+      <button class="time-control__btn time-control__btn--play">▶</button>
+      <button class="time-control__btn">⏭</button>
+      <span class="time-control__display">2026-02-25 14:32:07</span>
+      <input type="range" class="time-control__slider" min="0" max="100" value="72">
+      <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted)">×1.0</span>
+    </div>
+
+    <div class="command-bar">
+      <span class="command-bar__prefix">⌘ Claude</span>
+      <input class="command-bar__input" type="text" placeholder="자연어 명령 입력... (예: '현재 혼잡한 구역의 법적 허용 용적률은?')">
+      <span class="command-bar__shortcut">Ctrl+K</span>
+    </div>
+
+    <div class="ai-model-indicator">
+      <span class="ai-model-tag ai-model-tag--claude">● Claude 4.6</span>
+      <span class="ai-model-tag ai-model-tag--gemini">● Gemini 3.1</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// Toggle layer items on/off
+document.querySelectorAll('.layer-item__toggle').forEach(toggle => {
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggle.classList.toggle('layer-item__toggle--on');
+    const nameEl = toggle.parentElement.querySelector('.layer-item__name');
+    if (nameEl) nameEl.classList.toggle('layer-item__name--active');
+  });
+});
+
+// Tab navigation
+document.querySelectorAll('.tab-nav__item').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab-nav__item').forEach(t => t.classList.remove('tab-nav__item--active'));
+    tab.classList.add('tab-nav__item--active');
+  });
+});
+
+// Toolbar navigation
+document.querySelectorAll('.toolbar__btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.toolbar__btn').forEach(b => b.classList.remove('toolbar__btn--active'));
+    btn.classList.add('toolbar__btn--active');
+  });
+});
+
+// Update time display
+function updateTime() {
+  const now = new Date();
+  const formatted = now.toISOString().replace('T', ' ').substring(0, 19);
+  const display = document.querySelector('.time-control__display');
+  if (display) display.textContent = formatted;
+}
+setInterval(updateTime, 1000);
+
+// Simulate data point movement
+function animateDataPoints() {
+  document.querySelectorAll('.data-point').forEach(point => {
+    const currentTop = parseFloat(point.style.top);
+    const currentLeft = parseFloat(point.style.left);
+    const newTop = currentTop + (Math.random() - 0.5) * 0.3;
+    const newLeft = currentLeft + (Math.random() - 0.5) * 0.3;
+    point.style.top = Math.max(5, Math.min(90, newTop)) + '%';
+    point.style.left = Math.max(5, Math.min(90, newLeft)) + '%';
+  });
+}
+setInterval(animateDataPoints, 2000);
+
+// Simulate tracked objects count
+function updateHUD() {
+  const valueEl = document.querySelector('.hud-card__value');
+  if (valueEl) {
+    const base = 1847;
+    const variation = Math.floor(Math.random() * 30) - 15;
+    valueEl.innerHTML = `${(base + variation).toLocaleString()} <span class="hud-card__unit">active</span>`;
+  }
+}
+setInterval(updateHUD, 3000);
+</script>
+
+</body>
+</html>

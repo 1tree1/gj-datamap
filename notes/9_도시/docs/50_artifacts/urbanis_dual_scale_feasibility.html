@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual-Scale BIM Platform 실현가능성 분석</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050709;--s1:#0a0e16;--s2:#0f1520;--s3:#16202e;--bd:#1a2640;--t1:#e4eaf4;--t2:#8a96b0;--t3:#506080;--g:#00e896;--b:#38bdf8;--v:#a78bfa;--o:#f59e0b;--r:#ef4444;--p:#ec4899;--tl:#22d3ee}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t1);font-family:'Noto Sans KR',sans-serif;line-height:1.7}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+.c{max-width:960px;margin:0 auto;padding:44px 20px 100px}
+h1{font-family:'Fraunces',serif;font-size:32px;text-align:center;margin-bottom:4px}
+.sub{text-align:center;color:var(--t3);font-size:12px;font-family:'IBM Plex Mono',monospace;margin-bottom:36px}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* Verdict box */
+.verdict{border-radius:14px;padding:24px 28px;margin-bottom:32px;position:relative;overflow:hidden}
+.verdict.yes{background:linear-gradient(135deg,rgba(0,232,150,.06),rgba(56,189,248,.04));border:1px solid rgba(0,232,150,.2)}
+.verdict.warn{background:linear-gradient(135deg,rgba(245,158,11,.06),rgba(239,68,68,.04));border:1px solid rgba(245,158,11,.2)}
+.verdict-label{font-size:10px;font-weight:600;letter-spacing:1.5px;margin-bottom:6px;font-family:'IBM Plex Mono',monospace}
+.verdict.yes .verdict-label{color:var(--g)}
+.verdict.warn .verdict-label{color:var(--o)}
+.verdict p{font-size:13px;color:var(--t2);line-height:1.8}
+.verdict strong{color:var(--t1)}
+.verdict em{font-style:normal;font-weight:500}
+.verdict .em-g{color:var(--g)}.verdict .em-o{color:var(--o)}.verdict .em-r{color:var(--r)}.verdict .em-b{color:var(--b)}
+
+/* Sections */
+.sec{margin-top:40px}
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sec-n{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;padding:3px 9px;border-radius:14px;border:1px solid}
+.sec-t{font-size:17px;font-weight:700}
+
+/* Two column comparison */
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+@media(max-width:700px){.dual{grid-template-columns:1fr}}
+.scale-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:18px;position:relative}
+.scale-card h3{font-size:14px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.scale-card .scale-sub{font-size:10px;color:var(--t3);font-family:'IBM Plex Mono',monospace;margin-bottom:12px}
+
+/* Feature rows */
+.feat{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(26,38,64,.5)}
+.feat:last-child{border-bottom:none}
+.feat-icon{font-size:14px;flex-shrink:0;margin-top:2px}
+.feat-body{flex:1}
+.feat-name{font-size:12px;font-weight:500;margin-bottom:2px}
+.feat-desc{font-size:10px;color:var(--t3);line-height:1.5}
+.feat-tools{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.ft{font-size:8px;padding:1px 5px;border-radius:3px;font-family:'IBM Plex Mono',monospace;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--t3)}
+
+/* Difficulty indicator */
+.diff{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-family:'IBM Plex Mono',monospace;padding:2px 6px;border-radius:10px}
+.diff-easy{background:rgba(0,232,150,.1);color:var(--g);border:1px solid rgba(0,232,150,.2)}
+.diff-mid{background:rgba(56,189,248,.1);color:var(--b);border:1px solid rgba(56,189,248,.2)}
+.diff-hard{background:rgba(245,158,11,.1);color:var(--o);border:1px solid rgba(245,158,11,.2)}
+.diff-extreme{background:rgba(239,68,68,.1);color:var(--r);border:1px solid rgba(239,68,68,.2)}
+
+/* Architecture diagram */
+.arch{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:20px;margin:16px 0}
+.arch-t{font-size:11px;font-weight:600;color:var(--b);margin-bottom:10px;font-family:'IBM Plex Mono',monospace}
+.arch pre{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--t2);line-height:1.55;overflow-x:auto;white-space:pre}
+
+/* Tool chain */
+.chain{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:14px 0}
+.chain-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
+.chain-role{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;font-family:'IBM Plex Mono',monospace}
+.chain-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.chain-desc{font-size:10px;color:var(--t3);line-height:1.5}
+.chain-lic{font-size:8px;margin-top:4px}
+
+/* Timeline */
+.timeline{position:relative;padding-left:24px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--bd)}
+.tl-item{position:relative;padding:10px 0 10px 20px;border-bottom:none}
+.tl-item::before{content:'';position:absolute;left:-20px;top:14px;width:10px;height:10px;border-radius:50%;border:2px solid var(--bd);background:var(--bg)}
+.tl-item.active::before{border-color:var(--g);background:var(--g);box-shadow:0 0 8px rgba(0,232,150,.4)}
+.tl-phase{font-size:10px;font-weight:600;color:var(--t3);font-family:'IBM Plex Mono',monospace}
+.tl-title{font-size:13px;font-weight:600;margin:2px 0}
+.tl-desc{font-size:11px;color:var(--t3);line-height:1.6}
+.tl-time{font-size:9px;color:var(--o);font-family:'IBM Plex Mono',monospace;margin-top:2px}
+
+/* Honest box */
+.honest{background:var(--s2);border:1px solid var(--bd);border-left:3px solid var(--o);border-radius:0 12px 12px 0;padding:18px 20px;margin:16px 0}
+.honest-t{font-size:11px;font-weight:600;color:var(--o);margin-bottom:6px}
+.honest p{font-size:12px;color:var(--t2);line-height:1.7}
+.honest strong{color:var(--t1)}
+</style>
+</head>
+<body>
+<div class="c">
+
+<h1>🏗️ Dual-Scale BIM Platform</h1>
+<p class="sub">도시 스케일 + 건축물 스케일 · IFC 기반 · 시뮬레이션 통합 · 실현가능성 분석</p>
+
+<!-- Top-level Verdict -->
+<div class="verdict yes">
+  <div class="verdict-label">결론: 기술적으로 가능합니다</div>
+  <p>
+    필요한 오픈소스 도구가 <strong>모두 존재</strong>합니다. IFC 읽기/쓰기는 <span class="em-g">IfcOpenShell</span>,
+    환경 시뮬레이션은 <span class="em-g">EnergyPlus/Radiance/OpenFOAM</span>, 행태 시뮬레이션은 <span class="em-g">MATSim/SUMO</span>,
+    웹 3D 뷰어는 <span class="em-g">web-ifc + Three.js</span>, 도시 스케일 시각화는 <span class="em-g">deck.gl/CesiumJS</span>로 구현 가능합니다.<br><br>
+    단, <strong>"하나의 통합 프로그램"</strong>으로 만들면 <span class="em-r">Revit + ArcGIS + EnergyPlus를 혼자 만드는 것</span>과 같습니다.
+    현실적 전략은 <span class="em-b">"공유 데이터 허브 + 2개의 특화 뷰어"</span> 구조로, 각 스케일에 맞는 기능을 점진 구축하는 것입니다.
+  </p>
+</div>
+
+<div class="verdict warn">
+  <div class="verdict-label">⚠ 솔직한 경고</div>
+  <p>
+    Revit은 <strong>30년간 500+명의 엔지니어</strong>가 만든 프로그램입니다. Rhino는 <strong>25년간 전업 팀</strong>이 개발했습니다.
+    "BIM 프로그램을 만들겠다"는 것은 이들과 경쟁하겠다는 의미가 아니라,
+    <strong>특정 분석 워크플로우에 특화된 도구</strong>를 만들겠다는 의미여야 합니다.
+    즉, <span class="em-o">모델링 도구가 아닌, 분석·시각화·의사결정 지원 도구</span>가 현실적 목표입니다.
+  </p>
+</div>
+
+<!-- Section 1: What "BIM Program" Actually Means Here -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--b);border-color:rgba(56,189,248,.3)">01</span>
+    <h2 class="sec-t">"BIM 프로그램"의 현실적 재정의</h2>
+  </div>
+
+  <div class="dual">
+    <div class="scale-card" style="border-top:3px solid var(--g)">
+      <h3>❌ 만들면 안 되는 것</h3>
+      <div class="scale-sub">Revit/ArchiCAD 대체</div>
+      <div class="feat"><div class="feat-icon">🚫</div><div class="feat-body"><div class="feat-name">3D 모델링 엔진</div><div class="feat-desc">NURBS/B-Rep 커널 → 수십 년 개발. OpenCASCADE 존재하지만 CAD 수준 UI는 별도 개발 필요</div></div></div>
+      <div class="feat"><div class="feat-icon">🚫</div><div class="feat-body"><div class="feat-name">도면 생성 시스템</div><div class="feat-desc">2D 단면/입면/상세 자동 도면화 → Revit의 핵심 기능, 막대한 개발량</div></div></div>
+      <div class="feat"><div class="feat-icon">🚫</div><div class="feat-body"><div class="feat-name">범용 BIM 저작 도구</div><div class="feat-desc">벽·슬라브·기둥 자유 배치 + 간섭 검토 → 이미 Revit/Bonsai가 하는 영역</div></div></div>
+    </div>
+
+    <div class="scale-card" style="border-top:3px solid var(--g)">
+      <h3>✅ 만들어야 하는 것</h3>
+      <div class="scale-sub">분석·시뮬레이션·의사결정 플랫폼</div>
+      <div class="feat"><div class="feat-icon">✅</div><div class="feat-body"><div class="feat-name">IFC 읽기/쓰기/뷰어</div><div class="feat-desc">Revit/ArchiCAD에서 내보낸 IFC를 로드 → 시각화 + 속성 분석 + 시뮬레이션 연동</div></div></div>
+      <div class="feat"><div class="feat-icon">✅</div><div class="feat-body"><div class="feat-name">시뮬레이션 통합 허브</div><div class="feat-desc">IFC 모델 + 도시 데이터 → 에너지/일조/풍/보행 시뮬레이션 자동 실행 + 결과 3D 오버레이</div></div></div>
+      <div class="feat"><div class="feat-icon">✅</div><div class="feat-body"><div class="feat-name">도시↔건물 연계 분석</div><div class="feat-desc">도시 맥락(용도지역, 접근성, 열섬) 위에 건물 성능(에너지, 일조) 통합 대시보드</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: Two Programs Architecture -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--v);border-color:rgba(167,139,250,.3)">02</span>
+    <h2 class="sec-t">2개 프로그램 아키텍처</h2>
+  </div>
+
+  <div class="arch">
+    <div class="arch-t">시스템 구조도</div>
+    <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                   공유 데이터 허브 (Shared Core)              │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────────────┐ │
+│  │ PostGIS  │  │IFC Store │  │ GeoJSON  │  │ Simulation  │ │
+│  │(도시 DB) │  │(건물 DB) │  │  Cache   │  │  Results DB │ │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └──────┬──────┘ │
+│       └──────────────┼───────────┼────────────────┘        │
+│              <span style="color:var(--g)">Python FastAPI 백엔드</span>                          │
+│       (IfcOpenShell + GeoPandas + 시뮬레이션 래퍼)           │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ REST API / WebSocket
+          ┌────────────┴────────────┐
+          ▼                         ▼
+┌──────────────────┐    ┌──────────────────┐
+│ <span style="color:var(--b)">Program A: URBAN</span>  │    │ <span style="color:var(--v)">Program B: ARCHI</span>  │
+│  도시 스케일 뷰어  │    │  건축물 스케일 뷰어 │
+│                  │    │                  │
+│ • deck.gl 맵     │    │ • web-ifc 3D     │
+│ • 행정구역 입력   │    │ • IFC 파일 로드   │
+│ • 데이터 레이어   │    │ • BIM 속성 탐색   │
+│ • 도시 시뮬레이션 │    │ • 환경 시뮬레이션 │
+│ • 접근성 분석    │    │ • 에너지 분석     │
+│                  │    │                  │
+│ React + deck.gl  │    │ React + Three.js │
+│ + Mapbox GL      │    │ + web-ifc-viewer │
+└────────┬─────────┘    └────────┬─────────┘
+         │                       │
+         └───────────┬───────────┘
+                     ▼
+          ┌──────────────────┐
+          │  <span style="color:var(--o)">Export Bridges</span>   │
+          │                  │
+          │ → Grasshopper    │
+          │   (GH JSON/CSV)  │
+          │ → Unity XR       │
+          │   (glTF/3DTiles) │
+          │ → Revit/Dynamo   │
+          │   (IFC roundtrip)│
+          └──────────────────┘</pre>
+  </div>
+</div>
+
+<!-- Section 3: Program A - Urban Scale -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--b);border-color:rgba(56,189,248,.3)">A</span>
+    <h2 class="sec-t">Program A: 도시 스케일 (URBAN)</h2>
+  </div>
+
+  <div class="scale-card" style="border-top:3px solid var(--b)">
+    <h3><span style="color:var(--b)">🌆</span> 기능 목록 &amp; 구현 난이도</h3>
+    <div class="scale-sub">주요 기능 = 데이터 시각화 + 레이어 + 도시 시뮬레이션</div>
+
+    <div class="feat"><div class="feat-icon">🗺️</div><div class="feat-body">
+      <div class="feat-name">인터랙티브 맵 + 데이터 레이어 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">행정구역/필지/용도지역/건물노후도 등을 토글 가능한 레이어로 표현. 코로플렛, 히트맵, 3D 익스트루전.</div>
+      <div class="feat-tools"><span class="ft">deck.gl</span><span class="ft">Mapbox GL JS</span><span class="ft">React</span><span class="ft">GeoJSON</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-body">
+      <div class="feat-name">도시 데이터 대시보드 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">선택 영역의 인구·건물·토지·환경 지표를 차트/그래프로 실시간 표시. 영역 간 비교.</div>
+      <div class="feat-tools"><span class="ft">Recharts</span><span class="ft">D3.js</span><span class="ft">pandas 집계</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🚶</div><div class="feat-body">
+      <div class="feat-name">15분도시 접근성 (등시선) <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">선택 지점에서 5/10/15분 도보 등시선 생성 + 6대 기능 접근성 점수. Valhalla 오픈소스 라우팅 엔진.</div>
+      <div class="feat-tools"><span class="ft">Valhalla</span><span class="ft">OSRM</span><span class="ft">OSM 네트워크</span><span class="ft">GTFS</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🌡️</div><div class="feat-body">
+      <div class="feat-name">NDVI/열섬 위성 분석 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">Sentinel-2 다중밴드 → NDVI/NDBI/UI 지수 산출 → 시계열 변화 감지. 래스터 오버레이.</div>
+      <div class="feat-tools"><span class="ft">rasterio</span><span class="ft">Sentinel Hub</span><span class="ft">TorchGeo</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🚗</div><div class="feat-body">
+      <div class="feat-name">교통 흐름 시뮬레이션 <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">SUMO 미시교통 시뮬레이션을 백엔드에서 실행, 결과를 deck.gl TripsLayer로 애니메이션.</div>
+      <div class="feat-tools"><span class="ft">SUMO</span><span class="ft">TraCI API</span><span class="ft">deck.gl TripsLayer</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">👥</div><div class="feat-body">
+      <div class="feat-name">보행 에이전트 시뮬레이션 <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">Mesa/JuPedSim으로 보행자 동선 시뮬레이션. 공간구문론 통합도 기반 보행 예측.</div>
+      <div class="feat-tools"><span class="ft">Mesa 3</span><span class="ft">JuPedSim</span><span class="ft">OSMnx</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🏗️</div><div class="feat-body">
+      <div class="feat-name">IFC ↔ 도시 맥락 연결 <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">건물 IFC 모델을 도시 맵 위 정확한 위치에 배치. IFC의 IfcSite 좌표 → WGS84 변환.</div>
+      <div class="feat-tools"><span class="ft">IfcOpenShell</span><span class="ft">pyproj</span><span class="ft">CesiumJS</span></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- Section 4: Program B - Building Scale -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--v);border-color:rgba(167,139,250,.3)">B</span>
+    <h2 class="sec-t">Program B: 건축물 스케일 (ARCHI)</h2>
+  </div>
+
+  <div class="scale-card" style="border-top:3px solid var(--v)">
+    <h3><span style="color:var(--v)">🏠</span> 기능 목록 &amp; 구현 난이도</h3>
+    <div class="scale-sub">주요 기능 = IFC 뷰어 + BIM 속성 분석 + 환경 시뮬레이션</div>
+
+    <div class="feat"><div class="feat-icon">📦</div><div class="feat-body">
+      <div class="feat-name">IFC 3D 뷰어 + 속성 탐색 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">IFC 파일 로드 → 3D 렌더링 + 요소 선택 → 속성/Pset 표시. 분해구조 트리 탐색.</div>
+      <div class="feat-tools"><span class="ft">web-ifc</span><span class="ft">@thatopen/components</span><span class="ft">Three.js</span><span class="ft">IfcOpenShell(백엔드)</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">☀️</div><div class="feat-body">
+      <div class="feat-name">일조 시뮬레이션 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">IFC geometry + 태양 위치 → Three.js 실시간 그림자. 정밀 분석은 Radiance 백엔드 호출.</div>
+      <div class="feat-tools"><span class="ft">Three.js ShadowMap</span><span class="ft">SunCalc</span><span class="ft">Radiance(정밀)</span><span class="ft">Honeybee</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">⚡</div><div class="feat-body">
+      <div class="feat-name">에너지 성능 시뮬레이션 <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">IFC → EnergyPlus IDF 자동 변환 → 연간 에너지 소비 시뮬레이션. 결과를 실별 히트맵으로 표시.</div>
+      <div class="feat-tools"><span class="ft">EnergyPlus</span><span class="ft">eppy(Python)</span><span class="ft">IFC→IDF 변환기</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">💨</div><div class="feat-body">
+      <div class="feat-name">CFD 풍환경 시뮬레이션 <span class="diff diff-extreme">매우 어려움</span></div>
+      <div class="feat-desc">IFC geometry → OpenFOAM 메시 → steady-RANS 풍속장 계산. 결과 파티클/벡터필드 3D 렌더링.</div>
+      <div class="feat-tools"><span class="ft">OpenFOAM</span><span class="ft">snappyHexMesh</span><span class="ft">ParaView</span><span class="ft">vtk.js</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🚶</div><div class="feat-body">
+      <div class="feat-name">실내 보행 시뮬레이션 <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">IFC의 IfcSpace → 보행 가능 영역 추출 → Social Force Model 시뮬레이션. 피난 경로 분석.</div>
+      <div class="feat-tools"><span class="ft">JuPedSim</span><span class="ft">Vadere</span><span class="ft">IfcOpenShell 공간추출</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">📋</div><div class="feat-body">
+      <div class="feat-name">법규 자동 검토 (건폐율/용적률/높이) <span class="diff diff-hard">어려움</span></div>
+      <div class="feat-desc">IFC 모델에서 면적·높이 자동 산출 → 도시 스케일 용도지역 법규와 대조 → 적합/부적합 표시.</div>
+      <div class="feat-tools"><span class="ft">IfcOpenShell</span><span class="ft">지식그래프(OWL)</span><span class="ft">SPARQL 쿼리</span></div>
+    </div></div>
+
+    <div class="feat"><div class="feat-icon">🔄</div><div class="feat-body">
+      <div class="feat-name">IFC 읽기/쓰기 + 분석 결과 임베딩 <span class="diff diff-mid">중간</span></div>
+      <div class="feat-desc">시뮬레이션 결과를 IFC Pset으로 재기록. 다른 BIM 도구에서 결과를 확인 가능하게.</div>
+      <div class="feat-tools"><span class="ft">IfcOpenShell</span><span class="ft">ifcopenshell.api</span><span class="ft">IFC4 Pset 확장</span></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- Section 5: Core Technology Stack -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--g);border-color:rgba(0,232,150,.3)">03</span>
+    <h2 class="sec-t">핵심 기술 스택 (전부 오픈소스)</h2>
+  </div>
+
+  <div class="chain">
+    <div class="chain-item" style="border-top:2px solid var(--g)">
+      <div class="chain-role">IFC 엔진</div>
+      <div class="chain-name">IfcOpenShell</div>
+      <div class="chain-desc">IFC 읽기/쓰기/geometry 변환. Python API. IFC2X3~IFC4X3. Blender Bonsai 포함.</div>
+      <div class="chain-lic"><span class="ft">LGPL</span> <span class="ft">Python/C++</span></div>
+    </div>
+    <div class="chain-item" style="border-top:2px solid var(--b)">
+      <div class="chain-role">웹 IFC 뷰어</div>
+      <div class="chain-name">That Open Engine (web-ifc)</div>
+      <div class="chain-desc">브라우저에서 IFC 직접 파싱 + Three.js 렌더링. @thatopen/components로 UI 구성.</div>
+      <div class="chain-lic"><span class="ft">AGPL</span> <span class="ft">TypeScript</span></div>
+    </div>
+    <div class="chain-item" style="border-top:2px solid var(--v)">
+      <div class="chain-role">에너지 시뮬레이션</div>
+      <div class="chain-name">EnergyPlus + Radiance</div>
+      <div class="chain-desc">미 DOE 에너지 시뮬레이션 표준. eppy(Python)로 IDF 제어. Radiance로 일조/채광.</div>
+      <div class="chain-lic"><span class="ft">BSD</span> <span class="ft">C++/Python래퍼</span></div>
+    </div>
+    <div class="chain-item" style="border-top:2px solid var(--o)">
+      <div class="chain-role">풍환경 CFD</div>
+      <div class="chain-name">OpenFOAM</div>
+      <div class="chain-desc">오픈소스 CFD. IFC→STL→snappyHexMesh→simpleFoam. 결과를 VTK로 내보내기.</div>
+      <div class="chain-lic"><span class="ft">GPL</span> <span class="ft">C++</span></div>
+    </div>
+    <div class="chain-item" style="border-top:2px solid var(--p)">
+      <div class="chain-role">교통 시뮬레이션</div>
+      <div class="chain-name">SUMO + MATSim</div>
+      <div class="chain-desc">미시/거시 교통. TraCI Python API로 제어. OSM → 네트워크 자동 생성.</div>
+      <div class="chain-lic"><span class="ft">EPL/GPL</span> <span class="ft">Java/C++</span></div>
+    </div>
+    <div class="chain-item" style="border-top:2px solid var(--tl)">
+      <div class="chain-role">보행 시뮬레이션</div>
+      <div class="chain-name">JuPedSim + Mesa</div>
+      <div class="chain-desc">Social Force 기반 보행 시뮬레이션. Python API. Mesa는 범용 ABM 프레임워크.</div>
+      <div class="chain-lic"><span class="ft">LGPL/Apache</span> <span class="ft">Python/C++</span></div>
+    </div>
+  </div>
+
+  <div class="honest">
+    <div class="honest-t">🔑 핵심 인사이트: "시뮬레이션 엔진을 만드는 게 아니라, 래핑하는 것"</div>
+    <p>
+      EnergyPlus, OpenFOAM, SUMO 등은 이미 <strong>수십 년간 검증된 엔진</strong>입니다.
+      알렉산더가 만들어야 할 것은 이 엔진들이 아니라, <strong>IFC/도시데이터 → 시뮬레이션 입력 자동 변환 → 결과 3D 시각화</strong>라는 "접착제(glue)" 레이어입니다.
+      이것이 현실적이면서도 매우 가치 있는 작업입니다.
+    </p>
+  </div>
+</div>
+
+<!-- Section 6: IFC Deep Dive -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--tl);border-color:rgba(34,211,238,.3)">04</span>
+    <h2 class="sec-t">IFC 기반 워크플로우: 구체적으로 어떻게?</h2>
+  </div>
+
+  <div class="arch">
+    <div class="arch-t">IFC 데이터 흐름</div>
+    <pre>
+<span style="color:var(--t3)">[ Revit / ArchiCAD / Bonsai(Blender) ]</span>
+              │ .ifc 파일 내보내기
+              ▼
+<span style="color:var(--g)">┌─── IfcOpenShell (Python 백엔드) ───┐</span>
+│                                    │
+│  1. 파싱: model = ifcopenshell.open("building.ifc")
+│  2. 추출: walls = model.by_type("IfcWall")
+│  3. 속성: psets = ifcopenshell.util.element.get_psets(wall)
+│  4. 면적: area = ifcopenshell.util.element.get_container(space)
+│  5. 좌표: site_coords = get_site_address(model)
+│                                    │
+│  ┌───────────┐  ┌───────────────┐  │
+│  │ geometry → │  │ properties →  │  │
+│  │ glTF/OBJ   │  │ JSON/DB 저장  │  │
+│  └─────┬─────┘  └───────┬───────┘  │
+└────────┼────────────────┼──────────┘
+         │                │
+         ▼                ▼
+<span style="color:var(--b)">┌── web-ifc ──┐</span>   <span style="color:var(--v)">┌── 시뮬레이션 변환 ──┐</span>
+│ 브라우저 3D  │   │ IFC → EnergyPlus  │
+│ Three.js    │   │ IFC → OpenFOAM    │
+│ 요소 선택   │   │ IFC → JuPedSim    │
+│ 속성 표시   │   │ 결과 → IFC Pset   │
+└─────────────┘   └──────────────────┘</pre>
+  </div>
+
+  <div class="honest">
+    <div class="honest-t">IFC → 시뮬레이션 변환의 현실적 난이도</div>
+    <p>
+      <strong>IFC → EnergyPlus</strong>: 가장 성숙한 경로. <strong>Space Boundary</strong>(IfcRelSpaceBoundary)를 이용하여 열구역을 자동 추출하는 연구가 많음. 단, 실무 IFC에서 Space Boundary가 누락되는 경우가 빈번하여 <strong>geometry 기반 자동 생성이 추가로 필요</strong>합니다.<br><br>
+      <strong>IFC → OpenFOAM</strong>: IFC geometry를 STL로 변환 (IfcConvert)한 후 snappyHexMesh로 메시 생성. 이 경로는 비교적 직선적이지만, <strong>CFD 메시 품질 보장이 어려워</strong> 수동 조정이 자주 필요합니다.<br><br>
+      <strong>IFC → 보행 시뮬레이션</strong>: IfcSpace에서 보행 가능 영역을 추출해야 하는데, IFC 모델의 <strong>IfcSpace 정의 품질에 크게 의존</strong>합니다. 잘 만들어진 모델에서만 자동화 가능.
+    </p>
+  </div>
+</div>
+
+<!-- Section 7: Realistic Timeline -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--o);border-color:rgba(245,158,11,.3)">05</span>
+    <h2 class="sec-t">현실적 개발 로드맵 (1인 개발자 기준)</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item active">
+      <div class="tl-phase">PHASE 1 — MVP</div>
+      <div class="tl-title">도시 데이터 뷰어 + IFC 뷰어 (분리)</div>
+      <div class="tl-desc">Program A: 지도 + 데이터 레이어 + 대시보드. Program B: IFC 로드 + 3D 탐색 + 속성 조회. 시뮬레이션은 아직 없음. 데이터 파이프라인 확립.</div>
+      <div class="tl-time">⏱ 2~3개월</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">PHASE 2 — 접근성 + 일조</div>
+      <div class="tl-title">15분도시 등시선 + Three.js 일조 시뮬레이션</div>
+      <div class="tl-desc">Program A에 Valhalla 등시선 추가. Program B에 실시간 일조 시뮬레이션(SunCalc + Shadow). 두 프로그램 간 좌표 연동 (IFC 건물을 도시 맵 위에 표시).</div>
+      <div class="tl-time">⏱ 2~3개월</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">PHASE 3 — 에너지 + 교통</div>
+      <div class="tl-title">EnergyPlus 연동 + SUMO 교통 시뮬레이션</div>
+      <div class="tl-desc">IFC → EnergyPlus 자동 변환 파이프라인. SUMO 교통 시뮬레이션 결과를 deck.gl TripsLayer로 표현. 법규 자동 검토 (건폐율/용적률).</div>
+      <div class="tl-time">⏱ 3~4개월</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">PHASE 4 — 고급 시뮬레이션</div>
+      <div class="tl-title">CFD 풍환경 + 보행 시뮬레이션 + 지식그래프</div>
+      <div class="tl-desc">OpenFOAM CFD 풍환경 (가장 어려움). JuPedSim 보행. OWL 온톨로지 기반 법규 추론. 위성 변화감지. GNN 예측 모델.</div>
+      <div class="tl-time">⏱ 4~6개월</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-phase">PHASE 5 — 통합 + XR</div>
+      <div class="tl-title">Grasshopper/Unity/Dynamo 연계</div>
+      <div class="tl-desc">분석 결과 → Grasshopper 파라메트릭 설계. Unity XR 몰입형 체험. IFC roundtrip (결과를 IFC Pset으로 재기록).</div>
+      <div class="tl-time">⏱ 3~4개월</div>
+    </div>
+  </div>
+
+  <div class="verdict warn" style="margin-top:16px">
+    <div class="verdict-label">총 예상: 14~20개월 (1인 기준, 풀타임)</div>
+    <p>
+      하지만 <strong>Phase 1만 완성해도</strong> 이미 한국에 없는 도구입니다.
+      "도시 데이터를 인터랙티브 맵으로 보면서 IFC 건물 모델을 동시에 탐색"하는 플랫폼은
+      <span class="em-g">현재 존재하지 않기 때문</span>입니다.
+      <strong>MVP부터 빠르게 만들고, 실제 프로젝트에 써보면서 확장</strong>하는 것이 핵심 전략입니다.
+    </p>
+  </div>
+</div>
+
+<!-- Final Recommendation -->
+<div class="sec">
+  <div class="sec-h">
+    <span class="sec-n" style="color:var(--g);border-color:rgba(0,232,150,.3)">06</span>
+    <h2 class="sec-t">최종 권고</h2>
+  </div>
+
+  <div class="verdict yes">
+    <div class="verdict-label">한 줄 요약</div>
+    <p>
+      <strong>가능합니다.</strong> 단, "BIM 프로그램"이 아닌 <span class="em-g">"IFC 기반 도시-건축 통합 분석 플랫폼"</span>으로 정의하세요.
+      모델링은 Revit/Rhino/Bonsai에 맡기고, 알렉산더의 플랫폼은
+      <span class="em-b">"데이터 → 분석 → 시뮬레이션 → 시각화 → 의사결정"</span> 파이프라인에 집중하세요.
+      이것이 시장에 없는 것이고, 알렉산더의 기술 스택(Rhino/GH + Revit/Dynamo + Unity + Python/ML)에 완벽히 부합하는 영역입니다.
+    </p>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

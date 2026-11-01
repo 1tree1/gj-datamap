@@ -1,0 +1,93 @@
+{
+  "source": "도시재생전략계획 인쇄32~34,63쪽; 도시기본계획350,412쪽",
+  "population": [
+    {
+      "area": "경주시",
+      "year_2000": 275132,
+      "year_2020": 253502,
+      "change": -21630,
+      "percent": -7.86
+    },
+    {
+      "area": "중부동",
+      "year_2000": 7719,
+      "year_2020": 5308,
+      "change": -2411,
+      "percent": -31.23
+    },
+    {
+      "area": "성건동",
+      "year_2000": 21987,
+      "year_2020": 14047,
+      "change": -7940,
+      "percent": -36.11
+    },
+    {
+      "area": "황오동",
+      "year_2000": 12623,
+      "year_2020": 6567,
+      "change": -6056,
+      "percent": -47.98
+    },
+    {
+      "area": "황남동",
+      "year_2000": 11157,
+      "year_2020": 4779,
+      "change": -6378,
+      "percent": -57.17
+    },
+    {
+      "area": "현곡면",
+      "year_2000": 10456,
+      "year_2020": 21947,
+      "change": 11491,
+      "percent": 109.9
+    },
+    {
+      "area": "용강동",
+      "year_2000": 14242,
+      "year_2020": 22521,
+      "change": 8279,
+      "percent": 58.13
+    },
+    {
+      "area": "안강읍",
+      "year_2000": 34928,
+      "year_2020": 25017,
+      "change": -9911,
+      "percent": -28.38
+    },
+    {
+      "area": "건천읍",
+      "year_2000": 11375,
+      "year_2020": 9502,
+      "change": -1873,
+      "percent": -16.47
+    },
+    {
+      "area": "감포읍",
+      "year_2000": 8226,
+      "year_2020": 5501,
+      "change": -2725,
+      "percent": -33.13
+    },
+    {
+      "area": "외동읍",
+      "year_2000": 18688,
+      "year_2020": 20431,
+      "change": 1743,
+      "percent": 9.33
+    }
+  ],
+  "other": {
+    "birth_change_2015_2019": -631,
+    "natural_change_2019": -1036,
+    "age15_64_change_2015_2019": -8187,
+    "age65plus_change": 7305,
+    "business_change_2015_2019": 2536,
+    "workers_change_2015_2019": 7535,
+    "manufacturing_workers_change": -1551,
+    "unbuilt_park_area_percent": 72.84695556774548,
+    "farm_population_change_2000_2013": -14947
+  }
+}

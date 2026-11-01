@@ -1,0 +1,9 @@
+﻿area_id,area,area_ha,life_stores_2606,tour_stores_2606,life_share_pct,life_chg_13mo,tour_chg_13mo,stores_per_ha,fac_public,fac_finance,fac_medical,fac_school,fac_bigretail,fac_culture,fac_lodging
+A_hwango_grid32,황오동 원도심(격자32),32.0,137,49,73.7,4,1,5.8,4,5,64,0,0,1,39
+B_haengbok_hwangchon_digitized,행복황촌(근사),16.45,15,29,34.1,0,7,2.7,1,0,1,0,0,0,1
+C_zone_buffer300,구역+300m,106.7,185,112,62.3,6,14,2.8,9,5,72,0,0,2,49
+D_zone,구역,15.9,1,2,33.3,0,0,0.2,0,0,0,0,0,0,0
+E_center_r300,구역중심 300m,28.3,67,19,77.9,1,2,3.0,3,2,44,0,0,0,4
+F_cityhall_r500,동천동 시청 500m,78.5,169,46,78.6,10,-3,2.7,9,4,11,2,1,1,13
+G_seongdong_market_r200,성동시장 200m,12.6,72,10,87.8,0,1,6.5,4,3,51,0,0,0,6
+H_hwangridan_r300,황리단길 300m,28.3,58,82,41.4,8,-7,4.9,0,1,0,0,0,3,1

@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "items": [
+    {
+      "id": "gyeongju-baseline",
+      "title": "구경주역은 기존 문화공간과 추진 중인 계획을 기준으로 검토해야 합니다",
+      "queries": [
+        {
+          "id": "city-documents",
+          "source": {
+            "label": "경주시 공식 자료",
+            "files": [
+              {
+                "label": "2026-02-25 도시재생혁신지구 지정 및 계획수립 용역 공고"
+              },
+              {
+                "label": "2026-09-22 폐철도부지 매장유산 시굴조사 용역 공고"
+              }
+            ],
+            "links": [
+              {
+                "label": "경주문화관1918 소개",
+                "url": "https://www.gyeongju.go.kr/webzine/GJstory/vol158/html/post/2813.html"
+              }
+            ],
+            "caveats": [
+              "공고는 용역과 조사 절차의 증거이며 사업 완료나 시청 전체 이전 확정의 증거가 아닙니다."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "civic-hall",
+      "title": "아오레 나가오카는 청사와 시민활동 운영을 함께 비교할 사례입니다",
+      "queries": [
+        {
+          "id": "nagaoka",
+          "source": {
+            "label": "나가오카시",
+            "links": [
+              {
+                "label": "아오레 10년 성과",
+                "url": "https://www.city.nagaoka.niigata.jp/shisei/cate02/tayori/file/0406/t0406/02-03_aore10th.html"
+              },
+              {
+                "label": "보행량 조사",
+                "url": "https://www.city.nagaoka.niigata.jp/shisei/cate08/hokousya_tuukouryou.html"
+              }
+            ],
+            "caveats": [
+              "나가오카의 2025년도 보행량 조사 방식 변경은 장기 전후 비교에 영향을 줍니다.",
+              "사례의 시설 이용 실적은 경주의 인구 증가 효과를 입증하지 않습니다."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "mixed-use-precedents",
+      "title": "유산 재사용과 주거 혼합은 서로 다른 사례에서 추출할 수 있습니다",
+      "queries": [
+        {
+          "id": "kings-cross",
+          "source": {
+            "label": "King’s Cross 사업자",
+            "links": [
+              {
+                "label": "개발 개요",
+                "url": "https://www.kingscross.co.uk/about-the-development"
+              }
+            ],
+            "caveats": [
+              "사업자 설명이며, 런던의 개발수요를 경주로 직접 이전할 수 없습니다."
+            ]
+          }
+        },
+        {
+          "id": "kalkbreite",
+          "source": {
+            "label": "칼크브라이트 협동조합",
+            "links": [
+              {
+                "label": "사업 및 면적 개요",
+                "url": "https://www.kalkbreite.net/bauten/kalkbreite"
+              }
+            ],
+            "caveats": [
+              "스위스 면적 정의와 주거제도는 한국과 다르므로 원자료 정의를 유지해야 합니다."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "data-and-observation",
+      "title": "방문자 데이터와 공공공간 관찰은 정의를 구분해야 합니다",
+      "queries": [
+        {
+          "id": "tourism",
+          "source": {
+            "label": "한국관광공사",
+            "links": [
+              {
+                "label": "데이터 설명",
+                "url": "https://datalab.visitkorea.or.kr/datalab/portal/getMetaInfoList.do"
+              }
+            ],
+            "caveats": [
+              "이동통신 기반 방문자는 추정치이고 정확한 방문 목적을 알 수 없습니다."
+            ]
+          }
+        },
+        {
+          "id": "public-life",
+          "source": {
+            "label": "Gehl Institute 및 협력 도시",
+            "links": [
+              {
+                "label": "Public Life Data Protocol",
+                "url": "https://github.com/gehl-institute/pldp"
+              }
+            ],
+            "caveats": [
+              "본문의 조사 지점 수와 일정은 이 과제를 위한 제안이며 프로토콜의 의무 기준이 아닙니다."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+# gjplan 설정
+# 값은 archive/ 자료로 확정될 때마다 갱신한다. 추정치에는 반드시 tier와 확인 여부를 적는다.
+
+site:
+  name: 구 경주역 폐역 부지
+  address: 경상북도 경주시 성동동 일원 (원화로 266)
+  area_m2: 79438          # [T4, 원문 미확인] 2026.02 경주시 구상 공개
+  crs: EPSG:5187          # Korea 2000 동부원점 — 처리본 전량 통일
+  boundary: ../archive/C_data/processed/site.shp
+  boundary_layer: BOUNDARY
+
+scales:
+  S1: { name: SITE,     key: PNU19 }
+  S2: { name: DISTRICT, key: 집계구코드, h3_res: 8, radius_m: 1000 }
+  S3: { name: CITY,     key: 법정동코드10, h3_res: 7 }
+
+constraints:
+  layers:                 # 규제 4겹 + 2. 모두 EPSG:5187로 중첩
+    - 용도지역지구
+    - 고도보존육성지구
+    - 역사문화환경보존지역
+    - 지구단위계획_2026_01
+    - 신라왕경핵심유적특별법
+    - 세계유산완충구역
+  fixed:
+    - 등록문화유산_구역사
+  exclude_from_buildable:
+    - 매장문화재_유존지역
+    - 토양오염_정화전
+  cost_factor_inputs:
+    - 지반N값
+    - 토양오염
+    - 노반재활용가능구역
+
+generate:
+  s1_network:
+    axis_major: 1         # 종축 (선형 부지)
+    axis_cross_min: 2     # 횡축 최소
+    axis_cross_max: 5     # 횡축 최대
+    genes: [8, 14]        # 유전자 차원 범위
+  s2_blocks:
+    block_count: [8, 20]
+    aspect_ratio_max: 4.0
+  s3_plots:
+    genes: 4
+    target_distribution: 인근_원도심_실제_필지분포   # Wasserstein 거리로 f₄에 투입
+  s4_program:
+    use_candidates: 10    # D8(제안 15건 + 공고안 + 사례)에서 추출
+    density_levels: 3     # height_max 허용범위를 3단계 이산화
+
+evaluate:
+  cheap: [면적, 연면적, 사업성, 획지분포]
+  mid:   [가로망연결성, 통합도]
+  surrogate:
+    targets: [등시선접근성, 조망차단]
+    honest_samples: 500
+    model: lightgbm
+    min_r2: 0.85
+  excluded_from_loop: [ladybug_일조, ladybug_열환경]   # 최종 5개만 검증
+
+optimize:
+  algorithm: NSGA-III
+  pop: 200
+  gen: 300
+  objectives: [f1_접근성, f2_유산영향, f3_사업성, f4_조직정합, f5_공공성환경]
+  weights: null           # 가중치를 정하지 않는다
+
+phasing:
+  solver: CP-SAT          # OR-Tools. PuLP+CBC도 가능
+  phases: 4
+  constraints:
+    - 오염정화_선행
+    - 문화재조사_선굴착금지
+    - 인프라인입_순서
+    - 역사보수_1단계고정
+    - 단계별투자상한
+    - 공사중_남북횡단보행로_최소1개_상시개방
+  objectives: [NPV최대, 초기투자최소, 조기가시성과, 공사중단절최소]
+  report: 단계별_비가역성지표
+
+export:
+  formats: [dxf, xlsx, 3dm]
+  validate:
+    - 면적표합계_eq_구역총면적

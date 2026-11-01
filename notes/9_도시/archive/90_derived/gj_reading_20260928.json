@@ -1,0 +1,185 @@
+{
+ "isovists": [
+  {
+   "type": "원도심 격자 틀",
+   "x": 219119.9,
+   "y": 360820.5,
+   "area": 13900.75,
+   "open": 0.197,
+   "comp": 0.087,
+   "maxsight": 150.0,
+   "meansight": 52.85
+  },
+  {
+   "type": "성건동 격자",
+   "x": 218515.4,
+   "y": 361557.0,
+   "area": 6329.077,
+   "open": 0.09,
+   "comp": 0.052,
+   "maxsight": 150.0,
+   "meansight": 29.331
+  },
+  {
+   "type": "황오동 골목",
+   "x": 220011.0,
+   "y": 360767.0,
+   "area": 1447.677,
+   "open": 0.02,
+   "comp": 0.089,
+   "maxsight": 87.103,
+   "meansight": 14.696
+  },
+  {
+   "type": "막다른 골목",
+   "x": 220146.6,
+   "y": 360773.8,
+   "area": 95.828,
+   "open": 0.001,
+   "comp": 0.181,
+   "maxsight": 17.952,
+   "meansight": 4.064
+  },
+  {
+   "type": "대릉원 가장자리",
+   "x": 219476.2,
+   "y": 360082.8,
+   "area": 31884.921,
+   "open": 0.451,
+   "comp": 0.507,
+   "maxsight": 150.0,
+   "meansight": 73.702
+  },
+  {
+   "type": "폐선 부지 안",
+   "x": 219793.0,
+   "y": 360999.0,
+   "area": 41664.359,
+   "open": 0.589,
+   "comp": 0.223,
+   "maxsight": 150.0,
+   "meansight": 106.073
+  }
+ ],
+ "routes": [
+  {
+   "route": "화랑로 — 원도심 격자 틀",
+   "length_m": 948,
+   "mean_area": 11057,
+   "median_area": 10237,
+   "cv": 0.184,
+   "peaks": 9,
+   "peaks_per_100m": 0.95,
+   "peak_gap_median_m": 99.0,
+   "peak_gap_p75_m": 121.0
+  },
+  {
+   "route": "황오동 골목 — 세립 채움",
+   "length_m": 596,
+   "mean_area": 8620,
+   "median_area": 4938,
+   "cv": 0.859,
+   "peaks": 9,
+   "peaks_per_100m": 1.51,
+   "peak_gap_median_m": 53.0,
+   "peak_gap_p75_m": 105.5
+  },
+  {
+   "route": "부지 동쪽 가장자리 — 폐선과 황오동 사이",
+   "length_m": 638,
+   "mean_area": 5427,
+   "median_area": 5737,
+   "cv": 0.451,
+   "peaks": 16,
+   "peaks_per_100m": 2.51,
+   "peak_gap_median_m": 28.0,
+   "peak_gap_p75_m": 39.0
+  }
+ ],
+ "dijkstra": [
+  {
+   "case": "성건동 격자",
+   "nodes_explored": 2505,
+   "network_m": 752,
+   "straight_m": 605,
+   "detour": 1.24
+  },
+  {
+   "case": "황오동 세립 조직",
+   "nodes_explored": 3823,
+   "network_m": 871,
+   "straight_m": 594,
+   "detour": 1.47
+  },
+  {
+   "case": "동천동 회전 격자",
+   "nodes_explored": 3277,
+   "network_m": 796,
+   "straight_m": 604,
+   "detour": 1.32
+  },
+  {
+   "case": "폐선 부지 가로지르기",
+   "nodes_explored": 12340,
+   "network_m": 1531,
+   "straight_m": 601,
+   "detour": 2.55
+  }
+ ],
+ "frame_lines_at_site": [
+  {
+   "y_5187": 360511,
+   "street_len_west_m": 219,
+   "street_len_east_m": 72,
+   "len_inside_zone_m": 0
+  },
+  {
+   "y_5187": 360659,
+   "street_len_west_m": 345,
+   "street_len_east_m": 108,
+   "len_inside_zone_m": 125
+  },
+  {
+   "y_5187": 360806,
+   "street_len_west_m": 326,
+   "street_len_east_m": 75,
+   "len_inside_zone_m": 272
+  },
+  {
+   "y_5187": 360954,
+   "street_len_west_m": 215,
+   "street_len_east_m": 61,
+   "len_inside_zone_m": 265
+  },
+  {
+   "y_5187": 361101,
+   "street_len_west_m": 378,
+   "street_len_east_m": 24,
+   "len_inside_zone_m": 245
+  },
+  {
+   "y_5187": 361249,
+   "street_len_west_m": 344,
+   "street_len_east_m": 12,
+   "len_inside_zone_m": 79
+  },
+  {
+   "y_5187": 361396,
+   "street_len_west_m": 224,
+   "street_len_east_m": 0,
+   "len_inside_zone_m": 40
+  }
+ ],
+ "stack": {
+  "extent_km": [
+   3.48,
+   3.28
+  ],
+  "dem_p2_p99_m": [
+   27.8,
+   120.0
+  ],
+  "closed_contour_rings": 67,
+  "rings_in_heritage": 60
+ }
+}

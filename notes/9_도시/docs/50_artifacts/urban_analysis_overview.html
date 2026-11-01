@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URBANIS 도시 분석 기법 총람</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f19;
+  --card: #111827;
+  --card-hover: #1a2332;
+  --border: #1e293b;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --cyan: #06d6f2;
+  --magenta: #e040fb;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'Noto Sans KR',sans-serif; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+.container { max-width:1200px; margin:0 auto; padding:40px 20px 80px; }
+
+h1 {
+  font-size:28px; font-weight:900; text-align:center;
+  background:linear-gradient(135deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  margin-bottom:6px;
+}
+.subtitle { text-align:center; color:var(--text3); font-size:13px; margin-bottom:32px; font-family:'JetBrains Mono',monospace; }
+
+/* Pipeline */
+.pipeline {
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  margin-bottom:36px; flex-wrap:wrap;
+}
+.pipe-step {
+  padding:6px 14px; border-radius:20px; font-size:11px; font-weight:500;
+  border:1px solid var(--border); color:var(--text2); cursor:pointer;
+  transition:all .2s;
+}
+.pipe-step:hover, .pipe-step.active { border-color:var(--cyan); color:var(--cyan); background:rgba(6,214,242,.08); }
+.pipe-arrow { color:var(--text3); font-size:12px; }
+
+/* Filter tabs */
+.filters {
+  display:flex; gap:6px; margin-bottom:24px; flex-wrap:wrap; justify-content:center;
+}
+.filter-btn {
+  padding:5px 12px; border-radius:16px; font-size:11px;
+  border:1px solid var(--border); background:transparent; color:var(--text3);
+  cursor:pointer; transition:all .2s; font-family:inherit;
+}
+.filter-btn:hover { border-color:var(--text2); color:var(--text2); }
+.filter-btn.active { border-color:var(--cyan); color:var(--cyan); background:rgba(6,214,242,.08); }
+
+/* Cards grid */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(350px,1fr)); gap:14px; }
+
+.card {
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:18px; cursor:pointer; transition:all .25s;
+  position:relative; overflow:hidden;
+}
+.card:hover { border-color:rgba(6,214,242,.4); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.3); }
+.card.expanded { grid-column:1/-1; }
+
+.card-top { display:flex; align-items:flex-start; gap:12px; margin-bottom:10px; }
+.card-rank {
+  min-width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+  flex-shrink:0;
+}
+.card-title-area { flex:1; }
+.card-title { font-size:14px; font-weight:700; margin-bottom:3px; line-height:1.3; }
+.card-title-en { font-size:10px; color:var(--text3); font-family:'JetBrains Mono',monospace; }
+
+.card-badges { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:10px; }
+.badge {
+  font-size:9px; padding:2px 7px; border-radius:10px;
+  font-family:'JetBrains Mono',monospace;
+}
+
+.card-desc { font-size:12px; color:var(--text2); line-height:1.65; margin-bottom:12px; }
+.card-desc strong { color:var(--text); font-weight:500; }
+
+/* Evidence bar */
+.evidence { margin-bottom:10px; }
+.evidence-label { font-size:9px; color:var(--text3); margin-bottom:3px; font-family:'JetBrains Mono',monospace; letter-spacing:.5px; }
+.evidence-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.evidence-fill { height:100%; border-radius:2px; transition:width .5s ease; }
+
+/* Tools */
+.tools { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:10px; }
+.tool {
+  font-size:9px; padding:2px 7px; border-radius:4px;
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  color:var(--text3); font-family:'JetBrains Mono',monospace;
+}
+
+/* Detail section (hidden by default) */
+.card-detail { display:none; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+.card.expanded .card-detail { display:block; }
+
+.detail-section { margin-bottom:10px; }
+.detail-title { font-size:10px; font-weight:600; color:var(--cyan); margin-bottom:4px; text-transform:uppercase; letter-spacing:.5px; }
+.detail-text { font-size:11px; color:var(--text2); line-height:1.6; }
+.detail-text strong { color:var(--text); }
+
+.daegu-tag {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 8px; border-radius:6px; font-size:10px;
+  background:rgba(224,64,251,.1); border:1px solid rgba(224,64,251,.25); color:var(--magenta);
+  margin-top:6px;
+}
+
+/* Connection indicator */
+.connections { display:flex; gap:4px; flex-wrap:wrap; margin-top:8px; }
+.conn {
+  font-size:9px; padding:1px 6px; border-radius:8px;
+  background:rgba(6,214,242,.06); border:1px solid rgba(6,214,242,.15);
+  color:var(--cyan); font-family:'JetBrains Mono',monospace;
+}
+
+/* click hint */
+.click-hint {
+  position:absolute; top:12px; right:12px; font-size:9px; color:var(--text3);
+  opacity:0; transition:opacity .2s;
+}
+.card:hover .click-hint { opacity:1; }
+
+/* Category colors */
+.cat-spatial .card-rank { background:rgba(59,130,246,.15); color:var(--blue); }
+.cat-ai .card-rank { background:rgba(224,64,251,.15); color:var(--magenta); }
+.cat-env .card-rank { background:rgba(34,197,94,.15); color:var(--green); }
+.cat-social .card-rank { background:rgba(245,158,11,.15); color:var(--amber); }
+.cat-infra .card-rank { background:rgba(6,214,242,.15); color:var(--cyan); }
+
+@media(max-width:600px) {
+  .grid { grid-template-columns:1fr; }
+  h1 { font-size:22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>URBANIS 도시 분석 기법 총람</h1>
+  <p class="subtitle">14 Techniques · Ordered by Evidence &amp; Implementation Maturity</p>
+
+  <!-- Data Pipeline Flow -->
+  <div class="pipeline">
+    <span class="pipe-step active">데이터 수집</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">공간 분석</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">AI 해석</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">시뮬레이션</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">가치 도출</span><span class="pipe-arrow">→</span>
+    <span class="pipe-step">시각화</span>
+  </div>
+
+  <!-- Category Filters -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterCards('all')">전체 (14)</button>
+    <button class="filter-btn" onclick="filterCards('spatial')">🗺 공간분석</button>
+    <button class="filter-btn" onclick="filterCards('ai')">🤖 AI/생성</button>
+    <button class="filter-btn" onclick="filterCards('env')">🌿 환경/기후</button>
+    <button class="filter-btn" onclick="filterCards('social')">👥 사회/형평</button>
+    <button class="filter-btn" onclick="filterCards('infra')">⚡ 인프라</button>
+  </div>
+
+  <!-- Cards -->
+  <div class="grid" id="grid">
+
+    <!-- 1. Space Syntax -->
+    <div class="card cat-spatial" data-cat="spatial" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">01</div>
+        <div class="card-title-area">
+          <div class="card-title">공간구문론</div>
+          <div class="card-title-en">Space Syntax &amp; Spatial Network Analysis</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(59,130,246,.15);color:var(--blue)">40년+ 이론</span>
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">근거 최다</span>
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">대구 사례 有</span>
+      </div>
+      <div class="card-desc">
+        도로 네트워크의 <strong>위상적 연결성</strong>으로 보행·차량 흐름을 예측. <strong>통합도</strong>(Integration)는 중심성, <strong>선택도</strong>(Choice)는 통과량 예측. VGA로 시각적 개방감 분석.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:95%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">depthmapX</span><span class="tool">sDNA</span><span class="tool">OSMnx</span><span class="tool">QGIS SST</span><span class="tool">NetworkX</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 원리</div>
+          <div class="detail-text">Hillier &amp; Hanson (1984) 이래 가장 검증된 도시공간 이론. <strong>NAIN/NACH</strong> 정규화 지표로 도시 간 비교 가능. sDNA는 800m/1km 다중 반경 분석 지원, Rhino 플러그인도 제공.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">최신 트렌드 (2023-25)</div>
+          <div class="detail-text"><strong>GNN + Space Syntax</strong> 결합 — 그래프 오토인코더로 도시 형태 임베딩 학습 (De Sabbata 2024). CNN + GIS 지표 융합 보행편의성 지수 (GeoJournal 2025).</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: 약령시장 Angular Segment 분석 (Jeong 2013), Gohaud 2025 다중스케일 연구</div>
+        <div class="connections">
+          <span class="conn">→ #4 GNN</span><span class="conn">→ #7 15분도시</span><span class="conn">→ #11 에이전트</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Urban Morphology -->
+    <div class="card cat-spatial" data-cat="spatial" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">02</div>
+        <div class="card-title-area">
+          <div class="card-title">전산 도시 형태학</div>
+          <div class="card-title-en">Computational Urban Morphology</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(59,130,246,.15);color:var(--blue)">형태학적 테셀레이션</span>
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">대구 사례 有</span>
+      </div>
+      <div class="card-desc">
+        건물 풋프린트에서 <strong>Voronoi 테셀레이션</strong>으로 공간단위를 생성하고, 밀도·형태·연결성 등 <strong>300+개 형태 지표</strong>를 측정하여 도시 유형을 분류.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:88%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">momepy</span><span class="tool">OSMnx</span><span class="tool">PySAL</span><span class="tool">GeoPandas</span><span class="tool">scikit-learn</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 원리</div>
+          <div class="detail-text"><strong>momepy</strong>로 건물 발자국 → 형태학적 테셀레이션 생성 → GMM/Ward 클러스터링으로 도시조직 유형화. Fleischmann (2022) 프라하에서 10개 유형 식별. <strong>프랙탈 분석</strong>으로 도로망 자기유사성 진단.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">최신 트렌드</div>
+          <div class="detail-text">영국 전역 <strong>Spatial Signatures</strong> 분류 (Fleischmann &amp; Arribas-Bel), 3D 형태학 (네덜란드 LOD2), CNN+위성영상 자동 식별, <strong>Heterogeneous GNN</strong>으로 건물·도로·필지 통합 그래프 학습 (NUS 2026).</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: Gohaud 2025 — 9개 도시조직 유형, 16개 재생뉴딜사업지 분석, 고밀 재개발의 도시경관 파편화 발견</div>
+        <div class="connections">
+          <span class="conn">→ #5 생성AI</span><span class="conn">→ #1 공간구문론</span><span class="conn">→ #8 변화감지</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. CV Urban Perception -->
+    <div class="card cat-ai" data-cat="ai" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">03</div>
+        <div class="card-title-area">
+          <div class="card-title">컴퓨터비전 도시 지각 분석</div>
+          <div class="card-title-en">CV-based Urban Perception &amp; Sentiment</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">딥러닝</span>
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">한국 사례 다수</span>
+      </div>
+      <div class="card-desc">
+        스트리트뷰 이미지를 <strong>시맨틱 세그멘테이션</strong>(PSPNet, DeepLab V3+)으로 분석하여 <strong>녹시율(GVI)</strong>, 안전감, 활기 등 인간 지각을 정량화. SNS 감성 분석과 결합.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:85%;background:linear-gradient(90deg,var(--magenta),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">DeepLab V3+</span><span class="tool">PSPNet</span><span class="tool">KoBERT</span><span class="tool">Treepedia</span><span class="tool">QGIS GVI</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 원리</div>
+          <div class="detail-text">MIT <strong>Place Pulse 2.0</strong> — 11만장, 117만 비교 데이터로 6개 지각 차원 학습. <strong>GVI</strong> = 보행자 시야 내 녹색 비율. 한국은 <strong>네이버 지도</strong>가 주요 소스 (Google 제한).</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">최신 트렌드</div>
+          <div class="detail-text">서울 <strong>Swin Transformer</strong> 기반 노후도 예측 (2025), <strong>BERT + CV 융합</strong> 감성지도 (Frontiers 2025), GPT-4V 도시 매력도 평가 (geo-hallucination 주의), 시공간 대조학습 (arXiv 2025).</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: 네이버 스트리트뷰 + DeepLab V3+로 녹시율/스카이뷰 측정 가능, 재개발 전후 비교 활용</div>
+        <div class="connections">
+          <span class="conn">→ #6 뉴로심볼릭</span><span class="conn">→ #12 공간정의</span><span class="conn">→ #14 파이프라인</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. GNN -->
+    <div class="card cat-ai" data-cat="ai" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">04</div>
+        <div class="card-title-area">
+          <div class="card-title">그래프 신경망 도시 시스템</div>
+          <div class="card-title-en">GNN for Urban Planning &amp; Traffic</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">Nature 게재</span>
+        <span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">RL + GNN</span>
+      </div>
+      <div class="card-desc">
+        도시를 <strong>노드(교차로/건물)·엣지(도로)</strong> 그래프로 변환, GNN으로 학습. 칭화대 연구: GNN+강화학습이 <strong>인간 플래너 8명보다 우수한 도시배치</strong> 생성.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:82%;background:linear-gradient(90deg,var(--purple),var(--magenta))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">PyTorch Geometric</span><span class="tool">DGL</span><span class="tool">Stable Baselines3</span><span class="tool">OSMnx→그래프</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 원리</div>
+          <div class="detail-text"><strong>Zheng et al. 2023 (Nature Computational Science)</strong>: 도시계획을 순차적 MDP로 정의, GCN 상태 인코더 + 2개 정책 네트워크(토지이용 배치 + 도로 계획). 접근성·생태·교통 지표에서 인간 초과.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">교통 예측 적용</div>
+          <div class="detail-text"><strong>T-GCN, STGCN, DCRNN, Graph WaveNet</strong> — 시공간 그래프 컨볼루션으로 교통량 예측. 2024 GFAGNN은 적응형 인접행렬로 동적 그래프 구성. <strong>실시간 센서 데이터와 통합 가능</strong>.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #1 공간구문론</span><span class="conn">→ #5 생성AI</span><span class="conn">→ #11 시뮬레이션</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Generative AI -->
+    <div class="card cat-ai" data-cat="ai" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">05</div>
+        <div class="card-title-area">
+          <div class="card-title">생성AI 도시 레이아웃 합성</div>
+          <div class="card-title-en">GenAI: GAN → Diffusion for Urban Design</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">최신 급성장</span>
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">Human-in-the-Loop</span>
+      </div>
+      <div class="card-desc">
+        <strong>GAN → VAE → 확산모델</strong> 진화. MIT의 3단계 ControlNet 파이프라인: 도로→건물배치→렌더링. 텍스트/이미지 조건으로 단계별 설계 정제 가능.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:72%;background:linear-gradient(90deg,var(--magenta),var(--purple))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">Stable Diffusion</span><span class="tool">ControlNet</span><span class="tool">Pix2Pix</span><span class="tool">CycleGAN</span><span class="tool">LoRA</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">주요 모델들</div>
+          <div class="detail-text"><strong>ESGAN</strong> (2023): 대지 맥락 임베딩 GAN. <strong>GenFusion</strong> (2025): 확산+XGBoost+유전알고리즘으로 풍환경·일조 최적화. <strong>UrbanWorld</strong>: LLM 기반 3D 도시 생성. <strong>GC-GAN</strong>: 지식그래프 제약 조건 통합.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">URBANIS 적용</div>
+          <div class="detail-text">대구 NSDI/Vworld 데이터로 <strong>LoRA 파인튜닝</strong>(100~1000샘플) → 대구 형태 특화 생성 가능. 한계: 2D 픽셀 출력 → CAD/BIM 벡터 변환 필요, 도시 간 전이 어려움.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #2 형태학</span><span class="conn">→ #6 뉴로심볼릭</span><span class="conn">→ #9 디지털트윈</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Neuro-Symbolic -->
+    <div class="card cat-ai" data-cat="ai" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">06</div>
+        <div class="card-title-area">
+          <div class="card-title">뉴로-심볼릭 AI</div>
+          <div class="card-title-en">Neuro-Symbolic AI + Knowledge Graph</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">온톨로지</span>
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">법규 자동 검토</span>
+      </div>
+      <div class="card-desc">
+        <strong>신경망(패턴 인식)</strong> + <strong>심볼릭AI(논리 추론)</strong> 결합. 온톨로지 지식그래프로 용도지역·건폐율·일조사선 등 <strong>법적 제약을 실시간 검증</strong>.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:60%;background:linear-gradient(90deg,var(--amber),var(--magenta))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">OWL/RDF</span><span class="tool">GeoSPARQL</span><span class="tool">Neo4j</span><span class="tool">Apache Jena</span><span class="tool">Protégé</span><span class="tool">PyKEEN</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 아키텍처</div>
+          <div class="detail-text"><strong>OntoZoning</strong> (ETH, 싱가포르): 용도지역 OWL 온톨로지. <strong>LogiCity</strong> (NeurIPS 2024): 1차 논리 도시 시뮬레이터. <strong>SMOF</strong> (2025): BIM+GIS+IoT 통합, 선전 배치.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">URBANIS 적용</div>
+          <div class="detail-text">한국 <strong>용도지역제</strong>를 OWL 온톨로지로 인코딩 → Gemini Vision 탐지 결과를 지식그래프에 즉시 반영 → <strong>"이 구역의 법적 용적률은?"</strong> 실시간 RAG 질의 가능.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #3 CV분석</span><span class="conn">→ #5 생성AI</span><span class="conn">→ #14 파이프라인</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. 15-Minute City -->
+    <div class="card cat-social" data-cat="social" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">07</div>
+        <div class="card-title-area">
+          <div class="card-title">15분 도시 &amp; 접근성 분석</div>
+          <div class="card-title-en">15-Minute City &amp; Accessibility Index</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">정책 채택 확산</span>
+        <span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">부산 사례</span>
+      </div>
+      <div class="card-desc">
+        <strong>등시선(isochrone) 매핑</strong>으로 도보/자전거 15분 내 6대 기능(주거·직장·상업·의료·교육·여가) 접근성 측정. 부산이 <strong>1500억원 투자</strong>로 한국 최초 도입.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:78%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">Valhalla</span><span class="tool">r5py</span><span class="tool">OpenRouteService</span><span class="tool">Pandana</span><span class="tool">UrbanAccess</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">한국 현황</div>
+          <div class="detail-text"><strong>부산</strong>: 62개 생활권, 파리 국제학회 초청 (2025). <strong>서울</strong>: 2040 도시기본계획 '30분 생활권'. 한국 <strong>생활SOC</strong> 정책이 사실상 15분도시 구현. GTFS-RT 실시간 데이터로 정확도 11% 개선 (2025).</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: 고령화·인구감소로 접근성 불균형 심각 → 부산 모델 벤치마킹 최적 대상</div>
+        <div class="connections">
+          <span class="conn">→ #1 공간구문론</span><span class="conn">→ #12 공간정의</span><span class="conn">→ #11 에이전트</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Land Use Change Detection -->
+    <div class="card cat-infra" data-cat="infra" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">08</div>
+        <div class="card-title-area">
+          <div class="card-title">위성영상 토지이용 변화 감지</div>
+          <div class="card-title-en">Sentinel-2 Change Detection + Deep Learning</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">10m 해상도</span>
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">Transformer</span>
+      </div>
+      <div class="card-desc">
+        Sentinel-2 다중시기 영상에서 <strong>NDVI·NDBI·UI 지수</strong>와 딥러닝(<strong>BIT, ChangeFormer</strong>)으로 도시화·녹지손실·재개발 변화를 자동 감지.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:80%;background:linear-gradient(90deg,var(--cyan),var(--blue))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">TorchGeo</span><span class="tool">eo-learn</span><span class="tool">Google Earth Engine</span><span class="tool">rasterio</span><span class="tool">GDAL</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">모델 진화</div>
+          <div class="detail-text">Siamese CNN → <strong>BIT</strong> (Transformer, +4.7 F1) → <strong>ChangeFormer</strong> (순수 Transformer) → 시계열 시맨틱 세그멘테이션 (2024). 단, ICLR 2024 벤치마크에서 <strong>단순 U-Net이 복잡한 모델과 동등</strong>한 결과.</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: 신서혁신도시 개발 후 NDVI -0.07, LST +0.85°C 확인 (Kim 2019)</div>
+        <div class="connections">
+          <span class="conn">→ #2 형태학</span><span class="conn">→ #10 기후복원</span><span class="conn">→ #14 파이프라인</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Digital Twin -->
+    <div class="card cat-infra" data-cat="infra" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">09</div>
+        <div class="card-title-area">
+          <div class="card-title">도시 디지털 트윈</div>
+          <div class="card-title-en">Urban Digital Twin &amp; Participatory Planning</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">한국 선도</span>
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">CityGML 3.0</span>
+      </div>
+      <div class="card-desc">
+        <strong>CityGML 3.0</strong> 표준 + IoT 실시간 데이터 + 시뮬레이션. 한국: E8IGHT 세종스마트시티, <strong>서울 S-Map</strong> 60만동 3D 모델, 부산 에코델타시티 $4.2B 규모.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:75%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">3DCityDB</span><span class="tool">CesiumJS</span><span class="tool">3D Tiles</span><span class="tool">Py3DTilers</span><span class="tool">CityJSON</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">글로벌 사례</div>
+          <div class="detail-text"><strong>Virtual Singapore</strong> (700km²), <strong>Helsinki 3D+</strong> (버스지연 15% 감소), <strong>Zurich</strong> (소음·태양광·홍수 시뮬레이션 공개 데이터). OGC UDT Pilot (2024)이 표준화 진행 중.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">참여형 계획</div>
+          <div class="detail-text">VR 디지털트윈 시민 체험 (독일 Herrenberg 2020), 바르셀로나 <strong>vCity + Decidim</strong> 민주적 의사결정. 한국 스마트시티법 2024로 제도적 기반 마련.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #14 파이프라인</span><span class="conn">→ #10 기후복원</span><span class="conn">→ #11 시뮬레이션</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Climate Resilience -->
+    <div class="card cat-env" data-cat="env" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">10</div>
+        <div class="card-title-area">
+          <div class="card-title">기후 복원력 분석</div>
+          <div class="card-title-en">UHI · Sponge City · Wind Corridor · CFD</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(239,68,68,.15);color:var(--red)">대구 = "대프리카"</span>
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">바이오필릭</span>
+      </div>
+      <div class="card-desc">
+        대구 분지 지형으로 <strong>여름 40°C, 도심-교외 온도차 10°C</strong>. InVEST 열섬 모델, SCS-CN 스펀지시티, <strong>OpenFOAM CFD 풍길분석</strong>으로 기후적응 전략 수립.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:76%;background:linear-gradient(90deg,var(--red),var(--amber))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">InVEST UCM</span><span class="tool">ENVI-met</span><span class="tool">OpenFOAM</span><span class="tool">SWMM</span><span class="tool">Ladybug/GH</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">분석 체계</div>
+          <div class="detail-text"><strong>열섬</strong>: InVEST UCM (그늘·증발산·알베도·냉각섬 거리) + ECOSTRESS 70m 열적외선. <strong>홍수</strong>: SCS-CN + SWMM (1D-2D). <strong>풍길</strong>: WRF 메소스케일(1km) → OpenFOAM 건물스케일(&lt;10m). 수목 피복 10% 증가 → UHI 55% 감소.</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: 한국 유일 '폭염 전담 계획' 보유. 2025 ECOSTRESS 연구로 미세 열지도 가용</div>
+        <div class="connections">
+          <span class="conn">→ #8 변화감지</span><span class="conn">→ #9 디지털트윈</span><span class="conn">→ #13 도시대사</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. Agent-Based Simulation -->
+    <div class="card cat-spatial" data-cat="spatial" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">11</div>
+        <div class="card-title-area">
+          <div class="card-title">행위기반 모델 &amp; 에이전트 시뮬레이션</div>
+          <div class="card-title-en">Activity-Based / Agent-Based Simulation</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(59,130,246,.15);color:var(--blue)">MATSim/SUMO</span>
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">실시간 캘리브레이션</span>
+      </div>
+      <div class="card-desc">
+        수백만 가상 시민 에이전트의 <strong>하루 활동 계획</strong>을 시뮬레이션. IoT 센서로 <strong>실시간 보정</strong>하여 디지털트윈 교통 시뮬레이션 구현. LLM 기반 시나리오 생성 등장.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:77%;background:linear-gradient(90deg,var(--blue),var(--cyan))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">MATSim</span><span class="tool">SUMO</span><span class="tool">Mesa 3</span><span class="tool">Vadere</span><span class="tool">JuPedSim</span><span class="tool">PedSim</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">핵심 도구</div>
+          <div class="detail-text"><strong>MATSim</strong>: 수백만 에이전트, Java. <strong>SUMO</strong>: 미시적 교통, TraCI API. <strong>Mesa 3</strong>: Python ABM + Mesa-Geo GIS. <strong>AgentSUMO</strong> (2024): LLM 자연어로 시뮬레이션 시나리오 생성.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">실시간 보정</div>
+          <div class="detail-text">에스토니아 Tartu: <strong>IoT → SUMO 실시간 캘리브레이션</strong> (2023). 카메라 YOLO 탐지 → SUMO 신호 제어 (2024). 한국 KTDB OD 매트릭스 활용 가능.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #4 GNN</span><span class="conn">→ #9 디지털트윈</span><span class="conn">→ #14 파이프라인</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. Spatial Justice -->
+    <div class="card cat-social" data-cat="social" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">12</div>
+        <div class="card-title-area">
+          <div class="card-title">공간 정의 &amp; 사회공간적 불평등</div>
+          <div class="card-title-en">Spatial Justice &amp; Gentrification Risk</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(245,158,11,.15);color:var(--amber)">형평성 평가</span>
+        <span class="badge" style="background:rgba(239,68,68,.15);color:var(--red)">원주민 이주 80%</span>
+      </div>
+      <div class="card-desc">
+        재개발이 <strong>누구에게 이익이 되는가?</strong> 르페브르의 도시권, 파인스타인의 정의 도시론 기반. 한국 합동재개발에서 <strong>원주민 80% 이주</strong> 문제를 지표로 사전 경고.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:68%;background:linear-gradient(90deg,var(--amber),var(--red))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">PySAL</span><span class="tool">GeoPandas</span><span class="tool">OpenTripPlanner</span><span class="tool">Conveyal/R5</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">정량 지표</div>
+          <div class="detail-text"><strong>지니계수</strong>(접근성 공간분포), <strong>2단계 부유집수구역법</strong>(서비스 수급 균형), PCA 기반 <strong>공간정의지수</strong>. Nature Comms 2022: 28개 도시 녹색 젠트리피케이션 베이지안 모델.</div>
+        </div>
+        <div class="daegu-tag">🏙 대구: Lim &amp; Kain (2016) 탈산업화·인구감소·사회공간적 불평등 심화 진단. 재개발 시 이주 리스크 사전평가 필수</div>
+        <div class="connections">
+          <span class="conn">→ #7 15분도시</span><span class="conn">→ #3 CV분석</span><span class="conn">→ #13 도시대사</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13. Urban Metabolism -->
+    <div class="card cat-env" data-cat="env" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">13</div>
+        <div class="card-title-area">
+          <div class="card-title">도시 신진대사 (MFA)</div>
+          <div class="card-title-en">Urban Metabolism &amp; Circular Economy</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(34,197,94,.15);color:var(--green)">순환경제</span>
+        <span class="badge" style="background:rgba(59,130,246,.15);color:var(--blue)">7대 흐름</span>
+      </div>
+      <div class="card-desc">
+        도시를 <strong>유기체</strong>로 보고 물·에너지·폐기물·탄소·사람·상품·생태의 <strong>7대 물질 흐름</strong>을 추적. 암스테르담은 2050 완전 순환도시 목표, 실시간 대시보드 운영.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:65%;background:linear-gradient(90deg,var(--green),var(--amber))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">STAN</span><span class="tool">ODYM</span><span class="tool">OMAT</span><span class="tool">Sankey</span><span class="tool">InVEST</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">가로 수준 MFA</div>
+          <div class="detail-text">Tuffaha &amp; Sallay (2025): Kennedy 지표 + IABR 방법론으로 <strong>근린 수준 7대 흐름</strong> 평가 (암만 4개 지역). 대구 노후 도시조직의 자원 효율성 진단에 직접 적용 가능.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ #10 기후복원</span><span class="conn">→ #9 디지털트윈</span><span class="conn">→ #12 공간정의</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14. Real-time Pipeline -->
+    <div class="card cat-infra" data-cat="infra" onclick="toggleCard(this)">
+      <span class="click-hint">클릭하여 상세보기</span>
+      <div class="card-top">
+        <div class="card-rank">14</div>
+        <div class="card-title-area">
+          <div class="card-title">실시간 지리공간 파이프라인</div>
+          <div class="card-title-en">WebSocket + Pydantic + Streaming GeoJSON</div>
+        </div>
+      </div>
+      <div class="card-badges">
+        <span class="badge" style="background:rgba(6,214,242,.15);color:var(--cyan)">URBANIS 핵심</span>
+        <span class="badge" style="background:rgba(224,64,251,.15);color:var(--magenta)">Hybrid AI</span>
+      </div>
+      <div class="card-desc">
+        OpenSky·DOT카메라·Sentinel을 <strong>FastAPI WebSocket</strong>으로 10초 주기 수집 → <strong>Pydantic 검증</strong> → Gemini Vision 분석 → <strong>CesiumJS/deck.gl 3D 렌더링</strong>.
+      </div>
+      <div class="evidence">
+        <div class="evidence-label">학술 근거 수준</div>
+        <div class="evidence-bar"><div class="evidence-fill" style="width:70%;background:linear-gradient(90deg,var(--cyan),var(--magenta))"></div></div>
+      </div>
+      <div class="tools">
+        <span class="tool">FastAPI</span><span class="tool">geojson-pydantic</span><span class="tool">Redis Streams</span><span class="tool">Kafka</span><span class="tool">CesiumJS</span><span class="tool">deck.gl</span>
+      </div>
+      <div class="card-detail">
+        <div class="detail-section">
+          <div class="detail-title">아키텍처</div>
+          <div class="detail-text"><strong>WebSocket</strong>(양방향, 맵 업데이트) + <strong>SSE</strong>(단방향 센서) + <strong>gRPC</strong>(내부 마이크로서비스). <strong>geojson-pydantic</strong> v2.1로 AI 생성 GeoJSON 타입 검증. <strong>STAC API</strong>로 Sentinel COG 스트리밍.</div>
+        </div>
+        <div class="detail-section">
+          <div class="detail-title">3D 시각화</div>
+          <div class="detail-text"><strong>CesiumJS</strong>: CZML 시간동적 + 3D Tiles. <strong>deck.gl</strong>: Tile3DLayer로 3.5억 포인트 렌더링 (멜버른 사례). <strong>3DCityDB-Web-Map-Client</strong>로 CityGML→Cesium 연결.</div>
+        </div>
+        <div class="connections">
+          <span class="conn">→ 모든 기법의 데이터 기반</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleCard(card) {
+  const wasExpanded = card.classList.contains('expanded');
+  document.querySelectorAll('.card.expanded').forEach(c => c.classList.remove('expanded'));
+  if (!wasExpanded) card.classList.add('expanded');
+}
+
+function filterCards(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+      card.classList.remove('expanded');
+    }
+  });
+}
+</script>
+</body>
+</html>
