@@ -1,0 +1,134 @@
+{
+  "tourist": {
+    "url": "https://1tree1.github.io/gj-datamap/tourists.html",
+    "retrieved": "2026-10-11",
+    "htmlSha256": "9327f04813ab1537a3b11d41db7654cfaecea33aea13e5747621e7d46e5bdfca",
+    "dow": {
+      "categories": [
+        "월",
+        "화",
+        "수",
+        "목",
+        "금",
+        "토",
+        "일"
+      ],
+      "values": [
+        99.2,
+        96.3,
+        94.7,
+        96.1,
+        113.6,
+        161.9,
+        163.3
+      ],
+      "raw_daily_visits": [
+        115011,
+        111648,
+        109756,
+        111397,
+        131645,
+        187665,
+        189234
+      ],
+      "weekday_average": 115891.4,
+      "weekend_ratio": 1.63,
+      "period": "2024.09–2026.08",
+      "unit": "월–금 평균=100"
+    },
+    "stay": {
+      "categories": [
+        "데이터랩",
+        "관광설문"
+      ],
+      "day": [
+        83.1,
+        44.7
+      ],
+      "overnight": [
+        16.9,
+        55.3
+      ],
+      "telecom_period": "2025.09–2026.08",
+      "survey_year": 2024,
+      "survey_n": 3009,
+      "method": "데이터랩은 월별 숙박자 비율의 단순평균. 외지인 월별 순방문자와 관광실태조사 내국인 표본은 모집단·집계방식이 다름."
+    },
+    "mode": {
+      "categories": [
+        "자가용",
+        "KTX/SRT",
+        "전세·관광버스",
+        "시외버스",
+        "고속버스",
+        "일반열차",
+        "렌터카·기타"
+      ],
+      "values": [
+        76.9,
+        8.5,
+        8.3,
+        2.0,
+        1.8,
+        1.7,
+        0.8
+      ],
+      "n": 3009,
+      "year": 2024
+    }
+  },
+  "citizen": {
+    "categories": [
+      "쇼핑·여가",
+      "대중교통",
+      "문화·예술",
+      "의료·보건",
+      "하천·정보",
+      "학교·교육",
+      "관광시설",
+      "편의시설",
+      "주차"
+    ],
+    "counts": [
+      26,
+      24,
+      24,
+      8,
+      6,
+      5,
+      2,
+      1,
+      1
+    ],
+    "n": 52,
+    "total_mentions": 97,
+    "survey_dates": [
+      "2025-03-16",
+      "2025-04-24"
+    ],
+    "sample_total": 65,
+    "sample_valid": 63,
+    "method": "네이버폼·대면 인터뷰. 문항별 응답자52명, 복수응답. 시민 전체의 대표비율로 일반화하지 않음. 하천·정보는 원문 분류명.",
+    "source": "C:\\Users\\OFFICE\\Desktop\\9_도시\\#경주시 원도심 미래구상 기획 연구 0804 최종본.pdf",
+    "pages_print": [
+      33,
+      63,
+      64,
+      68
+    ]
+  },
+  "cases": [
+    {
+      "name": "Delft",
+      "url": "https://www.mecanoo.nl/Projects/project/52/Delft-Railway-Station-and-City-Hall?d=0&t=20",
+      "observed": "철도 고가를 대체한 터널 위에 역·시청을 결합하고 역에서 시청 공공홀로 직접 연결",
+      "application": "통합 청사와 시민 접근 동선의 결합"
+    },
+    {
+      "name": "King’s Cross",
+      "url": "https://www.kingscross.co.uk/about-the-development",
+      "observed": "철도·산업부지 재생에 대학·주거·업무·상업과 가로·광장·공원을 함께 배치",
+      "application": "일자리·주거·문화 기능을 공공공간으로 연결"
+    }
+  ]
+}

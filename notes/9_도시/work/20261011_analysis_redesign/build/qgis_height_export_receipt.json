@@ -1,0 +1,21 @@
+{
+  "qgisVersion": "3.32.0-Lima",
+  "exportResult": 0,
+  "image": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_analysis_redesign\\build\\assets\\height_qgis_revision10.png",
+  "project": "C:/Users/OFFICE/Desktop/9_도시/work/20261011_analysis_redesign/build/height_map_data/건물층수_슬라이드12.qgz",
+  "mapExtent": "218798.4082016666652635,360354.2945600000093691 : 220765.0748683333513327,361594.2945600000093691",
+  "classes": {
+    "1": "1층",
+    "2": "2층",
+    "3-5": "3–5층",
+    "6+": "6층 이상",
+    "unknown": "층수 미상"
+  },
+  "counts": {
+    "1": 6564,
+    "2": 810,
+    "3-5": 934,
+    "6+": 57
+  },
+  "field": "nmly"
+}

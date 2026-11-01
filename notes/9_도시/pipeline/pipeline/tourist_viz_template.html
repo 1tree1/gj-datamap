@@ -1,0 +1,554 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>경주를 찾는 사람들</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* 레이아웃: 한 줄 리포트 — 머리말 · 요약 4칸 · 주제별 절(차트 카드 2열, 좁으면 1열) · 출처 */
+:root {
+  --bg: #f4f5f3; --surface: #fcfcfb; --ink: #121614; --ink-2: #4b524e; --muted: #7f8682;
+  --rule: #dcdfdb; --grid: #e4e6e2; --axis: #c3c6c1; --accent: #1f5c55;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #4a3aa7; --s8: #e34948;
+  --q1: #cde2fb; --q2: #9ec5f4; --q3: #5598e7; --q4: #256abf; --q5: #104281;
+  --ghost: #a9aea9;
+  --f-display: "Gowun Batang", "Nanum Myeongjo", "Batang", serif;
+  --f-body: "IBM Plex Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", "IBM Plex Sans KR", "Courier New", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #101211; --surface: #1a1a19; --ink: #f1f3f1; --ink-2: #bcc2bd; --muted: #8b918d;
+  --rule: #2d302e; --grid: #2c2c2a; --axis: #3d403d; --accent: #74c6b8;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  --q1: #104281; --q2: #1c5cab; --q3: #2a78d6; --q4: #5598e7; --q5: #9ec5f4;
+  --ghost: #6c716d; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #101211; --surface: #1a1a19; --ink: #f1f3f1; --ink-2: #bcc2bd; --muted: #8b918d;
+  --rule: #2d302e; --grid: #2c2c2a; --axis: #3d403d; --accent: #74c6b8;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+  --q1: #104281; --q2: #1c5cab; --q3: #2a78d6; --q4: #5598e7; --q5: #9ec5f4;
+  --ghost: #6c716d; color-scheme: dark; }
+
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.6; }
+[hidden] { display: none !important; }
+.sitenav { display: flex; gap: 4px; font-size: 13.5px; }
+.sitenav a { color: var(--ink-2); text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; }
+.sitenav a:hover { border-color: var(--rule); }
+.sitenav a.on { color: var(--ink); border-color: var(--rule); background: var(--surface); font-weight: 600; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 72px; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--f-display); font-weight: 700; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.15; }
+h2 { font-size: clamp(22px, 3vw, 28px); line-height: 1.25; }
+h3 { font-size: 15px; font-weight: 600; margin: 0; line-height: 1.4; }
+p { margin: 0; }
+.eyebrow { font-family: var(--f-body); font-size: 13px; font-weight: 600; letter-spacing: 0.03em; color: var(--accent); }
+.lead { color: var(--ink-2); max-width: 68ch; }
+header { display: grid; gap: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-family: var(--f-body); font-size: 12px; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-top: 2px solid var(--ink); }
+.tile { padding: 16px 18px 4px 0; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.tile + .tile { padding-left: 18px; border-left: 1px solid var(--rule); }
+.tile .lab { font-size: 13px; color: var(--ink-2); }
+.tile .val { font-size: clamp(30px, 4vw, 40px); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+.tile .val small { font-size: 0.5em; font-weight: 500; margin-left: 2px; }
+.tile .sub { font-size: 12.5px; color: var(--muted); }
+.tile .src { font-size: 11.5px; color: var(--muted); }
+@media (max-width: 860px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile:nth-child(3) { padding-left: 0; border-left: 0; } .tile:nth-child(n+3) { border-top: 1px solid var(--rule); } }
+@media (max-width: 440px) { .tiles { grid-template-columns: minmax(0, 1fr); } .tile, .tile + .tile { padding-left: 0; border-left: 0; } .tile + .tile { border-top: 1px solid var(--rule); } }
+
+section { display: grid; gap: 20px; }
+.sec-head { display: grid; gap: 8px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.grid .wide { grid-column: 1 / -1; }
+@media (max-width: 880px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 18px 18px 14px; display: grid; gap: 10px; min-width: 0; }
+.card .sub { font-size: 12.5px; color: var(--muted); }
+.card .note { font-size: 13px; color: var(--ink-2); }
+.chart { min-width: 0; position: relative; }
+.chart svg { display: block; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.legend i.ln { height: 2px; width: 14px; border-radius: 1px; }
+.legend i.dot { border-radius: 50%; }
+details { font-size: 13px; }
+details summary { cursor: pointer; color: var(--ink-2); font-size: 12.5px; width: fit-content; }
+details summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tbl { overflow-x: auto; margin-top: 8px; }
+table { border-collapse: collapse; font-size: 12.5px; min-width: 100%; }
+th, td { padding: 4px 10px 4px 0; border-bottom: 1px solid var(--grid); text-align: left; white-space: nowrap; }
+th { color: var(--muted); font-weight: 500; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); }
+
+svg text { font-family: var(--f-body); }
+.t { fill: var(--ink-2); font-size: 12px; }
+.tm { fill: var(--muted); font-size: 11.5px; }
+.tv { fill: var(--ink); font-size: 12px; font-weight: 600; }
+.tn { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.tw { fill: #ffffff; font-size: 11.5px; font-weight: 600; }
+.tk { fill: #0b0b0b; font-size: 11.5px; font-weight: 600; }
+.gd { stroke: var(--grid); stroke-width: 1; }
+.ax { stroke: var(--axis); stroke-width: 1; }
+.mk { transition: opacity .12s; }
+.mk:hover, .mk:focus { opacity: .78; outline: none; }
+.hit { fill: transparent; }
+.hit:focus { outline: none; }
+
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 8px 10px; font-size: 12.5px; box-shadow: 0 6px 20px rgba(0,0,0,.14); max-width: 260px; display: grid; gap: 3px; }
+#tip .tt-h { color: var(--muted); font-size: 12px; }
+#tip .tt-r { display: flex; align-items: center; gap: 8px; }
+#tip .tt-r b { font-weight: 600; font-variant-numeric: tabular-nums; }
+#tip .tt-r span:last-child { color: var(--ink-2); }
+#tip .tt-k { width: 12px; height: 2px; border-radius: 1px; flex: none; }
+
+.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 32px; }
+@media (max-width: 760px) { .cols2 { grid-template-columns: minmax(0, 1fr); } }
+ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--ink-2); font-size: 14px; }
+ul.plain b { color: var(--ink); font-weight: 600; }
+.grade { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--rule); border-radius: 4px; padding: 0 5px; color: var(--ink-2); margin-right: 4px; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
+a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .mk { transition: none; } }
+</style>
+
+<div class="wrap">
+<!--__SITENAV__-->
+<header>
+  <div class="eyebrow">경주시 전체(S3) · 2026년 10월 1일 기준</div>
+  <h1>경주를 찾는 사람들</h1>
+  <p class="lead">몇 명이, 몇 살이, 어디서, 어느 나라에서, 무엇을 타고 오는가. 한국관광 데이터랩의 이동통신 추정치와 경주시 관광실태조사(국가승인통계), 철도·고속도로 실측량을 한자리에 놓았다. 두 자료는 세는 대상이 다르다. 데이터랩은 경주 밖에 사는 사람이 하루 들른 것을 모두 세고, 실태조사는 관광지에서 만난 관광객에게 묻는다.</p>
+  <div class="chips">
+    <span class="chip">데이터랩 · 연인원 · T2</span>
+    <span class="chip">관광실태조사 2024 · n=3,009 · T2</span>
+    <span class="chip">코레일·SR·도로공사 실측 · T2</span>
+    <span class="chip">부지(S1) 근거로 직접 쓰지 않음</span>
+  </div>
+</header>
+
+<div class="tiles" role="list">
+  <div class="tile" role="listitem"><div class="lab">경주 밖에서 온 방문, 2025년</div><div class="val">5,020<small>만 명</small></div><div class="sub">하루 평균 13.8만 · 2024년보다 6.6% 많음</div><div class="src">데이터랩 외지인 연인원</div></div>
+  <div class="tile" role="listitem"><div class="lab">외국인 방문, 2025년</div><div class="val">138.5<small>만 명</small></div><div class="sub">2024년보다 17.0% 많음 · 방문객의 2.7%</div><div class="src">데이터랩 SKT 로밍 연인원</div></div>
+  <div class="tile" role="listitem"><div class="lab">자가용으로 온 관광객</div><div class="val">76.9<small>%</small></div><div class="sub">KTX/SRT 8.5% · 전세·관광버스 8.3%</div><div class="src">관광실태조사 2024</div></div>
+  <div class="tile" role="listitem"><div class="lab">하룻밤 이상 머문 외지인</div><div class="val">16.9<small>%</small></div><div class="sub">숙박자의 70%는 1박</div><div class="src">데이터랩 2025.09–2026.08</div></div>
+</div>
+
+<section id="count">
+  <div class="sec-head"><div class="eyebrow">몇 명</div><h2>한 해 5천만 번, 주말과 10월에 몰린다</h2>
+  <p class="lead">경주시가 발표하는 ‘관광객 수’는 데이터랩 외지인 연인원이다. 한 사람이 사흘 머물면 세 번 센다. 통근·업무로 오는 포항·울산 사람도 들어 있다.</p></div>
+  <div class="grid">
+    <div class="card" id="c-annual"><h3>외지인 방문 연인원</h3><div class="sub">연간 · 2020–21년은 조회하지 않음 · 데이터랩(KT) T2</div><div class="chart"></div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-dow"><h3>요일별 방문 지수</h3><div class="sub">월–금 평균 = 100 · 2024.09–2026.08 일평균 · 데이터랩 T2</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>외지인(내국인)</span><span><i style="background:var(--s2)"></i>외국인</span></div>
+      <div class="chart"></div><div class="note">내국인은 주말에 1.6배로 늘고 외국인은 요일을 타지 않는다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card wide" id="c-month"><h3>월별 외지인 방문 연인원</h3><div class="sub">2024.09–2026.07 · 데이터랩 API 일별 합계 T2</div><div class="chart"></div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+  </div>
+</section>
+
+<section id="who">
+  <div class="sec-head"><div class="eyebrow">몇 살</div><h2>50대와 30대가 가장 많고, 방문자는 늙어 간다</h2>
+  <p class="lead">성·연령은 휴대전화 명의 기준이라 아이는 부모 이름으로 잡히고 남성 비중이 높게 나온다. 연령별 행태 차이는 관광실태조사로 본다.</p></div>
+  <div class="grid">
+    <div class="card" id="c-pyr"><h3>외지인 방문자 성·연령 구성</h3><div class="sub">% · 2025.09–2026.08 · 데이터랩 T2</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>남성 55.1%</span><span><i style="background:var(--s2)"></i>여성 44.9%</span></div>
+      <div class="chart"></div><details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-agetrend"><h3>연령별 비중 변화, 2019 → 2025</h3><div class="sub">% · 외지인 연인원 · 데이터랩 T2</div>
+      <div class="legend"><span><i class="dot" style="background:var(--ghost)"></i>2019</span><span><i class="dot" style="background:var(--s1)"></i>2025</span></div>
+      <div class="chart"></div><div class="note">20대는 4.0%p 줄고 60대 이상은 8.0%p 늘었다. 통신사 연령 추정 방식의 변경 여부는 확인하지 못했다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-spend"><h3>방문 비중과 소비 비중</h3><div class="sub">% · 2025.09–2026.08 · 방문 = 이동통신, 소비 = 신용카드(명의자) · 데이터랩 T2</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>방문</span><span><i style="background:var(--s2)"></i>관광소비</span></div>
+      <div class="chart"></div><div class="note">40·50대는 방문의 35%, 소비의 52%를 차지한다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-stay"><h3>당일과 숙박, 두 자료의 차이</h3><div class="sub">% · 데이터랩 2025.09–2026.08 / 관광실태조사 2024</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>당일</span><span><i style="background:var(--s2)"></i>숙박</span></div>
+      <div class="chart"></div><div class="note">관광지에서 만난 사람은 절반 넘게 숙박하지만, 경주에 들른 외지인 전체로는 6명 중 5명이 당일이다. 숙박자 중 1박이 70.2%, 2박이 21.3%다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+  </div>
+</section>
+
+<section id="from">
+  <div class="sec-head"><div class="eyebrow">어디서</div><h2>절반은 한 시간 거리의 이웃이다</h2>
+  <p class="lead">영남 5개 시도가 외지인 방문의 73%다. 포항·울산·경산·영천 같은 ‘1시간 생활권’과 수도권 원거리 숙박객으로 갈린다.</p></div>
+  <div class="grid">
+    <div class="card" id="c-map"><h3>유입 시군구별 방문 비중</h3><div class="sub">% · 2025.09–2026.08 유입 통계(약 794만, 통신·내비·카드 융합) · 데이터랩 T2 · 울릉 제외</div>
+      <div class="legend" id="map-legend"></div><div class="chart"></div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div style="display:grid;gap:16px;min-width:0">
+      <div class="card" id="c-region"><h3>권역별 구성</h3><div class="sub">% · 거주지 기준 외지인 연인원 5,042만 · 데이터랩 T2</div>
+        <div class="legend"><span><i style="background:var(--s1)"></i>동남권(부산·울산·경남)</span><span><i style="background:var(--s2)"></i>대경권(대구·경북)</span><span><i style="background:var(--s3)"></i>수도권</span><span><i style="background:var(--s4)"></i>그 외</span></div>
+        <div class="chart"></div><details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+      <div class="card" id="c-sido"><h3>시도별 외지인 방문</h3><div class="sub">% · 거주지 기준 연인원 · 데이터랩 T2</div><div class="chart"></div>
+        <div class="note">전남·광주는 행정코드 통합 이후 값이 빠진 것으로 보인다(유입 통계로는 3.6%). 원본 확인 전까지 인용하지 않는다.</div>
+        <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    </div>
+    <div class="card" id="c-dist"><h3>거주지에서 경주까지 거리</h3><div class="sub">% · 시군구청 간 도로거리 · 데이터랩 T2</div><div class="chart"></div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-navi"><h3>차로 오는 흐름은 가까운 도시에 더 쏠린다</h3><div class="sub">% · 같은 5개 시군구 · 내비게이션 목적지 검색 유입 상위 5 vs 이동통신 거주지 · 데이터랩 T2</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>내비게이션 유입</span><span><i style="background:var(--s2)"></i>이동통신 거주지</span></div>
+      <div class="chart"></div><details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+  </div>
+</section>
+
+<section id="nation">
+  <div class="sec-head"><div class="eyebrow">어느 나라에서</div><h2>중국·대만이 먼저고, 미국과 서유럽이 빠르게 는다</h2>
+  <p class="lead">데이터랩 ‘외래객 지역별 방한현황’은 경주시 단위 국적을 준다. 외국 유심의 SKT 로밍 신호로, 90일 이하 체류하며 하루 2시간 넘게 경주에 머문 사람을 센다. 방문 목적은 구분하지 않는다.</p></div>
+  <div class="grid">
+    <div class="card" id="c-nat"><h3>국적별 외국인 방문</h3><div class="sub">% · 2025.09–2026.08 연인원 155.8만 · 눈금은 전년 동기 · 데이터랩(SKT) T2</div>
+      <div class="legend"><span><i style="background:var(--s1)"></i>2025.09–2026.08</span><span><i class="ln" style="background:var(--ink-2)"></i>전년 동기</span></div>
+      <div class="chart"></div><details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div style="display:grid;gap:16px;min-width:0">
+      <div class="card" id="c-fmonth"><h3>월별 외국인 방문 연인원</h3><div class="sub">2024.09–2026.08 · 데이터랩(SKT) T2</div><div class="chart"></div>
+        <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+      <div class="card" id="c-gb"><h3>경북에 온 외국인 중 경주에 들른 비율</h3><div class="sub">% · 2025 연인원 근사 · 데이터랩 T2</div><div class="chart"></div>
+        <div class="note">경주는 대만·싱가포르·서유럽 관광객이 몰리는 곳이다. 경북 전체 2위인 베트남은 경주에서는 3.8%에 그친다.</div>
+        <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    </div>
+  </div>
+</section>
+
+<section id="mode">
+  <div class="sec-head"><div class="eyebrow">무엇을 타고</div><h2>열 명 중 여덟은 자가용, 수도권은 다섯 중 하나가 KTX</h2>
+  <p class="lead">경주시 관광실태조사의 ‘경주까지 주된 교통수단’ 문항이다. 6개 관광지(불국사·동궁과월지·대릉원·양동마을·경주월드·동궁원)에서 만 15세 이상에게 물었다. 2024년부터 황리단길·첨성대가 조사 지점에서 빠져 원도심 방문객의 수단은 따로 알 수 없다.</p></div>
+  <div class="legend" id="mode-legend"></div>
+  <div class="grid">
+    <div class="card" id="c-mode"><h3>경주까지 주된 교통수단, 2013–2024</h3><div class="sub">% · 내국인 · 관광실태조사 p.22 · T2</div><div class="chart"></div>
+      <div class="note">자가용은 60%에서 77%로 늘었고, 시외·고속버스와 일반열차는 19.6%에서 5.5%로 줄었다. 전세·관광버스는 단체여행 회복(0.4% → 22.2%)과 함께 돌아왔다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-mode2"><h3>권역·연령별 교통수단, 2024</h3><div class="sub">% · 내국인 · 관광실태조사 p.22 · T2 · 괄호는 응답자 수</div><div class="chart"></div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-fmode"><h3>외국인의 경주 여행 주된 수단</h3><div class="sub">% · 불국사 단일 지점 · 관광실태조사 p.55 · T2</div>
+      <div class="legend" id="fmode-legend"></div><div class="chart"></div>
+      <div class="note">보고서 본문의 ‘자가용 25.1%’는 표의 열 순서로 보면 택시다. 표본은 유럽·중동·아프리카가 42%, 중국이 2.5%라 국적 구성이 실제와 크게 다르다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+    <div class="card" id="c-wk"><h3>실측으로 본 주말 증가</h3><div class="sub">주말 ÷ 평일 · 철도 2024 · 고속도로 경주 관내 4개 IC 진출 2025 · 코레일·도로공사 T2</div><div class="chart"></div>
+      <div class="note">세로선은 1.0(평일과 같음)이다. 하루 철도 하차 5,599명(2024), 고속도로 진출 31,450대 중 승용 87%(2025). 철도는 외지인 방문의 최대 5.5%다. 주말 증가는 고속도로 밖, 국도로 오는 가까운 도시 차량이 더 크게 만든다(추정). 고속·시외버스 실측은 아직 없다.</div>
+      <details><summary>표로 보기</summary><div class="tbl"></div></details></div>
+  </div>
+</section>
+
+<section id="use">
+  <div class="sec-head"><div class="eyebrow">읽는 법</div><h2>계획 문서에 옮길 때</h2></div>
+  <div class="cols2">
+    <ul class="plain">
+      <li><b>자가용 76.9%는 관광지 응답자 기준이다.</b> 거주지 구성으로 다시 가중하면 77~81%, KTX/SRT는 5~9% 범위다.</li>
+      <li><b>외국인은 차가 없다.</b> 자가용(렌트 포함)은 13%이고, 버스·택시·관광버스가 87%다.</li>
+      <li><b>방문객 수가 늘어도 관광이라고 단정하지 않는다.</b> 외지인의 절반이 30–70km 생활권이다. 방문객과 거주·생활업종 지표를 나란히 보고한다.</li>
+    </ul>
+    <ul class="plain">
+      <li><b>데이터랩 화면값은 공식 다운로드 원본으로 바꾼 뒤 공모 문서에 쓴다.</b> 이용약관이 공식 다운로드 외 수집을 금지한다.</li>
+      <li><b>모두 경주시 전체(S3) 값이다.</b> 원도심(S2)·부지(S1) 방문자는 데이터랩 지자체 계정으로만 볼 수 있다.</li>
+      <li><b>경주 단위 외국인 연령, 고속·시외버스 이용량은 없다.</b> 버스는 data.go.kr 15142072 활용신청이 필요하다.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div><span class="grade">T2</span>한국관광공사 한국관광 데이터랩 — 지역별 관광현황, 외래객 지역별 방한현황(경주시 47130), DataLabService API. 내국인 KT, 외국인 SKT 로밍. 화면 표시값 전사.</div>
+  <div><span class="grade">T2</span>경주시, 제5회 경주시 관광실태조사 보고서(2025.11), 국가승인통계(KOSIS 기관 762). 내국인 n=3,009, 외국인 n=1,002.</div>
+  <div><span class="grade">T2</span>한국철도공사·(주)에스알 역별 승하차, 한국도로공사 TCS 영업소별 교통량, 항공통계 공항별 여객.</div>
+  <div>정리 문서: work/20261001_경주_관광객_수와_유형_v1.md · 빌드: pipeline/build_tourist_viz.py</div>
+</footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+/*__DATA__*/
+(() => {
+const NS = 'http://www.w3.org/2000/svg';
+const S = (tag, a = {}, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const T = (p, x, y, s, cls = 't', anchor = 'start', base) => { const t = S('text', { x, y, class: cls, 'text-anchor': anchor }, p); if (base) t.setAttribute('dominant-baseline', base); t.textContent = s; return t; };
+const nf = n => n.toLocaleString('ko-KR');
+const man = n => (n / 10000 >= 100 ? Math.round(n / 10000).toLocaleString('ko-KR') : (n / 10000).toFixed(1)) + '만';
+const pct = v => v.toFixed(1) + '%';
+const col = i => `var(--s${i})`;
+const colPath = (x, y, w, h, r = 4) => { r = Math.max(0, Math.min(r, h, w / 2)); return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; };
+const barR = (x, y, w, h, r = 4) => { r = Math.max(0, Math.min(r, w, h / 2)); return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`; };
+const barL = (x, y, w, h, r = 4) => { r = Math.max(0, Math.min(r, w, h / 2)); return `M${x + w},${y}H${x + r}Q${x},${y} ${x},${y + r}V${y + h - r}Q${x},${y + h} ${x + r},${y + h}H${x + w}Z`; };
+const textW = (s, px = 12) => { let w = 0; for (const ch of String(s)) w += /[ㄱ-힝]/.test(ch) ? px * 0.98 : px * 0.58; return w; };
+
+// 툴팁 — 값이 앞, 이름이 뒤. 텍스트는 textContent 로만 넣는다.
+const tip = document.getElementById('tip');
+function showTip(ev, title, rows) {
+  tip.replaceChildren();
+  const h = document.createElement('div'); h.className = 'tt-h'; h.textContent = title; tip.append(h);
+  for (const [c, label, val] of rows) {
+    const r = document.createElement('div'); r.className = 'tt-r';
+    if (c) { const k = document.createElement('span'); k.className = 'tt-k'; k.style.background = c; r.append(k); }
+    const b = document.createElement('b'); b.textContent = val; const s = document.createElement('span'); s.textContent = label; r.append(b, s); tip.append(r);
+  }
+  tip.hidden = false; moveTip(ev);
+}
+function moveTip(ev) { const pad = 14, r = tip.getBoundingClientRect(); let x = ev.clientX + pad, y = ev.clientY + pad;
+  if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - pad; if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - pad;
+  tip.style.left = Math.max(8, x) + 'px'; tip.style.top = Math.max(8, y) + 'px'; }
+const hideTip = () => { tip.hidden = true; };
+function hover(el, fn) { el.addEventListener('pointermove', fn); el.addEventListener('pointerleave', hideTip);
+  el.setAttribute('tabindex', '0'); el.addEventListener('focus', () => { const b = el.getBoundingClientRect(); fn({ clientX: b.left + b.width / 2, clientY: b.top }); }); el.addEventListener('blur', hideTip); }
+
+function table(card, head, rows) { const box = card.querySelector('.tbl'); if (!box || box.firstChild) return;
+  const t = document.createElement('table'); const tr = document.createElement('tr');
+  head.forEach(h => { const th = document.createElement('th'); th.textContent = h; tr.append(th); }); t.append(tr);
+  rows.forEach(r => { const tr = document.createElement('tr'); r.forEach((c, i) => { const td = document.createElement('td'); td.textContent = c ?? '–'; if (i > 0) td.className = 'num'; tr.append(td); }); t.append(tr); });
+  box.append(t); }
+
+function reg(id, fn) { const card = document.getElementById(id); const box = card.querySelector('.chart');
+  const run = () => { const w = Math.floor(box.clientWidth); if (!w || w === box._w) return; box._w = w; box.replaceChildren(); fn(box, w, card); };
+  new ResizeObserver(() => { clearTimeout(box._t); box._t = setTimeout(run, 80); }).observe(box); run(); }
+
+function legend(elId, names, colors) { const el = document.getElementById(elId); el.replaceChildren();
+  names.forEach((n, i) => { const s = document.createElement('span'); const k = document.createElement('i'); k.style.background = colors[i]; const t = document.createElement('span'); t.textContent = n; s.append(k, t); el.append(s); }); }
+
+// ── 세로 막대 (단일 계열, 값은 막대 끝)
+function columns(box, w, { cats, vals, fmt, h = 220, color = col(1), tipTitle, tipLabel }) {
+  const m = { l: 6, r: 6, t: 22, b: 26 }, iw = w - m.l - m.r, ih = h - m.t - m.b;
+  const svg = S('svg', { width: w, height: h, role: 'img' }, box); const max = Math.max(...vals) * 1.08;
+  const band = iw / cats.length, bw = Math.min(24, band * 0.5);
+  S('line', { x1: m.l, x2: w - m.r, y1: m.t + ih, y2: m.t + ih, class: 'ax' }, svg);
+  cats.forEach((c, i) => { const v = vals[i], x = m.l + band * i + (band - bw) / 2, bh = v / max * ih, y = m.t + ih - bh;
+    const g = S('g', { class: 'mk' }, svg); S('path', { d: colPath(x, y, bw, bh), style: `fill:${color}` }, g);
+    S('rect', { x: m.l + band * i, y: m.t, width: band, height: ih, class: 'hit' }, g);
+    T(svg, x + bw / 2, y - 6, fmt(v), 'tv tn', 'middle'); T(svg, x + bw / 2, h - 8, c, 'tm', 'middle');
+    hover(g, e => showTip(e, (tipTitle || '') + c, [[color, tipLabel || '', fmt(v)]])); });
+}
+
+// ── 선 (단일 계열, 크로스헤어)
+function line(box, w, { xs, vals, color = col(1), h = 240, yfmt, vfmt, xlab, mark = [] , ymax}) {
+  const m = { l: 44, r: 16, t: 18, b: 26 }, iw = w - m.l - m.r, ih = h - m.t - m.b;
+  const svg = S('svg', { width: w, height: h, role: 'img' }, box);
+  const top = ymax || Math.max(...vals) * 1.1; const step = niceStep(top / 4); const yT = Math.ceil(top / step) * step;
+  const X = i => m.l + iw * i / (xs.length - 1), Y = v => m.t + ih - v / yT * ih;
+  for (let v = 0; v <= yT + 1e-9; v += step) { S('line', { x1: m.l, x2: w - m.r, y1: Y(v), y2: Y(v), class: v === 0 ? 'ax' : 'gd' }, svg); T(svg, m.l - 6, Y(v) + 4, yfmt(v), 'tm tn', 'end'); }
+  const every = Math.max(1, Math.ceil(xs.length / Math.max(2, Math.floor(iw / 64))));
+  xs.forEach((x, i) => { if (i % every === 0 || i === xs.length - 1) T(svg, X(i), h - 8, xlab(x), 'tm', 'middle'); });
+  const pts = vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`);
+  S('path', { d: `M${X(0)},${Y(0)}L${pts.join('L')}L${X(xs.length - 1)},${Y(0)}Z`, style: `fill:${color};opacity:.1` }, svg);
+  S('path', { d: 'M' + pts.join('L'), style: `fill:none;stroke:${color};stroke-width:2;stroke-linejoin:round;stroke-linecap:round` }, svg);
+  const marks = [...mark, xs.length - 1];
+  marks.forEach(i => { S('circle', { cx: X(i), cy: Y(vals[i]), r: 4.5, style: `fill:${color};stroke:var(--surface);stroke-width:2` }, svg);
+    const anchor = X(i) > w - 70 ? 'end' : 'middle'; T(svg, anchor === 'end' ? X(i) + 4 : X(i), Y(vals[i]) - 10, vfmt(vals[i]), 'tv tn', anchor); });
+  const cross = S('line', { y1: m.t, y2: m.t + ih, class: 'ax', visibility: 'hidden' }, svg);
+  const dot = S('circle', { r: 4.5, style: `fill:${color};stroke:var(--surface);stroke-width:2`, visibility: 'hidden' }, svg);
+  const hit = S('rect', { x: m.l, y: m.t, width: iw, height: ih, class: 'hit' }, svg);
+  const at = e => { const r = svg.getBoundingClientRect(); return Math.max(0, Math.min(xs.length - 1, Math.round((e.clientX - r.left - m.l) / iw * (xs.length - 1)))); };
+  hit.addEventListener('pointermove', e => { const i = at(e); cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('visibility', 'visible');
+    dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(vals[i])); dot.setAttribute('visibility', 'visible'); showTip(e, xlab(xs[i], true), [[color, '', vfmt(vals[i], true)]]); });
+  hit.addEventListener('pointerleave', () => { cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); hideTip(); });
+}
+function niceStep(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw))); const f = raw / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+
+// ── 가로 막대 (단일 계열, 선택적으로 전년 눈금)
+function hbars(box, w, { rows, color = col(1), fmt = pct, labelW, ref, refFmt, extra, rowH = 24, max }) {
+  const lw = labelW || Math.min(150, Math.max(...rows.map(r => textW(r[0], 12))) + 10);
+  const ew = extra ? 46 : 0; const m = { l: lw, r: 52 + ew, t: 4, b: 4 }; const iw = Math.max(40, w - m.l - m.r);
+  const h = m.t + m.b + rows.length * rowH; const svg = S('svg', { width: w, height: h, role: 'img' }, box);
+  const mx = max || Math.max(...rows.map(r => Math.max(r[1], ref ? (r[2] ?? 0) : 0))) * 1.04; const bh = Math.min(14, rowH - 8);
+  S('line', { x1: m.l, x2: m.l, y1: m.t, y2: h - m.b, class: 'ax' }, svg);
+  rows.forEach((r, i) => { const y = m.t + i * rowH, cy = y + rowH / 2, bw = Math.max(1, r[1] / mx * iw);
+    const g = S('g', { class: 'mk' }, svg);
+    T(svg, m.l - 8, cy + 4, r[0], 't', 'end');
+    S('path', { d: barR(m.l, cy - bh / 2, bw, bh), style: `fill:${r.color || color}` }, g);
+    if (ref && r[2] != null) { const rx = m.l + r[2] / mx * iw; S('line', { x1: rx, x2: rx, y1: cy - bh / 2 - 3, y2: cy + bh / 2 + 3, style: 'stroke:var(--ink-2);stroke-width:2;stroke-linecap:round' }, svg); }
+    const vx = m.l + Math.max(bw, ref && r[2] != null ? r[2] / mx * iw : 0) + 6; T(svg, vx, cy + 4, fmt(r[1]), 'tv tn');
+    if (extra) T(svg, w - 2, cy + 4, extra(r), 'tm tn', 'end');
+    S('rect', { x: 0, y, width: w, height: rowH, class: 'hit' }, g);
+    hover(g, e => showTip(e, r[0], r.tip ? r.tip : [[r.color || color, '', fmt(r[1])]])); });
+}
+
+// ── 100% 누적 가로 막대 (구간 2px 간격, 들어가면 안쪽 라벨)
+function stacked(box, w, { rows, keys, colors, rowH = 30, labelW, gapAfter = [], inkOn = [] }) {
+  const lw = labelW || Math.min(140, Math.max(...rows.map(r => textW(r[0], 12))) + 10);
+  const m = { l: lw, r: 4, t: 2, b: 2 }; const iw = w - m.l - m.r; const extraGap = gapAfter.length * 12;
+  const h = m.t + m.b + rows.length * rowH + extraGap; const svg = S('svg', { width: w, height: h, role: 'img' }, box);
+  const bh = Math.min(20, rowH - 8); let yo = m.t;
+  rows.forEach((r, i) => { const vals = r[1], tot = vals.reduce((a, b) => a + b, 0); const cy = yo + rowH / 2;
+    T(svg, m.l - 8, cy + 4, r[0], 't', 'end'); let x = m.l; const segs = vals.map(v => v / tot * iw);
+    const nz = segs.map((s, k) => s > 0 ? k : -1).filter(k => k >= 0); const first = nz[0], last = nz[nz.length - 1];
+    segs.forEach((sw, k) => { if (sw <= 0) return; const gw = Math.max(0.5, sw - (k === last ? 0 : 2)); const g = S('g', { class: 'mk' }, svg);
+      let d; if (k === first && k === last) d = `M${x + 4},${cy - bh / 2}H${x + gw - 4}Q${x + gw},${cy - bh / 2} ${x + gw},${cy - bh / 2 + 4}V${cy + bh / 2 - 4}Q${x + gw},${cy + bh / 2} ${x + gw - 4},${cy + bh / 2}H${x + 4}Q${x},${cy + bh / 2} ${x},${cy + bh / 2 - 4}V${cy - bh / 2 + 4}Q${x},${cy - bh / 2} ${x + 4},${cy - bh / 2}Z`;
+      else if (k === first) d = barL(x, cy - bh / 2, gw, bh); else if (k === last) d = barR(x, cy - bh / 2, gw, bh);
+      else d = `M${x},${cy - bh / 2}h${gw}v${bh}h${-gw}Z`;
+      S('path', { d, style: `fill:${colors[k]}` }, g);
+      const lab = vals[k].toFixed(1); if (textW(lab, 11.5) + 8 < gw) T(svg, x + gw / 2, cy + 4, lab, (inkOn.includes(k) ? 'tk' : 'tw') + ' tn', 'middle').style.pointerEvents = 'none';
+      S('rect', { x, y: yo, width: sw, height: rowH, class: 'hit' }, g);
+      hover(g, e => showTip(e, r[0] + (r[2] ? ` (n=${nf(r[2])})` : ''), [[colors[k], keys[k], pct(vals[k])]]));
+      x += sw; });
+    yo += rowH + (gapAfter.includes(i) ? 12 : 0); });
+}
+
+// ── 묶음 가로 막대 (두 계열)
+function pairs(box, w, { rows, names, colors = [col(1), col(2)], fmt = pct, labelW }) {
+  const lw = labelW || Math.min(150, Math.max(...rows.map(r => textW(r[0], 12))) + 10);
+  const m = { l: lw, r: 48, t: 2, b: 2 }, iw = w - m.l - m.r, rowH = 34, bh = 11; const h = m.t + m.b + rows.length * rowH;
+  const svg = S('svg', { width: w, height: h, role: 'img' }, box); const mx = Math.max(...rows.flatMap(r => [r[1], r[2]])) * 1.04;
+  S('line', { x1: m.l, x2: m.l, y1: m.t, y2: h - m.b, class: 'ax' }, svg);
+  rows.forEach((r, i) => { const y = m.t + i * rowH; const g = S('g', { class: 'mk' }, svg); T(svg, m.l - 8, y + rowH / 2 + 4, r[0], 't', 'end');
+    [1, 2].forEach((k, j) => { const by = y + 5 + j * (bh + 2), bw = Math.max(1, r[k] / mx * iw);
+      S('path', { d: barR(m.l, by, bw, bh), style: `fill:${colors[j]}` }, g); T(svg, m.l + bw + 6, by + bh - 1, fmt(r[k]), 'tm tn'); });
+    S('rect', { x: 0, y, width: w, height: rowH, class: 'hit' }, g);
+    hover(g, e => showTip(e, r[0], [[colors[0], names[0], fmt(r[1])], [colors[1], names[1], fmt(r[2])]])); });
+}
+
+const D = DATA;
+
+// 연간
+reg('c-annual', (box, w, card) => { const a = D.annual;
+  columns(box, w, { cats: a.years, vals: a.outsider, fmt: man, tipLabel: '외지인 연인원' });
+  table(card, ['연도', '외지인 연인원', '외국인 연인원', '주요관광지점 입장객', '보고 지점'], a.years.map((y, i) => [y, nf(a.outsider[i]), a.foreign[i] ? nf(a.foreign[i]) : null, nf(a.spots[i]), a.spots_n[i] + '개소'])); });
+
+// 요일 지수 (묶음 세로 막대)
+reg('c-dow', (box, w, card) => { const rows = D.dow; const bw = rows.slice(0, 5); const b1 = bw.reduce((a, r) => a + r[1], 0) / 5, b2 = bw.reduce((a, r) => a + r[2], 0) / 5;
+  const idx = rows.map(r => [r[0].replace('요일', ''), Math.round(r[1] / b1 * 100), Math.round(r[2] / b2 * 100), r[1], r[2]]);
+  const h = 230, m = { l: 34, r: 6, t: 20, b: 26 }, iw = w - m.l - m.r, ih = h - m.t - m.b; const svg = S('svg', { width: w, height: h, role: 'img' }, box);
+  const yT = 180, Y = v => m.t + ih - v / yT * ih;
+  [0, 50, 100, 150].forEach(v => { S('line', { x1: m.l, x2: w - m.r, y1: Y(v), y2: Y(v), class: v === 0 ? 'ax' : 'gd' }, svg); T(svg, m.l - 6, Y(v) + 4, v, 'tm tn', 'end'); });
+  const band = iw / 7, bwid = Math.min(18, band * 0.32);
+  idx.forEach((r, i) => { const cx = m.l + band * i + band / 2; const g = S('g', { class: 'mk' }, svg);
+    [1, 2].forEach((k, j) => { const x = cx - bwid - 1 + j * (bwid + 2); S('path', { d: colPath(x, Y(r[k]), bwid, Y(0) - Y(r[k])), style: `fill:${col(j + 1)}` }, g); });
+    if (i >= 5) { T(svg, cx - bwid / 2 - 1, Y(r[1]) - 6, r[1], 'tv tn', 'middle'); }
+    T(svg, cx, h - 8, r[0], 'tm', 'middle'); S('rect', { x: cx - band / 2, y: m.t, width: band, height: ih, class: 'hit' }, g);
+    hover(g, e => showTip(e, r[0] + '요일 (평일 평균 = 100)', [[col(1), `외지인 · 하루 ${nf(r[3])}명`, r[1]], [col(2), `외국인 · 하루 ${nf(r[4])}명`, r[2]]])); });
+  table(card, ['요일', '외지인 일평균', '외지인 지수', '외국인 일평균', '외국인 지수'], idx.map(r => [r[0], nf(r[3]), r[1], nf(r[4]), r[2]])); });
+
+// 월별 외지인
+reg('c-month', (box, w, card) => { const ms = D.monthly; const xs = ms.map(r => r[0]), vals = ms.map(r => r[1]);
+  const peak = vals.indexOf(Math.max(...vals));
+  line(box, w, { xs, vals, h: 250, yfmt: v => v === 0 ? '0' : (v / 10000) + '만', vfmt: (v, full) => full ? nf(v) + '명' : man(v),
+    xlab: (x, full) => full ? `${x.slice(0, 4)}년 ${+x.slice(4)}월` : (x.slice(4) === '01' || x === xs[0] ? `${x.slice(2, 4)}.${x.slice(4)}` : `${+x.slice(4)}월`), mark: [peak] });
+  table(card, ['월', '외지인 연인원', '외국인 연인원'], ms.map(r => [r[0].slice(0, 4) + '.' + r[0].slice(4), nf(r[1]), nf(r[2])])); });
+
+// 피라미드
+reg('c-pyr', (box, w, card) => { const rows = [...D.pyramid].reverse(); const lab = 46, half = (w - lab) / 2, rowH = 26, bh = 14;
+  const h = rows.length * rowH + 4; const svg = S('svg', { width: w, height: h, role: 'img' }, box); const mx = 12, sc = (half - 40) / mx;
+  const cxL = half, cxR = half + lab;
+  rows.forEach((r, i) => { const y = 2 + i * rowH, cy = y + rowH / 2; const g = S('g', { class: 'mk' }, svg);
+    T(svg, half + lab / 2, cy + 4, r[0], 't', 'middle');
+    const wm = r[1] * sc, wf = r[2] * sc;
+    S('path', { d: barL(cxL - wm, cy - bh / 2, wm, bh), style: `fill:${col(1)}` }, g);
+    S('path', { d: barR(cxR, cy - bh / 2, wf, bh), style: `fill:${col(2)}` }, g);
+    T(svg, cxL - wm - 6, cy + 4, r[1].toFixed(1), 'tm tn', 'end'); T(svg, cxR + wf + 6, cy + 4, r[2].toFixed(1), 'tm tn');
+    S('rect', { x: 0, y, width: w, height: rowH, class: 'hit' }, g);
+    hover(g, e => showTip(e, r[0] + (r[0].includes('+') ? '' : '세'), [[col(1), '남성', pct(r[1])], [col(2), '여성', pct(r[2])], [null, '합계', pct(r[1] + r[2])]])); });
+  S('line', { x1: cxL, x2: cxL, y1: 0, y2: h, class: 'ax' }, svg); S('line', { x1: cxR, x2: cxR, y1: 0, y2: h, class: 'ax' }, svg);
+  table(card, ['연령', '남성 %', '여성 %', '합계 %'], D.pyramid.map(r => [r[0], r[1].toFixed(1), r[2].toFixed(1), (r[1] + r[2]).toFixed(1)])); });
+
+// 2019 → 2025 덤벨
+reg('c-agetrend', (box, w, card) => { const A = D.age_years; const rows = A.cols.map((c, i) => [c, A['2019'][i], A['2025'][i]]);
+  const lw = 44, m = { l: lw, r: 40, t: 18, b: 4 }, iw = w - m.l - m.r, rowH = 26; const h = m.t + m.b + rows.length * rowH;
+  const svg = S('svg', { width: w, height: h, role: 'img' }, box); const mx = 24, X = v => m.l + v / mx * iw;
+  [0, 5, 10, 15, 20].forEach(v => { S('line', { x1: X(v), x2: X(v), y1: m.t - 4, y2: h - m.b, class: v === 0 ? 'ax' : 'gd' }, svg); T(svg, X(v), 11, v + '%', 'tm tn', 'middle'); });
+  rows.forEach((r, i) => { const cy = m.t + i * rowH + rowH / 2; const g = S('g', { class: 'mk' }, svg);
+    T(svg, m.l - 8, cy + 4, r[0], 't', 'end');
+    S('line', { x1: X(r[1]), x2: X(r[2]), y1: cy, y2: cy, style: 'stroke:var(--axis);stroke-width:2' }, g);
+    S('circle', { cx: X(r[1]), cy, r: 5, style: 'fill:var(--ghost);stroke:var(--surface);stroke-width:2' }, g);
+    S('circle', { cx: X(r[2]), cy, r: 5, style: `fill:${col(1)};stroke:var(--surface);stroke-width:2` }, g);
+    const d = r[2] - r[1]; if (Math.abs(d) >= 1.5) T(svg, Math.max(X(r[1]), X(r[2])) + 10, cy + 4, (d > 0 ? '+' : '') + d.toFixed(1), 'tv tn');
+    S('rect', { x: 0, y: cy - rowH / 2, width: w, height: rowH, class: 'hit' }, g);
+    hover(g, e => showTip(e, r[0], [['var(--ghost)', '2019', pct(r[1])], [col(1), '2025', pct(r[2])], [null, '변화(%p)', (d > 0 ? '+' : '') + d.toFixed(1)]])); });
+  table(card, ['연령', '2019', '2023', '2024', '2025'], A.cols.map((c, i) => [c, A['2019'][i], A['2023'][i], A['2024'][i], A['2025'][i]])); });
+
+// 방문 vs 소비
+reg('c-spend', (box, w, card) => { const v = {}; D.pyramid.forEach(r => { v[r[0]] = r[1] + r[2]; }); const c = D.card_age;
+  const rows = [['10대', v['10~19'], c['10대']], ['20대', v['20~29'], c['20대']], ['30대', v['30~39'], c['30대']], ['40대', v['40~49'], c['40대']], ['50대', v['50~59'], c['50대']], ['60대', v['60~69'], c['60대']], ['70대 이상', v['70+'], c['70대'] + c['80대']]]
+    .map(r => [r[0], +r[1].toFixed(1), +r[2].toFixed(1)]);
+  pairs(box, w, { rows, names: ['방문', '관광소비'] });
+  table(card, ['연령', '방문 %', '관광소비 %'], rows.map(r => [r[0], r[1].toFixed(1), r[2].toFixed(1)])); });
+
+// 당일/숙박
+reg('c-stay', (box, w, card) => { const rows = [['데이터랩 외지인 전체', [83.1, 16.9]], ['관광실태조사 응답자', [44.7, 55.3]]];
+  stacked(box, w, { rows, keys: ['당일', '숙박'], colors: [col(1), col(2)], rowH: 36 });
+  const nd = D.nights; const keys = nd.cols; const months = Object.keys(nd).filter(k => k !== 'cols');
+  const avg = keys.map((_, i) => (months.reduce((a, m) => a + nd[m][i], 0) / months.length).toFixed(1));
+  table(card, ['구분', '당일 %', '숙박 %'], rows.map(r => [r[0], r[1][0], r[1][1]]).concat([['숙박자 박수 분포(데이터랩)', keys.map((k, i) => k + ' ' + avg[i]).join(' · '), '']])); });
+
+// 지도
+reg('c-map', (box, w, card) => { const M = D.map; const hs = M.sgg.map(s => s.sh).filter(v => v != null && v > 0).sort((a, b) => a - b);
+  const q = p => hs[Math.floor(p * (hs.length - 1))]; const br = [q(0.4), q(0.7), q(0.88), q(0.96)];
+  const bin = v => v <= br[0] ? 1 : v <= br[1] ? 2 : v <= br[2] ? 3 : v <= br[3] ? 4 : 5;
+  const lg = document.getElementById('map-legend'); if (!lg.firstChild) { const labs = [`${br[0]}% 이하`, `~${br[1]}%`, `~${br[2]}%`, `~${br[3]}%`, `${br[3]}% 초과`];
+    labs.forEach((l, i) => { const s = document.createElement('span'); const k = document.createElement('i'); k.style.background = `var(--q${i + 1})`; const t = document.createElement('span'); t.textContent = l; s.append(k, t); lg.append(s); }); }
+  const scale = Math.min(1, w / M.w), H = M.h * scale; const svg = S('svg', { width: w, height: H, viewBox: `0 0 ${M.w} ${M.h}`, role: 'img', 'aria-label': '경주 유입 시군구 지도' }, box);
+  const g0 = S('g', {}, svg); svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+  M.sgg.forEach(s => { const has = s.v != null && s.sh != null; const fill = has ? `var(--q${bin(s.sh)})` : 'var(--grid)';
+    const p = S('path', { d: s.d, class: 'mk', style: `fill:${fill};stroke:var(--surface);stroke-width:0.4` }, g0);
+    p.addEventListener('pointermove', e => showTip(e, s.nm, has ? [[fill, '유입 비중', pct(s.sh)], [null, '방문자', nf(s.v) + '명'], [null, '1인당 지출', s.pv ? nf(Math.round(s.pv)) + '원' : '–']] : [[null, '', '자료 없음(경계 미매칭)']]));
+    p.addEventListener('pointerleave', hideTip); });
+  M.sido.forEach(d => S('path', { d, style: 'fill:none;stroke:var(--ink-2);stroke-width:0.7;opacity:.55;pointer-events:none' }, svg));
+  const [gx, gy] = M.gj; S('circle', { cx: gx, cy: gy, r: 7, style: 'fill:none;stroke:var(--accent);stroke-width:2.5' }, svg);
+  S('circle', { cx: gx, cy: gy, r: 2.5, style: 'fill:var(--accent)' }, svg);
+  const lt = T(svg, gx + 11, gy + 5, '경주', 'tv', 'start'); lt.style.fontSize = (13 / scale) + 'px'; lt.style.paintOrder = 'stroke'; lt.style.stroke = 'var(--surface)'; lt.style.strokeWidth = (4 / scale) + 'px';
+  const top = M.sgg.filter(s => s.v != null).sort((a, b) => b.v - a.v);
+  table(card, ['시군구', '방문자', '비중 %', '1인당 지출(원)'], top.map(s => [s.nm, nf(s.v), s.sh, s.pv ? nf(Math.round(s.pv)) : null])); });
+
+// 권역
+reg('c-region', (box, w, card) => { const s = Object.fromEntries(D.sido.map(r => [r[0], r[1]])); const t = D.res_total;
+  const g = [s['부산광역시'] + s['울산광역시'] + s['경상남도'], s['대구광역시'] + s['경상북도'], s['서울특별시'] + s['경기도'] + s['인천광역시']]; g.push(t - g[0] - g[1] - g[2]);
+  const vals = g.map(v => +(v / t * 100).toFixed(1)); const keys = ['동남권', '대경권', '수도권', '그 외'];
+  stacked(box, w, { rows: [['외지인 연인원', vals]], keys, colors: [col(1), col(2), col(3), col(4)], rowH: 40, labelW: 82, inkOn: [2, 3] });
+  table(card, ['권역', '연인원', '%'], keys.map((k, i) => [k, nf(g[i]), vals[i]])); });
+
+// 시도
+const SHORT = { 경상북도: '경북', 경상남도: '경남', 충청남도: '충남', 충청북도: '충북', 전북특별자치도: '전북', 강원특별자치도: '강원', 제주특별자치도: '제주', 세종특별자치시: '세종', 전남광주통합특별시: '전남·광주', 경기도: '경기' };
+const short = n => SHORT[n] || n.replace(/(광역시|특별시)$/, '');
+reg('c-sido', (box, w, card) => { const rows = D.sido.map(r => { const o = [short(r[0]), r[2]]; o.tip = [[col(1), '비중', pct(r[2])], [null, '연인원', nf(r[1]) + '명']]; return o; });
+  hbars(box, w, { rows, rowH: 22, labelW: 70 });
+  table(card, ['시도', '연인원', '%'], D.sido.map(r => [r[0], nf(r[1]), r[2]])); });
+
+// 거리
+reg('c-dist', (box, w, card) => { const r = D.distance; const cats = ['30 미만', '30–70', '70–140', '140–190', '190–240', '240 이상'];
+  columns(box, w, { cats, vals: r.map(x => x[1]), fmt: pct, tipTitle: '거주지 거리 ', tipLabel: 'km · 외지인 연인원 비중', h: 210 });
+  table(card, ['거리', '%'], r.map(x => [x[0], x[1]])); });
+
+// 내비 vs 이동통신
+reg('c-navi', (box, w, card) => { const tot = D.res_total; const sg = Object.fromEntries(D.top_sgg.map(r => [r[0], r[1]]));
+  const rows = D.navi_top5.map(r => [r[0].replace('경북 ', '').replace('울산 ', '울산 '), r[1], +((sg[r[0]] || 0) / tot * 100).toFixed(1)]);
+  pairs(box, w, { rows, names: ['내비게이션 유입', '이동통신 거주지'] });
+  table(card, ['시군구', '내비 유입 %', '이동통신 거주지 %'], rows.map(r => [r[0], r[1], r[2]])); });
+
+// 국적
+reg('c-nat', (box, w, card) => { const [ta, tb] = D.foreign_total;
+  const rows = D.foreign.map(r => { const cur = r[2], prev = +(r[3] / tb * 100).toFixed(1); const o = [r[0], cur, prev]; o.raw = r;
+    o.tip = [[col(1), '2025.09–2026.08', `${nf(r[1])}명 · ${pct(cur)}`], ['var(--ink-2)', '전년 동기', `${nf(r[3])}명 · ${pct(prev)}`], [null, '증감', r[4] == null ? '–' : (r[4] > 0 ? '+' : '') + r[4] + '%']]; return o; });
+  hbars(box, w, { rows, ref: true, rowH: 22, labelW: 74, extra: o => o.raw[4] == null ? '' : (o.raw[4] > 0 ? '▲' : o.raw[4] < 0 ? '▼' : '') + Math.abs(o.raw[4]) + '%' });
+  table(card, ['국적', '2025.09–2026.08', '%', '전년 동기', '증감 %'], D.foreign.map(r => [r[0], nf(r[1]), r[2], nf(r[3]), r[4]])); });
+
+// 외국인 월별
+reg('c-fmonth', (box, w, card) => { const fm = D.foreign_monthly; const all = { ...fm['2024-09~2025-08'], ...fm['2025-09~2026-08'] };
+  const xs = Object.keys(all).sort(), vals = xs.map(k => all[k]); const peak = vals.indexOf(Math.max(...vals));
+  line(box, w, { xs, vals, h: 210, color: col(1), yfmt: v => v === 0 ? '0' : (v / 10000) + '만', vfmt: (v, full) => full ? nf(v) + '명' : man(v),
+    xlab: (x, full) => full ? `${x.slice(0, 4)}년 ${+x.slice(4)}월` + (x === '202510' ? ' · 추석·APEC' : '') : (x.slice(4) === '01' || x === xs[0] ? `${x.slice(2, 4)}.${x.slice(4)}` : `${+x.slice(4)}월`), mark: [peak] });
+  table(card, ['월', '외국인 연인원'], xs.map((x, i) => [x.slice(0, 4) + '.' + x.slice(4), nf(vals[i])])); });
+
+// 경북 대비
+reg('c-gb', (box, w, card) => { hbars(box, w, { rows: D.gb_share.map(r => [r[0], r[1]]), rowH: 22, labelW: 64, max: 100 });
+  table(card, ['국적', '경북 방문 중 경주 %'], D.gb_share); });
+
+// 교통수단
+const SV = D.survey; const modeColors = [1, 2, 3, 4, 5, 6, 7].map(col);
+legend('mode-legend', SV.modes, modeColors);
+reg('c-mode', (box, w, card) => { stacked(box, w, { rows: SV.trend.map(r => [r[0], r[2], r[1]]), keys: SV.modes, colors: modeColors, rowH: 34, labelW: 44, inkOn: [2, 3, 4] });
+  table(card, ['연도', 'n', ...SV.modes], SV.trend.map(r => [r[0], nf(r[1]), ...r[2]])); });
+reg('c-mode2', (box, w, card) => { stacked(box, w, { rows: SV.by_group.map(r => [`${r[0]} (${nf(r[1])})`, r[2], r[1]]), keys: SV.modes, colors: modeColors, rowH: 28, labelW: 112, gapAfter: [3], inkOn: [2, 3, 4] });
+  table(card, ['구분', 'n', ...SV.modes], SV.by_group.map(r => [r[0], nf(r[1]), ...r[2]])); });
+// 외국인 수단 — 검증된 순서: 택시·자가용·관광버스·일반버스·기차 (같은 대상은 내국인 차트와 같은 색)
+const fOrder = [1, 3, 2, 0, 4]; const fNames = fOrder.map(i => SV.foreign_modes[i]); const fColors = ['var(--s8)', col(1), col(3), col(4), col(6)];
+legend('fmode-legend', fNames, fColors);
+reg('c-fmode', (box, w, card) => { stacked(box, w, { rows: SV.foreign.map(r => [r[0], fOrder.map(i => r[2][i]), r[1]]), keys: fNames, colors: fColors, rowH: 38, labelW: 44, inkOn: [2, 3] });
+  table(card, ['연도', 'n', ...SV.foreign_modes], SV.foreign.map(r => [r[0], nf(r[1]), ...r[2]])); });
+
+// 주말 배수
+reg('c-wk', (box, w, card) => { const rows = D.counts.weekend.map(r => { const o = [r[0], r[1]]; o.tip = [[col(1), '주말 ÷ 평일', r[1].toFixed(2) + '배']]; return o; });
+  const svgBox = box; hbars(svgBox, w, { rows, rowH: 26, labelW: Math.min(170, w * 0.42), fmt: v => v.toFixed(2) + '배', max: 1.8 });
+  const svg = box.querySelector('svg'); const lw = Math.min(170, w * 0.42), iw = Math.max(40, w - lw - 52); const x1 = lw + 1 / 1.8 * iw;
+  S('line', { x1, x2: x1, y1: 0, y2: svg.getAttribute('height'), style: 'stroke:var(--ink-2);stroke-width:1;opacity:.5;pointer-events:none' }, svg);
+  const c = D.counts; table(card, ['항목', '값'], [['철도 하차 2023 (연/일)', `${nf(c.rail[0][1])} / ${nf(c.rail[0][2])}`], ['철도 하차 2024 (연/일)', `${nf(c.rail[1][1])} / ${nf(c.rail[1][2])}`],
+    ['IC 진출 2025 일평균(대)', nf(c.ic['일평균'])], ...c.ic_by_unit.map(u => [`  ${u[0]} IC 2024 / 2025`, `${nf(u[1])} / ${nf(u[2])}`]),
+    ['포항경주공항 도착 2025', nf(c.air['2025'])], ...c.weekend.map(r => [r[0] + ' 주말/평일', r[1]])]); });
+})();
+</script>

@@ -1,0 +1,514 @@
+{
+  "scale": "1:1500",
+  "source_units_label": "mm",
+  "actual_source_unit": "m",
+  "coordinate_factor": 0.6666666666666666,
+  "plate_size_mm": [
+    160,
+    160
+  ],
+  "edge_margin_mm": 3.0,
+  "minimum_part_gap_mm": 2.0,
+  "requested_part_gap_mm": 2.0,
+  "total_parts": 40,
+  "total_projected_area_mm2": 25225.436973344964,
+  "area_with_2mm_spacing_mm2": 30347.018507413097,
+  "usable_plate_area_mm2": 23716.0,
+  "plates": [
+    {
+      "plate": 1,
+      "stl": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\print_1500_20261011\\plate_01_160mm_1_1500.stl",
+      "parts": 36,
+      "bounds_mm": [
+        [
+          4.119999885559082,
+          4.119999885559082,
+          0.0
+        ],
+        [
+          155.8301239013672,
+          155.28599548339844,
+          13.333000183105469
+        ]
+      ],
+      "triangles": 23840,
+      "watertight": true,
+      "winding_consistent": true,
+      "volume_mm3": 113288.77827037305,
+      "part_ids": [
+        "part_06",
+        "part_01",
+        "part_10",
+        "part_07",
+        "part_12",
+        "part_09",
+        "part_08",
+        "part_15",
+        "part_18",
+        "part_14",
+        "part_11",
+        "part_13",
+        "part_20",
+        "part_17",
+        "part_19",
+        "part_16",
+        "part_21",
+        "part_22",
+        "part_26",
+        "part_25",
+        "part_23",
+        "part_24",
+        "part_28",
+        "part_29",
+        "part_27",
+        "part_31",
+        "part_32",
+        "part_30",
+        "part_33",
+        "part_37",
+        "part_36",
+        "part_34",
+        "part_35",
+        "part_40",
+        "part_39",
+        "part_38"
+      ]
+    },
+    {
+      "plate": 2,
+      "stl": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\print_1500_20261011\\plate_02_160mm_1_1500.stl",
+      "parts": 4,
+      "bounds_mm": [
+        [
+          4.119999885559082,
+          4.119999885559082,
+          0.0
+        ],
+        [
+          148.3967742919922,
+          148.88600158691406,
+          18.66699981689453
+        ]
+      ],
+      "triangles": 1812,
+      "watertight": true,
+      "winding_consistent": true,
+      "volume_mm3": 100117.33171201579,
+      "part_ids": [
+        "part_02",
+        "part_03",
+        "part_04",
+        "part_05"
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "id": "part_06",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        57.453000183105466,
+        4.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_01",
+      "plate": 1,
+      "rotation_deg": 302.98586,
+      "translation_mm": [
+        47.91436573832078,
+        22.264082878306017,
+        0.0
+      ]
+    },
+    {
+      "id": "part_10",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        128.42000019073487,
+        4.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_07",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        146.84100067138672,
+        73.68500244140625,
+        0.0
+      ]
+    },
+    {
+      "id": "part_12",
+      "plate": 1,
+      "rotation_deg": 270,
+      "translation_mm": [
+        59.62,
+        48.72000038146973,
+        0.0
+      ]
+    },
+    {
+      "id": "part_09",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        25.961949462890626,
+        94.58748733520508,
+        0.0
+      ]
+    },
+    {
+      "id": "part_08",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        49.85299980163575,
+        33.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_15",
+      "plate": 1,
+      "rotation_deg": 270,
+      "translation_mm": [
+        52.12,
+        84.45399963378907,
+        0.0
+      ]
+    },
+    {
+      "id": "part_18",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        74.12,
+        53.62,
+        0.0
+      ]
+    },
+    {
+      "id": "part_14",
+      "plate": 1,
+      "rotation_deg": 33.56274,
+      "translation_mm": [
+        149.5811776173939,
+        63.31526544926632,
+        0.0
+      ]
+    },
+    {
+      "id": "part_11",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        108.12,
+        76.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_13",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        28.12,
+        78.62,
+        0.0
+      ]
+    },
+    {
+      "id": "part_20",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        106.12,
+        114.45300018310547,
+        0.0
+      ]
+    },
+    {
+      "id": "part_17",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        79.12,
+        145.95300018310547,
+        0.0
+      ]
+    },
+    {
+      "id": "part_19",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        36.12,
+        154.45300018310547,
+        0.0
+      ]
+    },
+    {
+      "id": "part_16",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        14.920000190734864,
+        118.78699981689454,
+        0.0
+      ]
+    },
+    {
+      "id": "part_21",
+      "plate": 1,
+      "rotation_deg": 270,
+      "translation_mm": [
+        124.62,
+        107.83299934387207,
+        0.0
+      ]
+    },
+    {
+      "id": "part_22",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        155.78599988937378,
+        4.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_26",
+      "plate": 1,
+      "rotation_deg": 212.67881,
+      "translation_mm": [
+        129.3442623739525,
+        148.6021336041566,
+        0.0
+      ]
+    },
+    {
+      "id": "part_25",
+      "plate": 1,
+      "rotation_deg": 32.58237,
+      "translation_mm": [
+        83.82655904807267,
+        112.38516266692393,
+        0.0
+      ]
+    },
+    {
+      "id": "part_23",
+      "plate": 1,
+      "rotation_deg": 302.6808,
+      "translation_mm": [
+        89.59035851937561,
+        152.34273333321374,
+        0.0
+      ]
+    },
+    {
+      "id": "part_24",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        38.12,
+        148.62,
+        0.0
+      ]
+    },
+    {
+      "id": "part_28",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        63.786999816894536,
+        86.62,
+        0.0
+      ]
+    },
+    {
+      "id": "part_29",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        99.78699981689454,
+        94.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_27",
+      "plate": 1,
+      "rotation_deg": 270,
+      "translation_mm": [
+        47.12,
+        108.68599998474122,
+        0.0
+      ]
+    },
+    {
+      "id": "part_31",
+      "plate": 1,
+      "rotation_deg": 302.98873,
+      "translation_mm": [
+        9.630577321447836,
+        108.15822621446614,
+        0.0
+      ]
+    },
+    {
+      "id": "part_32",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        133.62,
+        113.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_30",
+      "plate": 1,
+      "rotation_deg": 122.98754,
+      "translation_mm": [
+        108.1089297145515,
+        121.48188418884611,
+        0.0
+      ]
+    },
+    {
+      "id": "part_33",
+      "plate": 1,
+      "rotation_deg": 180,
+      "translation_mm": [
+        44.785999889373784,
+        141.78699981689454,
+        0.0
+      ]
+    },
+    {
+      "id": "part_37",
+      "plate": 1,
+      "rotation_deg": 329.95581,
+      "translation_mm": [
+        47.941625654225454,
+        125.62000039357592,
+        0.0
+      ]
+    },
+    {
+      "id": "part_36",
+      "plate": 1,
+      "rotation_deg": 0,
+      "translation_mm": [
+        142.62,
+        127.94162562462873,
+        0.0
+      ]
+    },
+    {
+      "id": "part_34",
+      "plate": 1,
+      "rotation_deg": 270,
+      "translation_mm": [
+        102.62,
+        139.78599988937378,
+        0.0
+      ]
+    },
+    {
+      "id": "part_35",
+      "plate": 1,
+      "rotation_deg": 210.04419,
+      "translation_mm": [
+        24.617846073291783,
+        147.50856489312923,
+        0.0
+      ]
+    },
+    {
+      "id": "part_40",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        112.4480029296875,
+        32.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_39",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        56.948002929687505,
+        33.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_38",
+      "plate": 1,
+      "rotation_deg": 90,
+      "translation_mm": [
+        153.9480234336853,
+        51.12,
+        0.0
+      ]
+    },
+    {
+      "id": "part_02",
+      "plate": 2,
+      "rotation_deg": 270,
+      "translation_mm": [
+        4.12,
+        93.18700134277344,
+        0.0
+      ]
+    },
+    {
+      "id": "part_03",
+      "plate": 2,
+      "rotation_deg": 212.99864,
+      "translation_mm": [
+        77.49549557137863,
+        121.4202098739858,
+        0.0
+      ]
+    },
+    {
+      "id": "part_04",
+      "plate": 2,
+      "rotation_deg": 246.06394,
+      "translation_mm": [
+        119.50709901399237,
+        77.64950582950034,
+        0.0
+      ]
+    },
+    {
+      "id": "part_05",
+      "plate": 2,
+      "rotation_deg": 180,
+      "translation_mm": [
+        24.12,
+        148.88599884033204,
+        0.0
+      ]
+    }
+  ],
+  "source_geometry_coverage_count": 176,
+  "missing_source_ids": [],
+  "groove_height_mm": 0.4,
+  "groove_depth_mm": 0.25,
+  "layout_3dm": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\print_1500_20261011\\print_layout_1_1500.3dm",
+  "assembly_3dm": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\print_1500_20261011\\site_assembly_1_1500.3dm",
+  "elapsed_seconds": 140.2914264202118
+}

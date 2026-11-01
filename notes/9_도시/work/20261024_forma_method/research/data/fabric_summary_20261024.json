@@ -1,0 +1,1811 @@
+{
+ "pkl_n": 22621,
+ "pkl_floor_hist": {
+  "1": 16977,
+  "2": 2520,
+  "3": 1389,
+  "4": 1298,
+  "5": 263,
+  "6": 70,
+  "7": 43,
+  "8": 13,
+  "9": 14,
+  "10": 11,
+  "11": 1,
+  "12": 11,
+  "13": 5,
+  "15": 5,
+  "16": 1
+ },
+ "pkl_h_is_multiple_of_3p5": 1.0,
+ "extent_km2": 11.32,
+ "shp_floor_hist": {
+  "1": 17926,
+  "2": 2522,
+  "3": 1390,
+  "4": 1300,
+  "5": 263,
+  "6": 70,
+  "7": 43,
+  "8": 13,
+  "9": 14,
+  "10": 12,
+  "11": 1,
+  "12": 11,
+  "13": 5,
+  "14": 1,
+  "15": 7,
+  "16": 1
+ },
+ "river_names": [
+  "북천",
+  "형산강"
+ ],
+ "pkl_unmatched_to_face": 0,
+ "extent_all": {
+  "label": "모델 범위 전체(가장자리 포함)",
+  "n_faces": 1096,
+  "n_urban_faces": 863,
+  "area_ha": 1132.5,
+  "island_ha": 846.3,
+  "tare": 0.253,
+  "n_bldg": 22621,
+  "footprint_ha": 202.21,
+  "floor_area_ha": 464.41,
+  "GSI_fabric": 0.179,
+  "FSI_fabric": 0.41,
+  "GSI_island": 0.239,
+  "FSI_island": 0.549,
+  "L": 2.3,
+  "OSR_fabric": 2.0,
+  "floors_p50": 1,
+  "floors_mean": 1.51,
+  "share_1f": 0.75,
+  "share_le2f": 0.862,
+  "share_ge5f": 0.019,
+  "floors_max": 16,
+  "floor_hist": {
+   "1": 16977,
+   "2": 2520,
+   "3": 1389,
+   "4": 1298,
+   "5": 263,
+   "6": 70,
+   "7": 43,
+   "8": 13,
+   "9": 14,
+   "10": 11,
+   "11": 1,
+   "12": 11,
+   "13": 5,
+   "15": 5,
+   "16": 1
+  },
+  "urban_GSI_fabric_p25_p50_p75": [
+   0.337,
+   0.429,
+   0.481
+  ],
+  "urban_GSI_island_p25_p50_p75": [
+   0.472,
+   0.572,
+   0.636
+  ],
+  "urban_FSI_fabric_p25_p50_p75": [
+   0.521,
+   0.871,
+   1.199
+  ],
+  "urban_FSI_island_p25_p50_p75": [
+   0.659,
+   1.17,
+   1.61
+  ],
+  "urban_L_p25_p50_p75": [
+   1.373,
+   2.036,
+   2.795
+  ],
+  "urban_OSR_fabric_p25_p50_p75": [
+   0.455,
+   0.653,
+   1.139
+  ],
+  "urban_face_area_p25_p50_p75": [
+   2424,
+   4345,
+   7009
+  ],
+  "urban_island_area_p50": 3332,
+  "urban_mrr_short_p50": 50.9,
+  "urban_mrr_long_p50": 101.1,
+  "urban_tare_p50": 0.238,
+  "urban_share_1f_p50": 0.679,
+  "urban_fl_max_p50": 4.0,
+  "urban_dist_river_p50": 379,
+  "urban_share_within_300m_river": 0.381,
+  "urban_share_within_500m_river": 0.65,
+  "urban_GSI_island_bins": {
+   "0.4-0.5": 124,
+   "0.0-0.2": 49,
+   "0.5-0.6": 256,
+   "0.2-0.3": 30,
+   "0.3-0.4": 67,
+   "0.6-1.0": 337
+  }
+ },
+ "s2_circle": {
+  "label": "S2 구역중심 반경 1 km (대표점 기준)",
+  "n_faces": 441,
+  "n_urban_faces": 338,
+  "area_ha": 299.6,
+  "island_ha": 221.1,
+  "tare": 0.262,
+  "n_bldg": 9768,
+  "footprint_ha": 80.3,
+  "floor_area_ha": 174.8,
+  "GSI_fabric": 0.268,
+  "FSI_fabric": 0.584,
+  "GSI_island": 0.363,
+  "FSI_island": 0.791,
+  "L": 2.18,
+  "OSR_fabric": 1.25,
+  "floors_p50": 1.0,
+  "floors_mean": 1.42,
+  "share_1f": 0.781,
+  "share_le2f": 0.886,
+  "share_ge5f": 0.018,
+  "floors_max": 15,
+  "floor_hist": {
+   "1": 7628,
+   "2": 1030,
+   "3": 536,
+   "4": 394,
+   "5": 108,
+   "6": 40,
+   "7": 19,
+   "8": 5,
+   "9": 5,
+   "10": 2,
+   "15": 1
+  },
+  "urban_GSI_fabric_p25_p50_p75": [
+   0.324,
+   0.412,
+   0.477
+  ],
+  "urban_GSI_island_p25_p50_p75": [
+   0.458,
+   0.552,
+   0.618
+  ],
+  "urban_FSI_fabric_p25_p50_p75": [
+   0.493,
+   0.765,
+   1.072
+  ],
+  "urban_FSI_island_p25_p50_p75": [
+   0.646,
+   0.985,
+   1.463
+  ],
+  "urban_L_p25_p50_p75": [
+   1.313,
+   1.881,
+   2.731
+  ],
+  "urban_OSR_fabric_p25_p50_p75": [
+   0.511,
+   0.753,
+   1.241
+  ],
+  "urban_face_area_p25_p50_p75": [
+   2209,
+   4078,
+   7792
+  ],
+  "urban_island_area_p50": 3227,
+  "urban_mrr_short_p50": 56.3,
+  "urban_mrr_long_p50": 95.1,
+  "urban_tare_p50": 0.223,
+  "urban_share_1f_p50": 0.76,
+  "urban_fl_max_p50": 4.0,
+  "urban_dist_river_p50": 395,
+  "urban_share_within_300m_river": 0.355,
+  "urban_share_within_500m_river": 0.633,
+  "urban_GSI_island_bins": {
+   "0.5-0.6": 119,
+   "0.2-0.3": 11,
+   "0.6-1.0": 101,
+   "0.3-0.4": 33,
+   "0.4-0.5": 50,
+   "0.0-0.2": 24
+  }
+ },
+ "s2_circle_excl_zone": {
+  "label": "S2 1 km, 구역 접촉 가구 제외",
+  "n_faces": 434,
+  "n_urban_faces": 332,
+  "area_ha": 273.4,
+  "island_ha": 208.3,
+  "tare": 0.238,
+  "n_bldg": 9296,
+  "footprint_ha": 75.82,
+  "floor_area_ha": 167.4,
+  "GSI_fabric": 0.277,
+  "FSI_fabric": 0.612,
+  "GSI_island": 0.364,
+  "FSI_island": 0.804,
+  "L": 2.21,
+  "OSR_fabric": 1.18,
+  "floors_p50": 1.0,
+  "floors_mean": 1.43,
+  "share_1f": 0.777,
+  "share_le2f": 0.884,
+  "share_ge5f": 0.019,
+  "floors_max": 15,
+  "floor_hist": {
+   "1": 7220,
+   "2": 1001,
+   "3": 510,
+   "4": 389,
+   "5": 105,
+   "6": 39,
+   "7": 19,
+   "8": 5,
+   "9": 5,
+   "10": 2,
+   "15": 1
+  },
+  "urban_GSI_fabric_p25_p50_p75": [
+   0.325,
+   0.413,
+   0.477
+  ],
+  "urban_GSI_island_p25_p50_p75": [
+   0.459,
+   0.553,
+   0.62
+  ],
+  "urban_FSI_fabric_p25_p50_p75": [
+   0.498,
+   0.773,
+   1.08
+  ],
+  "urban_FSI_island_p25_p50_p75": [
+   0.65,
+   0.998,
+   1.469
+  ],
+  "urban_L_p25_p50_p75": [
+   1.319,
+   1.893,
+   2.733
+  ],
+  "urban_OSR_fabric_p25_p50_p75": [
+   0.51,
+   0.748,
+   1.218
+  ],
+  "urban_face_area_p25_p50_p75": [
+   2197,
+   4078,
+   7775
+  ],
+  "urban_island_area_p50": 3227,
+  "urban_mrr_short_p50": 55.9,
+  "urban_mrr_long_p50": 94.6,
+  "urban_tare_p50": 0.224,
+  "urban_share_1f_p50": 0.759,
+  "urban_fl_max_p50": 4.0,
+  "urban_dist_river_p50": 398,
+  "urban_share_within_300m_river": 0.355,
+  "urban_share_within_500m_river": 0.633,
+  "urban_GSI_island_bins": {
+   "0.5-0.6": 119,
+   "0.2-0.3": 11,
+   "0.6-1.0": 100,
+   "0.3-0.4": 31,
+   "0.4-0.5": 48,
+   "0.0-0.2": 23
+  }
+ },
+ "by_dong": {
+  "황오동": {
+   "label": "황오동",
+   "n_faces": 102,
+   "n_urban_faces": 69,
+   "area_ha": 66.4,
+   "island_ha": 54.3,
+   "tare": 0.182,
+   "n_bldg": 2270,
+   "footprint_ha": 18.52,
+   "floor_area_ha": 33.07,
+   "GSI_fabric": 0.279,
+   "FSI_fabric": 0.498,
+   "GSI_island": 0.341,
+   "FSI_island": 0.609,
+   "L": 1.79,
+   "OSR_fabric": 1.45,
+   "floors_p50": 1.0,
+   "floors_mean": 1.28,
+   "share_1f": 0.817,
+   "share_le2f": 0.923,
+   "share_ge5f": 0.004,
+   "floors_max": 7,
+   "floor_hist": {
+    "1": 1855,
+    "2": 240,
+    "3": 145,
+    "4": 22,
+    "5": 2,
+    "6": 3,
+    "7": 3
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.344,
+    0.432,
+    0.495
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.469,
+    0.57,
+    0.64
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.45,
+    0.624,
+    0.825
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.59,
+    0.777,
+    1.226
+   ],
+   "urban_L_p25_p50_p75": [
+    1.144,
+    1.554,
+    2.044
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.663,
+    0.878,
+    1.326
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2278,
+    4999,
+    9006
+   ],
+   "urban_island_area_p50": 3958,
+   "urban_mrr_short_p50": 58.0,
+   "urban_mrr_long_p50": 93.0,
+   "urban_tare_p50": 0.199,
+   "urban_share_1f_p50": 0.786,
+   "urban_fl_max_p50": 3.0,
+   "urban_dist_river_p50": 685,
+   "urban_share_within_300m_river": 0.159,
+   "urban_share_within_500m_river": 0.348,
+   "urban_GSI_island_bins": {
+    "0.6-1.0": 26,
+    "0.5-0.6": 22,
+    "0.4-0.5": 8,
+    "0.0-0.2": 6,
+    "0.2-0.3": 2,
+    "0.3-0.4": 5
+   }
+  },
+  "성동동": {
+   "label": "성동동",
+   "n_faces": 55,
+   "n_urban_faces": 46,
+   "area_ha": 68.4,
+   "island_ha": 46.2,
+   "tare": 0.325,
+   "n_bldg": 2000,
+   "footprint_ha": 17.64,
+   "floor_area_ha": 39.5,
+   "GSI_fabric": 0.258,
+   "FSI_fabric": 0.577,
+   "GSI_island": 0.382,
+   "FSI_island": 0.855,
+   "L": 2.24,
+   "OSR_fabric": 1.29,
+   "floors_p50": 1.0,
+   "floors_mean": 1.37,
+   "share_1f": 0.818,
+   "share_le2f": 0.902,
+   "share_ge5f": 0.022,
+   "floors_max": 9,
+   "floor_hist": {
+    "1": 1635,
+    "2": 169,
+    "3": 90,
+    "4": 61,
+    "5": 26,
+    "6": 12,
+    "7": 5,
+    "8": 1,
+    "9": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.315,
+    0.369,
+    0.463
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.394,
+    0.512,
+    0.609
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.485,
+    0.673,
+    1.006
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.598,
+    0.902,
+    1.275
+   ],
+   "urban_L_p25_p50_p75": [
+    1.226,
+    1.917,
+    2.633
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.552,
+    0.849,
+    1.471
+   ],
+   "urban_face_area_p25_p50_p75": [
+    3043,
+    6795,
+    10287
+   ],
+   "urban_island_area_p50": 5308,
+   "urban_mrr_short_p50": 66.8,
+   "urban_mrr_long_p50": 133.2,
+   "urban_tare_p50": 0.199,
+   "urban_share_1f_p50": 0.799,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 317,
+   "urban_share_within_300m_river": 0.457,
+   "urban_share_within_500m_river": 0.826,
+   "urban_GSI_island_bins": {
+    "0.4-0.5": 9,
+    "0.6-1.0": 12,
+    "0.0-0.2": 3,
+    "0.5-0.6": 13,
+    "0.2-0.3": 3,
+    "0.3-0.4": 6
+   }
+  },
+  "노서동": {
+   "label": "노서동",
+   "n_faces": 41,
+   "n_urban_faces": 36,
+   "area_ha": 33.7,
+   "island_ha": 26.9,
+   "tare": 0.202,
+   "n_bldg": 859,
+   "footprint_ha": 11.74,
+   "floor_area_ha": 32.2,
+   "GSI_fabric": 0.348,
+   "FSI_fabric": 0.955,
+   "GSI_island": 0.436,
+   "FSI_island": 1.197,
+   "L": 2.74,
+   "OSR_fabric": 0.68,
+   "floors_p50": 1,
+   "floors_mean": 1.91,
+   "share_1f": 0.569,
+   "share_le2f": 0.73,
+   "share_ge5f": 0.04,
+   "floors_max": 9,
+   "floor_hist": {
+    "1": 489,
+    "2": 138,
+    "3": 102,
+    "4": 96,
+    "5": 23,
+    "6": 5,
+    "7": 5,
+    "9": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.405,
+    0.491,
+    0.526
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.543,
+    0.635,
+    0.669
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.893,
+    1.231,
+    1.484
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    1.196,
+    1.56,
+    1.888
+   ],
+   "urban_L_p25_p50_p75": [
+    1.968,
+    2.586,
+    3.219
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.318,
+    0.447,
+    0.615
+   ],
+   "urban_face_area_p25_p50_p75": [
+    4927,
+    7130,
+    9472
+   ],
+   "urban_island_area_p50": 5599,
+   "urban_mrr_short_p50": 65.8,
+   "urban_mrr_long_p50": 110.6,
+   "urban_tare_p50": 0.197,
+   "urban_share_1f_p50": 0.506,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 395,
+   "urban_share_within_300m_river": 0.306,
+   "urban_share_within_500m_river": 0.667,
+   "urban_GSI_island_bins": {
+    "0.5-0.6": 7,
+    "0.3-0.4": 2,
+    "0.6-1.0": 21,
+    "0.0-0.2": 3,
+    "0.2-0.3": 2,
+    "0.4-0.5": 1
+   }
+  },
+  "노동동": {
+   "label": "노동동",
+   "n_faces": 30,
+   "n_urban_faces": 22,
+   "area_ha": 14.8,
+   "island_ha": 12.1,
+   "tare": 0.183,
+   "n_bldg": 432,
+   "footprint_ha": 5.18,
+   "floor_area_ha": 13.38,
+   "GSI_fabric": 0.351,
+   "FSI_fabric": 0.907,
+   "GSI_island": 0.429,
+   "FSI_island": 1.11,
+   "L": 2.58,
+   "OSR_fabric": 0.72,
+   "floors_p50": 1.0,
+   "floors_mean": 1.82,
+   "share_1f": 0.56,
+   "share_le2f": 0.75,
+   "share_ge5f": 0.025,
+   "floors_max": 6,
+   "floor_hist": {
+    "1": 242,
+    "2": 82,
+    "3": 68,
+    "4": 29,
+    "5": 7,
+    "6": 4
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.43,
+    0.479,
+    0.546
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.508,
+    0.594,
+    0.677
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.83,
+    1.069,
+    1.403
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    1.011,
+    1.342,
+    1.793
+   ],
+   "urban_L_p25_p50_p75": [
+    1.911,
+    2.096,
+    2.742
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.336,
+    0.452,
+    0.678
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2647,
+    4109,
+    7722
+   ],
+   "urban_island_area_p50": 3462,
+   "urban_mrr_short_p50": 56.5,
+   "urban_mrr_long_p50": 87.4,
+   "urban_tare_p50": 0.19,
+   "urban_share_1f_p50": 0.56,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 1002,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.0,
+   "urban_GSI_island_bins": {
+    "0.6-1.0": 10,
+    "0.5-0.6": 7,
+    "0.0-0.2": 3,
+    "0.3-0.4": 1,
+    "0.4-0.5": 1
+   }
+  },
+  "성건동": {
+   "label": "성건동",
+   "n_faces": 277,
+   "n_urban_faces": 248,
+   "area_ha": 187.6,
+   "island_ha": 108.6,
+   "tare": 0.421,
+   "n_bldg": 4996,
+   "footprint_ha": 48.41,
+   "floor_area_ha": 115.59,
+   "GSI_fabric": 0.258,
+   "FSI_fabric": 0.616,
+   "GSI_island": 0.446,
+   "FSI_island": 1.065,
+   "L": 2.39,
+   "OSR_fabric": 1.2,
+   "floors_p50": 1.0,
+   "floors_mean": 1.71,
+   "share_1f": 0.618,
+   "share_le2f": 0.809,
+   "share_ge5f": 0.017,
+   "floors_max": 9,
+   "floor_hist": {
+    "1": 3090,
+    "2": 951,
+    "3": 438,
+    "4": 430,
+    "5": 53,
+    "6": 12,
+    "7": 19,
+    "8": 2,
+    "9": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.399,
+    0.458,
+    0.494
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.562,
+    0.621,
+    0.663
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.837,
+    1.024,
+    1.24
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    1.091,
+    1.379,
+    1.684
+   ],
+   "urban_L_p25_p50_p75": [
+    1.871,
+    2.233,
+    2.823
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.427,
+    0.518,
+    0.674
+   ],
+   "urban_face_area_p25_p50_p75": [
+    1978,
+    3535,
+    5725
+   ],
+   "urban_island_area_p50": 2565,
+   "urban_mrr_short_p50": 42.2,
+   "urban_mrr_long_p50": 90.0,
+   "urban_tare_p50": 0.251,
+   "urban_share_1f_p50": 0.571,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 270,
+   "urban_share_within_300m_river": 0.552,
+   "urban_share_within_500m_river": 0.903,
+   "urban_GSI_island_bins": {
+    "0.6-1.0": 151,
+    "0.5-0.6": 61,
+    "0.2-0.3": 4,
+    "0.3-0.4": 6,
+    "0.4-0.5": 22,
+    "0.0-0.2": 4
+   }
+  },
+  "동부동": {
+   "label": "동부동",
+   "n_faces": 23,
+   "n_urban_faces": 20,
+   "area_ha": 11.4,
+   "island_ha": 8.6,
+   "tare": 0.245,
+   "n_bldg": 432,
+   "footprint_ha": 3.76,
+   "floor_area_ha": 8.35,
+   "GSI_fabric": 0.329,
+   "FSI_fabric": 0.73,
+   "GSI_island": 0.435,
+   "FSI_island": 0.967,
+   "L": 2.22,
+   "OSR_fabric": 0.92,
+   "floors_p50": 1.0,
+   "floors_mean": 1.45,
+   "share_1f": 0.792,
+   "share_le2f": 0.859,
+   "share_ge5f": 0.023,
+   "floors_max": 7,
+   "floor_hist": {
+    "1": 342,
+    "2": 29,
+    "3": 29,
+    "4": 22,
+    "5": 8,
+    "6": 1,
+    "7": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.302,
+    0.378,
+    0.419
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.396,
+    0.524,
+    0.587
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.433,
+    0.686,
+    0.983
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.549,
+    0.82,
+    1.265
+   ],
+   "urban_L_p25_p50_p75": [
+    1.283,
+    1.719,
+    2.732
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.551,
+    0.874,
+    1.313
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2190,
+    4069,
+    9415
+   ],
+   "urban_island_area_p50": 3056,
+   "urban_mrr_short_p50": 51.7,
+   "urban_mrr_long_p50": 95.4,
+   "urban_tare_p50": 0.212,
+   "urban_share_1f_p50": 0.835,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 815,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.0,
+   "urban_GSI_island_bins": {
+    "0.6-1.0": 5,
+    "0.3-0.4": 3,
+    "0.2-0.3": 1,
+    "0.4-0.5": 5,
+    "0.5-0.6": 5,
+    "0.0-0.2": 1
+   }
+  },
+  "서부동": {
+   "label": "서부동",
+   "n_faces": 22,
+   "n_urban_faces": 19,
+   "area_ha": 18.2,
+   "island_ha": 14.4,
+   "tare": 0.205,
+   "n_bldg": 723,
+   "footprint_ha": 6.84,
+   "floor_area_ha": 16.3,
+   "GSI_fabric": 0.377,
+   "FSI_fabric": 0.897,
+   "GSI_island": 0.474,
+   "FSI_island": 1.128,
+   "L": 2.38,
+   "OSR_fabric": 0.69,
+   "floors_p50": 1,
+   "floors_mean": 1.41,
+   "share_1f": 0.799,
+   "share_le2f": 0.887,
+   "share_ge5f": 0.029,
+   "floors_max": 5,
+   "floor_hist": {
+    "1": 578,
+    "2": 63,
+    "3": 31,
+    "4": 30,
+    "5": 21
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.363,
+    0.418,
+    0.473
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.509,
+    0.6,
+    0.657
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.537,
+    0.638,
+    0.784
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.725,
+    0.925,
+    1.019
+   ],
+   "urban_L_p25_p50_p75": [
+    1.269,
+    1.679,
+    1.961
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.746,
+    0.897,
+    1.095
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2195,
+    4920,
+    8862
+   ],
+   "urban_island_area_p50": 3308,
+   "urban_mrr_short_p50": 57.4,
+   "urban_mrr_long_p50": 94.6,
+   "urban_tare_p50": 0.268,
+   "urban_share_1f_p50": 0.824,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 659,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.0,
+   "urban_GSI_island_bins": {
+    "0.6-1.0": 10,
+    "0.4-0.5": 3,
+    "0.5-0.6": 5,
+    "0.0-0.2": 1
+   }
+  },
+  "북부동": {
+   "label": "북부동",
+   "n_faces": 13,
+   "n_urban_faces": 9,
+   "area_ha": 11.4,
+   "island_ha": 9.8,
+   "tare": 0.144,
+   "n_bldg": 462,
+   "footprint_ha": 2.73,
+   "floor_area_ha": 3.84,
+   "GSI_fabric": 0.239,
+   "FSI_fabric": 0.336,
+   "GSI_island": 0.279,
+   "FSI_island": 0.393,
+   "L": 1.41,
+   "OSR_fabric": 2.26,
+   "floors_p50": 1.0,
+   "floors_mean": 1.09,
+   "share_1f": 0.946,
+   "share_le2f": 0.978,
+   "share_ge5f": 0.0,
+   "floors_max": 4,
+   "floor_hist": {
+    "1": 437,
+    "2": 15,
+    "3": 5,
+    "4": 5
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.212,
+    0.434,
+    0.475
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.237,
+    0.48,
+    0.51
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.4,
+    0.481,
+    0.534
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.447,
+    0.531,
+    0.628
+   ],
+   "urban_L_p25_p50_p75": [
+    1.0,
+    1.23,
+    1.344
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    1.002,
+    1.101,
+    1.971
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2957,
+    9689,
+    13328
+   ],
+   "urban_island_area_p50": 8762,
+   "urban_mrr_short_p50": 91.6,
+   "urban_mrr_long_p50": 155.7,
+   "urban_tare_p50": 0.106,
+   "urban_share_1f_p50": 0.938,
+   "urban_fl_max_p50": 2.0,
+   "urban_dist_river_p50": 618,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.111,
+   "urban_GSI_island_bins": {
+    "0.0-0.2": 2,
+    "0.4-0.5": 2,
+    "0.6-1.0": 1,
+    "0.2-0.3": 1,
+    "0.5-0.6": 3
+   }
+  },
+  "사정동": {
+   "label": "사정동",
+   "n_faces": 55,
+   "n_urban_faces": 49,
+   "area_ha": 37.4,
+   "island_ha": 29.9,
+   "tare": 0.2,
+   "n_bldg": 1727,
+   "footprint_ha": 12.48,
+   "floor_area_ha": 15.06,
+   "GSI_fabric": 0.334,
+   "FSI_fabric": 0.402,
+   "GSI_island": 0.417,
+   "FSI_island": 0.503,
+   "L": 1.21,
+   "OSR_fabric": 1.66,
+   "floors_p50": 1,
+   "floors_mean": 1.03,
+   "share_1f": 0.972,
+   "share_le2f": 0.998,
+   "share_ge5f": 0.0,
+   "floors_max": 4,
+   "floor_hist": {
+    "1": 1678,
+    "2": 46,
+    "3": 2,
+    "4": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.299,
+    0.385,
+    0.483
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.405,
+    0.533,
+    0.568
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.309,
+    0.431,
+    0.498
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.449,
+    0.551,
+    0.622
+   ],
+   "urban_L_p25_p50_p75": [
+    1.0,
+    1.0,
+    1.061
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    1.033,
+    1.339,
+    2.238
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2100,
+    5355,
+    7536
+   ],
+   "urban_island_area_p50": 4464,
+   "urban_mrr_short_p50": 54.9,
+   "urban_mrr_long_p50": 94.4,
+   "urban_tare_p50": 0.211,
+   "urban_share_1f_p50": 1.0,
+   "urban_fl_max_p50": 1.0,
+   "urban_dist_river_p50": 429,
+   "urban_share_within_300m_river": 0.245,
+   "urban_share_within_500m_river": 0.673,
+   "urban_GSI_island_bins": {
+    "0.5-0.6": 17,
+    "0.2-0.3": 3,
+    "0.3-0.4": 8,
+    "0.6-1.0": 10,
+    "0.4-0.5": 10,
+    "0.0-0.2": 1
+   }
+  },
+  "황남동": {
+   "label": "황남동",
+   "n_faces": 48,
+   "n_urban_faces": 39,
+   "area_ha": 41.5,
+   "island_ha": 34.9,
+   "tare": 0.157,
+   "n_bldg": 1297,
+   "footprint_ha": 9.16,
+   "floor_area_ha": 10.55,
+   "GSI_fabric": 0.221,
+   "FSI_fabric": 0.255,
+   "GSI_island": 0.262,
+   "FSI_island": 0.302,
+   "L": 1.15,
+   "OSR_fabric": 3.06,
+   "floors_p50": 1,
+   "floors_mean": 1.04,
+   "share_1f": 0.958,
+   "share_le2f": 0.999,
+   "share_ge5f": 0.0,
+   "floors_max": 3,
+   "floor_hist": {
+    "1": 1243,
+    "2": 53,
+    "3": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.354,
+    0.412,
+    0.46
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.452,
+    0.493,
+    0.583
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.385,
+    0.46,
+    0.508
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.473,
+    0.553,
+    0.617
+   ],
+   "urban_L_p25_p50_p75": [
+    1.0,
+    1.046,
+    1.134
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    1.034,
+    1.257,
+    1.676
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2656,
+    5383,
+    8089
+   ],
+   "urban_island_area_p50": 3915,
+   "urban_mrr_short_p50": 65.7,
+   "urban_mrr_long_p50": 96.8,
+   "urban_tare_p50": 0.163,
+   "urban_share_1f_p50": 0.972,
+   "urban_fl_max_p50": 2.0,
+   "urban_dist_river_p50": 797,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.0,
+   "urban_GSI_island_bins": {
+    "0.4-0.5": 15,
+    "0.0-0.2": 3,
+    "0.5-0.6": 11,
+    "0.3-0.4": 2,
+    "0.6-1.0": 8
+   }
+  },
+  "인왕동": {
+   "label": "인왕동",
+   "n_faces": 39,
+   "n_urban_faces": 19,
+   "area_ha": 89.7,
+   "island_ha": 76.5,
+   "tare": 0.147,
+   "n_bldg": 915,
+   "footprint_ha": 5.27,
+   "floor_area_ha": 6.52,
+   "GSI_fabric": 0.059,
+   "FSI_fabric": 0.073,
+   "GSI_island": 0.069,
+   "FSI_island": 0.085,
+   "L": 1.24,
+   "OSR_fabric": 12.95,
+   "floors_p50": 1,
+   "floors_mean": 1.02,
+   "share_1f": 0.984,
+   "share_le2f": 0.995,
+   "share_ge5f": 0.0,
+   "floors_max": 4,
+   "floor_hist": {
+    "1": 900,
+    "2": 10,
+    "3": 3,
+    "4": 2
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.115,
+    0.288,
+    0.472
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.175,
+    0.408,
+    0.518
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.129,
+    0.314,
+    0.472
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.2,
+    0.443,
+    0.535
+   ],
+   "urban_L_p25_p50_p75": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    1.118,
+    2.187,
+    7.61
+   ],
+   "urban_face_area_p25_p50_p75": [
+    2956,
+    4994,
+    13109
+   ],
+   "urban_island_area_p50": 3630,
+   "urban_mrr_short_p50": 71.1,
+   "urban_mrr_long_p50": 121.3,
+   "urban_tare_p50": 0.157,
+   "urban_share_1f_p50": 1.0,
+   "urban_fl_max_p50": 1.0,
+   "urban_dist_river_p50": 529,
+   "urban_share_within_300m_river": 0.0,
+   "urban_share_within_500m_river": 0.421,
+   "urban_GSI_island_bins": {
+    "0.0-0.2": 5,
+    "0.4-0.5": 5,
+    "0.6-1.0": 2,
+    "0.5-0.6": 3,
+    "0.3-0.4": 3,
+    "0.2-0.3": 1
+   }
+  },
+  "동천동": {
+   "label": "동천동",
+   "n_faces": 332,
+   "n_urban_faces": 259,
+   "area_ha": 190.9,
+   "island_ha": 128.9,
+   "tare": 0.325,
+   "n_bldg": 5183,
+   "footprint_ha": 48.15,
+   "floor_area_ha": 149.21,
+   "GSI_fabric": 0.252,
+   "FSI_fabric": 0.782,
+   "GSI_island": 0.374,
+   "FSI_island": 1.158,
+   "L": 3.1,
+   "OSR_fabric": 0.96,
+   "floors_p50": 1,
+   "floors_mean": 1.84,
+   "share_1f": 0.643,
+   "share_le2f": 0.77,
+   "share_ge5f": 0.039,
+   "floors_max": 16,
+   "floor_hist": {
+    "1": 3334,
+    "2": 658,
+    "3": 437,
+    "4": 552,
+    "5": 107,
+    "6": 32,
+    "7": 9,
+    "8": 10,
+    "9": 11,
+    "10": 10,
+    "11": 1,
+    "12": 11,
+    "13": 5,
+    "15": 5,
+    "16": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.313,
+    0.408,
+    0.459
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.439,
+    0.554,
+    0.612
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.716,
+    1.049,
+    1.308
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.958,
+    1.426,
+    1.776
+   ],
+   "urban_L_p25_p50_p75": [
+    1.939,
+    2.585,
+    3.145
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.429,
+    0.571,
+    0.848
+   ],
+   "urban_face_area_p25_p50_p75": [
+    3013,
+    4654,
+    6009
+   ],
+   "urban_island_area_p50": 3387,
+   "urban_mrr_short_p50": 44.5,
+   "urban_mrr_long_p50": 111.0,
+   "urban_tare_p50": 0.248,
+   "urban_share_1f_p50": 0.583,
+   "urban_fl_max_p50": 4.0,
+   "urban_dist_river_p50": 325,
+   "urban_share_within_300m_river": 0.467,
+   "urban_share_within_500m_river": 0.726,
+   "urban_GSI_island_bins": {
+    "0.5-0.6": 94,
+    "0.3-0.4": 28,
+    "0.6-1.0": 75,
+    "0.4-0.5": 36,
+    "0.0-0.2": 15,
+    "0.2-0.3": 11
+   }
+  },
+  "황성동": {
+   "label": "황성동",
+   "n_faces": 21,
+   "n_urban_faces": 14,
+   "area_ha": 23.2,
+   "island_ha": 8.7,
+   "tare": 0.626,
+   "n_bldg": 253,
+   "footprint_ha": 2.08,
+   "floor_area_ha": 4.82,
+   "GSI_fabric": 0.09,
+   "FSI_fabric": 0.208,
+   "GSI_island": 0.24,
+   "FSI_island": 0.556,
+   "L": 2.32,
+   "OSR_fabric": 4.38,
+   "floors_p50": 1,
+   "floors_mean": 1.32,
+   "share_1f": 0.838,
+   "share_le2f": 0.929,
+   "share_ge5f": 0.024,
+   "floors_max": 7,
+   "floor_hist": {
+    "1": 212,
+    "2": 23,
+    "3": 6,
+    "4": 6,
+    "5": 4,
+    "6": 1,
+    "7": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.267,
+    0.304,
+    0.348
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.411,
+    0.51,
+    0.55
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.388,
+    0.537,
+    0.676
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.525,
+    0.658,
+    1.079
+   ],
+   "urban_L_p25_p50_p75": [
+    1.083,
+    1.827,
+    2.626
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    0.752,
+    1.433,
+    1.614
+   ],
+   "urban_face_area_p25_p50_p75": [
+    1807,
+    2735,
+    5506
+   ],
+   "urban_island_area_p50": 1754,
+   "urban_mrr_short_p50": 50.0,
+   "urban_mrr_long_p50": 76.9,
+   "urban_tare_p50": 0.349,
+   "urban_share_1f_p50": 0.882,
+   "urban_fl_max_p50": 3.5,
+   "urban_dist_river_p50": 175,
+   "urban_share_within_300m_river": 0.857,
+   "urban_share_within_500m_river": 1.0,
+   "urban_GSI_island_bins": {
+    "0.4-0.5": 3,
+    "0.6-1.0": 2,
+    "0.5-0.6": 6,
+    "0.2-0.3": 1,
+    "0.3-0.4": 1,
+    "0.0-0.2": 1
+   }
+  },
+  "구황동": {
+   "label": "구황동",
+   "n_faces": 15,
+   "n_urban_faces": 7,
+   "area_ha": 70.5,
+   "island_ha": 62.6,
+   "tare": 0.111,
+   "n_bldg": 485,
+   "footprint_ha": 3.23,
+   "floor_area_ha": 4.47,
+   "GSI_fabric": 0.046,
+   "FSI_fabric": 0.063,
+   "GSI_island": 0.052,
+   "FSI_island": 0.071,
+   "L": 1.39,
+   "OSR_fabric": 15.04,
+   "floors_p50": 1,
+   "floors_mean": 1.09,
+   "share_1f": 0.932,
+   "share_le2f": 0.981,
+   "share_ge5f": 0.0,
+   "floors_max": 4,
+   "floor_hist": {
+    "1": 452,
+    "2": 24,
+    "3": 8,
+    "4": 1
+   },
+   "urban_GSI_fabric_p25_p50_p75": [
+    0.228,
+    0.29,
+    0.405
+   ],
+   "urban_GSI_island_p25_p50_p75": [
+    0.263,
+    0.351,
+    0.467
+   ],
+   "urban_FSI_fabric_p25_p50_p75": [
+    0.292,
+    0.444,
+    0.51
+   ],
+   "urban_FSI_island_p25_p50_p75": [
+    0.331,
+    0.518,
+    0.571
+   ],
+   "urban_L_p25_p50_p75": [
+    1.122,
+    1.308,
+    1.541
+   ],
+   "urban_OSR_fabric_p25_p50_p75": [
+    1.144,
+    1.601,
+    2.656
+   ],
+   "urban_face_area_p25_p50_p75": [
+    6698,
+    12220,
+    25451
+   ],
+   "urban_island_area_p50": 10600,
+   "urban_mrr_short_p50": 93.1,
+   "urban_mrr_long_p50": 167.9,
+   "urban_tare_p50": 0.133,
+   "urban_share_1f_p50": 0.938,
+   "urban_fl_max_p50": 3.0,
+   "urban_dist_river_p50": 297,
+   "urban_share_within_300m_river": 0.571,
+   "urban_share_within_500m_river": 1.0,
+   "urban_GSI_island_bins": {
+    "0.0-0.2": 1,
+    "0.3-0.4": 2,
+    "0.4-0.5": 2,
+    "0.5-0.6": 1,
+    "0.2-0.3": 1
+   }
+  }
+ },
+ "s2_four_dongs": {
+  "label": "황오·성동·노서·노동 4개 동 합",
+  "n_faces": 228,
+  "n_urban_faces": 173,
+  "area_ha": 183.3,
+  "island_ha": 139.5,
+  "tare": 0.239,
+  "n_bldg": 5561,
+  "footprint_ha": 53.08,
+  "floor_area_ha": 118.15,
+  "GSI_fabric": 0.29,
+  "FSI_fabric": 0.645,
+  "GSI_island": 0.381,
+  "FSI_island": 0.847,
+  "L": 2.23,
+  "OSR_fabric": 1.1,
+  "floors_p50": 1,
+  "floors_mean": 1.45,
+  "share_1f": 0.759,
+  "share_le2f": 0.872,
+  "share_ge5f": 0.018,
+  "floors_max": 9,
+  "floor_hist": {
+   "1": 4221,
+   "2": 629,
+   "3": 405,
+   "4": 208,
+   "5": 58,
+   "6": 24,
+   "7": 13,
+   "8": 1,
+   "9": 2
+  },
+  "urban_GSI_fabric_p25_p50_p75": [
+   0.335,
+   0.434,
+   0.503
+  ],
+  "urban_GSI_island_p25_p50_p75": [
+   0.452,
+   0.57,
+   0.641
+  ],
+  "urban_FSI_fabric_p25_p50_p75": [
+   0.485,
+   0.795,
+   1.205
+  ],
+  "urban_FSI_island_p25_p50_p75": [
+   0.625,
+   1.067,
+   1.552
+  ],
+  "urban_L_p25_p50_p75": [
+   1.35,
+   1.964,
+   2.61
+  ],
+  "urban_OSR_fabric_p25_p50_p75": [
+   0.417,
+   0.7,
+   1.296
+  ],
+  "urban_face_area_p25_p50_p75": [
+   3015,
+   5964,
+   9395
+  ],
+  "urban_island_area_p50": 4402,
+  "urban_mrr_short_p50": 61.5,
+  "urban_mrr_long_p50": 105.0,
+  "urban_tare_p50": 0.196,
+  "urban_share_1f_p50": 0.7,
+  "urban_fl_max_p50": 3.0,
+  "urban_dist_river_p50": 504,
+  "urban_share_within_300m_river": 0.249,
+  "urban_share_within_500m_river": 0.497,
+  "urban_GSI_island_bins": {
+   "0.6-1.0": 69,
+   "0.4-0.5": 19,
+   "0.5-0.6": 49,
+   "0.3-0.4": 14,
+   "0.0-0.2": 15,
+   "0.2-0.3": 7
+  }
+ },
+ "s1_zone": {
+  "area_m2_plan_boundary": 228022,
+  "n_bldg_inside": 385,
+  "footprint_m2": 34559,
+  "floor_area_m2": 58876,
+  "GSI": 0.1516,
+  "FSI": 0.2582,
+  "floor_hist": {
+   "1": 331,
+   "2": 26,
+   "3": 20,
+   "4": 4,
+   "5": 3,
+   "6": 1
+  }
+ },
+ "roads_s2": {
+  "centerline_km": 80.3,
+  "circle_ha": 314.2,
+  "network_density_km_per_km2": 25.56,
+  "width_share_by_length": {
+   "<4 m": 0.402,
+   "4-6 m": 0.169,
+   "6-8 m": 0.165,
+   "8-12 m": 0.096,
+   "12-20 m": 0.074,
+   ">=20 m": 0.095
+  },
+  "width_median_length_weighted": 5.0,
+  "road_area_ha": 59.0,
+  "road_area_ratio": 0.188,
+  "rail_area_ha": 11.9,
+  "river_area_ha": 14.8,
+  "n_links": 4496,
+  "link_len_p50": 6.4,
+  "intersections_deg3plus": 1019,
+  "intersection_density_per_km2": 324.4,
+  "dead_end_nodes": 452,
+  "dead_end_link_share": 0.1
+ },
+ "walk_s2": {
+  "sidewalk_km": 57.96,
+  "with_width_km": 41.9,
+  "width_share": {
+   "<1.5 m": 0.002,
+   "1.5-2 m": 0.031,
+   "2-3 m": 0.139,
+   "3-5 m": 0.645,
+   ">=5 m": 0.182
+  }
+ },
+ "parks_s2": {
+  "광장|미집행": 0.69,
+  "공원|미집행": 6.48,
+  "공원|부분집행": 0.05,
+  "공원|집행완료": 1.17,
+  "합계_ha": 8.39,
+  "공원녹지율_전체": 0.0267,
+  "공원녹지율_집행": 0.0
+ },
+ "facilities_s2": {
+  "도서관": 6,
+  "공원": 4,
+  "박물관": 2
+ },
+ "stores_s2": {
+  "n": 2551,
+  "by_lcls": {
+   "소매": 817,
+   "음식": 780,
+   "수리·개인": 292,
+   "과학·기술": 199,
+   "숙박": 145,
+   "시설관리·임대": 122,
+   "예술·스포츠": 63,
+   "교육": 61,
+   "부동산": 42,
+   "보건의료": 30
+  },
+  "share_flr1": 0.576,
+  "faces_with_10plus_stores": 78,
+  "mix_H_p25_p50_p75": [
+   0.782,
+   0.831,
+   0.88
+  ],
+  "stores_per_ha_island_s2": 11.54
+ },
+ "register": {
+  "성동동": {
+   "n_main": 1021,
+   "bcRat_n": 745,
+   "bcRat_p25_p50_p75": [
+    31.6,
+    45.2,
+    62.5
+   ],
+   "vlRat_n": 751,
+   "vlRat_p25_p50_p75": [
+    33.7,
+    51.0,
+    151.0
+   ],
+   "lot_weighted_BCR": 0.435,
+   "lot_weighted_FAR": 1.082,
+   "floors_mean": 1.94,
+   "floors_p50": 2.0,
+   "useApr_p50": 1978,
+   "share_30y_plus": 0.781,
+   "share_20y_plus": 0.884,
+   "purpose_share": {
+    "단독주택": 0.649,
+    "제1종근린생활시설": 0.129,
+    "제2종근린생활시설": 0.1,
+    "공동주택": 0.026,
+    "운수시설": 0.024,
+    "숙박시설": 0.016
+   }
+  },
+  "황오동": {
+   "n_main": 1467,
+   "bcRat_n": 1281,
+   "bcRat_p25_p50_p75": [
+    30.7,
+    44.0,
+    59.5
+   ],
+   "vlRat_n": 1305,
+   "vlRat_p25_p50_p75": [
+    31.9,
+    48.0,
+    95.0
+   ],
+   "lot_weighted_BCR": 0.394,
+   "lot_weighted_FAR": 0.697,
+   "floors_mean": 1.54,
+   "floors_p50": 1.0,
+   "useApr_p50": 1976,
+   "share_30y_plus": 0.872,
+   "share_20y_plus": 0.954,
+   "purpose_share": {
+    "단독주택": 0.647,
+    "제1종근린생활시설": 0.17,
+    "제2종근린생활시설": 0.107,
+    "숙박시설": 0.025,
+    "공동주택": 0.014,
+    "교육연구시설": 0.008
+   }
+  },
+  "노동동": {
+   "n_main": 428,
+   "bcRat_n": 355,
+   "bcRat_p25_p50_p75": [
+    50.3,
+    70.2,
+    79.6
+   ],
+   "vlRat_n": 367,
+   "vlRat_p25_p50_p75": [
+    57.5,
+    105.0,
+    193.6
+   ],
+   "lot_weighted_BCR": 0.553,
+   "lot_weighted_FAR": 1.483,
+   "floors_mean": 1.98,
+   "floors_p50": 2.0,
+   "useApr_p50": 1974,
+   "share_30y_plus": 0.832,
+   "share_20y_plus": 0.91,
+   "purpose_share": {
+    "제1종근린생활시설": 0.367,
+    "단독주택": 0.264,
+    "제2종근린생활시설": 0.257,
+    "숙박시설": 0.044,
+    "종교시설": 0.009,
+    "창고시설": 0.009
+   }
+  },
+  "노서동": {
+   "n_main": 666,
+   "bcRat_n": 581,
+   "bcRat_p25_p50_p75": [
+    43.9,
+    66.0,
+    75.8
+   ],
+   "vlRat_n": 584,
+   "vlRat_p25_p50_p75": [
+    52.8,
+    134.3,
+    213.3
+   ],
+   "lot_weighted_BCR": 0.498,
+   "lot_weighted_FAR": 1.325,
+   "floors_mean": 2.42,
+   "floors_p50": 2.0,
+   "useApr_p50": 1981,
+   "share_30y_plus": 0.741,
+   "share_20y_plus": 0.821,
+   "purpose_share": {
+    "단독주택": 0.515,
+    "제1종근린생활시설": 0.152,
+    "제2종근린생활시설": 0.137,
+    "숙박시설": 0.116,
+    "공동주택": 0.03,
+    "창고시설": 0.011
+   }
+  },
+  "성건동": {
+   "n_main": 3160,
+   "bcRat_n": 1969,
+   "bcRat_p25_p50_p75": [
+    43.6,
+    57.5,
+    59.7
+   ],
+   "vlRat_n": 1973,
+   "vlRat_p25_p50_p75": [
+    49.9,
+    99.9,
+    174.5
+   ],
+   "lot_weighted_BCR": 0.471,
+   "lot_weighted_FAR": 1.174,
+   "floors_mean": 2.17,
+   "floors_p50": 2.0,
+   "useApr_p50": 1986,
+   "share_30y_plus": 0.75,
+   "share_20y_plus": 0.846,
+   "purpose_share": {
+    "단독주택": 0.729,
+    "제2종근린생활시설": 0.09,
+    "제1종근린생활시설": 0.075,
+    "공동주택": 0.058,
+    "판매시설": 0.016,
+    "숙박시설": 0.006
+   }
+  },
+  "5개동 합": {
+   "n": 4991,
+   "lot_weighted_BCR": 0.456,
+   "lot_weighted_FAR": 1.086,
+   "platArea_sum_ha": 130.8
+  }
+ }
+}

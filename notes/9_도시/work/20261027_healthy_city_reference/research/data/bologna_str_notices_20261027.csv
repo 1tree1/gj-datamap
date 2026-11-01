@@ -1,0 +1,13 @@
+﻿anno_richiesta,centro_storico,n_avvio_locazione_turistica_esito_positivo,filtro,fonte
+2020,fuori/nd,2,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2020,centro,5,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2021,fuori/nd,90,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2021,centro,99,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2022,fuori/nd,165,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2022,centro,198,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2023,fuori/nd,296,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2023,centro,261,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2024,fuori/nd,222,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2024,centro,198,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2025,fuori/nd,188,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"
+2025,centro,149,"tipo_intervento like *uso turistico - AVVIO* AND esito in (chiusura d ufficio positiva, Pronuncia positiva, Efficace)","opendata.comune.bologna.it istanze-attivita-ricettive (CC BY 4.0), 2026-10-27 조회"

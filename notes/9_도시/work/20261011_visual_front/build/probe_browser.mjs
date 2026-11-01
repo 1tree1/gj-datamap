@@ -1,0 +1,14 @@
+import {chromium} from 'playwright';
+import fs from 'node:fs/promises';
+const R='C:/Users/OFFICE/Desktop/9_도시/work/20261011_visual_front/build';
+console.log('browser',chromium.executablePath());
+const b=await chromium.launch({channel:'msedge',headless:true,args:['--no-sandbox']});
+const p=await b.newPage({viewport:{width:1800,height:1100},deviceScaleFactor:2});
+p.on('pageerror',e=>console.log('page error',e.message));
+await p.goto('https://1tree1.github.io/gj-datamap/index.html',{waitUntil:'domcontentloaded',timeout:60000});
+await p.waitForFunction(()=>window.__map?.getLayer('traffic_hist'),{timeout:90000});
+console.log('title',await p.title());
+console.log('layers',await p.locator('.layer').count());
+await p.screenshot({path:R+'/assets/web_initial.png'});
+await fs.writeFile(R+'/web_dom.txt',await p.locator('body').innerText());
+await b.close();

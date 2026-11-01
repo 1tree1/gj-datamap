@@ -1,0 +1,267 @@
+{
+  "sourceSha256": "647733379ba7477adc95eb84e0ecd984969e46ec31baf78e374f4c1ffe553ebb",
+  "finalSlideCount": 60,
+  "retainedOriginalPages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "removedOriginalPages": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "newAnalysisPages": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "preservationChanges": [
+    {
+      "original": 29,
+      "final": 26,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 30,
+      "final": 27,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 31,
+      "final": 28,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 32,
+      "final": 29,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 33,
+      "final": 30,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 34,
+      "final": 31,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 35,
+      "final": 32,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 36,
+      "final": 33,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 37,
+      "final": 34,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 38,
+      "final": 35,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 39,
+      "final": 36,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 40,
+      "final": 37,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 41,
+      "final": 38,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 42,
+      "final": 39,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 43,
+      "final": 40,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 44,
+      "final": 41,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 45,
+      "final": 42,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 46,
+      "final": 43,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 47,
+      "final": 44,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 48,
+      "final": 45,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 49,
+      "final": 46,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 50,
+      "final": 47,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 51,
+      "final": 48,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 52,
+      "final": 49,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 53,
+      "final": 50,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 54,
+      "final": 51,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 55,
+      "final": 52,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 56,
+      "final": 53,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 57,
+      "final": 54,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 58,
+      "final": 55,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 59,
+      "final": 56,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 60,
+      "final": 57,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 61,
+      "final": 58,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 62,
+      "final": 59,
+      "change": "footer and Pretendard only"
+    },
+    {
+      "original": 63,
+      "final": 60,
+      "change": "footer and Pretendard only"
+    }
+  ],
+  "font": "Pretendard",
+  "accent": "blue; orange for contrast"
+}

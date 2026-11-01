@@ -1,0 +1,492 @@
+[
+  {
+    "name": "population_full",
+    "ids": [
+      "pop_chg"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        128.93364107205974,
+        35.626709163668224
+      ],
+      [
+        129.5572934374943,
+        36.09326619735185
+      ]
+    ],
+    "zoom": 10.517335029050228,
+    "center": [
+      129.24546725477558,
+      35.86033094452593
+    ],
+    "definitions": [
+      {
+        "id": "pop_chg",
+        "title": "10년 인구변화 (2015→2025 %)",
+        "short": "10년 인구변화 (2015→2025 %)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심 2025년 폐지된 중부동은 2011~2024 시계열을 황오동에 합산해 계산(황오동 2015 = 8,045+6,314). 합산 전 값은 yearly_raw. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "chg_10y_pct"
+              ],
+              0
+            ],
+            "#8c2d04",
+            -30,
+            "#d94801",
+            -20,
+            "#fd8d3c",
+            -10,
+            "#fdd0a2",
+            0,
+            "#c7e9c0",
+            10,
+            "#41ab5d",
+            25,
+            "#00441b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "hadm",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#8c2d04",
+            "−30%↓"
+          ],
+          [
+            "#d94801",
+            "−30~−20"
+          ],
+          [
+            "#fd8d3c",
+            "−20~−10"
+          ],
+          [
+            "#fdd0a2",
+            "−10~0"
+          ],
+          [
+            "#c7e9c0",
+            "0~+10"
+          ],
+          [
+            "#41ab5d",
+            "+10~25"
+          ],
+          [
+            "#00441b",
+            "+25%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct",
+          "yearly_note"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "youth_focus",
+    "ids": [
+      "pop_y2034"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.13581866142238,
+        35.806280284970526
+      ],
+      [
+        129.30618133858076,
+        35.93371391186979
+      ]
+    ],
+    "zoom": 12.389467792766078,
+    "center": [
+      129.221,
+      35.87002271629251
+    ],
+    "definitions": [
+      {
+        "id": "pop_y2034",
+        "title": "청년인구 (20–34세 수·비율)",
+        "short": "청년 20–34세 (수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) 5세별 합 × 행정동 경계 근사. 20–34세는 청년기본법(19–34세)에 가장 가까운 5세 구간. 경주시 31,387명(12.9%). 황성동 4,597 · 동천동 3,289 · 용강동 3,245 · 현곡면 2,851 · 성건동 2,497(20.5%, 대학). 원도심 4개 동 합 4,255. 급간은 임의 설정.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_y2034"
+              ],
+              0
+            ],
+            "#f7fcfd",
+            6,
+            "#e0ecf4",
+            9,
+            "#bfd3e6",
+            12,
+            "#9ebcda",
+            15,
+            "#8c6bb1",
+            18,
+            "#6e016b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_y2034",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fcfd",
+            "<6%"
+          ],
+          [
+            "#e0ecf4",
+            "6–9"
+          ],
+          [
+            "#bfd3e6",
+            "9–12"
+          ],
+          [
+            "#9ebcda",
+            "12–15"
+          ],
+          [
+            "#8c6bb1",
+            "15–18"
+          ],
+          [
+            "#6e016b",
+            "18%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "n_y2034",
+          "pct_y2034",
+          "n_youth",
+          "pct_youth",
+          "pct_65",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "aging_focus",
+    "ids": [
+      "pop_65"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.13970776324925,
+        35.81055946484591
+      ],
+      [
+        129.2972922367489,
+        35.92843556991728
+      ]
+    ],
+    "zoom": 12.501951703345053,
+    "center": [
+      129.21849999999995,
+      35.86951943626883
+    ],
+    "definitions": [
+      {
+        "id": "pop_65",
+        "title": "고령인구 (65세↑ 수·비율)",
+        "short": "고령인구 (65세↑ 수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_65"
+              ],
+              0
+            ],
+            "#f7fbf4",
+            15,
+            "#d4e8d0",
+            20,
+            "#a9d1a4",
+            27,
+            "#f2c078",
+            35,
+            "#e07b39",
+            45,
+            "#b5322a"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_65",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fbf4",
+            "<15%"
+          ],
+          [
+            "#d4e8d0",
+            "15–20"
+          ],
+          [
+            "#a9d1a4",
+            "20–27"
+          ],
+          [
+            "#f2c078",
+            "27–35"
+          ],
+          [
+            "#e07b39",
+            "35–45"
+          ],
+          [
+            "#b5322a",
+            "45%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "northsouth_clean",
+    "ids": [
+      "rail_abandoned",
+      "zone",
+      "parks_upis"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.17406906166616,
+        35.82079032605101
+      ],
+      [
+        129.25193093833758,
+        35.890207801528945
+      ]
+    ],
+    "zoom": 13.1405764530092,
+    "center": [
+      129.21299999999997,
+      35.85550666146878
+    ],
+    "definitions": [
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      }
+    ]
+  }
+]

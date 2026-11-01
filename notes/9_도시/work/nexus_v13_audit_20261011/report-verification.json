@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "area_totals_reconciled": true,
+  "target_totals_reconciled": true,
+  "rendered_browser": "Microsoft Edge headless 1440px and 390px",
+  "rendered_charts": [
+    {
+      "id": "total-chart",
+      "bars": 2
+    },
+    {
+      "id": "facility-chart",
+      "bars": 9
+    }
+  ],
+  "controls_checked": [
+    "table: smaller facilities = 2",
+    "table: unmatched = 3",
+    "table: reset = 17",
+    "pagination: all 3 pages",
+    "source data: filtered 2 rows preserved"
+  ],
+  "export_sha256": "59520232109e4afb57d709976dbb8d0860ff1958a74c1fce52c22e714a65b06e"
+}

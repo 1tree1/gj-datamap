@@ -1,0 +1,32 @@
+Building native site solids
+Building common_base area=101343.20182399999
+Built common_base
+Building raised_to_sidewalk area=0.1343100000000051
+Building raised_to_sidewalk area=24944.855573000008
+Building raised_to_sidewalk area=0.038421999999762396
+Building raised_to_sidewalk area=58219.332751
+Building raised_to_sidewalk area=9619.966354500004
+Built raised_to_sidewalk
+Building raised_general area=0.005877499999997551
+Building raised_general area=9075.362240500002
+Building raised_general area=0.17601599999999484
+Building raised_general area=7458.4082880000005
+Building raised_general area=7617.247092000003
+Building raised_general area=8054.812771000004
+Building raised_general area=0.0010260000000008275
+Building raised_general area=0.1343100000000051
+Building raised_general area=11751.7924905
+Building raised_general area=0.03842199999976259
+Building raised_general area=5332.4901230000005
+Building raised_general area=5627.042416000001
+Building raised_general area=9787.560302
+Building raised_general area=0.02632399999972157
+Building raised_general area=7894.074750499998
+Built raised_general
+Building raised_green area=4089.4461985000025
+Building raised_green area=1717.9196000000006
+Building raised_green area=5418.1389165
+Built raised_green
+BooleanUnion starting: 24 solids
+BooleanUnion verified
+Saved C:\Users\OFFICE\Desktop\gyeongju_site_base_1_1500_sidewalk_fixed.3dm

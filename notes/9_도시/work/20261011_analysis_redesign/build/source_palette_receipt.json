@@ -1,0 +1,15 @@
+{
+  "parts": [
+    "ppt/media/image1.png",
+    "ppt/media/image39.jpg",
+    "ppt/media/image40.png",
+    "ppt/media/image41.jpg",
+    "ppt/media/image42.png",
+    "ppt/media/image43.png",
+    "ppt/media/image44.png",
+    "ppt/media/image46.png",
+    "ppt/media/image47.png",
+    "ppt/media/image48.png"
+  ],
+  "method": "Photoshop red-channel hue/saturation adjustment; geometry and labels unchanged"
+}

@@ -1,0 +1,72 @@
+{
+  "sources": [
+    "https://1tree1.github.io/gj-datamap/data/traffic_hist.geojson",
+    "https://1tree1.github.io/gj-datamap/data/traffic_hist_summary.json"
+  ],
+  "metric": "ITS link mean speed, not vehicle volume",
+  "weekend_dates": [
+    "20250111",
+    "20250208",
+    "20250308",
+    "20250412",
+    "20250510",
+    "20250614",
+    "20250712"
+  ],
+  "bounds_5187": [
+    218000,
+    359700,
+    222000,
+    362500
+  ],
+  "selection": "links intersecting displayed map extent; both directional links kept, each once",
+  "hours": [
+    {
+      "hour": 6,
+      "n_links": 554,
+      "congested_links": 79,
+      "slow_links": 159
+    },
+    {
+      "hour": 13,
+      "n_links": 554,
+      "congested_links": 100,
+      "slow_links": 199
+    },
+    {
+      "hour": 21,
+      "n_links": 554,
+      "congested_links": 81,
+      "slow_links": 189
+    }
+  ],
+  "local_check_only": [
+    {
+      "area": "west",
+      "radius_m": 200,
+      "n_links": 11,
+      "congested": 2
+    },
+    {
+      "area": "east",
+      "radius_m": 200,
+      "n_links": 4,
+      "congested": 0
+    },
+    {
+      "area": "south",
+      "radius_m": 200,
+      "n_links": 7,
+      "congested": 3
+    },
+    {
+      "area": "north",
+      "radius_m": 200,
+      "n_links": 36,
+      "congested": 8
+    }
+  ],
+  "map": "traffic_weekend13",
+  "geometry": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_analysis_redesign\\build\\traffic_revision6_geometry.json",
+  "sourceSha256": "8dad698b2a56fa8e3dc5f87851ab3ebd4d715f6d6eee72d0185e97919575f10b"
+}

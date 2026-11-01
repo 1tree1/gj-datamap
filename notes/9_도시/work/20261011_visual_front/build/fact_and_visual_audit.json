@@ -1,0 +1,57 @@
+{
+  "status": "pass",
+  "source": "prepared source snapshots and source report transcriptions",
+  "checks": {
+    "plan_minus_gosi_m2": 61416,
+    "youth_2020_2025_net": -7249,
+    "age20_24_contribution_pct": 62.7,
+    "hwango_youth20_34_pct": 11.4,
+    "four_districts_youth_share_pct": 44.5,
+    "market_hwangchon_density_ratio": 14.6,
+    "F_cityhall_r500_weekend_weekday_daily_ratio": 0.88,
+    "H_hwangridan_r300_weekend_weekday_daily_ratio": 1.72,
+    "known_age_parcel_20_plus_pct": 91.9,
+    "hwango_field_1_3_hour_pct": 79.1,
+    "hwangchon_life_tour_net": [
+      0,
+      7
+    ],
+    "hwango_lodging_life_retail_permit_net": [
+      5,
+      -9
+    ]
+  },
+  "visual_review": {
+    "slide_pages": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31
+    ],
+    "final_pptx_import_render": true,
+    "all_pages_individually_inspected": true
+  }
+}

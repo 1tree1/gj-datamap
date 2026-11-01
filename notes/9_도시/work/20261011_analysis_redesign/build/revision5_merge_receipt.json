@@ -1,0 +1,367 @@
+{
+  "source": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_analysis_redesign\\output\\구경주역_중간마감_v4_전략다이어그램.pptx",
+  "sourceSha256": "12a3c907a7eabbd6085f98f700d07355ea0eaedb5d270fe62b9096f0379ee373",
+  "deletedOriginalPages": [
+    20,
+    24
+  ],
+  "order": [
+    {
+      "old": 1,
+      "new": 1,
+      "part": "ppt/slides/slide1.xml",
+      "action": "retain"
+    },
+    {
+      "old": 2,
+      "new": 2,
+      "part": "ppt/slides/slide2.xml",
+      "action": "retain"
+    },
+    {
+      "old": 3,
+      "new": 3,
+      "part": "ppt/slides/slide3.xml",
+      "action": "retain"
+    },
+    {
+      "old": 4,
+      "new": 4,
+      "part": "ppt/slides/slide4.xml",
+      "action": "retain"
+    },
+    {
+      "old": 5,
+      "new": 5,
+      "part": "ppt/slides/slide5.xml",
+      "action": "retain"
+    },
+    {
+      "old": 6,
+      "new": 6,
+      "part": "ppt/slides/slide6.xml",
+      "action": "retain"
+    },
+    {
+      "old": 7,
+      "new": 7,
+      "part": "ppt/slides/slide7.xml",
+      "action": "retain"
+    },
+    {
+      "old": 8,
+      "new": 8,
+      "part": "ppt/slides/slide8.xml",
+      "action": "retain"
+    },
+    {
+      "old": 9,
+      "new": 9,
+      "part": "ppt/slides/slide9.xml",
+      "action": "retain"
+    },
+    {
+      "old": 10,
+      "new": 10,
+      "part": "ppt/slides/slide10.xml",
+      "action": "retain"
+    },
+    {
+      "old": 11,
+      "new": 11,
+      "part": "ppt/slides/slide1001.xml",
+      "action": "retain"
+    },
+    {
+      "old": 12,
+      "new": 12,
+      "part": "ppt/slides/slide1002.xml",
+      "action": "retain"
+    },
+    {
+      "old": 13,
+      "new": 13,
+      "part": "ppt/slides/slide1003.xml",
+      "action": "retain"
+    },
+    {
+      "old": 14,
+      "new": 14,
+      "part": "ppt/slides/slide1004.xml",
+      "action": "retain"
+    },
+    {
+      "old": 15,
+      "new": 15,
+      "part": "ppt/slides/slide1005.xml",
+      "action": "retain"
+    },
+    {
+      "old": 16,
+      "new": 16,
+      "part": "ppt/slides/slide1006.xml",
+      "action": "retain"
+    },
+    {
+      "old": 17,
+      "new": 17,
+      "part": "ppt/slides/slide1007.xml",
+      "action": "retain"
+    },
+    {
+      "old": 18,
+      "new": 18,
+      "part": "ppt/slides/slide1008.xml",
+      "action": "retain"
+    },
+    {
+      "old": 19,
+      "new": 19,
+      "part": "ppt/slides/slide1009.xml",
+      "action": "retain"
+    },
+    {
+      "old": 21,
+      "new": 20,
+      "part": "ppt/slides/slide2001.xml",
+      "action": "replace"
+    },
+    {
+      "old": 22,
+      "new": 21,
+      "part": "ppt/slides/slide2002.xml",
+      "action": "replace"
+    },
+    {
+      "old": 23,
+      "new": 22,
+      "part": "ppt/slides/slide1013.xml",
+      "action": "retain"
+    },
+    {
+      "old": 25,
+      "new": 23,
+      "part": "ppt/slides/slide2003.xml",
+      "action": "replace"
+    },
+    {
+      "old": 26,
+      "new": 24,
+      "part": "ppt/slides/slide29.xml",
+      "action": "retain"
+    },
+    {
+      "old": 27,
+      "new": 25,
+      "part": "ppt/slides/slide30.xml",
+      "action": "retain"
+    },
+    {
+      "old": 28,
+      "new": 26,
+      "part": "ppt/slides/slide31.xml",
+      "action": "retain"
+    },
+    {
+      "old": 29,
+      "new": 27,
+      "part": "ppt/slides/slide32.xml",
+      "action": "retain"
+    },
+    {
+      "old": 30,
+      "new": 28,
+      "part": "ppt/slides/slide33.xml",
+      "action": "retain"
+    },
+    {
+      "old": 31,
+      "new": 29,
+      "part": "ppt/slides/slide34.xml",
+      "action": "retain"
+    },
+    {
+      "old": 32,
+      "new": 30,
+      "part": "ppt/slides/slide35.xml",
+      "action": "retain"
+    },
+    {
+      "old": 33,
+      "new": 31,
+      "part": "ppt/slides/slide36.xml",
+      "action": "retain"
+    },
+    {
+      "old": 34,
+      "new": 32,
+      "part": "ppt/slides/slide37.xml",
+      "action": "retain"
+    },
+    {
+      "old": 35,
+      "new": 33,
+      "part": "ppt/slides/slide38.xml",
+      "action": "retain"
+    },
+    {
+      "old": 36,
+      "new": 34,
+      "part": "ppt/slides/slide39.xml",
+      "action": "retain"
+    },
+    {
+      "old": 37,
+      "new": 35,
+      "part": "ppt/slides/slide40.xml",
+      "action": "retain"
+    },
+    {
+      "old": 38,
+      "new": 36,
+      "part": "ppt/slides/slide41.xml",
+      "action": "retain"
+    },
+    {
+      "old": 39,
+      "new": 37,
+      "part": "ppt/slides/slide42.xml",
+      "action": "retain"
+    },
+    {
+      "old": null,
+      "new": 38,
+      "part": "ppt/slides/slide2004.xml",
+      "action": "insert four-anchor slide"
+    },
+    {
+      "old": 40,
+      "new": 39,
+      "part": "ppt/slides/slide43.xml",
+      "action": "retain"
+    },
+    {
+      "old": 41,
+      "new": 40,
+      "part": "ppt/slides/slide44.xml",
+      "action": "retain"
+    },
+    {
+      "old": 42,
+      "new": 41,
+      "part": "ppt/slides/slide45.xml",
+      "action": "retain"
+    },
+    {
+      "old": 43,
+      "new": 42,
+      "part": "ppt/slides/slide46.xml",
+      "action": "retain"
+    },
+    {
+      "old": 44,
+      "new": 43,
+      "part": "ppt/slides/slide47.xml",
+      "action": "retain"
+    },
+    {
+      "old": 45,
+      "new": 44,
+      "part": "ppt/slides/slide48.xml",
+      "action": "retain"
+    },
+    {
+      "old": 46,
+      "new": 45,
+      "part": "ppt/slides/slide49.xml",
+      "action": "retain"
+    },
+    {
+      "old": 47,
+      "new": 46,
+      "part": "ppt/slides/slide50.xml",
+      "action": "retain"
+    },
+    {
+      "old": 48,
+      "new": 47,
+      "part": "ppt/slides/slide51.xml",
+      "action": "retain"
+    },
+    {
+      "old": 49,
+      "new": 48,
+      "part": "ppt/slides/slide52.xml",
+      "action": "retain"
+    },
+    {
+      "old": 50,
+      "new": 49,
+      "part": "ppt/slides/slide53.xml",
+      "action": "retain"
+    },
+    {
+      "old": 51,
+      "new": 50,
+      "part": "ppt/slides/slide54.xml",
+      "action": "retain"
+    },
+    {
+      "old": 52,
+      "new": 51,
+      "part": "ppt/slides/slide55.xml",
+      "action": "retain"
+    },
+    {
+      "old": 53,
+      "new": 52,
+      "part": "ppt/slides/slide56.xml",
+      "action": "retain"
+    },
+    {
+      "old": 54,
+      "new": 53,
+      "part": "ppt/slides/slide57.xml",
+      "action": "retain"
+    },
+    {
+      "old": 55,
+      "new": 54,
+      "part": "ppt/slides/slide58.xml",
+      "action": "retain"
+    },
+    {
+      "old": 56,
+      "new": 55,
+      "part": "ppt/slides/slide59.xml",
+      "action": "retain"
+    },
+    {
+      "old": 57,
+      "new": 56,
+      "part": "ppt/slides/slide60.xml",
+      "action": "retain"
+    },
+    {
+      "old": 58,
+      "new": 57,
+      "part": "ppt/slides/slide61.xml",
+      "action": "retain"
+    },
+    {
+      "old": 59,
+      "new": 58,
+      "part": "ppt/slides/slide62.xml",
+      "action": "retain"
+    },
+    {
+      "old": 60,
+      "new": 59,
+      "part": "ppt/slides/slide63.xml",
+      "action": "retain"
+    }
+  ],
+  "notes": "New current program definition on page38. Original detailed program and area calculations retained and visibly identified as previous scheme. No unsupported recomputation of floor areas.",
+  "newChartCount": 4,
+  "totalSlides": 59
+}

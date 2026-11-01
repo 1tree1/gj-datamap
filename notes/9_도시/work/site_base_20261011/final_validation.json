@@ -1,0 +1,23 @@
+{
+  "delivered_file": "C:\\Users\\OFFICE\\Desktop\\gyeongju_site_base_1_1500_sidewalk_fixed.3dm",
+  "file_bytes": 938756,
+  "reopened_objects": 1,
+  "native_valid_closed_brep": true,
+  "units": "Millimeters",
+  "watertight": true,
+  "winding_consistent": true,
+  "connected_components": 1,
+  "mesh_volume_mm3": 293009.41587912146,
+  "dimensions_mm": [
+    207.38299560546875,
+    631.9539794921875,
+    3.5
+  ],
+  "thickness_samples_passed": {
+    "general": 100,
+    "road": 100,
+    "sidewalk": 100,
+    "green": 100
+  },
+  "selection_scope": "Selected masterplan_v2 site boundary; road, sidewalk and green extrusion profiles in the same masterplan"
+}

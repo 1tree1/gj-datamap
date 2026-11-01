@@ -1,0 +1,109 @@
+{
+  "conversion": "chart_data_snapshot",
+  "converted_chart_count": 9,
+  "converted_charts": [
+    {
+      "chart_part": "ppt/slides/charts/chart1001.xml",
+      "owner_slide": 15,
+      "point_count": 3,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-001.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1002.xml",
+      "owner_slide": 16,
+      "point_count": 2,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-002.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1003.xml",
+      "owner_slide": 17,
+      "point_count": 6,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-003.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1004.xml",
+      "owner_slide": 18,
+      "point_count": 4,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-004.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1005.xml",
+      "owner_slide": 18,
+      "point_count": 5,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-005.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1006.xml",
+      "owner_slide": 19,
+      "point_count": 6,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-006.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1007.xml",
+      "owner_slide": 20,
+      "point_count": 5,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-007.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1008.xml",
+      "owner_slide": 21,
+      "point_count": 2,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-008.xlsx"
+    },
+    {
+      "chart_part": "ppt/slides/charts/chart1009.xml",
+      "owner_slide": 22,
+      "point_count": 2,
+      "series_count": 1,
+      "workbook_part": "ppt/embeddings/chart-data-snapshot-009.xlsx"
+    }
+  ],
+  "detected_chart_owner_slides": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    53
+  ],
+  "experimental": true,
+  "input_sha256": "1c695d83c395e807820a51d32da81a8d2ed1c46edc2fdfcdf6b3d95fa713a291",
+  "new_formulas_describe_snapshot_only": true,
+  "output_bytes": 46694046,
+  "output_sha256": "4c866d811c13c5040ee3cfb2460f1f556c21213222874f3d1d52064c54741126",
+  "portable_chart_validation_passed": true,
+  "portable_validated_owner_slides": [
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    53
+  ],
+  "preserved_existing_workbook_chart_count": 1,
+  "preserved_existing_workbook_charts": [
+    {
+      "chart_part": "ppt/charts/chart3.xml",
+      "owner_slide": 53
+    }
+  ],
+  "schema_version": "experimental.literal-chart-workbook-snapshot.v1",
+  "source_formula_required_slides": [],
+  "source_formulas_preserved": false,
+  "source_workbook_preserved": false,
+  "source_workbook_required_slides": []
+}

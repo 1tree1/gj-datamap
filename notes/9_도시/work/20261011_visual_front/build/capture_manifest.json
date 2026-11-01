@@ -1,0 +1,2923 @@
+[
+  {
+    "name": "context",
+    "ids": [
+      "rail_abandoned",
+      "zone",
+      "parks_upis"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.14401270282104,
+        35.82055272303954
+      ],
+      [
+        129.28198729717997,
+        35.89044519587786
+      ]
+    ],
+    "zoom": 12.993234736934223,
+    "center": [
+      129.21299999999997,
+      35.85550666146878
+    ],
+    "definitions": [
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "physical_gap",
+    "ids": [
+      "rail_abandoned",
+      "zone",
+      "urban_roads"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.20617204301095,
+        35.83745343666183
+      ],
+      [
+        129.22982795699028,
+        35.858545778727546
+      ]
+    ],
+    "zoom": 14.859292668343729,
+    "center": [
+      129.21800000000007,
+      35.848000308943824
+    ],
+    "definitions": [
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "id": "urban_roads",
+        "title": "도심 가로망 — 간선·보조간선 (전략계획 2022 서술)",
+        "short": "간선·보조간선",
+        "group": "교통",
+        "file": "urban_roads.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "경주시 도시재생전략계획(변경, 2022) 기초조사 §2) 도심 가로망: 동서 간선 국도4호·태종로 / 남북 간선 원화로·강변로·서라벌대로~산업로 / 보조간선 포석로·일정로·용당로·알천남로·알천북로 (T1 서술). 도로명으로 표준노드링크(2026-09-14) 링크를 골라 그림 — 원문은 도면 없음.",
+        "paint": {
+          "line-color": [
+            "match",
+            [
+              "get",
+              "cls"
+            ],
+            "보조간선",
+            "#f9a825",
+            "#d84315"
+          ],
+          "line-width": [
+            "match",
+            [
+              "get",
+              "cls"
+            ],
+            "보조간선",
+            2.5,
+            4
+          ],
+          "line-opacity": 0.85
+        },
+        "legend": [
+          [
+            "#d84315",
+            "간선 (태종로 / 원화로·강변로·서라벌대로·산업로)"
+          ],
+          [
+            "#f9a825",
+            "보조간선 (포석로·일정로·용당로·알천남로·알천북로)"
+          ]
+        ],
+        "popup": [
+          "name",
+          "cls",
+          "lanes",
+          "road_no",
+          "source"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "footfall",
+    "ids": [
+      "footfall_areas"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.16930473741894,
+        35.82534360937646
+      ],
+      [
+        129.26269526258505,
+        35.872655437246465
+      ]
+    ],
+    "zoom": 13.55628928557036,
+    "center": [
+      129.21600000000012,
+      35.84900305172091
+    ],
+    "definitions": [
+      {
+        "id": "footfall_areas",
+        "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+        "file": "footfall_areas.geojson",
+        "type": "fill",
+        "visible": false,
+        "group": "상권·유동",
+        "short": "유동인구 8구역 (ha당)",
+        "source_note": "<b>무엇인가</b> 소상공인시장진흥공단 소상공인365(bigdata.sbiz.or.kr) 상권분석 리포트의 유동인구. 통신사 통화량으로 50m 격자마다 '하루에 그 안에 있었던 사람 수(연인원)'를 추정한 값 (T2). 2025.06~2026.06 13개월의 월별 일평균을 다시 평균했다. 보행량이 아니다 — 차를 타고 지나간 사람도 섞이고(원화로·태종로 통과교통이 A·C에 포함될 수 있음), 한 사람이 세 번 오가면 세 번 잡힌다.<br><b>색 읽는 법</b> 채움 = per_ha = 하루 평균 유동인구 ÷ 구역 면적(ha). 절대치가 아니라 밀도로 그려야 15.9ha 구역과 106ha 구역을 나란히 비교할 수 있다. 구간(50/100/300/500/750/1,200)은 임의로 정한 값이다.<br><b>구역 8개는 정의가 다르다</b> A 황오동 = 모니터링 보고서와 같은 SGIS 100m 격자 32셀(2020년 이후 시계열과 이어 붙일 수 있는 유일한 구역) · B 행복황촌 = 활성화계획 위치도 디지타이징(±20m 근사) · C 구역+300m 버퍼 · D 지구단위계획구역 · E 중심 300m(검증용) · F 시청 500m · G 성동시장 200m · H 황리단길 300m(반경 원).<br><b>클릭 항목</b> footfall_avg 하루 평균 사람 수 · per_ha ha당 · pct_18_23 저녁 비중(전 구역 20~23%로 거의 같다 — 저녁 활동의 차이는 비율이 아니라 절대치에서 난다. 시청 500m만 27%) · weekend_ratio 주말÷주중(1 미만 평일형, 1 초과 주말형: 황리단길 1.7, 행복황촌 1.15, 나머지 0.6~0.7) · pct_60plus 60대 이상(전 구역 37~40%) · resident/worker 같은 플랫폼의 거주·직장 인구(유동÷(거주+직장)이 1 아래면 주민 말고는 안 들어오는 곳) · life/tour_stores 대표 11개 업종만 센 생활·관광 업소 수.<br><b>하지 말 것</b> '유동인구가 늘었다'는 근거는 없다 — 황오동 6년 −14%, 행복황촌 정체(보고서의 +396%는 분석 영역이 바뀐 것으로 판정, 인용 금지). 13개월 안의 8월 +15~20%·1월 −10%는 계절이지 추세가 아니다. 시군구 관광데이터랩 방문자와 합치지 않는다(집계 기준이 다르다). 방법: work/20260920_소상공인365_유동인구_재추출.md · 원자료 archive/C_data/raw/sbiz365_footfall_20260920.json",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "per_ha"
+            ],
+            50,
+            "#f1f5f0",
+            100,
+            "#d9e8d3",
+            300,
+            "#a3c9a8",
+            500,
+            "#5f9f7a",
+            750,
+            "#2c6a5c",
+            1200,
+            "#0f3d34"
+          ]
+        },
+        "outline": {
+          "line-color": "#0f3d34",
+          "line-width": 1.4,
+          "line-dasharray": [
+            3,
+            2
+          ]
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#f1f5f0",
+            "≤50/ha"
+          ],
+          [
+            "#d9e8d3",
+            "100"
+          ],
+          [
+            "#a3c9a8",
+            "300"
+          ],
+          [
+            "#5f9f7a",
+            "500"
+          ],
+          [
+            "#2c6a5c",
+            "750"
+          ],
+          [
+            "#0f3d34",
+            "1,200/ha"
+          ],
+          [
+            "transparent",
+            "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+          ]
+        ],
+        "popup": [
+          "name",
+          "per_ha",
+          "footfall_avg",
+          "pct_18_23",
+          "weekend_ratio",
+          "pct_60plus",
+          "resident",
+          "worker",
+          "life_stores",
+          "tour_stores",
+          "life_chg",
+          "tour_chg",
+          "area_ha",
+          "source"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "footfall_ew",
+    "ids": [
+      "footfall_areas",
+      "zone"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.19879413836725,
+        35.83735428896503
+      ],
+      [
+        129.2352058616396,
+        35.857645551094464
+      ]
+    ],
+    "zoom": 14.915162454512693,
+    "center": [
+      129.21699999999998,
+      35.847500569013675
+    ],
+    "definitions": [
+      {
+        "id": "footfall_areas",
+        "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+        "file": "footfall_areas.geojson",
+        "type": "fill",
+        "visible": false,
+        "group": "상권·유동",
+        "short": "유동인구 8구역 (ha당)",
+        "source_note": "<b>무엇인가</b> 소상공인시장진흥공단 소상공인365(bigdata.sbiz.or.kr) 상권분석 리포트의 유동인구. 통신사 통화량으로 50m 격자마다 '하루에 그 안에 있었던 사람 수(연인원)'를 추정한 값 (T2). 2025.06~2026.06 13개월의 월별 일평균을 다시 평균했다. 보행량이 아니다 — 차를 타고 지나간 사람도 섞이고(원화로·태종로 통과교통이 A·C에 포함될 수 있음), 한 사람이 세 번 오가면 세 번 잡힌다.<br><b>색 읽는 법</b> 채움 = per_ha = 하루 평균 유동인구 ÷ 구역 면적(ha). 절대치가 아니라 밀도로 그려야 15.9ha 구역과 106ha 구역을 나란히 비교할 수 있다. 구간(50/100/300/500/750/1,200)은 임의로 정한 값이다.<br><b>구역 8개는 정의가 다르다</b> A 황오동 = 모니터링 보고서와 같은 SGIS 100m 격자 32셀(2020년 이후 시계열과 이어 붙일 수 있는 유일한 구역) · B 행복황촌 = 활성화계획 위치도 디지타이징(±20m 근사) · C 구역+300m 버퍼 · D 지구단위계획구역 · E 중심 300m(검증용) · F 시청 500m · G 성동시장 200m · H 황리단길 300m(반경 원).<br><b>클릭 항목</b> footfall_avg 하루 평균 사람 수 · per_ha ha당 · pct_18_23 저녁 비중(전 구역 20~23%로 거의 같다 — 저녁 활동의 차이는 비율이 아니라 절대치에서 난다. 시청 500m만 27%) · weekend_ratio 주말÷주중(1 미만 평일형, 1 초과 주말형: 황리단길 1.7, 행복황촌 1.15, 나머지 0.6~0.7) · pct_60plus 60대 이상(전 구역 37~40%) · resident/worker 같은 플랫폼의 거주·직장 인구(유동÷(거주+직장)이 1 아래면 주민 말고는 안 들어오는 곳) · life/tour_stores 대표 11개 업종만 센 생활·관광 업소 수.<br><b>하지 말 것</b> '유동인구가 늘었다'는 근거는 없다 — 황오동 6년 −14%, 행복황촌 정체(보고서의 +396%는 분석 영역이 바뀐 것으로 판정, 인용 금지). 13개월 안의 8월 +15~20%·1월 −10%는 계절이지 추세가 아니다. 시군구 관광데이터랩 방문자와 합치지 않는다(집계 기준이 다르다). 방법: work/20260920_소상공인365_유동인구_재추출.md · 원자료 archive/C_data/raw/sbiz365_footfall_20260920.json",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "per_ha"
+            ],
+            50,
+            "#f1f5f0",
+            100,
+            "#d9e8d3",
+            300,
+            "#a3c9a8",
+            500,
+            "#5f9f7a",
+            750,
+            "#2c6a5c",
+            1200,
+            "#0f3d34"
+          ]
+        },
+        "outline": {
+          "line-color": "#0f3d34",
+          "line-width": 1.4,
+          "line-dasharray": [
+            3,
+            2
+          ]
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#f1f5f0",
+            "≤50/ha"
+          ],
+          [
+            "#d9e8d3",
+            "100"
+          ],
+          [
+            "#a3c9a8",
+            "300"
+          ],
+          [
+            "#5f9f7a",
+            "500"
+          ],
+          [
+            "#2c6a5c",
+            "750"
+          ],
+          [
+            "#0f3d34",
+            "1,200/ha"
+          ],
+          [
+            "transparent",
+            "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+          ]
+        ],
+        "popup": [
+          "name",
+          "per_ha",
+          "footfall_avg",
+          "pct_18_23",
+          "weekend_ratio",
+          "pct_60plus",
+          "resident",
+          "worker",
+          "life_stores",
+          "tour_stores",
+          "life_chg",
+          "tour_chg",
+          "area_ha",
+          "source"
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      }
+    ]
+  },
+  {
+    "name": "footfall_ns",
+    "ids": [
+      "footfall_areas",
+      "zone",
+      "rail_abandoned",
+      "parks_upis"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.17396570519605,
+        35.8209858748984
+      ],
+      [
+        129.25203429481377,
+        35.890012423344814
+      ]
+    ],
+    "zoom": 13.274254888241373,
+    "center": [
+      129.21299999999997,
+      35.85550666146878
+    ],
+    "definitions": [
+      {
+        "id": "footfall_areas",
+        "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+        "file": "footfall_areas.geojson",
+        "type": "fill",
+        "visible": false,
+        "group": "상권·유동",
+        "short": "유동인구 8구역 (ha당)",
+        "source_note": "<b>무엇인가</b> 소상공인시장진흥공단 소상공인365(bigdata.sbiz.or.kr) 상권분석 리포트의 유동인구. 통신사 통화량으로 50m 격자마다 '하루에 그 안에 있었던 사람 수(연인원)'를 추정한 값 (T2). 2025.06~2026.06 13개월의 월별 일평균을 다시 평균했다. 보행량이 아니다 — 차를 타고 지나간 사람도 섞이고(원화로·태종로 통과교통이 A·C에 포함될 수 있음), 한 사람이 세 번 오가면 세 번 잡힌다.<br><b>색 읽는 법</b> 채움 = per_ha = 하루 평균 유동인구 ÷ 구역 면적(ha). 절대치가 아니라 밀도로 그려야 15.9ha 구역과 106ha 구역을 나란히 비교할 수 있다. 구간(50/100/300/500/750/1,200)은 임의로 정한 값이다.<br><b>구역 8개는 정의가 다르다</b> A 황오동 = 모니터링 보고서와 같은 SGIS 100m 격자 32셀(2020년 이후 시계열과 이어 붙일 수 있는 유일한 구역) · B 행복황촌 = 활성화계획 위치도 디지타이징(±20m 근사) · C 구역+300m 버퍼 · D 지구단위계획구역 · E 중심 300m(검증용) · F 시청 500m · G 성동시장 200m · H 황리단길 300m(반경 원).<br><b>클릭 항목</b> footfall_avg 하루 평균 사람 수 · per_ha ha당 · pct_18_23 저녁 비중(전 구역 20~23%로 거의 같다 — 저녁 활동의 차이는 비율이 아니라 절대치에서 난다. 시청 500m만 27%) · weekend_ratio 주말÷주중(1 미만 평일형, 1 초과 주말형: 황리단길 1.7, 행복황촌 1.15, 나머지 0.6~0.7) · pct_60plus 60대 이상(전 구역 37~40%) · resident/worker 같은 플랫폼의 거주·직장 인구(유동÷(거주+직장)이 1 아래면 주민 말고는 안 들어오는 곳) · life/tour_stores 대표 11개 업종만 센 생활·관광 업소 수.<br><b>하지 말 것</b> '유동인구가 늘었다'는 근거는 없다 — 황오동 6년 −14%, 행복황촌 정체(보고서의 +396%는 분석 영역이 바뀐 것으로 판정, 인용 금지). 13개월 안의 8월 +15~20%·1월 −10%는 계절이지 추세가 아니다. 시군구 관광데이터랩 방문자와 합치지 않는다(집계 기준이 다르다). 방법: work/20260920_소상공인365_유동인구_재추출.md · 원자료 archive/C_data/raw/sbiz365_footfall_20260920.json",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "per_ha"
+            ],
+            50,
+            "#f1f5f0",
+            100,
+            "#d9e8d3",
+            300,
+            "#a3c9a8",
+            500,
+            "#5f9f7a",
+            750,
+            "#2c6a5c",
+            1200,
+            "#0f3d34"
+          ]
+        },
+        "outline": {
+          "line-color": "#0f3d34",
+          "line-width": 1.4,
+          "line-dasharray": [
+            3,
+            2
+          ]
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#f1f5f0",
+            "≤50/ha"
+          ],
+          [
+            "#d9e8d3",
+            "100"
+          ],
+          [
+            "#a3c9a8",
+            "300"
+          ],
+          [
+            "#5f9f7a",
+            "500"
+          ],
+          [
+            "#2c6a5c",
+            "750"
+          ],
+          [
+            "#0f3d34",
+            "1,200/ha"
+          ],
+          [
+            "transparent",
+            "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+          ]
+        ],
+        "popup": [
+          "name",
+          "per_ha",
+          "footfall_avg",
+          "pct_18_23",
+          "weekend_ratio",
+          "pct_60plus",
+          "resident",
+          "worker",
+          "life_stores",
+          "tour_stores",
+          "life_chg",
+          "tour_chg",
+          "area_ha",
+          "source"
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ns_assets",
+    "ids": [
+      "rail_abandoned",
+      "zone",
+      "parks_upis",
+      "facilities"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.17396570519605,
+        35.8209858748984
+      ],
+      [
+        129.25203429481377,
+        35.890012423344814
+      ]
+    ],
+    "zoom": 13.274254888241373,
+    "center": [
+      129.21299999999997,
+      35.85550666146878
+    ],
+    "definitions": [
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      },
+      {
+        "id": "facilities",
+        "title": "도서관·박물관·미술관·공원 (V-World 장소검색 POI)",
+        "short": "도서관·박물관·미술관·공원",
+        "group": "교육·문화·종교",
+        "file": "facilities.geojson",
+        "type": "circle",
+        "visible": false,
+        "minzoom": 10,
+        "source_note": "V-World 장소검색(bbox 경주시, 카테고리 필터: 공공·작은·대학도서관 / 국립·사립·대학박물관·전시관·기념관 / 공립·사립미술관·화랑 / 공원>근린·어린이·소·체육·문화공원 등, 국립공원·사무소·진출입시설·정류장 제외). 공식 시설 목록이 아닌 POI(T2)라 누락·중복 가능 — 도서관·박물관미술관·도시공원 표준데이터 API 활용신청 후 교체 예정. 공원 폴리곤은 '도시계획 공간시설' 레이어.",
+        "paint": {
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            10,
+            3,
+            14,
+            6,
+            17,
+            9
+          ],
+          "circle-color": [
+            "match",
+            [
+              "get",
+              "kind"
+            ],
+            "도서관",
+            "#2f6db5",
+            "박물관",
+            "#c7641c",
+            "미술관",
+            "#6f4fa3",
+            "공원",
+            "#1f8a4c",
+            "#555"
+          ],
+          "circle-opacity": 0.9,
+          "circle-stroke-width": 1.2,
+          "circle-stroke-color": "#fff"
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10.5,
+          "minzoom": 14
+        },
+        "subfilter": {
+          "field": "kind",
+          "values": [
+            "도서관",
+            "박물관",
+            "미술관",
+            "공원"
+          ],
+          "colors": {
+            "도서관": "#2f6db5",
+            "박물관": "#c7641c",
+            "미술관": "#6f4fa3",
+            "공원": "#1f8a4c"
+          }
+        },
+        "legend": [],
+        "popup": [
+          "name",
+          "kind",
+          "category",
+          "addr",
+          "source"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "population_change",
+    "ids": [
+      "pop_chg"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        128.82152924219946,
+        35.603831252624445
+      ],
+      [
+        129.6744707578045,
+        36.036089250793054
+      ]
+    ],
+    "zoom": 10.365190558604406,
+    "center": [
+      129.24800000000005,
+      35.82025446691135
+    ],
+    "definitions": [
+      {
+        "id": "pop_chg",
+        "title": "10년 인구변화 (2015→2025 %)",
+        "short": "10년 인구변화 (2015→2025 %)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심 2025년 폐지된 중부동은 2011~2024 시계열을 황오동에 합산해 계산(황오동 2015 = 8,045+6,314). 합산 전 값은 yearly_raw. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "chg_10y_pct"
+              ],
+              0
+            ],
+            "#8c2d04",
+            -30,
+            "#d94801",
+            -20,
+            "#fd8d3c",
+            -10,
+            "#fdd0a2",
+            0,
+            "#c7e9c0",
+            10,
+            "#41ab5d",
+            25,
+            "#00441b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "hadm",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#8c2d04",
+            "−30%↓"
+          ],
+          [
+            "#d94801",
+            "−30~−20"
+          ],
+          [
+            "#fd8d3c",
+            "−20~−10"
+          ],
+          [
+            "#fdd0a2",
+            "−10~0"
+          ],
+          [
+            "#c7e9c0",
+            "0~+10"
+          ],
+          [
+            "#41ab5d",
+            "+10~25"
+          ],
+          [
+            "#00441b",
+            "+25%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct",
+          "yearly_note"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "population_core",
+    "ids": [
+      "pop_chg"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.15181956033672,
+        35.79898720587957
+      ],
+      [
+        129.29318043966606,
+        35.92500662186106
+      ]
+    ],
+    "zoom": 12.280182556633342,
+    "center": [
+      129.22250000000008,
+      35.862021958933866
+    ],
+    "definitions": [
+      {
+        "id": "pop_chg",
+        "title": "10년 인구변화 (2015→2025 %)",
+        "short": "10년 인구변화 (2015→2025 %)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 연도별 총인구 · 황오동 +20%는 2025 중부동 통합 효과(통합 전 −30%) · 용강동 +33% 신도심 2025년 폐지된 중부동은 2011~2024 시계열을 황오동에 합산해 계산(황오동 2015 = 8,045+6,314). 합산 전 값은 yearly_raw. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "chg_10y_pct"
+              ],
+              0
+            ],
+            "#8c2d04",
+            -30,
+            "#d94801",
+            -20,
+            "#fd8d3c",
+            -10,
+            "#fdd0a2",
+            0,
+            "#c7e9c0",
+            10,
+            "#41ab5d",
+            25,
+            "#00441b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "hadm",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#8c2d04",
+            "−30%↓"
+          ],
+          [
+            "#d94801",
+            "−30~−20"
+          ],
+          [
+            "#fd8d3c",
+            "−20~−10"
+          ],
+          [
+            "#fdd0a2",
+            "−10~0"
+          ],
+          [
+            "#c7e9c0",
+            "0~+10"
+          ],
+          [
+            "#41ab5d",
+            "+10~25"
+          ],
+          [
+            "#00441b",
+            "+25%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct",
+          "yearly_note"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "aging_core",
+    "ids": [
+      "pop_65"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.10067008763843,
+        35.80981954533782
+      ],
+      [
+        129.33632991236016,
+        35.9291743826565
+      ]
+    ],
+    "zoom": 12.220931552037898,
+    "center": [
+      129.21849999999995,
+      35.86951943626883
+    ],
+    "definitions": [
+      {
+        "id": "pop_65",
+        "title": "고령인구 (65세↑ 수·비율)",
+        "short": "고령인구 (65세↑ 수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_65"
+              ],
+              0
+            ],
+            "#f7fbf4",
+            15,
+            "#d4e8d0",
+            20,
+            "#a9d1a4",
+            27,
+            "#f2c078",
+            35,
+            "#e07b39",
+            45,
+            "#b5322a"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_65",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fbf4",
+            "<15%"
+          ],
+          [
+            "#d4e8d0",
+            "15–20"
+          ],
+          [
+            "#a9d1a4",
+            "20–27"
+          ],
+          [
+            "#f2c078",
+            "27–35"
+          ],
+          [
+            "#e07b39",
+            "35–45"
+          ],
+          [
+            "#b5322a",
+            "45%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "youth_city",
+    "ids": [
+      "pop_y2034"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        128.82152924219895,
+        35.60383125262388
+      ],
+      [
+        129.67447075780393,
+        36.036089250792486
+      ]
+    ],
+    "zoom": 10.365190558604429,
+    "center": [
+      129.24799999999993,
+      35.82025446691135
+    ],
+    "definitions": [
+      {
+        "id": "pop_y2034",
+        "title": "청년인구 (20–34세 수·비율)",
+        "short": "청년 20–34세 (수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) 5세별 합 × 행정동 경계 근사. 20–34세는 청년기본법(19–34세)에 가장 가까운 5세 구간. 경주시 31,387명(12.9%). 황성동 4,597 · 동천동 3,289 · 용강동 3,245 · 현곡면 2,851 · 성건동 2,497(20.5%, 대학). 원도심 4개 동 합 4,255. 급간은 임의 설정.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_y2034"
+              ],
+              0
+            ],
+            "#f7fcfd",
+            6,
+            "#e0ecf4",
+            9,
+            "#bfd3e6",
+            12,
+            "#9ebcda",
+            15,
+            "#8c6bb1",
+            18,
+            "#6e016b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_y2034",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fcfd",
+            "<6%"
+          ],
+          [
+            "#e0ecf4",
+            "6–9"
+          ],
+          [
+            "#bfd3e6",
+            "9–12"
+          ],
+          [
+            "#9ebcda",
+            "12–15"
+          ],
+          [
+            "#8c6bb1",
+            "15–18"
+          ],
+          [
+            "#6e016b",
+            "18%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "n_y2034",
+          "pct_y2034",
+          "n_youth",
+          "pct_youth",
+          "pct_65",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "youth_core",
+    "ids": [
+      "pop_y2034"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.14911432965295,
+        35.80591913831179
+      ],
+      [
+        129.29288567034814,
+        35.934074476547124
+      ]
+    ],
+    "zoom": 12.255789357534294,
+    "center": [
+      129.221,
+      35.87002271629251
+    ],
+    "definitions": [
+      {
+        "id": "pop_y2034",
+        "title": "청년인구 (20–34세 수·비율)",
+        "short": "청년 20–34세 (수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) 5세별 합 × 행정동 경계 근사. 20–34세는 청년기본법(19–34세)에 가장 가까운 5세 구간. 경주시 31,387명(12.9%). 황성동 4,597 · 동천동 3,289 · 용강동 3,245 · 현곡면 2,851 · 성건동 2,497(20.5%, 대학). 원도심 4개 동 합 4,255. 급간은 임의 설정.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_y2034"
+              ],
+              0
+            ],
+            "#f7fcfd",
+            6,
+            "#e0ecf4",
+            9,
+            "#bfd3e6",
+            12,
+            "#9ebcda",
+            15,
+            "#8c6bb1",
+            18,
+            "#6e016b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_y2034",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fcfd",
+            "<6%"
+          ],
+          [
+            "#e0ecf4",
+            "6–9"
+          ],
+          [
+            "#bfd3e6",
+            "9–12"
+          ],
+          [
+            "#9ebcda",
+            "12–15"
+          ],
+          [
+            "#8c6bb1",
+            "15–18"
+          ],
+          [
+            "#6e016b",
+            "18%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "n_y2034",
+          "pct_y2034",
+          "n_youth",
+          "pct_youth",
+          "pct_65",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "age_buildings",
+    "ids": [
+      "parcels",
+      "zone"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.2031426044793,
+        35.8404730700223
+      ],
+      [
+        129.2328573955245,
+        35.85552683346019
+      ]
+    ],
+    "zoom": 15.208384239927259,
+    "center": [
+      129.21799999999996,
+      35.848000308943824
+    ],
+    "definitions": [
+      {
+        "id": "parcels",
+        "title": "필지 · 건축물 노후도",
+        "file": "parcels.geojson",
+        "type": "fill",
+        "visible": false,
+        "minzoom": 14,
+        "source_note": "V-World 지적 7,616필지 + 건축물대장 2,164필지 조인 · 클릭 시 토지이용계획(지역·지구 목록, 토지이음과 동일) · 색 = 최고령 건물 경과연수 사용승인일이 없는 대장(철도시설·구 역사 등 12필지)은 회색 '미상'. 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님. 노후 기준: 도시재생 쇠퇴진단은 20년↑ 노후건축물 비율(50%↑)을 쓴다. 30년↑은 참고 구간.",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "case",
+            [
+              "!",
+              [
+                "has",
+                "bldg_age"
+              ]
+            ],
+            "rgba(0,0,0,0)",
+            [
+              "!=",
+              [
+                "typeof",
+                [
+                  "get",
+                  "bldg_age"
+                ]
+              ],
+              "number"
+            ],
+            "#b0b0b0",
+            [
+              "step",
+              [
+                "get",
+                "bldg_age"
+              ],
+              "#e8f3e6",
+              10,
+              "#c7e0bd",
+              20,
+              "#f6d68a",
+              30,
+              "#e9975a",
+              40,
+              "#c8452b"
+            ]
+          ]
+        },
+        "legend": [
+          [
+            "#e8f3e6",
+            "<10년"
+          ],
+          [
+            "#c7e0bd",
+            "10–20"
+          ],
+          [
+            "#f6d68a",
+            "20–30"
+          ],
+          [
+            "#e9975a",
+            "30–40"
+          ],
+          [
+            "#c8452b",
+            "40년↑"
+          ],
+          [
+            "#b0b0b0",
+            "대장 있음 · 사용승인일 미상 (역사·철도시설 등 12필지)"
+          ],
+          [
+            "rgba(0,0,0,0)",
+            "건물 없음/미조인"
+          ]
+        ],
+        "popup": [
+          "addr",
+          "pnu",
+          "lu_list",
+          "lu_touch",
+          "jiga",
+          "bldg_oldest",
+          "bldg_age",
+          "bldg_purps",
+          "bldg_strct",
+          "bldg_flr",
+          "bldg_totArea",
+          "bldg_n"
+        ],
+        "outline": {
+          "line-color": "#6b7c88",
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            14,
+            0.2,
+            18,
+            1
+          ],
+          "line-opacity": 0.8
+        },
+        "group": "건물·필지",
+        "short": "필지 · 건물 노후도"
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      }
+    ]
+  },
+  {
+    "name": "commerce",
+    "ids": [
+      "stores",
+      "zone"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.20350781546279,
+        35.83225231998529
+      ],
+      [
+        129.23249218454373,
+        35.85574746560681
+      ]
+    ],
+    "zoom": 14.703722012558798,
+    "center": [
+      129.21800000000007,
+      35.84400076278993
+    ],
+    "definitions": [
+      {
+        "id": "stores",
+        "title": "상가 업소 (소진공 2026-03 + 게스트하우스)",
+        "file": "stores.geojson",
+        "type": "circle",
+        "visible": false,
+        "minzoom": 14,
+        "source_note": "소진공 상가정보 API 10,314 (원도심+황성·동천·용강·보문 창) + 게스트하우스 18 · 영업 중 스냅샷",
+        "paint": {
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            14,
+            1.5,
+            17,
+            4,
+            19,
+            7
+          ],
+          "circle-opacity": 0.85,
+          "circle-stroke-width": 0.4,
+          "circle-stroke-color": "#fff",
+          "circle-color": [
+            "match",
+            [
+              "get",
+              "indsLclsNm"
+            ],
+            "음식",
+            "#e05a3a",
+            "소매",
+            "#3a7bd5",
+            "숙박",
+            "#8e44ad",
+            "수리·개인",
+            "#7f8c8d",
+            "과학·기술",
+            "#16a085",
+            "시설관리·임대",
+            "#a67c52",
+            "예술·스포츠",
+            "#f39c12",
+            "교육",
+            "#27ae60",
+            "부동산",
+            "#95a5a6",
+            "보건의료",
+            "#c0392b",
+            "#555"
+          ]
+        },
+        "legend": [],
+        "popup": [
+          "bizesNm",
+          "indsLclsNm",
+          "indsMclsNm",
+          "indsSclsNm",
+          "lnoAdr",
+          "bldNm",
+          "flrNo",
+          "src"
+        ],
+        "subfilter": {
+          "field": "indsLclsNm",
+          "values": [
+            "음식",
+            "소매",
+            "숙박",
+            "수리·개인",
+            "과학·기술",
+            "시설관리·임대",
+            "예술·스포츠",
+            "교육",
+            "부동산",
+            "보건의료"
+          ],
+          "colors": {
+            "음식": "#e05a3a",
+            "소매": "#3a7bd5",
+            "숙박": "#8e44ad",
+            "수리·개인": "#7f8c8d",
+            "과학·기술": "#16a085",
+            "시설관리·임대": "#a67c52",
+            "예술·스포츠": "#f39c12",
+            "교육": "#27ae60",
+            "부동산": "#95a5a6",
+            "보건의료": "#c0392b"
+          }
+        },
+        "group": "상권·유동",
+        "short": "상가 업소 (10,332)"
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      }
+    ]
+  },
+  {
+    "name": "facilities",
+    "ids": [
+      "facilities",
+      "zone",
+      "parks_upis"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.16930473741706,
+        35.82534360937768
+      ],
+      [
+        129.2626952625833,
+        35.87265543724769
+      ]
+    ],
+    "zoom": 13.556289285570008,
+    "center": [
+      129.216,
+      35.8490030517209
+    ],
+    "definitions": [
+      {
+        "id": "facilities",
+        "title": "도서관·박물관·미술관·공원 (V-World 장소검색 POI)",
+        "short": "도서관·박물관·미술관·공원",
+        "group": "교육·문화·종교",
+        "file": "facilities.geojson",
+        "type": "circle",
+        "visible": false,
+        "minzoom": 10,
+        "source_note": "V-World 장소검색(bbox 경주시, 카테고리 필터: 공공·작은·대학도서관 / 국립·사립·대학박물관·전시관·기념관 / 공립·사립미술관·화랑 / 공원>근린·어린이·소·체육·문화공원 등, 국립공원·사무소·진출입시설·정류장 제외). 공식 시설 목록이 아닌 POI(T2)라 누락·중복 가능 — 도서관·박물관미술관·도시공원 표준데이터 API 활용신청 후 교체 예정. 공원 폴리곤은 '도시계획 공간시설' 레이어.",
+        "paint": {
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            10,
+            3,
+            14,
+            6,
+            17,
+            9
+          ],
+          "circle-color": [
+            "match",
+            [
+              "get",
+              "kind"
+            ],
+            "도서관",
+            "#2f6db5",
+            "박물관",
+            "#c7641c",
+            "미술관",
+            "#6f4fa3",
+            "공원",
+            "#1f8a4c",
+            "#555"
+          ],
+          "circle-opacity": 0.9,
+          "circle-stroke-width": 1.2,
+          "circle-stroke-color": "#fff"
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10.5,
+          "minzoom": 14
+        },
+        "subfilter": {
+          "field": "kind",
+          "values": [
+            "도서관",
+            "박물관",
+            "미술관",
+            "공원"
+          ],
+          "colors": {
+            "도서관": "#2f6db5",
+            "박물관": "#c7641c",
+            "미술관": "#6f4fa3",
+            "공원": "#1f8a4c"
+          }
+        },
+        "legend": [],
+        "popup": [
+          "name",
+          "kind",
+          "category",
+          "addr",
+          "source"
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "arrival",
+    "ids": [
+      "gateways",
+      "rail_stations",
+      "rail_active"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.04171502369496,
+        35.78491486727256
+      ],
+      [
+        129.32828497630356,
+        35.93007615509018
+      ]
+    ],
+    "zoom": 11.938750032713056,
+    "center": [
+      129.18499999999995,
+      35.85752873710449
+    ],
+    "definitions": [
+      {
+        "id": "gateways",
+        "title": "경주 진입 관문 — 고속도로 IC 5 · KTX역 · 서경주역 · 버스터미널 2 · (옛)경주역",
+        "short": "진입 관문 (IC·역·터미널)",
+        "file": "gateways.geojson",
+        "type": "circle",
+        "visible": false,
+        "group": "시청·교통거점",
+        "source_note": "관광객·시민이 경주에 들어오는 관문 10곳. 지정 근거: 2030 경관계획 ‘관문적 경관거점’(경주IC·건천IC·남경주IC·서경주역·신경주역 등, T1) · 전략계획 2022 p.48 광역교통망(경부고속 경주IC·건천IC, 동해고속 남경주IC·동경주IC, T1) · 기본계획 p.201–208 철도·터미널 현황(T1) · 미래구상 2025 p.31 서경주역 관문 제안(T2). 위치는 V-World 장소검색 좌표(IC는 ‘○○나들목’ 지명점). 클릭하면 연결 축의 통행량(기본계획 2015 교통량표 / 도로공사 2025 AADT)·운행횟수·승차 인원이 보인다. <b>주의</b>: 4개 문서 어디에도 ‘경주 방문 관광객의 입경 교통수단 비율’ 통계는 없다. 이 레이어는 관문의 위치와 규모만 보여준다. 전국 평균(국민여행조사 2025 자가용 84.5%)은 리포트 ‘이동’ 카드 참조.",
+        "paint": {
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            9,
+            5,
+            13,
+            9,
+            16,
+            13
+          ],
+          "circle-color": [
+            "match",
+            [
+              "get",
+              "kind"
+            ],
+            "고속도로 IC",
+            "#8d6e63",
+            "고속철도역",
+            "#0f62fe",
+            "일반철도역",
+            "#4589ff",
+            "버스터미널",
+            "#e66a00",
+            "폐역",
+            "#c0392b",
+            "#555"
+          ],
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#fff",
+          "circle-opacity": 0.92
+        },
+        "label": {
+          "field": "lbl",
+          "size": 12,
+          "minzoom": 9
+        },
+        "legend": [
+          [
+            "#8d6e63",
+            "고속도로 IC"
+          ],
+          [
+            "#0f62fe",
+            "고속철도역"
+          ],
+          [
+            "#4589ff",
+            "일반철도역"
+          ],
+          [
+            "#e66a00",
+            "버스터미널"
+          ],
+          [
+            "#c0392b",
+            "폐역"
+          ],
+          [
+            "transparent",
+            "통행량·운행횟수는 팝업 · 북경주IC는 미래구상 연구의 외곽순환 기점"
+          ]
+        ],
+        "subfilter": {
+          "field": "kind",
+          "values": [
+            "고속도로 IC",
+            "고속철도역",
+            "일반철도역",
+            "버스터미널",
+            "폐역"
+          ],
+          "colors": {
+            "고속도로 IC": "#8d6e63",
+            "고속철도역": "#0f62fe",
+            "일반철도역": "#4589ff",
+            "버스터미널": "#e66a00",
+            "폐역": "#c0392b"
+          }
+        },
+        "popup": [
+          "name",
+          "kind",
+          "note",
+          "src_doc",
+          "geocode",
+          "source"
+        ]
+      },
+      {
+        "id": "rail_stations",
+        "title": "철도역 — 구경주역·옛 서경주역·신 서경주역·불국사역",
+        "short": "철도역",
+        "group": "시청·교통거점",
+        "file": "rail_stations.geojson",
+        "type": "circle",
+        "visible": false,
+        "source_note": "위치 OSM·위키(T4). 신 서경주역 일평균 173명(2024)→309명(2025)은 나무위키 전재 — 철도통계연보로 치환 필요.",
+        "paint": {
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            11,
+            5,
+            15,
+            9
+          ],
+          "circle-color": [
+            "match",
+            [
+              "get",
+              "status"
+            ],
+            "active",
+            "#1a237e",
+            "#b71c1c"
+          ],
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#fff"
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐역 (구경주역·옛 서경주·불국사)"
+          ],
+          [
+            "#1a237e",
+            "운영 중 (신 서경주역)"
+          ]
+        ],
+        "popup": [
+          "name",
+          "note",
+          "source"
+        ]
+      },
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_active",
+        "title": "현행 철도 (이설 동해선·중앙선)",
+        "short": "현행 철도",
+        "file": "rail_active.geojson",
+        "source_note": "OSM railway=rail, Overpass 2026-09-21 (T4). 신 서경주역(현곡면 하구리)이 이 선 위에 있음.",
+        "paint": {
+          "line-color": "#455a64",
+          "line-width": 1.8,
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#455a64",
+            "현행선"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "name": "traffic_we_6",
+    "ids": [
+      "traffic_hist"
+    ],
+    "hour": 6,
+    "bounds": [
+      [
+        129.19864516129087,
+        35.83138949128612
+      ],
+      [
+        129.23735483870968,
+        35.870609303718055
+      ]
+    ],
+    "zoom": 14.14879928554299,
+    "center": [
+      129.21799999999996,
+      35.85100182233916
+    ],
+    "definitions": [
+      {
+        "id": "traffic_hist",
+        "title": "시간대별 평균 소통 (이력)",
+        "short": "시간대별 평균 소통 (이력 표본)",
+        "group": "교통",
+        "file": "traffic_hist.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+        "paint": {
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            12,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              3,
+              "103",
+              2.5,
+              1.2
+            ],
+            16,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              8,
+              "103",
+              6,
+              3.5
+            ]
+          ],
+          "line-opacity": 0.9,
+          "line-color": [
+            "case",
+            [
+              "!",
+              [
+                "has",
+                "wd_08"
+              ]
+            ],
+            "#bbb",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_c"
+                ],
+                15
+              ]
+            ],
+            "#d7191c",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_f"
+                ],
+                25
+              ]
+            ],
+            "#fdae61",
+            "#1a9641"
+          ]
+        },
+        "hourslider": true,
+        "legend": [
+          [
+            "#d7191c",
+            "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+          ],
+          [
+            "#fdae61",
+            "서행"
+          ],
+          [
+            "#1a9641",
+            "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+          ],
+          [
+            "#ccc",
+            "표본 없음"
+          ]
+        ],
+        "popup": [
+          "ROAD_NAME",
+          "wd_mean",
+          "wd_min",
+          "wd_worst_hour",
+          "n_obs_hist",
+          "MAX_SPD",
+          "LANES",
+          "LINK_ID"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "traffic_we_13",
+    "ids": [
+      "traffic_hist"
+    ],
+    "hour": 13,
+    "bounds": [
+      [
+        129.19864516129036,
+        35.831389491286885
+      ],
+      [
+        129.23735483870917,
+        35.870609303718794
+      ]
+    ],
+    "zoom": 14.148799285544436,
+    "center": [
+      129.21799999999996,
+      35.8510018223392
+    ],
+    "definitions": [
+      {
+        "id": "traffic_hist",
+        "title": "시간대별 평균 소통 (이력)",
+        "short": "시간대별 평균 소통 (이력 표본)",
+        "group": "교통",
+        "file": "traffic_hist.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+        "paint": {
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            12,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              3,
+              "103",
+              2.5,
+              1.2
+            ],
+            16,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              8,
+              "103",
+              6,
+              3.5
+            ]
+          ],
+          "line-opacity": 0.9,
+          "line-color": [
+            "case",
+            [
+              "!",
+              [
+                "has",
+                "wd_08"
+              ]
+            ],
+            "#bbb",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_c"
+                ],
+                15
+              ]
+            ],
+            "#d7191c",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_f"
+                ],
+                25
+              ]
+            ],
+            "#fdae61",
+            "#1a9641"
+          ]
+        },
+        "hourslider": true,
+        "legend": [
+          [
+            "#d7191c",
+            "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+          ],
+          [
+            "#fdae61",
+            "서행"
+          ],
+          [
+            "#1a9641",
+            "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+          ],
+          [
+            "#ccc",
+            "표본 없음"
+          ]
+        ],
+        "popup": [
+          "ROAD_NAME",
+          "wd_mean",
+          "wd_min",
+          "wd_worst_hour",
+          "n_obs_hist",
+          "MAX_SPD",
+          "LANES",
+          "LINK_ID"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "traffic_we_21",
+    "ids": [
+      "traffic_hist"
+    ],
+    "hour": 21,
+    "bounds": [
+      [
+        129.19864516128854,
+        35.83138949128606
+      ],
+      [
+        129.23735483870735,
+        35.870609303717984
+      ]
+    ],
+    "zoom": 14.148799285542992,
+    "center": [
+      129.21800000000007,
+      35.8510018223392
+    ],
+    "definitions": [
+      {
+        "id": "traffic_hist",
+        "title": "시간대별 평균 소통 (이력)",
+        "short": "시간대별 평균 소통 (이력 표본)",
+        "group": "교통",
+        "file": "traffic_hist.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+        "paint": {
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            12,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              3,
+              "103",
+              2.5,
+              1.2
+            ],
+            16,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              8,
+              "103",
+              6,
+              3.5
+            ]
+          ],
+          "line-opacity": 0.9,
+          "line-color": [
+            "case",
+            [
+              "!",
+              [
+                "has",
+                "wd_08"
+              ]
+            ],
+            "#bbb",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_c"
+                ],
+                15
+              ]
+            ],
+            "#d7191c",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_f"
+                ],
+                25
+              ]
+            ],
+            "#fdae61",
+            "#1a9641"
+          ]
+        },
+        "hourslider": true,
+        "legend": [
+          [
+            "#d7191c",
+            "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+          ],
+          [
+            "#fdae61",
+            "서행"
+          ],
+          [
+            "#1a9641",
+            "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+          ],
+          [
+            "#ccc",
+            "표본 없음"
+          ]
+        ],
+        "popup": [
+          "ROAD_NAME",
+          "wd_mean",
+          "wd_min",
+          "wd_worst_hour",
+          "n_obs_hist",
+          "MAX_SPD",
+          "LANES",
+          "LINK_ID"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "traffic_wide",
+    "ids": [
+      "traffic_hist"
+    ],
+    "hour": 13,
+    "bounds": [
+      [
+        129.16930473741638,
+        35.825343609376816
+      ],
+      [
+        129.26269526258255,
+        35.87265543724685
+      ]
+    ],
+    "zoom": 13.556289285570434,
+    "center": [
+      129.21600000000012,
+      35.8490030517209
+    ],
+    "definitions": [
+      {
+        "id": "traffic_hist",
+        "title": "시간대별 평균 소통 (이력)",
+        "short": "시간대별 평균 소통 (이력 표본)",
+        "group": "교통",
+        "file": "traffic_hist.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "ITS 교통소통 이력 파일(일별 5분 링크속도, 2019.3~)에서 표본일 추출 → 링크별 시간대·평일/주말 평균 · 색 = 선택 시간대 평균속도 · 표본일 수는 분석 탭 참조 소통등급 임계는 표준노드링크 ROAD_RANK별: 고속국도 40/80, 도시고속 30/50, 그 외(국도 시가지 구간 포함) 도시부 15/25 km/h — ITS 판단 관행값(공식 고시 원문 미확인).",
+        "paint": {
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            12,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              3,
+              "103",
+              2.5,
+              1.2
+            ],
+            16,
+            [
+              "match",
+              [
+                "get",
+                "ROAD_RANK"
+              ],
+              "101",
+              8,
+              "103",
+              6,
+              3.5
+            ]
+          ],
+          "line-opacity": 0.9,
+          "line-color": [
+            "case",
+            [
+              "!",
+              [
+                "has",
+                "wd_08"
+              ]
+            ],
+            "#bbb",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_c"
+                ],
+                15
+              ]
+            ],
+            "#d7191c",
+            [
+              "<",
+              [
+                "get",
+                "wd_08"
+              ],
+              [
+                "coalesce",
+                [
+                  "get",
+                  "thr_f"
+                ],
+                25
+              ]
+            ],
+            "#fdae61",
+            "#1a9641"
+          ]
+        },
+        "hourslider": true,
+        "legend": [
+          [
+            "#d7191c",
+            "정체 (도시부 <15 · 도시고속 <30 · 고속 <40 km/h)"
+          ],
+          [
+            "#fdae61",
+            "서행"
+          ],
+          [
+            "#1a9641",
+            "원활 (도시부 25↑ · 도시고속 50↑ · 고속 80↑)"
+          ],
+          [
+            "#ccc",
+            "표본 없음"
+          ]
+        ],
+        "popup": [
+          "ROAD_NAME",
+          "wd_mean",
+          "wd_min",
+          "wd_worst_hour",
+          "n_obs_hist",
+          "MAX_SPD",
+          "LANES",
+          "LINK_ID"
+        ]
+      }
+    ]
+  }
+]

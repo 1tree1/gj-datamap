@@ -1,0 +1,619 @@
+[
+  {
+    "name": "footfall_close",
+    "ids": [
+      "footfall_areas",
+      "zone"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.20948915208675,
+        35.839827648308884
+      ],
+      [
+        129.2270527072273,
+        35.85077921451649
+      ]
+    ],
+    "zoom": 15.667420295408373,
+    "center": [
+      129.21827092965714,
+      35.84530362044359
+    ],
+    "definitions": [
+      {
+        "id": "footfall_areas",
+        "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+        "file": "footfall_areas.geojson",
+        "type": "fill",
+        "visible": false,
+        "group": "상권·유동",
+        "short": "유동인구 8구역 (ha당)",
+        "source_note": "<b>무엇인가</b> 소상공인시장진흥공단 소상공인365(bigdata.sbiz.or.kr) 상권분석 리포트의 유동인구. 통신사 통화량으로 50m 격자마다 '하루에 그 안에 있었던 사람 수(연인원)'를 추정한 값 (T2). 2025.06~2026.06 13개월의 월별 일평균을 다시 평균했다. 보행량이 아니다 — 차를 타고 지나간 사람도 섞이고(원화로·태종로 통과교통이 A·C에 포함될 수 있음), 한 사람이 세 번 오가면 세 번 잡힌다.<br><b>색 읽는 법</b> 채움 = per_ha = 하루 평균 유동인구 ÷ 구역 면적(ha). 절대치가 아니라 밀도로 그려야 15.9ha 구역과 106ha 구역을 나란히 비교할 수 있다. 구간(50/100/300/500/750/1,200)은 임의로 정한 값이다.<br><b>구역 8개는 정의가 다르다</b> A 황오동 = 모니터링 보고서와 같은 SGIS 100m 격자 32셀(2020년 이후 시계열과 이어 붙일 수 있는 유일한 구역) · B 행복황촌 = 활성화계획 위치도 디지타이징(±20m 근사) · C 구역+300m 버퍼 · D 지구단위계획구역 · E 중심 300m(검증용) · F 시청 500m · G 성동시장 200m · H 황리단길 300m(반경 원).<br><b>클릭 항목</b> footfall_avg 하루 평균 사람 수 · per_ha ha당 · pct_18_23 저녁 비중(전 구역 20~23%로 거의 같다 — 저녁 활동의 차이는 비율이 아니라 절대치에서 난다. 시청 500m만 27%) · weekend_ratio 주말÷주중(1 미만 평일형, 1 초과 주말형: 황리단길 1.7, 행복황촌 1.15, 나머지 0.6~0.7) · pct_60plus 60대 이상(전 구역 37~40%) · resident/worker 같은 플랫폼의 거주·직장 인구(유동÷(거주+직장)이 1 아래면 주민 말고는 안 들어오는 곳) · life/tour_stores 대표 11개 업종만 센 생활·관광 업소 수.<br><b>하지 말 것</b> '유동인구가 늘었다'는 근거는 없다 — 황오동 6년 −14%, 행복황촌 정체(보고서의 +396%는 분석 영역이 바뀐 것으로 판정, 인용 금지). 13개월 안의 8월 +15~20%·1월 −10%는 계절이지 추세가 아니다. 시군구 관광데이터랩 방문자와 합치지 않는다(집계 기준이 다르다). 방법: work/20260920_소상공인365_유동인구_재추출.md · 원자료 archive/C_data/raw/sbiz365_footfall_20260920.json",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "per_ha"
+            ],
+            50,
+            "#f1f5f0",
+            100,
+            "#d9e8d3",
+            300,
+            "#a3c9a8",
+            500,
+            "#5f9f7a",
+            750,
+            "#2c6a5c",
+            1200,
+            "#0f3d34"
+          ]
+        },
+        "outline": {
+          "line-color": "#0f3d34",
+          "line-width": 1.4,
+          "line-dasharray": [
+            3,
+            2
+          ]
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#f1f5f0",
+            "≤50/ha"
+          ],
+          [
+            "#d9e8d3",
+            "100"
+          ],
+          [
+            "#a3c9a8",
+            "300"
+          ],
+          [
+            "#5f9f7a",
+            "500"
+          ],
+          [
+            "#2c6a5c",
+            "750"
+          ],
+          [
+            "#0f3d34",
+            "1,200/ha"
+          ],
+          [
+            "transparent",
+            "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+          ]
+        ],
+        "popup": [
+          "name",
+          "per_ha",
+          "footfall_avg",
+          "pct_18_23",
+          "weekend_ratio",
+          "pct_60plus",
+          "resident",
+          "worker",
+          "life_stores",
+          "tour_stores",
+          "life_chg",
+          "tour_chg",
+          "area_ha",
+          "source"
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      }
+    ]
+  },
+  {
+    "name": "youth_nolabel",
+    "ids": [
+      "pop_y2034"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.1358186614179,
+        35.80628028497178
+      ],
+      [
+        129.30618133857627,
+        35.93371391187108
+      ]
+    ],
+    "zoom": 12.389467792766315,
+    "center": [
+      129.221,
+      35.87002271629251
+    ],
+    "definitions": [
+      {
+        "id": "pop_y2034",
+        "title": "청년인구 (20–34세 수·비율)",
+        "short": "청년 20–34세 (수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "행안부 주민등록 2026-08 (KOSIS DT_1B04005N) 5세별 합 × 행정동 경계 근사. 20–34세는 청년기본법(19–34세)에 가장 가까운 5세 구간. 경주시 31,387명(12.9%). 황성동 4,597 · 동천동 3,289 · 용강동 3,245 · 현곡면 2,851 · 성건동 2,497(20.5%, 대학). 원도심 4개 동 합 4,255. 급간은 임의 설정.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_y2034"
+              ],
+              0
+            ],
+            "#f7fcfd",
+            6,
+            "#e0ecf4",
+            9,
+            "#bfd3e6",
+            12,
+            "#9ebcda",
+            15,
+            "#8c6bb1",
+            18,
+            "#6e016b"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_y2034",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fcfd",
+            "<6%"
+          ],
+          [
+            "#e0ecf4",
+            "6–9"
+          ],
+          [
+            "#bfd3e6",
+            "9–12"
+          ],
+          [
+            "#9ebcda",
+            "12–15"
+          ],
+          [
+            "#8c6bb1",
+            "15–18"
+          ],
+          [
+            "#6e016b",
+            "18%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "n_y2034",
+          "pct_y2034",
+          "n_youth",
+          "pct_youth",
+          "pct_65",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "aging_nolabel",
+    "ids": [
+      "pop_65"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.13970776325294,
+        35.81055946484574
+      ],
+      [
+        129.29729223675275,
+        35.928435569917056
+      ]
+    ],
+    "zoom": 12.50195170334497,
+    "center": [
+      129.21849999999995,
+      35.86951943626883
+    ],
+    "definitions": [
+      {
+        "id": "pop_65",
+        "title": "고령인구 (65세↑ 수·비율)",
+        "short": "고령인구 (65세↑ 수·비율)",
+        "group": "인구",
+        "file": "hadm_pop.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "KOSIS 주민등록 2026-08 (행안부) × 행정동 경계 근사(법정동 합집합) · 22개 행정동 · 2025 중부동→황오동 통합 · 색 = 비율, 라벨 = 수(비율) · 산내면 60.1% / 황남동 50.1% / 황오동 43.8% 급간(범례 구간)은 데이터 분포를 보고 손으로 정한 값 — 분위수·자연분류 아님.",
+        "paint": {
+          "fill-opacity": 0.6,
+          "fill-color": [
+            "step",
+            [
+              "coalesce",
+              [
+                "get",
+                "pct_65"
+              ],
+              0
+            ],
+            "#f7fbf4",
+            15,
+            "#d4e8d0",
+            20,
+            "#a9d1a4",
+            27,
+            "#f2c078",
+            35,
+            "#e07b39",
+            45,
+            "#b5322a"
+          ]
+        },
+        "outline": {
+          "line-color": "#3a4a44",
+          "line-width": 1.2
+        },
+        "label": {
+          "field": "lbl_65",
+          "size": 10.5
+        },
+        "legend": [
+          [
+            "#f7fbf4",
+            "<15%"
+          ],
+          [
+            "#d4e8d0",
+            "15–20"
+          ],
+          [
+            "#a9d1a4",
+            "20–27"
+          ],
+          [
+            "#f2c078",
+            "27–35"
+          ],
+          [
+            "#e07b39",
+            "35–45"
+          ],
+          [
+            "#b5322a",
+            "45%↑"
+          ],
+          [
+            "transparent",
+            "※ 급간은 임의 설정(분위수 아님)"
+          ]
+        ],
+        "popup": [
+          "hadm",
+          "pop",
+          "area_km2",
+          "density",
+          "n_65",
+          "pct_65",
+          "n_youth",
+          "pct_youth",
+          "n_0_14",
+          "chg_10y_pct"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "footfall_ns_clean",
+    "ids": [
+      "footfall_areas",
+      "zone",
+      "rail_abandoned",
+      "parks_upis"
+    ],
+    "hour": null,
+    "bounds": [
+      [
+        129.17396570519435,
+        35.82098587489898
+      ],
+      [
+        129.25203429481212,
+        35.890012423345425
+      ]
+    ],
+    "zoom": 13.274254888241083,
+    "center": [
+      129.21299999999997,
+      35.85550666146878
+    ],
+    "definitions": [
+      {
+        "id": "footfall_areas",
+        "title": "유동인구 8구역 (소상공인365, 2025.06~2026.06)",
+        "file": "footfall_areas.geojson",
+        "type": "fill",
+        "visible": false,
+        "group": "상권·유동",
+        "short": "유동인구 8구역 (ha당)",
+        "source_note": "<b>무엇인가</b> 소상공인시장진흥공단 소상공인365(bigdata.sbiz.or.kr) 상권분석 리포트의 유동인구. 통신사 통화량으로 50m 격자마다 '하루에 그 안에 있었던 사람 수(연인원)'를 추정한 값 (T2). 2025.06~2026.06 13개월의 월별 일평균을 다시 평균했다. 보행량이 아니다 — 차를 타고 지나간 사람도 섞이고(원화로·태종로 통과교통이 A·C에 포함될 수 있음), 한 사람이 세 번 오가면 세 번 잡힌다.<br><b>색 읽는 법</b> 채움 = per_ha = 하루 평균 유동인구 ÷ 구역 면적(ha). 절대치가 아니라 밀도로 그려야 15.9ha 구역과 106ha 구역을 나란히 비교할 수 있다. 구간(50/100/300/500/750/1,200)은 임의로 정한 값이다.<br><b>구역 8개는 정의가 다르다</b> A 황오동 = 모니터링 보고서와 같은 SGIS 100m 격자 32셀(2020년 이후 시계열과 이어 붙일 수 있는 유일한 구역) · B 행복황촌 = 활성화계획 위치도 디지타이징(±20m 근사) · C 구역+300m 버퍼 · D 지구단위계획구역 · E 중심 300m(검증용) · F 시청 500m · G 성동시장 200m · H 황리단길 300m(반경 원).<br><b>클릭 항목</b> footfall_avg 하루 평균 사람 수 · per_ha ha당 · pct_18_23 저녁 비중(전 구역 20~23%로 거의 같다 — 저녁 활동의 차이는 비율이 아니라 절대치에서 난다. 시청 500m만 27%) · weekend_ratio 주말÷주중(1 미만 평일형, 1 초과 주말형: 황리단길 1.7, 행복황촌 1.15, 나머지 0.6~0.7) · pct_60plus 60대 이상(전 구역 37~40%) · resident/worker 같은 플랫폼의 거주·직장 인구(유동÷(거주+직장)이 1 아래면 주민 말고는 안 들어오는 곳) · life/tour_stores 대표 11개 업종만 센 생활·관광 업소 수.<br><b>하지 말 것</b> '유동인구가 늘었다'는 근거는 없다 — 황오동 6년 −14%, 행복황촌 정체(보고서의 +396%는 분석 영역이 바뀐 것으로 판정, 인용 금지). 13개월 안의 8월 +15~20%·1월 −10%는 계절이지 추세가 아니다. 시군구 관광데이터랩 방문자와 합치지 않는다(집계 기준이 다르다). 방법: work/20260920_소상공인365_유동인구_재추출.md · 원자료 archive/C_data/raw/sbiz365_footfall_20260920.json",
+        "paint": {
+          "fill-opacity": 0.55,
+          "fill-color": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "get",
+              "per_ha"
+            ],
+            50,
+            "#f1f5f0",
+            100,
+            "#d9e8d3",
+            300,
+            "#a3c9a8",
+            500,
+            "#5f9f7a",
+            750,
+            "#2c6a5c",
+            1200,
+            "#0f3d34"
+          ]
+        },
+        "outline": {
+          "line-color": "#0f3d34",
+          "line-width": 1.4,
+          "line-dasharray": [
+            3,
+            2
+          ]
+        },
+        "label": {
+          "field": "lbl",
+          "size": 11
+        },
+        "legend": [
+          [
+            "#f1f5f0",
+            "≤50/ha"
+          ],
+          [
+            "#d9e8d3",
+            "100"
+          ],
+          [
+            "#a3c9a8",
+            "300"
+          ],
+          [
+            "#5f9f7a",
+            "500"
+          ],
+          [
+            "#2c6a5c",
+            "750"
+          ],
+          [
+            "#0f3d34",
+            "1,200/ha"
+          ],
+          [
+            "transparent",
+            "B 행복황촌·D 폐역 구역 ≈ 80/ha, G 성동시장 1,175/ha — 낙차 15배"
+          ]
+        ],
+        "popup": [
+          "name",
+          "per_ha",
+          "footfall_avg",
+          "pct_18_23",
+          "weekend_ratio",
+          "pct_60plus",
+          "resident",
+          "worker",
+          "life_stores",
+          "tour_stores",
+          "life_chg",
+          "tour_chg",
+          "area_ha",
+          "source"
+        ]
+      },
+      {
+        "id": "zone",
+        "title": "지구단위계획구역 (구역 27)",
+        "file": "zone.geojson",
+        "type": "line",
+        "visible": false,
+        "source_note": "쇄선 추출 158,472㎡ · 고시 156,460㎡ (+1.3%)",
+        "paint": {
+          "line-color": "#d81e1e",
+          "line-width": 2.5,
+          "line-dasharray": [
+            4,
+            2,
+            1,
+            2
+          ]
+        },
+        "legend": [
+          [
+            "#d81e1e",
+            "구역 경계"
+          ]
+        ],
+        "popup": [
+          "name",
+          "area_m2",
+          "gosi_area_m2"
+        ],
+        "group": "대상지·계획",
+        "short": "지구단위계획구역"
+      },
+      {
+        "group": "시청·교통거점",
+        "type": "line",
+        "visible": false,
+        "popup": [
+          "name",
+          "railway",
+          "cls",
+          "source"
+        ],
+        "id": "rail_abandoned",
+        "title": "폐선 (2021.12 이설 동해남부선·중앙선·금장삼각선)",
+        "short": "폐선",
+        "file": "rail_abandoned.geojson",
+        "source_note": "OSM railway=abandoned/disused, Overpass 2026-09-21 (T4). 구경주역→황성→석장(동국대)→금장(옛 서경주) 약 3.5km 노반 연속. 금장→신 서경주역(하구리)은 폐선 없음(2.3~2.7km 이격). 지형도면 1~10·13~15장 벡터화로 T1 치환 예정.",
+        "paint": {
+          "line-color": "#b71c1c",
+          "line-width": 3,
+          "line-dasharray": [
+            3,
+            2
+          ],
+          "line-opacity": 0.9
+        },
+        "legend": [
+          [
+            "#b71c1c",
+            "폐선"
+          ]
+        ]
+      },
+      {
+        "id": "parks_upis",
+        "title": "도시계획 공간시설 — 공원·녹지·광장 (V-World UPIS, S2 창)",
+        "short": "공원·녹지·광장 (도시계획시설)",
+        "group": "대상지·계획",
+        "file": "parks_upis.geojson",
+        "type": "fill",
+        "visible": false,
+        "source_note": "V-World LT_C_UPISUQ153(도시계획시설 공간시설) S2 창 4분할 호출 · 공원 71·녹지 35·광장 12·공공공지 5·유원지 1. 결정 폴리곤(집행·미집행 포함, exc_nam 참조). 고시 2026-8호 신설 근린공원 3개 반영 여부 미대조.",
+        "paint": {
+          "fill-opacity": 0.45,
+          "fill-color": [
+            "match",
+            [
+              "get",
+              "lcl_nam"
+            ],
+            "공원",
+            "#43a047",
+            "녹지",
+            "#9ccc65",
+            "광장",
+            "#8d6e63",
+            "공공공지",
+            "#bdbdbd",
+            "유원지",
+            "#26a69a",
+            "#999"
+          ]
+        },
+        "outline": {
+          "line-color": "#2e7d32",
+          "line-width": 0.8
+        },
+        "label": {
+          "field": "lbl",
+          "size": 10,
+          "minzoom": 14
+        },
+        "legend": [
+          [
+            "#43a047",
+            "공원"
+          ],
+          [
+            "#9ccc65",
+            "녹지"
+          ],
+          [
+            "#8d6e63",
+            "광장"
+          ],
+          [
+            "#bdbdbd",
+            "공공공지"
+          ],
+          [
+            "#26a69a",
+            "유원지"
+          ]
+        ],
+        "popup": [
+          "dgm_nm",
+          "lcl_nam",
+          "mls_nam",
+          "dgm_ar",
+          "exc_nam",
+          "ntfc_sn"
+        ]
+      }
+    ]
+  }
+]

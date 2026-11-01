@@ -1,0 +1,29 @@
+{
+  "saved_desktop": "C:\\Users\\OFFICE\\Desktop\\gyeongju_site_base_1_1500_sidewalk_fixed.3dm",
+  "saved_workspace": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\site_base_20261011\\gyeongju_site_base_1_1500.3dm",
+  "native_object_count": 1,
+  "input_solids": 24,
+  "valid": true,
+  "closed_solid": true,
+  "orientation": "Outward",
+  "naked_edges": 0,
+  "nonmanifold_edges": 0,
+  "volume_mm3": 293009.3548116175,
+  "expected_volume_mm3": 293009.4214314,
+  "volume_difference_mm3": -0.06661978247575462,
+  "bounds_mm": [
+    [
+      -0.000647597987977977,
+      0.0,
+      0.0
+    ],
+    [
+      207.383,
+      631.954,
+      3.5
+    ]
+  ],
+  "faces": 299,
+  "mesh_closed": true,
+  "elapsed_seconds": 2.918046236038208
+}

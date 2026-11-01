@@ -1,0 +1,12 @@
+import fs from 'node:fs/promises';
+import {FileBlob,PresentationFile} from 'file:///C:/Users/OFFICE/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs';
+const dir='C:/Users/OFFICE/Desktop/9_도시/work/20261011_history_aerial/build';
+const source='C:/Users/OFFICE/Desktop/9_도시/work/20261011_visual_front/output/NEXUS_1918_05-31_visual_evidence_final.pptx';
+const pres=await PresentationFile.importPptx(await FileBlob.load(source));
+pres.slides.keep([1]);
+const slide=pres.slides.items[0];
+await fs.writeFile(dir+'/before.png',new Uint8Array(await(await pres.export({slide,format:'png',scale:1})).arrayBuffer()));
+await fs.writeFile(dir+'/before.layout.json',await(await slide.export({format:'layout'})).text());
+const summary=await pres.inspect({kind:'slide,textbox,image,shape,layout',maxChars:16000});
+await fs.writeFile(dir+'/before.inspect.jsonl',summary.ndjson);
+console.log(summary.ndjson);

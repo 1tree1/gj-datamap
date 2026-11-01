@@ -1,0 +1,29 @@
+{"kind":"deck","id":"pr/zvdnn1","name":"Deck"}
+{"kind":"layout","id":"ly/mt47idgn","editable":false,"name":"Master","type":"master"}
+{"kind":"layout","id":"ly/ve5cvepo","editable":false,"name":"Title Slide","type":"title","placeholders":[{"name":"title","type":"title"},{"name":"subtitle","type":"subtitle"}]}
+{"kind":"layout","id":"ly/t47q5sza","editable":false,"name":"Section Header","type":"sectionHeader","placeholders":[{"name":"title","type":"title"}]}
+{"kind":"layout","id":"ly/xorudofu","editable":false,"name":"Title and Body","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/zilcr2dc","editable":false,"name":"Title and Two Column","type":"twoColTx","placeholders":[{"name":"title","type":"title"},{"name":"Left column","type":"body"},{"name":"Right column","type":"body"}]}
+{"kind":"layout","id":"ly/gnal8rmx","editable":false,"name":"Title and One Column","type":"tx","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/lczalgbm","editable":false,"name":"Blank","type":"blank"}
+{"kind":"slide","id":"sl/motloz","slideIndex":0,"layout":{"id":"ly/lczalgbm","name":"Blank"},"title":"건물 높이 분포","textShapes":9,"backgroundColor":"rgba(255,255,255,1)"}
+{"kind":"textbox","id":"sh/5s3ytk3m","slideIndex":0,"position":{"left":48,"top":151,"width":220,"height":27},"name":"r10-label-1","text":"건물 높이 분포","geometry":"rect","lineWidth":0,"style":{"fontSize":18,"typeface":"Pretendard","color":"#235D82","alignment":"left"}}
+{"kind":"textbox","id":"sh/ipsfip4v","slideIndex":0,"position":{"left":493,"top":153,"width":145,"height":25},"name":"r10-label-2","text":"층수 기준","geometry":"rect","lineWidth":0,"style":{"fontSize":15,"typeface":"Pretendard","color":"#69747D","alignment":"left"}}
+{"kind":"shape","id":"sh/svuhozmd","slideIndex":0,"position":{"left":48,"top":567,"width":13,"height":13},"name":"r10-key-3","geometry":"rect","fillColor":"#BEC5CB","lineWidth":0}
+{"kind":"textbox","id":"sh/tg3yx43i","slideIndex":0,"position":{"left":70,"top":560,"width":97,"height":27},"name":"r10-label-4","text":"1층","geometry":"rect","lineWidth":0,"style":{"fontSize":16,"typeface":"Pretendard","color":"#252C32","alignment":"left"}}
+{"kind":"shape","id":"sh/6tcfmp47","slideIndex":0,"position":{"left":162,"top":567,"width":13,"height":13},"name":"r10-key-5","geometry":"rect","fillColor":"#89A8BC","lineWidth":0}
+{"kind":"textbox","id":"sh/7ulgvuls","slideIndex":0,"position":{"left":184,"top":560,"width":97,"height":27},"name":"r10-label-6","text":"2층","geometry":"rect","lineWidth":0,"style":{"fontSize":16,"typeface":"Pretendard","color":"#252C32","alignment":"left"}}
+{"kind":"shape","id":"sh/gjehszm9","slideIndex":0,"position":{"left":276,"top":567,"width":13,"height":13},"name":"r10-key-7","geometry":"rect","fillColor":"#447594","lineWidth":0}
+{"kind":"textbox","id":"sh/hkny143u","slideIndex":0,"position":{"left":298,"top":560,"width":97,"height":27},"name":"r10-label-8","text":"3–5층","geometry":"rect","lineWidth":0,"style":{"fontSize":16,"typeface":"Pretendard","color":"#252C32","alignment":"left"}}
+{"kind":"shape","id":"sh/honapgfi","slideIndex":0,"position":{"left":390,"top":567,"width":13,"height":13},"name":"r10-key-9","geometry":"rect","fillColor":"#18415B","lineWidth":0}
+{"kind":"textbox","id":"sh/wnu9gbed","slideIndex":0,"position":{"left":412,"top":560,"width":97,"height":27},"name":"r10-label-10","text":"6층 이상","geometry":"rect","lineWidth":0,"style":{"fontSize":16,"typeface":"Pretendard","color":"#252C32","alignment":"left"}}
+{"kind":"textbox","id":"sh/v2lsn6xs","slideIndex":0,"position":{"left":494,"top":560,"width":148,"height":27},"name":"r10-label-11","text":"높을수록 진한 색","geometry":"rect","lineWidth":0,"style":{"fontSize":14,"typeface":"Pretendard","color":"#69747D","alignment":"left"}}
+{"kind":"shape","id":"sh/u1crelw7","slideIndex":0,"position":{"left":48,"top":597,"width":5,"height":1},"name":"r10-band-dash-12","geometry":"rect","fillColor":"#8A959E","lineWidth":0}
+{"kind":"shape","id":"sh/5snat0fu","slideIndex":0,"position":{"left":56,"top":597,"width":5,"height":1},"name":"r10-band-dash-13","geometry":"rect","fillColor":"#8A959E","lineWidth":0}
+{"kind":"shape","id":"sh/4re9kve9","slideIndex":0,"position":{"left":64,"top":597,"width":5,"height":1},"name":"r10-band-dash-14","geometry":"rect","fillColor":"#8A959E","lineWidth":0}
+{"kind":"shape","id":"sh/jq5srqxo","slideIndex":0,"position":{"left":428,"top":597,"width":24,"height":1.2},"name":"r10-boundary-15","geometry":"rect","fillColor":"#235D82","lineWidth":0}
+{"kind":"textbox","id":"sh/ipwrilw3","slideIndex":0,"position":{"left":460,"top":586,"width":144,"height":24},"name":"r10-label-16","text":"고시구역","geometry":"rect","lineWidth":0,"style":{"fontSize":14,"typeface":"Pretendard","color":"#69747D","alignment":"left"}}
+{"kind":"textbox","id":"sh/lw3ahwfq","slideIndex":0,"position":{"left":48,"top":607,"width":582,"height":19},"name":"r10-label-17","text":"동서 비교 범위 밖 건물은 연하게 표시","geometry":"rect","lineWidth":0,"style":{"fontSize":13,"typeface":"Pretendard","color":"#69747D","alignment":"left"}}
+{"kind":"shape","id":"sh/kva98re5","slideIndex":0,"position":{"left":662,"top":154,"width":0.7,"height":462},"name":"r10-separator-18","geometry":"rect","fillColor":"#D8DEE3","lineWidth":0}
+{"kind":"image","id":"im/i5sfqh0j","slideIndex":0,"position":{"left":48,"top":182,"width":590,"height":372},"fit":"contain","name":"","alt":"QGIS 건물 층수 지도. NGII nmly 실제 층수, 2026-8 고시구역과 동서 150m 비교 범위."}
+{"kind":"notes","id":"nt/motloz","slideIndex":0,"text":""}

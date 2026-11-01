@@ -1,0 +1,473 @@
+{
+  "retainedPixels": [
+    {
+      "old": 1,
+      "new": 1,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 3,
+      "new": 3,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 4,
+      "new": 4,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 5,
+      "new": 5,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 6,
+      "new": 6,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 7,
+      "new": 7,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 8,
+      "new": 8,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 9,
+      "new": 9,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 10,
+      "new": 10,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 11,
+      "new": 11,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 12,
+      "new": 12,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 13,
+      "new": 13,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 14,
+      "new": 14,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 15,
+      "new": 15,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 16,
+      "new": 16,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 17,
+      "new": 17,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 18,
+      "new": 18,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 19,
+      "new": 19,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 23,
+      "new": 22,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 26,
+      "new": 24,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 27,
+      "new": 25,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 28,
+      "new": 26,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 29,
+      "new": 27,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 30,
+      "new": 28,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 31,
+      "new": 29,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 32,
+      "new": 30,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 33,
+      "new": 31,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 34,
+      "new": 32,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 35,
+      "new": 33,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 36,
+      "new": 34,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 37,
+      "new": 35,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 38,
+      "new": 36,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 40,
+      "new": 39,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 41,
+      "new": 40,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 42,
+      "new": 41,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 43,
+      "new": 42,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 44,
+      "new": 43,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 45,
+      "new": 44,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 46,
+      "new": 45,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 47,
+      "new": 46,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 48,
+      "new": 47,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 49,
+      "new": 48,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 50,
+      "new": 49,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 51,
+      "new": 50,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 52,
+      "new": 51,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 53,
+      "new": 52,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 54,
+      "new": 53,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 55,
+      "new": 54,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 56,
+      "new": 55,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 57,
+      "new": 56,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 58,
+      "new": 57,
+      "identicalOutsideAuthorizedChanges": false
+    },
+    {
+      "old": 59,
+      "new": 58,
+      "identicalOutsideAuthorizedChanges": true
+    },
+    {
+      "old": 60,
+      "new": 59,
+      "identicalOutsideAuthorizedChanges": true
+    }
+  ],
+  "paletteQuantizationDifferences": [
+    {
+      "old": 40,
+      "new": 39,
+      "bounds": [
+        57,
+        40,
+        1223,
+        663
+      ]
+    },
+    {
+      "old": 41,
+      "new": 40,
+      "bounds": [
+        57,
+        40,
+        1239,
+        663
+      ]
+    },
+    {
+      "old": 43,
+      "new": 42,
+      "bounds": [
+        57,
+        40,
+        1223,
+        668
+      ]
+    },
+    {
+      "old": 47,
+      "new": 46,
+      "bounds": [
+        57,
+        40,
+        1225,
+        690
+      ]
+    },
+    {
+      "old": 48,
+      "new": 47,
+      "bounds": [
+        119,
+        248,
+        934,
+        493
+      ]
+    },
+    {
+      "old": 49,
+      "new": 48,
+      "bounds": [
+        57,
+        40,
+        1223,
+        672
+      ]
+    },
+    {
+      "old": 50,
+      "new": 49,
+      "bounds": [
+        58,
+        40,
+        1197,
+        686
+      ]
+    },
+    {
+      "old": 51,
+      "new": 50,
+      "bounds": [
+        58,
+        40,
+        1191,
+        685
+      ]
+    },
+    {
+      "old": 52,
+      "new": 51,
+      "bounds": [
+        57,
+        40,
+        1223,
+        591
+      ]
+    },
+    {
+      "old": 54,
+      "new": 53,
+      "bounds": [
+        61,
+        40,
+        1223,
+        630
+      ]
+    },
+    {
+      "old": 55,
+      "new": 54,
+      "bounds": [
+        56,
+        40,
+        1223,
+        640
+      ]
+    },
+    {
+      "old": 56,
+      "new": 55,
+      "bounds": [
+        57,
+        40,
+        1223,
+        654
+      ]
+    },
+    {
+      "old": 57,
+      "new": 56,
+      "bounds": [
+        57,
+        40,
+        1223,
+        654
+      ]
+    },
+    {
+      "old": 58,
+      "new": 57,
+      "bounds": [
+        57,
+        40,
+        1223,
+        663
+      ]
+    }
+  ],
+  "retainedWorkbookCount": 8,
+  "retainedWorkbooksUnchanged": true,
+  "chartCount": 12,
+  "retainedNativeContentAndGeometryUnchangedExceptAuthorizedFooterAndLabel": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+  ],
+  "pixelDifferenceExplanation": "Orange header adds a palette colour in PowerPoint indexed PNG exports. Native geometry, content and original colour definitions are unchanged.",
+  "anchorEditable": true,
+  "fullPdfPageCount": 59,
+  "anchorPdfPageCount": 1
+}

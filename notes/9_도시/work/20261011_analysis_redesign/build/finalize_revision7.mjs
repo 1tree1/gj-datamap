@@ -1,0 +1,7 @@
+import {pathToFileURL} from 'node:url';
+const R='C:/Users/OFFICE/Desktop/9_도시/work/20261011_analysis_redesign',B=R+'/build';
+const SK='C:/Users/OFFICE/.codex/plugins/cache/openai-primary-runtime/presentations/26.1007.11041/skills/presentations';
+process.env.RUNTIME_NODE_MODULES='C:/Users/OFFICE/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules';
+const {finalizePresentation}=await import(pathToFileURL(SK+'/container_tools/artifact_tool_utils.mjs').href);
+const result=await finalizePresentation({workspaceDir:R,candidatePath:B+'/revision7_full_candidate.pptx',finalPath:R+'/output/구경주역_중간마감_v7_연결교차확산.pptx',pythonExecutable:'C:/Users/OFFICE/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe',integrityValidatorPath:SK+'/container_tools/inspect_presentation_package_integrity.py',layoutValidatorPath:SK+'/container_tools/inspect_presentation_layout_geometry.py',layoutArgs:['--expected-slide-size-emu','12191695,6858000','--validate-bullet-geometry','--validate-heading-fit'],explicitTotalSlideCount:59,requiredNativeTableOwnerSlides:[],requiredNativeChartOwnerSlides:[11,13,14,15,16,17,18,19,20,21,52],nativeChartTargetApplication:'portable',fontPolicy:{basis:'user_request',families:['Pretendard']},verifyArtifactToolImport:true,materializeLiteralChartWorkbooks:false,receiptPath:B+'/revision7_final.validation.json'});
+console.log(JSON.stringify({passed:true,finalPath:result.finalPath||result.outputPath}));

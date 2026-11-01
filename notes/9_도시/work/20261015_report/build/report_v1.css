@@ -1,0 +1,76 @@
+/* 구경주역 도시재생 마스터플랜 보고서 — A3 가로, 2단 흐름 */
+@page { size: 420mm 297mm; margin: 21mm 20mm 19mm 20mm; }
+@page cover { margin: 0; }
+:root { --red: #C8102E; --ink: #222; --grey: #666; --line: #d6d6d2; --soft: #F3F5F8; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: "Pretendard", "Malgun Gothic", sans-serif; font-size: 10.5pt; line-height: 1.66; color: var(--ink);
+       word-break: keep-all; overflow-wrap: break-word; font-variant-numeric: tabular-nums; }
+
+/* 표지 */
+.cover { page: cover; width: 420mm; height: 297mm; position: relative; overflow: hidden; break-after: page; background: #fff; }
+.cover .img { position: absolute; left: 150mm; top: 0; width: 270mm; height: 297mm; object-fit: cover; }
+.cover .panel { position: absolute; left: 0; top: 0; width: 150mm; height: 297mm; padding: 26mm 16mm 20mm 22mm; background: #fff; }
+.cover .kicker { color: var(--red); font-size: 12pt; font-weight: 600; letter-spacing: .02em; }
+.cover h1 { font-size: 34pt; line-height: 1.22; margin: 10mm 0 6mm; font-weight: 800; }
+.cover .sub { font-size: 14pt; line-height: 1.5; color: #333; }
+.cover .nexus { margin-top: 14mm; font-size: 12pt; color: var(--grey); }
+.cover .nexus b { display: block; font-size: 26pt; color: var(--ink); letter-spacing: .04em; }
+.cover .meta { position: absolute; left: 22mm; bottom: 20mm; font-size: 11pt; line-height: 1.7; color: #333; }
+.cover .rule { width: 18mm; height: 1.4mm; background: var(--red); margin-top: 8mm; }
+
+/* 목차 */
+.toc { break-after: page; }
+.toc h1 { font-size: 24pt; margin: 0 0 8mm; }
+.toc .cols { column-count: 3; column-gap: 14mm; }
+.toc .ch { break-inside: avoid; margin-bottom: 6mm; }
+.toc .ch > div.t { display: flex; font-size: 13pt; font-weight: 700; border-bottom: .35mm solid var(--ink); padding-bottom: 1mm; margin-bottom: 1.5mm; }
+.toc .ch > div.t span.no { color: var(--red); width: 12mm; }
+.toc .row { display: flex; font-size: 10.5pt; line-height: 1.75; }
+.toc .row .n { flex: 1; } .toc .row .pg, .toc .ch > div.t .pg { margin-left: auto; color: var(--grey); padding-left: 4mm; }
+
+/* 장 */
+.chapter { column-count: 2; column-gap: 14mm; column-fill: auto; break-before: page; }
+.ch-open { column-span: all; border-bottom: .5mm solid var(--ink); padding-bottom: 5mm; margin-bottom: 7mm; break-after: avoid; }
+.ch-no { color: var(--red); font-size: 52pt; font-weight: 800; line-height: 1; }
+.ch-open h1 { font-size: 28pt; margin: 3mm 0 3mm; line-height: 1.2; }
+.ch-lead { font-size: 13pt; color: #333; margin: 0; max-width: 300mm; line-height: 1.6; }
+h2 { font-size: 15pt; margin: 6mm 0 2.5mm; padding-top: 2mm; border-top: .35mm solid var(--ink); line-height: 1.35; break-after: avoid; }
+h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; color: #111; break-after: avoid; }
+h3::before { content: ""; display: inline-block; width: 2.2mm; height: 2.2mm; background: var(--red); margin-right: 2mm; vertical-align: .4mm; }
+h4 { font-size: 10.5pt; margin: 3mm 0 1mm; break-after: avoid; }
+p { margin: 0 0 2.2mm; text-align: justify; orphans: 2; widows: 2; }
+ul, ol { margin: 0 0 2.5mm; padding-left: 5.5mm; } li { margin: 0 0 .8mm; }
+.src { color: var(--grey); font-size: 10pt; margin-left: 1mm; white-space: normal; }
+b, strong { font-weight: 700; }
+
+figure { margin: 2mm 0 4mm; break-inside: avoid; }
+figure img { display: block; width: 100%; height: auto; border: .2mm solid #e4e4e0; }
+figure.col img { max-height: 150mm; object-fit: contain; }
+figure.wide { column-span: all; text-align: center; }
+figure.wide img { width: auto; max-width: 100%; max-height: 200mm; margin: 0 auto; }
+figure.page { column-span: all; break-inside: avoid; text-align: center; margin: 2mm 0 4mm; }
+figure.page img { width: auto; max-width: 100%; max-height: 206mm; margin: 0 auto; object-fit: contain; border: none; }
+figcaption { font-size: 10pt; color: #444; margin-top: 1.5mm; text-align: left; line-height: 1.5; }
+
+table.t { width: 100%; border-collapse: collapse; margin: 2mm 0 4.5mm; font-size: 10pt; line-height: 1.45; break-inside: auto; }
+table.t.wide { column-span: all; }
+table.t caption { break-after: avoid; caption-side: top; text-align: left; font-weight: 700; font-size: 10.5pt; margin-bottom: 1.5mm; }
+table.t th { background: #3c3c3c; color: #fff; font-weight: 600; padding: 1.4mm 1.8mm; text-align: center; border: .2mm solid #3c3c3c; }
+table.t td { padding: 1.2mm 1.8mm; border-bottom: .2mm solid var(--line); vertical-align: top; }
+table.t tr { break-inside: avoid; }
+table.t thead { display: table-header-group; }
+table.t td.r, table.t th.r { text-align: right; } table.t td.c, table.t th.c { text-align: center; }
+table.t tr.sub td, table.t tr.sum td { background: #efefec; font-weight: 700; }
+table.t tr.total td { background: #dcdcd8; font-weight: 700; }
+
+.box { background: var(--soft); border-left: 1.6mm solid var(--red); padding: 2.6mm 3.4mm; margin: 3mm 0 4.5mm; break-inside: avoid; }
+.box b:first-child { color: var(--red); margin-right: 1.5mm; }
+.box.wide { column-span: all; }
+.pb { break-after: page; height: 0; }
+.kpi { column-span: all; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4mm; margin: 2mm 0 6mm; }
+.kpi div { background: var(--soft); border-top: 1mm solid var(--red); padding: 3mm; }
+.kpi .v { font-size: 18pt; font-weight: 800; line-height: 1.2; } .kpi .k { font-size: 10pt; color: #444; }
+.note { color: var(--grey); font-size: 10pt; }
+ol.srclist { font-size: 10pt; line-height: 1.5; padding-left: 8mm; margin: 2mm 0 4mm; }
+ol.srclist li { margin: 0 0 1.1mm; break-inside: avoid; }

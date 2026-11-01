@@ -1,0 +1,36 @@
+import { chromium } from 'file:///C:/Users/OFFICE/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+import fs from 'node:fs/promises';
+const dir = 'C:/Users/OFFICE/Desktop/9_도시/work/20261011_history_aerial/build';
+const browser = await chromium.launch({ channel: 'msedge', headless: true, args: ['--no-sandbox'] });
+const page = await browser.newPage({ ignoreHTTPSErrors: true });
+try {
+ await page.goto('https://map.ngii.go.kr/ms/map/NlipMap.do', { waitUntil: 'domcontentloaded', timeout: 30000 });
+ await page.waitForTimeout(2000);
+ await page.locator('#totalSearchKeyword').fill('경주문화관1918');
+ await page.locator('#btnTotalSearch').click();
+ await page.waitForTimeout(3500);
+ console.log('SEARCH', (await page.locator('body').innerText()).slice(0,5000));
+ console.log('LINKS', JSON.stringify(await page.locator('a,button').evaluateAll(es=>es.filter(e=>(e.innerText||'').includes('1918')).map(e=>({tag:e.tagName,text:e.innerText,html:e.outerHTML.slice(0,1200)})))));
+ await page.locator('button[data-minx]').first().click();
+ await page.waitForTimeout(2000);
+ console.log('CATEGORIES', (await page.locator('body').innerText()).slice(0,7000));
+ console.log('AIRCONTROL', JSON.stringify(await page.locator('nav.category button').evaluateAll(es=>es.map(e=>({text:e.innerText,html:e.outerHTML.slice(0,400)})))));
+ await page.locator('nav.category button[value="2"]').click();
+ await page.waitForTimeout(2500);
+ await page.locator('#toAirYear').selectOption('1954');
+ await page.locator('button.filtering[value="aerial"]').click();
+ await page.waitForTimeout(1800);
+ console.log('CUTOFF1954', (await page.locator('body').innerText()).slice(0,6500));
+ await fs.writeFile(dir + '/ngii_catalog_1954.html',await page.content());
+ await page.screenshot({ path: dir + '/ngii_catalog_1954.png' });
+ await page.locator('#toAirYear').selectOption('1953');
+ await page.locator('button.filtering[value="aerial"]').click();
+ await page.waitForTimeout(1800);
+ console.log('CUTOFF1953', (await page.locator('body').innerText()).slice(0,6500));
+ await page.waitForTimeout(2000);
+ const text = await page.locator('body').innerText();
+ await fs.writeFile(dir + '/ngii_catalog_page.html', await page.content());
+ await page.screenshot({ path: dir + '/ngii_catalog_page.png' });
+ console.log(JSON.stringify({ url: page.url(), body: text.slice(0, 5500), inputs: await page.locator('input,select').evaluateAll(es => es.map(e => ({tag:e.tagName,id:e.id,name:e.name,value:e.value,placeholder:e.getAttribute('placeholder')})).slice(0,50)) }));
+} catch (e) { console.log(String(e)); }
+await browser.close();

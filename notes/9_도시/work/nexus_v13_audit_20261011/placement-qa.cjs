@@ -1,0 +1,13 @@
+const fs=require("fs"),path=require("path");const {chromium}=require(require.resolve("playwright",{paths:[process.argv[2]]}));
+(async()=>{const b=await chromium.launch({headless:true,channel:"msedge"});const p=await b.newPage({viewport:{width:1440,height:1000}});const errors=[];p.on("pageerror",e=>errors.push(e.message));
+await p.goto("http://127.0.0.1:61285/?view=1",{waitUntil:"networkidle"});await p.waitForSelector(".placement-content");await p.screenshot({path:path.join(process.argv[3],"placement-default-desktop.png"),fullPage:true});
+const buttons=p.locator(".placement-content .report-evidence-disclosure-trigger");const n=await buttons.count();for(let i=0;i<n;i++)await buttons.nth(i).click();
+const allText=await p.locator(".placement-content").innerText();const headings=await p.locator(".placement-program-list h3").allTextContents();
+await p.screenshot({path:path.join(process.argv[3],"placement-expanded-desktop.png"),fullPage:true});
+await p.getByLabel("배치표 권역",{exact:true}).selectOption("북서측 공공업무");const publicText=await p.locator('[data-component-id="placement-table"]').innerText();
+await p.getByLabel("배치표 권역",{exact:true}).selectOption("북동측 정주·생활");const livingText=await p.locator('[data-component-id="placement-table"]').innerText();
+await p.getByLabel("배치표 권역",{exact:true}).selectOption("전체");const resetText=await p.locator('[data-component-id="placement-table"]').innerText();
+await p.setViewportSize({width:390,height:844});await p.locator('[data-component-id="placement-zone-public"]').screenshot({path:path.join(process.argv[3],"placement-public-mobile.png")});
+const mobile=await p.evaluate(()=>({width:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,componentWidths:[...document.querySelectorAll(".placement-content [data-component-id]")].map(e=>({id:e.dataset.componentId,width:e.getBoundingClientRect().width}))}));
+const out={errors,zones:n,programs:headings,publicText,livingText,resetText,mobile,escapeCount:(allText.match(/\\n|\*\*/g)||[]).length};
+fs.writeFileSync(path.join(process.argv[3],"placement-qa-result.json"),JSON.stringify(out,null,2));console.log(JSON.stringify({...out,publicText:publicText.slice(-120),livingText:livingText.slice(-120),resetText:resetText.slice(-120)}));await b.close();})().catch(e=>{console.error(e.stack);process.exit(1)});

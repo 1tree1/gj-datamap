@@ -1,0 +1,542 @@
+[
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\aerial_1954.jpg",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\aerial_2009.jpg",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\aerial_2025.jpg",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\age_buildings.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\anchors.png",
+    "w": 494,
+    "h": 610
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\arrival.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\axes_map.png",
+    "w": 1440,
+    "h": 1840
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\blocks_map.png",
+    "w": 1440,
+    "h": 1840
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\city.png",
+    "w": 1800,
+    "h": 2250
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\cover_outline.png",
+    "w": 1800,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\crossing_map.png",
+    "w": 1040,
+    "h": 1480
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\decision_map.png",
+    "w": 840,
+    "h": 1680
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_axon_program.png",
+    "w": 4870,
+    "h": 1868
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_axon_program_nw.png",
+    "w": 4813,
+    "h": 1868
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_legend.png",
+    "w": 760,
+    "h": 810
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_section_strip.png",
+    "w": 3200,
+    "h": 1240
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_strategy_connect.png",
+    "w": 2910,
+    "h": 1539
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_strategy_exchange.png",
+    "w": 2910,
+    "h": 1539
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_strategy_spread.png",
+    "w": 2910,
+    "h": 1539
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\diag_top_program.png",
+    "w": 2112,
+    "h": 1628
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\footfall_close.png",
+    "w": 2600,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\footfall_density.png",
+    "w": 1800,
+    "h": 1440
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\heritage.png",
+    "w": 366,
+    "h": 521
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\landuse_map.png",
+    "w": 1440,
+    "h": 1840
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\location_base.png",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\northsouth.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\northsouth_v.png",
+    "w": 1440,
+    "h": 1720
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\ortho_2015.jpg",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\ortho_2021.jpg",
+    "w": 1800,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\physical_gap.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\pop_65.png",
+    "w": 1600,
+    "h": 1280
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\pop_change.png",
+    "w": 1600,
+    "h": 1280
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\pop_y2034.png",
+    "w": 1600,
+    "h": 1280
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\rail_axis.png",
+    "w": 2000,
+    "h": 1500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\reg_godo.png",
+    "w": 640,
+    "h": 920
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\reg_heritage.png",
+    "w": 640,
+    "h": 920
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\reg_landuse.png",
+    "w": 640,
+    "h": 920
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\reg_plan.png",
+    "w": 640,
+    "h": 920
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\road_plan_map.png",
+    "w": 1440,
+    "h": 1840
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\road_plan_solo.png",
+    "w": 640,
+    "h": 1720
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\site_outline.png",
+    "w": 480,
+    "h": 1320
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\sketch_axes.jpg",
+    "w": 1395,
+    "h": 1980
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\sketch_roads.jpg",
+    "w": 1417,
+    "h": 1980
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\strategy_map.png",
+    "w": 1800,
+    "h": 1500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\street_orientation.png",
+    "w": 900,
+    "h": 833
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\traffic_06.png",
+    "w": 1000,
+    "h": 1240
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\traffic_13.png",
+    "w": 1000,
+    "h": 1240
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\traffic_21.png",
+    "w": 1000,
+    "h": 1240
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_age.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_footfall_close.png",
+    "w": 2600,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_m6a.png",
+    "w": 1200,
+    "h": 1600
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_population_change.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_traffic_13.png",
+    "w": 2000,
+    "h": 2500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\t_youth_core.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_midterm_deck\\build\\assets\\zones_map.png",
+    "w": 920,
+    "h": 1800
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\age_buildings.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\aging_core.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\aging_focus.png",
+    "w": 2600,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\aging_nolabel.png",
+    "w": 2600,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\anchors.png",
+    "w": 494,
+    "h": 610
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\arrival.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\city_relations.png",
+    "w": 658,
+    "h": 658
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\commerce.png",
+    "w": 2200,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\context.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\core_fabric.png",
+    "w": 1165,
+    "h": 1164
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\crossing_detail.png",
+    "w": 570,
+    "h": 700
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\facilities.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\footfall.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\footfall_close.png",
+    "w": 2600,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\footfall_ew.png",
+    "w": 3200,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\footfall_ns.png",
+    "w": 2200,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\footfall_ns_clean.png",
+    "w": 2200,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\heritage_original.jpg",
+    "w": 366,
+    "h": 521
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\northsouth_clean.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\ns_assets.png",
+    "w": 2200,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\physical_gap.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\population_change.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\population_core.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\population_full.png",
+    "w": 2600,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\reg_0.png",
+    "w": 290,
+    "h": 382
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\reg_1.png",
+    "w": 290,
+    "h": 382
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\reg_2.png",
+    "w": 290,
+    "h": 382
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\reg_3.png",
+    "w": 290,
+    "h": 382
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\site_diagram.png",
+    "w": 690,
+    "h": 633
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\street_orientation.png",
+    "w": 900,
+    "h": 833
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\traffic_we_13.png",
+    "w": 2000,
+    "h": 2500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\traffic_we_21.png",
+    "w": 2000,
+    "h": 2500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\traffic_we_6.png",
+    "w": 2000,
+    "h": 2500
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\traffic_wide.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\web_initial.png",
+    "w": 3600,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\youth_city.png",
+    "w": 3200,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\youth_core.png",
+    "w": 2000,
+    "h": 2200
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\youth_focus.png",
+    "w": 2600,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261011_visual_front\\build\\assets\\youth_nolabel.png",
+    "w": 2600,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m1_gyeongju_city.png",
+    "w": 1800,
+    "h": 2250
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m2_oldcore_1km.png",
+    "w": 2000,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m3b_site_distance_station_building.png",
+    "w": 2000,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m3_site_distance.png",
+    "w": 2000,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m4_walk_barrier.png",
+    "w": 1800,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m5_footfall_zones.png",
+    "w": 2000,
+    "h": 2000
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m6a_zoning.png",
+    "w": 1200,
+    "h": 1600
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m6b_height.png",
+    "w": 1200,
+    "h": 1600
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m6c_heritage.png",
+    "w": 1200,
+    "h": 1600
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m6d_plan.png",
+    "w": 1200,
+    "h": 1600
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m7_boundaries.png",
+    "w": 1800,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m7_boundaries_planlabel_backup.png",
+    "w": 1800,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m8_decision_map.png",
+    "w": 1800,
+    "h": 2400
+  },
+  {
+    "path": "C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\20261008_presentation_front\\assets\\maps\\m9_rail_axis_S3.png",
+    "w": 2000,
+    "h": 1500
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "pixelIdenticalOutsidePageNumbers": 57,
+  "sourceSlideXmlPreservedExceptPageNumber": 59,
+  "newSlide": 24,
+  "pdfPages": 60,
+  "renderedDifferencesWithUnchangedSourceContent": [
+    {
+      "sourcePage": 40,
+      "newPage": 41,
+      "meanAbsoluteChannelDifference": 2.7548645050125313,
+      "maxChannelDifference": 34,
+      "visuallyCompared": true
+    },
+    {
+      "sourcePage": 47,
+      "newPage": 48,
+      "meanAbsoluteChannelDifference": 0.004618969298245614,
+      "maxChannelDifference": 15,
+      "visuallyCompared": true
+    }
+  ],
+  "visualReviewPassed": true
+}

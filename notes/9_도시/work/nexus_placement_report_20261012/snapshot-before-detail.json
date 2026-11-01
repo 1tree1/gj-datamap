@@ -1,0 +1,821 @@
+{
+  "surface": "report",
+  "title": "공공업무·정주·창작·관광을 연결한 NEXUS 마스터플랜",
+  "generatedAt": "2026-10-11T08:39:44.264898+00:00",
+  "status": "reviewed",
+  "buildStatus": "complete",
+  "filters": [],
+  "report": {
+    "asOf": "2026-10-11"
+  },
+  "queries": {
+    "totals": {
+      "rows": [
+        {
+          "plan": "v13 전체 프로그램",
+          "area": 105560,
+          "scope": "조건부 수영장·영화관 포함"
+        },
+        {
+          "plan": "현재 선택 모델",
+          "area": 176661.18077577112,
+          "scope": "층별 겹침 제거"
+        },
+        {
+          "plan": "v13 우선 프로그램",
+          "area": 102960,
+          "scope": "조건부 수영장·영화관 제외"
+        }
+      ],
+      "source": {
+        "label": "NEXUS v13와 선택된 Rhino 최종 모델 비교",
+        "files": [
+          {
+            "label": "NEXUS 1918 최종 통합 스페이스 프로그램 v13 · 2026.10.11"
+          },
+          {
+            "label": "구경주역_마스터플랜_최종.3dm · 선택 건축 매스 157개"
+          }
+        ],
+        "filters": [
+          "현재 선택 객체 3,947개 중 건축 매스 157개",
+          "같은 높이 구간의 겹치는 면적은 한 번 합산"
+        ],
+        "caveats": [
+          "면적은 1좌표 단위=1m로 해석했다. Rhino 선언 단위는 Millimeters이지만 주거 매스 48×10 및 기존 면적 속성이 m 스케일과 일치한다.",
+          "모델 면적은 선택한 건축 매스의 층별 수평 바닥면 합집합이다. 법정 연면적이나 실별 면적을 확정한 값이 아니다.",
+          "기존 역사 상세 Mesh·유리 지붕·식재·야외 지면·용도 불명 연결 요소는 건축 합계에서 제외했다.",
+          "기능을 묶어 비교한 항목은 내부 실 배정이 확인되지 않았다. 미확인 값은 0으로 처리하지 않았다."
+        ],
+        "evidenceFlow": [
+          {
+            "title": "모델 추출",
+            "detail": "provider: Rhino MCP; tool: run_python; slot: axolotl. 현재 선택 중 건축물 레이어의 닫힌 Brep/Extrusion 157개에서 수평 바닥면을 추출했다. 원 실행 코드는 query.methods에 보존했다."
+          },
+          {
+            "title": "v13 목표 정리",
+            "detail": "사용자가 붙여넣은 v13 문서에서 시설 목표 연면적을 취합했다. 조건부 수영장 1,800㎡와 영화관 800㎡를 포함하면 105,560㎡, 제외하면 102,960㎡다."
+          },
+          {
+            "title": "교차 검산",
+            "detail": "기능별 합집합 합계와 전체 합집합 합계가 0.000001㎡ 이내로 일치했다. 157개 매스를 체적÷높이로 대조한 최대 면적 오차는 0.000042㎡였다."
+          }
+        ],
+        "metricDefinitions": [
+          {
+            "label": "비교 면적 (㎡)",
+            "definition": "v13 시설 목표 합계와 현재 선택한 건축 매스의 층별 수평 바닥면 합집합을 비교했다. 증감률=(모델−v13)/v13×100.",
+            "componentIds": [
+              "summary",
+              "total-chart",
+              "methods"
+            ]
+          }
+        ]
+      },
+      "methods": [
+        {
+          "language": "python",
+          "code": "import Rhino, json, math, re\nfrom pathlib import Path\nfrom collections import defaultdict, Counter\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__\nsel=list(doc.Objects.GetSelectedObjects(False,False))\noutdir=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\noutdir.mkdir(parents=True,exist_ok=True)\norigin=Rhino.Geometry.Point3d(1166700,1761100,0)\nrecords=[]; caps=defaultdict(list); failures=[]\nfor o in sel:\n layer=doc.Layers[o.Attributes.LayerIndex].FullPath\n if \"::06_\" not in layer: continue\n g=o.Geometry\n if isinstance(g,Rhino.Geometry.Extrusion): b=g.ToBrep()\n elif isinstance(g,Rhino.Geometry.Brep): b=g.DuplicateBrep()\n else: continue\n bb=g.GetBoundingBox(True)\n us=o.Attributes.GetUserStrings()\n meta={str(k):str(us[k]) for k in us.AllKeys} if us else {}\n name=meta.get('건축물') or re.sub(r' \\d+F$','',o.Attributes.Name or '(unnamed)')\n bottom=[]\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   c=f.DuplicateFace(False)\n   c.Transform(Rhino.Geometry.Transform.Translation(-origin.X,-origin.Y,-bb.Min.Z))\n   bottom.append(c)\n raw=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in bottom)\n if not bottom:failures.append({'id':str(o.Id),'name':name,'reason':'no horizontal bottom'})\n key=(name,round(bb.Min.Z,5),round(bb.Max.Z,5))\n caps[key].extend(bottom)\n record={'id':str(o.Id),'object_name':o.Attributes.Name,'building':name,'layer':layer,'category':meta.get('용도분류',''),'zmin':bb.Min.Z,'zmax':bb.Max.Z,'dimensions':[bb.Max.X-bb.Min.X,bb.Max.Y-bb.Min.Y,bb.Max.Z-bb.Min.Z],'bottom_area':raw,'is_solid':bool(b.IsSolid),'metadata':meta}\n records.append(record)\nfloor_rows=[]; global_caps=defaultdict(list)\nfor key,items in caps.items():\n arr=List[Rhino.Geometry.Brep](items)\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(arr,Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0:\n  merged=items; failures.append({'name':key[0],'z':key[1],'reason':'union failed; raw sum used'})\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged)\n floor_rows.append({'building':key[0],'zmin':key[1],'zmax':key[2],'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items),'union_area':area,'parts':len(items),'union_parts':len(merged)})\n global_caps[(key[1],key[2])].extend(merged)\nglobal_rows=[]\nfor key,items in global_caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](items),Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0: merged=items;failures.append({'zrange':list(key),'reason':'global union failed'})\n global_rows.append({'zmin':key[0],'zmax':key[1],'area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged),'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items)})\nbuildings=[]\nfor name in sorted(set(r['building'] for r in records)):\n rows=[r for r in floor_rows if r['building']==name]; rs=[r for r in records if r['building']==name]\n buildings.append({'building':name,'category':rs[0]['category'],'objects':len(rs),'actual_floor_count':len(rows),'z_intervals':[[r['zmin'],r['zmax']] for r in sorted(rows,key=lambda a:a['zmin'])],'floor_areas':[round(r['union_area'],4) for r in sorted(rows,key=lambda a:a['zmin'])],'gfa':sum(r['union_area'] for r in rows),'raw_gfa':sum(r['raw_area'] for r in rows),'metadata_gfa':rs[0]['metadata'].get('연면적㎡'),'metadata_floors':rs[0]['metadata'].get('층수')})\ndata={'document':doc.Name,'path':doc.Path,'declared_unit':str(doc.ModelUnitSystem),'physical_interpretation':'one coordinate unit interpreted as one meter based on 48x10 housing and 25x100 city hall dimensions, metadata and source program','selection_count':len(sel),'building_object_count':len(records),'records':records,'floors':floor_rows,'buildings':buildings,'global_floors':global_rows,'total_building_union_gfa':sum(r['gfa'] for r in buildings),'global_union_gfa':sum(r['area'] for r in global_rows),'failures':failures}\n(outdir/'rhino_measurements.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({k:data[k] for k in ['document','declared_unit','selection_count','building_object_count','buildings','total_building_union_gfa','global_union_gfa','failures']},ensure_ascii=False))\n"
+        },
+        {
+          "language": "python",
+          "code": "import Rhino,json,re\nfrom pathlib import Path\nfrom collections import defaultdict\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__;sel=list(doc.Objects.GetSelectedObjects(False,False))\nroot=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\ndata=json.loads((root/'rhino_measurements.json').read_text(encoding='utf-8'))\ndef category(name):\n if name in ['공공청사 본관','공공청사 민원·시민홀동']:return '청사'\n if name in ['공공기관 업무동','청년창업지원센터']:return '기관·청년창업'\n if name=='공공청사·기관 직원 주차장동':return '북측 주차'\n if re.match(r'^주거동 \\d+$',name):return '주거'\n if name=='생활체육관·편의시설':return '스포츠·생활편의'\n if name in ['복합문화센터','생활가로 상가']:return '중앙 북측 복합문화·상가'\n if name=='건강·돌봄센터':return '건강·돌봄'\n if name in ['실내 공예마켓·운영동','전통문화 공방·체험·전시동']:return '서측 공예전시·마켓·공방'\n if name=='작가 교류·행사동':return '작가 교류'\n if name.startswith('레지던시 거주동') or name.startswith('레지던시 제작동'):return '레지던시'\n if name=='실내 체험관':return '실내 체험'\n if name in ['근대역사관','지역문화원 본동','소상공인 상생동(남)','소상공인 상생동(북)']:return '남측 역사문화·상생'\n if name=='관광지원센터':return '관광지원'\n if name=='공유주차장':return '남측 공유주차'\n if name=='모빌리티 허브':return '모빌리티 허브'\n if name in ['레지던시 가로상가','관문 가로상가']:return '별도 가로상가'\n return name\ncaps=defaultdict(list);records={r['id']:r for r in data['records']}\nvolume_check=[]\nfor o in sel:\n if str(o.Id) not in records:continue\n r=records[str(o.Id)];g=o.Geometry\n b=g.ToBrep() if isinstance(g,Rhino.Geometry.Extrusion) else g.DuplicateBrep()\n bb=b.GetBoundingBox(True);b.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n v=Rhino.Geometry.VolumeMassProperties.Compute(b)\n area_from_volume=abs(v.Volume)/(bb.Max.Z-bb.Min.Z) if v else None\n volume_check.append({'id':str(o.Id),'name':r['building'],'bottom_area':r['bottom_area'],'volume_over_height':area_from_volume,'error':abs(area_from_volume-r['bottom_area']) if area_from_volume is not None else None})\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   face=f.DuplicateFace(False);face.Transform(Rhino.Geometry.Transform.Translation(0,0,-bb.Min.Z))\n   caps[(category(r['building']),round(bb.Min.Z,5),round(bb.Max.Z,5))].append(face)\ngroup_sums=defaultdict(float);group_floors=[]\nfor (name,z1,z2),parts in caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](parts),Rhino.Geometry.Plane.WorldXY,0.0001)\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(x).Area for x in merged)\n group_sums[name]+=area;group_floors.append({'group':name,'zmin':z1,'zmax':z2,'area':area})\nsite_rows=[]\nfor o in sel:\n l=doc.Layers[o.Attributes.LayerIndex].FullPath;g=o.Geometry\n if isinstance(g,Rhino.Geometry.Curve) and g.IsClosed and ('00_' in l or '01_' in l or '02_' in l or '03_' in l or '08_' in l):\n  crv=g.DuplicateCurve();crv.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n  ap=Rhino.Geometry.AreaMassProperties.Compute(crv)\n  if ap:site_rows.append({'id':str(o.Id),'name':o.Attributes.Name,'layer':l,'area':ap.Area})\nresult={'group_gfa':dict(group_sums),'group_floors':group_floors,'group_sum_before_cross_group_overlap':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':sum(group_sums.values())-data['global_union_gfa'],'volume_checks':volume_check,'max_volume_check_error':max(v['error'] for v in volume_check if v['error'] is not None),'site_rows':site_rows}\n(root/'comparison_groups.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({'group_gfa':dict(group_sums),'group_sum':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':result['remaining_cross_group_overlap'],'max_volume_check_error':result['max_volume_check_error'],'volume_nonprismatic':[v for v in volume_check if v['error'] is not None and v['error']>0.01],'site_rows':site_rows},ensure_ascii=False))\n"
+        }
+      ]
+    },
+    "facilities": {
+      "rows": [
+        {
+          "facility": "공공청사",
+          "target": 26500,
+          "model": 29545.000000018634,
+          "delta": 3045.0000000186337,
+          "note": "본관 7층 + 민원·시민홀동 5층"
+        },
+        {
+          "facility": "공공기관·청년창업",
+          "target": 2200,
+          "model": 12503.040000009667,
+          "delta": 10303.040000009667,
+          "note": "공공기관 업무동 3층 + 청년창업지원센터 4층을 묶어 비교"
+        },
+        {
+          "facility": "북측 주차장동",
+          "target": 22560,
+          "model": 17409.414338414615,
+          "delta": -5150.5856615853845,
+          "note": "4층"
+        },
+        {
+          "facility": "주거 8동·1층 연결부",
+          "target": 19200,
+          "model": 20160,
+          "delta": 960,
+          "note": "기본 48×10·5층·8동은 일치; 겹침 제외 1층 연결부 960㎡ 추가"
+        },
+        {
+          "facility": "스포츠·생활편의",
+          "target": 5300,
+          "model": 6000,
+          "delta": 700,
+          "note": "4층 매스; 수영장·영화관의 실별 반영 여부는 미확인"
+        },
+        {
+          "facility": "복합문화시설",
+          "target": 2000,
+          "model": 7470.5526914673155,
+          "delta": 5470.5526914673155,
+          "note": "z=4,8,12의 3개 높이 구간; 1층 영역은 별도 매스로 식별되지 않음"
+        },
+        {
+          "facility": "건강·돌봄",
+          "target": 1200,
+          "model": 2140.629652943462,
+          "delta": 940.6296529434621,
+          "note": "실제 3층, 층당 약 714㎡"
+        },
+        {
+          "facility": "도시농업·자원순환 지원실",
+          "target": 200,
+          "model": null,
+          "delta": null,
+          "note": "전용 실 또는 독립 건물 식별 불가"
+        },
+        {
+          "facility": "서측 공예전시·마켓·공방",
+          "target": 2700,
+          "model": 8994.225130358123,
+          "delta": 6294.225130358123,
+          "note": "실내 공예마켓·운영동 + 전통문화 공방·체험·전시동; 기능을 묶어 비교"
+        },
+        {
+          "facility": "작가 교류·행사",
+          "target": 300,
+          "model": 2605.5000000016307,
+          "delta": 2305.5000000016307,
+          "note": "현재 z=4~8 및 12~16의 두 매스"
+        },
+        {
+          "facility": "작가 레지던시",
+          "target": 2500,
+          "model": 7125,
+          "delta": 4625,
+          "note": "거주동 3개×5층=3,750㎡; 제작매스 3,375㎡"
+        },
+        {
+          "facility": "실내 체험관",
+          "target": 3000,
+          "model": 8580.749999989639,
+          "delta": 5580.749999989639,
+          "note": "실제 4층, 3층 확장 포함"
+        },
+        {
+          "facility": "남측 역사문화·지원 기능",
+          "target": 6800,
+          "model": 22061.57596450382,
+          "delta": 15261.57596450382,
+          "note": "근대역사관 + 지역문화원 + 소상공인 상생동 묶음; 수장고·기획전시·기록·사업화의 실별 배정 미확인"
+        },
+        {
+          "facility": "관광지원센터",
+          "target": 1500,
+          "model": 1259.944824213606,
+          "delta": -240.0551757863941,
+          "note": "2층, 층당 약 630㎡"
+        },
+        {
+          "facility": "남측 공유주차장",
+          "target": 9600,
+          "model": 16000,
+          "delta": 6400,
+          "note": "5층, 80×40m"
+        },
+        {
+          "facility": "모빌리티 허브",
+          "target": null,
+          "model": 8502.079999957494,
+          "delta": null,
+          "note": "v13에 독립 건물 연면적 항목 없음"
+        },
+        {
+          "facility": "별도 가로상가 합계",
+          "target": null,
+          "model": 6303.4681738930685,
+          "delta": null,
+          "note": "생활가로·레지던시·관문 가로상가; v13의 편의·마켓 안에서 수용 여부 미확인"
+        }
+      ],
+      "source": {
+        "label": "NEXUS v13와 선택된 Rhino 최종 모델 비교",
+        "files": [
+          {
+            "label": "NEXUS 1918 최종 통합 스페이스 프로그램 v13 · 2026.10.11"
+          },
+          {
+            "label": "구경주역_마스터플랜_최종.3dm · 선택 건축 매스 157개"
+          }
+        ],
+        "filters": [
+          "현재 선택 객체 3,947개 중 건축 매스 157개",
+          "같은 높이 구간의 겹치는 면적은 한 번 합산"
+        ],
+        "caveats": [
+          "면적은 1좌표 단위=1m로 해석했다. Rhino 선언 단위는 Millimeters이지만 주거 매스 48×10 및 기존 면적 속성이 m 스케일과 일치한다.",
+          "모델 면적은 선택한 건축 매스의 층별 수평 바닥면 합집합이다. 법정 연면적이나 실별 면적을 확정한 값이 아니다.",
+          "기존 역사 상세 Mesh·유리 지붕·식재·야외 지면·용도 불명 연결 요소는 건축 합계에서 제외했다.",
+          "기능을 묶어 비교한 항목은 내부 실 배정이 확인되지 않았다. 미확인 값은 0으로 처리하지 않았다."
+        ],
+        "evidenceFlow": [
+          {
+            "title": "모델 추출",
+            "detail": "provider: Rhino MCP; tool: run_python; slot: axolotl. 현재 선택 중 건축물 레이어의 닫힌 Brep/Extrusion 157개에서 수평 바닥면을 추출했다. 원 실행 코드는 query.methods에 보존했다."
+          },
+          {
+            "title": "v13 목표 정리",
+            "detail": "사용자가 붙여넣은 v13 문서에서 시설 목표 연면적을 취합했다. 조건부 수영장 1,800㎡와 영화관 800㎡를 포함하면 105,560㎡, 제외하면 102,960㎡다."
+          },
+          {
+            "title": "교차 검산",
+            "detail": "기능별 합집합 합계와 전체 합집합 합계가 0.000001㎡ 이내로 일치했다. 157개 매스를 체적÷높이로 대조한 최대 면적 오차는 0.000042㎡였다."
+          }
+        ],
+        "metricDefinitions": [
+          {
+            "label": "비교 면적 (㎡)",
+            "definition": "기능별 모델 바닥면 합집합과 v13 목표 면적을 대응했다. delta=model−target. 대상이 없거나 용도가 확인되지 않으면 null을 유지했다.",
+            "componentIds": [
+              "summary",
+              "major-findings",
+              "facility-chart",
+              "facility-table",
+              "housing",
+              "parking",
+              "unmapped",
+              "methods"
+            ]
+          }
+        ]
+      },
+      "methods": [
+        {
+          "language": "python",
+          "code": "import Rhino, json, math, re\nfrom pathlib import Path\nfrom collections import defaultdict, Counter\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__\nsel=list(doc.Objects.GetSelectedObjects(False,False))\noutdir=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\noutdir.mkdir(parents=True,exist_ok=True)\norigin=Rhino.Geometry.Point3d(1166700,1761100,0)\nrecords=[]; caps=defaultdict(list); failures=[]\nfor o in sel:\n layer=doc.Layers[o.Attributes.LayerIndex].FullPath\n if \"::06_\" not in layer: continue\n g=o.Geometry\n if isinstance(g,Rhino.Geometry.Extrusion): b=g.ToBrep()\n elif isinstance(g,Rhino.Geometry.Brep): b=g.DuplicateBrep()\n else: continue\n bb=g.GetBoundingBox(True)\n us=o.Attributes.GetUserStrings()\n meta={str(k):str(us[k]) for k in us.AllKeys} if us else {}\n name=meta.get('건축물') or re.sub(r' \\d+F$','',o.Attributes.Name or '(unnamed)')\n bottom=[]\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   c=f.DuplicateFace(False)\n   c.Transform(Rhino.Geometry.Transform.Translation(-origin.X,-origin.Y,-bb.Min.Z))\n   bottom.append(c)\n raw=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in bottom)\n if not bottom:failures.append({'id':str(o.Id),'name':name,'reason':'no horizontal bottom'})\n key=(name,round(bb.Min.Z,5),round(bb.Max.Z,5))\n caps[key].extend(bottom)\n record={'id':str(o.Id),'object_name':o.Attributes.Name,'building':name,'layer':layer,'category':meta.get('용도분류',''),'zmin':bb.Min.Z,'zmax':bb.Max.Z,'dimensions':[bb.Max.X-bb.Min.X,bb.Max.Y-bb.Min.Y,bb.Max.Z-bb.Min.Z],'bottom_area':raw,'is_solid':bool(b.IsSolid),'metadata':meta}\n records.append(record)\nfloor_rows=[]; global_caps=defaultdict(list)\nfor key,items in caps.items():\n arr=List[Rhino.Geometry.Brep](items)\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(arr,Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0:\n  merged=items; failures.append({'name':key[0],'z':key[1],'reason':'union failed; raw sum used'})\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged)\n floor_rows.append({'building':key[0],'zmin':key[1],'zmax':key[2],'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items),'union_area':area,'parts':len(items),'union_parts':len(merged)})\n global_caps[(key[1],key[2])].extend(merged)\nglobal_rows=[]\nfor key,items in global_caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](items),Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0: merged=items;failures.append({'zrange':list(key),'reason':'global union failed'})\n global_rows.append({'zmin':key[0],'zmax':key[1],'area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged),'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items)})\nbuildings=[]\nfor name in sorted(set(r['building'] for r in records)):\n rows=[r for r in floor_rows if r['building']==name]; rs=[r for r in records if r['building']==name]\n buildings.append({'building':name,'category':rs[0]['category'],'objects':len(rs),'actual_floor_count':len(rows),'z_intervals':[[r['zmin'],r['zmax']] for r in sorted(rows,key=lambda a:a['zmin'])],'floor_areas':[round(r['union_area'],4) for r in sorted(rows,key=lambda a:a['zmin'])],'gfa':sum(r['union_area'] for r in rows),'raw_gfa':sum(r['raw_area'] for r in rows),'metadata_gfa':rs[0]['metadata'].get('연면적㎡'),'metadata_floors':rs[0]['metadata'].get('층수')})\ndata={'document':doc.Name,'path':doc.Path,'declared_unit':str(doc.ModelUnitSystem),'physical_interpretation':'one coordinate unit interpreted as one meter based on 48x10 housing and 25x100 city hall dimensions, metadata and source program','selection_count':len(sel),'building_object_count':len(records),'records':records,'floors':floor_rows,'buildings':buildings,'global_floors':global_rows,'total_building_union_gfa':sum(r['gfa'] for r in buildings),'global_union_gfa':sum(r['area'] for r in global_rows),'failures':failures}\n(outdir/'rhino_measurements.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({k:data[k] for k in ['document','declared_unit','selection_count','building_object_count','buildings','total_building_union_gfa','global_union_gfa','failures']},ensure_ascii=False))\n"
+        },
+        {
+          "language": "python",
+          "code": "import Rhino,json,re\nfrom pathlib import Path\nfrom collections import defaultdict\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__;sel=list(doc.Objects.GetSelectedObjects(False,False))\nroot=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\ndata=json.loads((root/'rhino_measurements.json').read_text(encoding='utf-8'))\ndef category(name):\n if name in ['공공청사 본관','공공청사 민원·시민홀동']:return '청사'\n if name in ['공공기관 업무동','청년창업지원센터']:return '기관·청년창업'\n if name=='공공청사·기관 직원 주차장동':return '북측 주차'\n if re.match(r'^주거동 \\d+$',name):return '주거'\n if name=='생활체육관·편의시설':return '스포츠·생활편의'\n if name in ['복합문화센터','생활가로 상가']:return '중앙 북측 복합문화·상가'\n if name=='건강·돌봄센터':return '건강·돌봄'\n if name in ['실내 공예마켓·운영동','전통문화 공방·체험·전시동']:return '서측 공예전시·마켓·공방'\n if name=='작가 교류·행사동':return '작가 교류'\n if name.startswith('레지던시 거주동') or name.startswith('레지던시 제작동'):return '레지던시'\n if name=='실내 체험관':return '실내 체험'\n if name in ['근대역사관','지역문화원 본동','소상공인 상생동(남)','소상공인 상생동(북)']:return '남측 역사문화·상생'\n if name=='관광지원센터':return '관광지원'\n if name=='공유주차장':return '남측 공유주차'\n if name=='모빌리티 허브':return '모빌리티 허브'\n if name in ['레지던시 가로상가','관문 가로상가']:return '별도 가로상가'\n return name\ncaps=defaultdict(list);records={r['id']:r for r in data['records']}\nvolume_check=[]\nfor o in sel:\n if str(o.Id) not in records:continue\n r=records[str(o.Id)];g=o.Geometry\n b=g.ToBrep() if isinstance(g,Rhino.Geometry.Extrusion) else g.DuplicateBrep()\n bb=b.GetBoundingBox(True);b.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n v=Rhino.Geometry.VolumeMassProperties.Compute(b)\n area_from_volume=abs(v.Volume)/(bb.Max.Z-bb.Min.Z) if v else None\n volume_check.append({'id':str(o.Id),'name':r['building'],'bottom_area':r['bottom_area'],'volume_over_height':area_from_volume,'error':abs(area_from_volume-r['bottom_area']) if area_from_volume is not None else None})\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   face=f.DuplicateFace(False);face.Transform(Rhino.Geometry.Transform.Translation(0,0,-bb.Min.Z))\n   caps[(category(r['building']),round(bb.Min.Z,5),round(bb.Max.Z,5))].append(face)\ngroup_sums=defaultdict(float);group_floors=[]\nfor (name,z1,z2),parts in caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](parts),Rhino.Geometry.Plane.WorldXY,0.0001)\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(x).Area for x in merged)\n group_sums[name]+=area;group_floors.append({'group':name,'zmin':z1,'zmax':z2,'area':area})\nsite_rows=[]\nfor o in sel:\n l=doc.Layers[o.Attributes.LayerIndex].FullPath;g=o.Geometry\n if isinstance(g,Rhino.Geometry.Curve) and g.IsClosed and ('00_' in l or '01_' in l or '02_' in l or '03_' in l or '08_' in l):\n  crv=g.DuplicateCurve();crv.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n  ap=Rhino.Geometry.AreaMassProperties.Compute(crv)\n  if ap:site_rows.append({'id':str(o.Id),'name':o.Attributes.Name,'layer':l,'area':ap.Area})\nresult={'group_gfa':dict(group_sums),'group_floors':group_floors,'group_sum_before_cross_group_overlap':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':sum(group_sums.values())-data['global_union_gfa'],'volume_checks':volume_check,'max_volume_check_error':max(v['error'] for v in volume_check if v['error'] is not None),'site_rows':site_rows}\n(root/'comparison_groups.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({'group_gfa':dict(group_sums),'group_sum':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':result['remaining_cross_group_overlap'],'max_volume_check_error':result['max_volume_check_error'],'volume_nonprismatic':[v for v in volume_check if v['error'] is not None and v['error']>0.01],'site_rows':site_rows},ensure_ascii=False))\n"
+        }
+      ]
+    },
+    "site": {
+      "rows": [
+        {
+          "name": "공동체텃밭",
+          "target": 1600,
+          "model": 1651.3499999976484,
+          "delta": 51.34999999764841,
+          "note": ""
+        },
+        {
+          "name": "생활 소공원",
+          "target": 1600,
+          "model": 1656.4000000023516,
+          "delta": 56.40000000235159,
+          "note": "v13 중앙북측 소공원과 대응시켜 비교"
+        },
+        {
+          "name": "8 창작·체험(아티스트 레지던시)",
+          "target": 15000,
+          "model": 11998.221324154658,
+          "delta": -3001.778675845342,
+          "note": "실내 3,000㎡+야외 12,000㎡의 최소 소요면적과 비교; 전부 이 획지에 배치하는 경우"
+        },
+        {
+          "name": "구역경계",
+          "target": 218478.066,
+          "model": 228022.18108916853,
+          "delta": 9544.11508916854,
+          "note": ""
+        }
+      ],
+      "source": {
+        "label": "NEXUS v13와 선택된 Rhino 최종 모델 비교",
+        "files": [
+          {
+            "label": "NEXUS 1918 최종 통합 스페이스 프로그램 v13 · 2026.10.11"
+          },
+          {
+            "label": "구경주역_마스터플랜_최종.3dm · 선택 건축 매스 157개"
+          }
+        ],
+        "filters": [
+          "현재 선택 객체 3,947개 중 건축 매스 157개",
+          "같은 높이 구간의 겹치는 면적은 한 번 합산"
+        ],
+        "caveats": [
+          "면적은 1좌표 단위=1m로 해석했다. Rhino 선언 단위는 Millimeters이지만 주거 매스 48×10 및 기존 면적 속성이 m 스케일과 일치한다.",
+          "모델 면적은 선택한 건축 매스의 층별 수평 바닥면 합집합이다. 법정 연면적이나 실별 면적을 확정한 값이 아니다.",
+          "기존 역사 상세 Mesh·유리 지붕·식재·야외 지면·용도 불명 연결 요소는 건축 합계에서 제외했다.",
+          "기능을 묶어 비교한 항목은 내부 실 배정이 확인되지 않았다. 미확인 값은 0으로 처리하지 않았다."
+        ],
+        "evidenceFlow": [
+          {
+            "title": "모델 추출",
+            "detail": "provider: Rhino MCP; tool: run_python; slot: axolotl. 현재 선택 중 건축물 레이어의 닫힌 Brep/Extrusion 157개에서 수평 바닥면을 추출했다. 원 실행 코드는 query.methods에 보존했다."
+          },
+          {
+            "title": "v13 목표 정리",
+            "detail": "사용자가 붙여넣은 v13 문서에서 시설 목표 연면적을 취합했다. 조건부 수영장 1,800㎡와 영화관 800㎡를 포함하면 105,560㎡, 제외하면 102,960㎡다."
+          },
+          {
+            "title": "교차 검산",
+            "detail": "기능별 합집합 합계와 전체 합집합 합계가 0.000001㎡ 이내로 일치했다. 157개 매스를 체적÷높이로 대조한 최대 면적 오차는 0.000042㎡였다."
+          }
+        ],
+        "metricDefinitions": [
+          {
+            "label": "비교 면적 (㎡)",
+            "definition": "닫힌 구역·획지·지면 경계곡선의 평면 면적을 v13 명시 면적에 비교했다. 창작·체험 획지는 프로그램 최소 소요면적과 조건부로 비교했다.",
+            "componentIds": [
+              "site-findings",
+              "site-table",
+              "methods"
+            ]
+          }
+        ]
+      },
+      "methods": [
+        {
+          "language": "python",
+          "code": "import Rhino, json, math, re\nfrom pathlib import Path\nfrom collections import defaultdict, Counter\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__\nsel=list(doc.Objects.GetSelectedObjects(False,False))\noutdir=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\noutdir.mkdir(parents=True,exist_ok=True)\norigin=Rhino.Geometry.Point3d(1166700,1761100,0)\nrecords=[]; caps=defaultdict(list); failures=[]\nfor o in sel:\n layer=doc.Layers[o.Attributes.LayerIndex].FullPath\n if \"::06_\" not in layer: continue\n g=o.Geometry\n if isinstance(g,Rhino.Geometry.Extrusion): b=g.ToBrep()\n elif isinstance(g,Rhino.Geometry.Brep): b=g.DuplicateBrep()\n else: continue\n bb=g.GetBoundingBox(True)\n us=o.Attributes.GetUserStrings()\n meta={str(k):str(us[k]) for k in us.AllKeys} if us else {}\n name=meta.get('건축물') or re.sub(r' \\d+F$','',o.Attributes.Name or '(unnamed)')\n bottom=[]\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   c=f.DuplicateFace(False)\n   c.Transform(Rhino.Geometry.Transform.Translation(-origin.X,-origin.Y,-bb.Min.Z))\n   bottom.append(c)\n raw=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in bottom)\n if not bottom:failures.append({'id':str(o.Id),'name':name,'reason':'no horizontal bottom'})\n key=(name,round(bb.Min.Z,5),round(bb.Max.Z,5))\n caps[key].extend(bottom)\n record={'id':str(o.Id),'object_name':o.Attributes.Name,'building':name,'layer':layer,'category':meta.get('용도분류',''),'zmin':bb.Min.Z,'zmax':bb.Max.Z,'dimensions':[bb.Max.X-bb.Min.X,bb.Max.Y-bb.Min.Y,bb.Max.Z-bb.Min.Z],'bottom_area':raw,'is_solid':bool(b.IsSolid),'metadata':meta}\n records.append(record)\nfloor_rows=[]; global_caps=defaultdict(list)\nfor key,items in caps.items():\n arr=List[Rhino.Geometry.Brep](items)\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(arr,Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0:\n  merged=items; failures.append({'name':key[0],'z':key[1],'reason':'union failed; raw sum used'})\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged)\n floor_rows.append({'building':key[0],'zmin':key[1],'zmax':key[2],'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items),'union_area':area,'parts':len(items),'union_parts':len(merged)})\n global_caps[(key[1],key[2])].extend(merged)\nglobal_rows=[]\nfor key,items in global_caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](items),Rhino.Geometry.Plane.WorldXY,0.0001)\n if merged is None or len(merged)==0: merged=items;failures.append({'zrange':list(key),'reason':'global union failed'})\n global_rows.append({'zmin':key[0],'zmax':key[1],'area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in merged),'raw_area':sum(Rhino.Geometry.AreaMassProperties.Compute(c).Area for c in items)})\nbuildings=[]\nfor name in sorted(set(r['building'] for r in records)):\n rows=[r for r in floor_rows if r['building']==name]; rs=[r for r in records if r['building']==name]\n buildings.append({'building':name,'category':rs[0]['category'],'objects':len(rs),'actual_floor_count':len(rows),'z_intervals':[[r['zmin'],r['zmax']] for r in sorted(rows,key=lambda a:a['zmin'])],'floor_areas':[round(r['union_area'],4) for r in sorted(rows,key=lambda a:a['zmin'])],'gfa':sum(r['union_area'] for r in rows),'raw_gfa':sum(r['raw_area'] for r in rows),'metadata_gfa':rs[0]['metadata'].get('연면적㎡'),'metadata_floors':rs[0]['metadata'].get('층수')})\ndata={'document':doc.Name,'path':doc.Path,'declared_unit':str(doc.ModelUnitSystem),'physical_interpretation':'one coordinate unit interpreted as one meter based on 48x10 housing and 25x100 city hall dimensions, metadata and source program','selection_count':len(sel),'building_object_count':len(records),'records':records,'floors':floor_rows,'buildings':buildings,'global_floors':global_rows,'total_building_union_gfa':sum(r['gfa'] for r in buildings),'global_union_gfa':sum(r['area'] for r in global_rows),'failures':failures}\n(outdir/'rhino_measurements.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({k:data[k] for k in ['document','declared_unit','selection_count','building_object_count','buildings','total_building_union_gfa','global_union_gfa','failures']},ensure_ascii=False))\n"
+        },
+        {
+          "language": "python",
+          "code": "import Rhino,json,re\nfrom pathlib import Path\nfrom collections import defaultdict\nfrom System.Collections.Generic import List\ndoc=__rhino_doc__;sel=list(doc.Objects.GetSelectedObjects(False,False))\nroot=Path(r'C:\\Users\\OFFICE\\Desktop\\9_도시\\work\\nexus_v13_audit_20261011')\ndata=json.loads((root/'rhino_measurements.json').read_text(encoding='utf-8'))\ndef category(name):\n if name in ['공공청사 본관','공공청사 민원·시민홀동']:return '청사'\n if name in ['공공기관 업무동','청년창업지원센터']:return '기관·청년창업'\n if name=='공공청사·기관 직원 주차장동':return '북측 주차'\n if re.match(r'^주거동 \\d+$',name):return '주거'\n if name=='생활체육관·편의시설':return '스포츠·생활편의'\n if name in ['복합문화센터','생활가로 상가']:return '중앙 북측 복합문화·상가'\n if name=='건강·돌봄센터':return '건강·돌봄'\n if name in ['실내 공예마켓·운영동','전통문화 공방·체험·전시동']:return '서측 공예전시·마켓·공방'\n if name=='작가 교류·행사동':return '작가 교류'\n if name.startswith('레지던시 거주동') or name.startswith('레지던시 제작동'):return '레지던시'\n if name=='실내 체험관':return '실내 체험'\n if name in ['근대역사관','지역문화원 본동','소상공인 상생동(남)','소상공인 상생동(북)']:return '남측 역사문화·상생'\n if name=='관광지원센터':return '관광지원'\n if name=='공유주차장':return '남측 공유주차'\n if name=='모빌리티 허브':return '모빌리티 허브'\n if name in ['레지던시 가로상가','관문 가로상가']:return '별도 가로상가'\n return name\ncaps=defaultdict(list);records={r['id']:r for r in data['records']}\nvolume_check=[]\nfor o in sel:\n if str(o.Id) not in records:continue\n r=records[str(o.Id)];g=o.Geometry\n b=g.ToBrep() if isinstance(g,Rhino.Geometry.Extrusion) else g.DuplicateBrep()\n bb=b.GetBoundingBox(True);b.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n v=Rhino.Geometry.VolumeMassProperties.Compute(b)\n area_from_volume=abs(v.Volume)/(bb.Max.Z-bb.Min.Z) if v else None\n volume_check.append({'id':str(o.Id),'name':r['building'],'bottom_area':r['bottom_area'],'volume_over_height':area_from_volume,'error':abs(area_from_volume-r['bottom_area']) if area_from_volume is not None else None})\n for f in b.Faces:\n  fb=f.GetBoundingBox(True)\n  if abs(fb.Max.Z-fb.Min.Z)<1e-5 and abs(fb.Min.Z-bb.Min.Z)<1e-5:\n   face=f.DuplicateFace(False);face.Transform(Rhino.Geometry.Transform.Translation(0,0,-bb.Min.Z))\n   caps[(category(r['building']),round(bb.Min.Z,5),round(bb.Max.Z,5))].append(face)\ngroup_sums=defaultdict(float);group_floors=[]\nfor (name,z1,z2),parts in caps.items():\n merged=Rhino.Geometry.Brep.CreatePlanarUnion(List[Rhino.Geometry.Brep](parts),Rhino.Geometry.Plane.WorldXY,0.0001)\n area=sum(Rhino.Geometry.AreaMassProperties.Compute(x).Area for x in merged)\n group_sums[name]+=area;group_floors.append({'group':name,'zmin':z1,'zmax':z2,'area':area})\nsite_rows=[]\nfor o in sel:\n l=doc.Layers[o.Attributes.LayerIndex].FullPath;g=o.Geometry\n if isinstance(g,Rhino.Geometry.Curve) and g.IsClosed and ('00_' in l or '01_' in l or '02_' in l or '03_' in l or '08_' in l):\n  crv=g.DuplicateCurve();crv.Transform(Rhino.Geometry.Transform.Translation(-1166700,-1761100,0))\n  ap=Rhino.Geometry.AreaMassProperties.Compute(crv)\n  if ap:site_rows.append({'id':str(o.Id),'name':o.Attributes.Name,'layer':l,'area':ap.Area})\nresult={'group_gfa':dict(group_sums),'group_floors':group_floors,'group_sum_before_cross_group_overlap':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':sum(group_sums.values())-data['global_union_gfa'],'volume_checks':volume_check,'max_volume_check_error':max(v['error'] for v in volume_check if v['error'] is not None),'site_rows':site_rows}\n(root/'comparison_groups.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')\nprint(json.dumps({'group_gfa':dict(group_sums),'group_sum':sum(group_sums.values()),'global_union_gfa':data['global_union_gfa'],'remaining_cross_group_overlap':result['remaining_cross_group_overlap'],'max_volume_check_error':result['max_volume_check_error'],'volume_nonprismatic':[v for v in volume_check if v['error'] is not None and v['error']>0.01],'site_rows':site_rows},ensure_ascii=False))\n"
+        }
+      ]
+    },
+    "placement": {
+      "rows": [
+        {
+          "id": "civic",
+          "zone": "북서측 공공업무",
+          "program": "공공청사·시의회·행정지원",
+          "location": "북서측 원화로 쪽, 시민광장과 직원 주차장동 사이",
+          "scale": "v13 연면적 26,500㎡·업무 1,000석 계획",
+          "basis": "사용자 설명: 원화로 통행량이 많음. 모델: 북서측 청사와 시민광장.",
+          "reason": "많은 시민이 찾는 행정시설의 주소성과 인지성을 서측 대로에 확보하고, 시민광장을 완충·대기·만남 공간으로 연결한다. 청사 내부 민원은 광장 쪽에서 찾기 쉽게 하고 직원 출입은 북측 주차동과 연결한다.",
+          "movement": "시민: 원화로→시민광장→민원 진입. 직원: 북측 주차동→직원 출입.",
+          "check": "민원·직원 출입구와 실제 보행거리를 정해 차량 진입과 광장 보행이 겹치는 지점을 검토한다.",
+          "status": "건물·광장 위치 확인 / 출입 동선 제안"
+        },
+        {
+          "id": "staff-parking",
+          "zone": "북서측 공공업무",
+          "program": "공공청사·기관 직원 주차장동",
+          "location": "청사에 인접한 북측 공공 주차 획지",
+          "scale": "v13 공공용 총 720면 중 주차동 705면 계획",
+          "basis": "사용자 설명: 매일 출근하는 직원의 접근 반경 고려. 모델: 청사 북측 주차동.",
+          "reason": "반복되는 출퇴근 이동을 청사 가까이에서 수용하고, 장시간 주차를 청사·기관의 공동시설로 묶는다. 차량이 중앙 생활·문화 보행공간을 관통하지 않도록 외곽 진입과 직원 보행을 조직한다.",
+          "movement": "차량: 북측 외곽 진입→주차동. 보행: 주차동→청사·기관.",
+          "check": "기관까지의 연결 동선은 청사보다 길어질 수 있으므로 직선 반경 대신 출입구 사이 실제 보행거리와 횡단 지점을 확인한다. 705면 실배치는 미확인.",
+          "status": "주차동 위치 확인 / 실제 면수·동선 미확인"
+        },
+        {
+          "id": "institutions",
+          "zone": "북서측 공공업무",
+          "program": "공공기관 클러스터·청년창업지원",
+          "location": "공공청사 남쪽, 중앙 북측 서측의 동서 보행축·오픈스페이스 접점",
+          "scale": "v13 클러스터 2,200㎡·업무/사업참여 약 100명 가정 / 사용자 일 방문 15~20명 추정",
+          "basis": "사용자 설명: 청사보다 작은 규모, 상담·교류를 통한 동서 보행축 활성화. 모델: 공공기관 업무동·청년창업지원센터.",
+          "reason": "청사의 행정지원과 가까우면서 취업·창업·관광콘텐츠·상권협력 활동이 중앙 공공공간에 드러나도록 배치한다. 상담·교육·전시 가능한 1층을 보행축에 열어 공공업무 권역과 생활문화 권역을 연결한다.",
+          "movement": "서측 방문 진입→기관 상담. 중앙 보행축→공개 프로그램. 청사↔기관 업무 연계.",
+          "check": "일 방문 추정은 실측 수요가 아니다. 현재 업무·창업 매스 합계 약 12,503㎡는 v13 2,200㎡보다 커서, 위치 근거와 면적 적정성을 따로 검토한다.",
+          "status": "건물 위치 확인 / 수요는 사용자 추정 / 규모 대응 필요"
+        },
+        {
+          "id": "visitor-parking",
+          "zone": "북서측 공공업무",
+          "program": "공공기관 방문객 옥외주차",
+          "location": "기관 전면의 서측 대로 접근부, 기관 출입구 가까운 곳",
+          "scale": "사용자 방문 수요 15~20명/일 추정 / v13 옥외 15면·약 650㎡ 계획",
+          "basis": "사용자 배치 의도와 v13 주차 배분.",
+          "reason": "비정기·단시간 상담 방문자가 직원 주차동까지 이동하지 않고 기관을 쉽게 찾도록 전면에 배치한다. 방문 주차와 승하차를 기관 출입구에 연결해 접근성과 편의성을 높인다.",
+          "movement": "대로→계획 진입차로→방문 주차·승하차→기관 출입구.",
+          "check": "15~20명/일을 15~20면으로 직접 환산하지 않는다. 피크 동시 방문, 체류시간, 차량 이용률을 통해 15면 계획을 검토하고 보행축 횡단을 줄인다. 대로 직접 진출입은 확정하지 않는다.",
+          "status": "사용자 배치 의도 / 개별 주차구획 미확인"
+        },
+        {
+          "id": "housing",
+          "zone": "북동측 정주·생활",
+          "program": "청년·신혼 주거 8동",
+          "location": "북동측, 황오·황촌 기존 주거지와 맞닿는 정주 권역",
+          "scale": "v13 256세대·464명·19,200㎡ 계획 / 기본 8동·5층 매스 확인",
+          "basis": "사용자 설명: 기존 주거지의 정적인 분위기와 연계.",
+          "reason": "일상생활 중심의 기존 주거 맥락에 신규 정주 인구를 연결하고, 서측 공공업무 및 남측 행사·방문 공간과 생활영역을 구분한다. 동 사이 보행과 공유 공간을 건강·돌봄·텃밭으로 이어 주민 생활권을 만든다.",
+          "movement": "기존 동네↔주거 1층 커뮤니티↔건강·돌봄·생활 소공원.",
+          "check": "동간 거리·일조·야간 행사 소음은 별도 검토한다. 매스가 일치해도 세대별 평면과 수용 인원이 확정된 것은 아니다.",
+          "status": "8동·층수 위치 확인 / 세대 구성은 v13 계획"
+        },
+        {
+          "id": "community",
+          "zone": "북동측 정주·생활",
+          "program": "지역개방 주민 커뮤니티",
+          "location": "주거동 1층, 기존 동네와 내부 보행로가 만나는 면",
+          "scale": "v13 주거 연면적 안에 1,600㎡ 포함·활동 자리 310개 계획",
+          "basis": "사용자 설명: 계획 주민과 도보권 기존 주민이 함께 사용.",
+          "reason": "입주민의 일상 동선에 프로그램을 붙이면서 동네 주민도 주거층을 통과하지 않고 접근할 수 있게 1층에 배치한다. 홀·작은도서관·가족실·공유부엌을 공용 마당과 연결해 두 생활권의 접점을 만든다.",
+          "movement": "동네 보행 접근→외부인 이용 가능한 커뮤니티 출입. 주거 코어는 별도 관리.",
+          "check": "310개는 실별 활동 자리의 합이며 동시 방문객 예측이 아니다. 기본 1층 안의 1,600㎡와 추가 연결 매스 960㎡를 구분해 실 배정을 확인한다.",
+          "status": "1층 연계 의도 / 상세 실 배정 미확인"
+        },
+        {
+          "id": "sports",
+          "zone": "북동측 정주·생활",
+          "program": "주민 스포츠·생활편의시설",
+          "location": "북측 공원·체육공원과 북동 주거 사이의 접점",
+          "scale": "v13 5,300㎡: 체육·생활편의 2,700㎡ 우선, 수영장·영화관 2,600㎡ 조건부",
+          "basis": "모델: 생활체육관·편의시설이 주거 북측, 공원 가까이에 위치.",
+          "reason": "주민 운동·휴식 동선을 주거와 공원에 이어 실내 활동과 야외 활동을 연속시키고, 공원의 이용자를 생활편의 공간으로 연결한다. 행사 규모가 큰 이용은 주거의 사적 동선과 나눠 받는다.",
+          "movement": "주거·동네→생활체육관↔체육공원. 외부 이용자→공공 출입면.",
+          "check": "현재 4층 매스와 v13 1층 체육관·수영장 날개 구성이 다르다. 수영장·영화관의 실제 실 배정·운영 수요를 확인한다.",
+          "status": "건물 위치 확인 / 조건부 실 구성 미확인"
+        },
+        {
+          "id": "care",
+          "zone": "북동측 정주·생활",
+          "program": "건강·돌봄센터",
+          "location": "주거 남쪽, 중앙 북측 동측의 황오·황촌 접점",
+          "scale": "v13 1,200㎡·2층·약 90개 활동 자리 제안",
+          "basis": "사용자 설명: 기존 동네와 연계. 모델: 건강·돌봄센터가 주거·생활 소공원 가까이 배치.",
+          "reason": "고령자·가족·아이의 반복적인 이용을 고려해 새 주거와 기존 동네 양쪽에서 찾을 수 있는 접점에 둔다. 상담·가벼운 운동·돌봄과 야외 쉼터를 연결해 지역 생활서비스의 거점으로 만든다.",
+          "movement": "기존 주거·신규 주거→안전한 보행 접근→센터↔소공원·텃밭.",
+          "check": "‘도보권’의 정확한 분·거리와 접근성은 실제 출입구·경사·횡단 정보를 확인한 뒤 제시한다. 90명은 의료 진료정원이 아니다.",
+          "status": "건물 위치 확인 / 용량은 v13 제안"
+        },
+        {
+          "id": "small-park",
+          "zone": "북동측 정주·생활",
+          "program": "생활 소공원",
+          "location": "중앙 북측 동측, 건강·돌봄센터와 공동체텃밭 사이",
+          "scale": "v13 대응 기준 1,600㎡ / 측정 생활 소공원 약 1,656㎡",
+          "basis": "모델 지면요소 ‘생활 소공원’. 서측 C 중앙 근린공원과 구분.",
+          "reason": "센터·주거·상업시설 이용 사이에 짧게 머무를 수 있는 생활형 쉼터를 두고, 정주권과 중앙 공공활동 사이의 완충 공간으로 사용한다.",
+          "movement": "돌봄센터↔쉼터↔텃밭·생활가로.",
+          "check": "텃밭과 독립된 면적인지 확인한다. 두 공간이 중첩되면 야외 합계에서 중복 계산하지 않는다.",
+          "status": "구획 위치·면적 확인"
+        },
+        {
+          "id": "garden",
+          "zone": "북동측 정주·생활",
+          "program": "공동체텃밭·도시농업·자원순환 지원실",
+          "location": "중앙 북측 동측 생활 소공원 남쪽, 지원실은 텃밭 출입부에 제안",
+          "scale": "v13 야외 1,600㎡·60구획 제안 + 지원실 200㎡·교육 20명/회 계획",
+          "basis": "모델: 공동체텃밭 구획 약 1,651㎡. 지원실은 독립 매스로 미식별.",
+          "reason": "재배·관리라는 반복 활동을 새 주민과 기존 주민이 함께 수행하게 하여 커뮤니티의 교류를 야외로 확장한다. 도구·세척·교육 공간은 작업 접근이 쉬운 출입부에 붙인다.",
+          "movement": "주거·커뮤니티→텃밭→도구·세척·교육 지원. 관리 차량은 생활 보행과 구분.",
+          "check": "60구획과 30/30 배분은 운영 제안이다. 200㎡ 실의 실제 위치를 평면에서 지정하고 공원·텃밭 면적을 따로 확인한다.",
+          "status": "텃밭 구획 확인 / 지원실 내부 배치 제안"
+        },
+        {
+          "id": "life-retail",
+          "zone": "북동측 정주·생활",
+          "program": "생활가로 상업시설",
+          "location": "건강·돌봄·소공원·텃밭을 잇는 생활가로 접점",
+          "scale": "모델 생활가로 상가 약 1,336㎡ / v13 편의 기능과의 대응 미확인",
+          "basis": "사용자 설명과 모델 생활가로 상가.",
+          "reason": "상점·식음·라운지 같은 일상 용도를 생활 보행 경로에 붙여 센터·공원 이용 전후의 방문을 연결한다. 주거 쪽은 일상 서비스, 공공 보행축 쪽은 열린 가로면으로 조직한다.",
+          "movement": "동네·주거→상가↔돌봄·공원·텃밭.",
+          "check": "운영 업종은 계획안으로 정하고 기존 상권과의 기능 중복을 검토한다. v13 생활편의 면적을 별도 가로상가와 중복 합산하지 않는다.",
+          "status": "상가 매스 확인 / 업종·프로그램 대응 필요"
+        },
+        {
+          "id": "resident-parking",
+          "zone": "북동측 정주·생활",
+          "program": "주거용 옥외주차",
+          "location": "북동 주거 획지의 외곽에 확보하는 배치 제안",
+          "scale": "v13 180면·약 5,760㎡ 공급 제안",
+          "basis": "v13에서 주거 야간 주차를 별도로 배분. 실제 모델의 180개 주차구획은 미확인.",
+          "reason": "주민의 야간·상시 주차를 공공청사 직원 주차나 남측 관광 주차와 구분하고, 차에서 주거 코어로 이동하는 경로를 짧고 명확하게 조직한다. 차량 진입은 획지 가장자리에서 받으며 커뮤니티·어린이 활동의 보행공간을 관통하지 않도록 배치한다.",
+          "movement": "주거 외곽 차량 접근→주민 주차→주거 코어. 동네·커뮤니티 보행과 진입을 구분.",
+          "check": "180면은 설계 공급 제안으로 실제 배치가 확인된 면수가 아니다. 획지에 들어가는지 검토하고 주차동 공유로 바꾸면 직원용 공급과 운영을 재배분한다.",
+          "status": "v13 외곽 주차 배치 제안 / 개별 구획 미확인"
+        },
+        {
+          "id": "north-parks",
+          "zone": "북동측 정주·생활",
+          "program": "북측 근린공원·체육공원",
+          "location": "북측 공공·주거 권역 상단, 생활체육시설과 맞닿는 외부 공간",
+          "scale": "v13 큰 공원 면적 미확정 / 모델 A 북측 근린공원·B 체육공원 구획",
+          "basis": "저장 모델의 A·B 공원 레이어와 스포츠 시설의 상대 위치.",
+          "reason": "북측 업무·주거 이용자가 함께 쉬고 운동할 수 있는 외부 거점을 두어 생활체육의 실내 활동을 야외 운동·산책으로 연결한다. 주민은 짧은 일상 경로로, 직원은 업무 전후나 휴식 시간에 공원을 이용할 수 있도록 접근을 조직한다.",
+          "movement": "주거·생활체육시설↔체육공원·북측 근린공원. 청사↔공공 휴식 공간.",
+          "check": "A 공원에 직원 주차 획지와 겹치는 곡선이 있어 표시 구획을 정리하기 전 면적을 합산하지 않는다. 주차 진입과 산책 동선의 교차도 확인한다.",
+          "status": "공원 레이어 확인 / 중첩 구획 정리 필요"
+        },
+        {
+          "id": "culture",
+          "zone": "중앙 문화·보행 연결",
+          "program": "복합문화시설",
+          "location": "중앙 북측, 남북 보행축에 길게 면하는 생활문화 접점",
+          "scale": "v13 2,000㎡·가변홀 180석·전시 60명·교육 50명 계획",
+          "basis": "사용자 설명: 남북으로 세장한 배치로 남북축 강조. 모델: 중앙 생활문화 매스.",
+          "reason": "북측 일상생활과 남측 창작·역사문화 사이에 공연·강좌·열람·전시를 두어 남북 이동 중 이용할 수 있는 문화 거점을 만든다. 세장한 형태는 축의 방향을 읽게 하고, 여러 출입과 투과 가능한 1층을 통해 보행과 접촉하도록 구성한다.",
+          "movement": "남북축↔문화 로비·전시·열람. 동서 연결부에서 북동 생활권·북서 업무권과 교차.",
+          "check": "축을 강조하는 형태가 긴 벽면이나 보행 장벽이 되지 않도록 관통·출입·빈 공간을 검토한다. 현재 매스 총량과 v13의 차이는 별도 면적표에서 확인한다.",
+          "status": "사용자 형태 의도 / 개방성과 실 구성은 상세 제안"
+        },
+        {
+          "id": "axes-parks",
+          "zone": "중앙 문화·보행 연결",
+          "program": "중앙 근린공원·동서 선형공원·남북 보행축",
+          "location": "서측 C 중앙 근린공원과 D 동서·E 남북 보행축",
+          "scale": "모델 명칭 D 폭 40m·E 폭 30m / 실제 유효 보행폭은 미검증",
+          "basis": "모델의 공원·보행 레이어 및 사용자 중앙 오픈스페이스 설명.",
+          "reason": "동서축은 서측 업무·전시와 동측 주거·제작을 연결하고, 남북축은 일상 생활권에서 남측 관문까지의 연속적인 보행을 조직한다. 공원·광장은 이동 중 머무름과 프로그램의 외부 활동을 수용한다.",
+          "movement": "북측 공공·주거↔중앙 문화·창작↔남측 역사관광. 동서로 양쪽 생활권 연결.",
+          "check": "명목 폭을 전부 인도로 표현하지 않는다. 건물·식재·광장·서비스 동선이 제외된 유효 보행폭과 연결 단절을 확인한다. C 공원은 동측 생활 소공원과 다른 구획이다.",
+          "status": "공원·축의 위치·명칭 확인 / 유효 폭 미확인"
+        },
+        {
+          "id": "craft-display",
+          "zone": "중앙 남측 서측 공예",
+          "program": "공예 전문전시·실내 공예마켓",
+          "location": "중앙 남측 서측, 공예 중정과 동서 보행축 가까이",
+          "scale": "v13 서측 전시·마켓·운영 합계 2,700㎡ / 20부스·전시 약 140명 계획",
+          "basis": "사용자 설명과 모델 공예마켓·전통문화 공방·체험·전시동.",
+          "reason": "전시와 판매를 공공 보행공간에 가까운 면에 배치하여 작품을 보는 활동이 구매·교류로 이어지도록 한다. 동측 제작·체험에서 만들어진 결과물을 서측에서 전시·판매하는 상호 연결을 형성한다.",
+          "movement": "보행축→전시·마켓→공예 중정. 동측 제작·체험↔서측 전시·판매.",
+          "check": "20부스와 전시 140명은 계획 용량이다. 현재 공방을 포함한 서측 매스와 v13 2,700㎡의 실별 대응을 확인한다.",
+          "status": "건물 권역 확인 / 실별 대응 미확인"
+        },
+        {
+          "id": "craft-operations",
+          "zone": "중앙 남측 서측 공예",
+          "program": "운영·작품관리·공방 지원",
+          "location": "전시·마켓의 후면 또는 측면 서비스 영역",
+          "scale": "v13 운영·작품관리 200㎡가 서측 2,700㎡에 포함",
+          "basis": "v13 세부 실 구성. 내부 실 위치는 모델에서 미확인.",
+          "reason": "작품 반입·보관·설치가 전시·판매와 가까이 이루어지게 두되, 방문객 보행과 작품 운반이 충돌하지 않도록 서비스 면을 분리한다. 공개 공방은 보행·중정 쪽, 관리 기능은 반입 쪽에 둔다.",
+          "movement": "외곽 서비스 진입→관리·보관→전시·마켓. 관람객은 공개면에서 진입.",
+          "check": "작품 반입 경로·문폭·보관 환경과 실제 관리실 위치를 상세 평면에서 정한다.",
+          "status": "세부 실 배치 제안"
+        },
+        {
+          "id": "craft-outdoor",
+          "zone": "중앙 남측 서측 공예",
+          "program": "야외 전시시설·공예 중정·공원",
+          "location": "서측 공예시설 사이의 중정과 공개 마당",
+          "scale": "모델 공예 중정 약 5,200㎡ / v13 야외 전시 독립 목표 없음",
+          "basis": "사용자 설명과 모델 공예 중정.",
+          "reason": "실내 전시의 경험을 야외 작품 감상·소규모 시연·휴식으로 확장하고 여러 시설이 함께 쓰는 공공 마당으로 조직한다. 건물 사이를 지나가는 길과 머무르는 공간을 함께 확보한다.",
+          "movement": "마켓·전시↔야외 작품·휴식↔동서 보행축.",
+          "check": "야외 작품·행사가 상시 통행을 막지 않도록 통로를 남긴다. 동측 야외 체험 12,000㎡와 자동으로 합산하거나 대체하지 않는다.",
+          "status": "중정 구획 확인 / 야외 전시 배정 제안"
+        },
+        {
+          "id": "experience",
+          "zone": "중앙 남측 동측 창작",
+          "program": "실내 공예·역사문화 체험관",
+          "location": "중앙 남측 동측의 공개 보행축 쪽, 제작동 서쪽",
+          "scale": "v13 3,000㎡·체험실 8개·250~300명 동시 운영 목표",
+          "basis": "사용자 설명과 모델 실내 체험관.",
+          "reason": "방문자가 체험 권역을 쉽게 찾도록 공개 보행축에 가까운 앞쪽에 두고, 전문 제작동과 연결해 작가 시연·완성품·재료의 흐름을 공유한다. 공공 체험과 전문 제작의 안전·운영 영역을 구분한다.",
+          "movement": "공개 보행축→예약·안내→체험·시연→야외 체험·마켓.",
+          "check": "250~300명은 하루 방문객이 아니라 동시 운영 목표다. 현재 4층 매스가 v13 1층 체험관 운영을 어떻게 수용하는지 확인한다.",
+          "status": "건물 위치 확인 / 운영·층별 실 배정 필요"
+        },
+        {
+          "id": "exchange",
+          "zone": "중앙 남측 동측 창작",
+          "program": "작가 교류·행사실",
+          "location": "체험관과 레지던시 제작권의 접점",
+          "scale": "v13 300㎡·약 75명/행사 계획",
+          "basis": "사용자 설명: 교류·행사 기능을 동측으로 배치. 모델 작가 교류·행사동.",
+          "reason": "상시 작업하는 작가와 체험·관람 방문자가 만나는 중간 지점에 두어 강연·워크숍·발표를 연결한다. 서측 판매 중심 공간과 역할을 나눠 동측을 제작·학습·교류의 거점으로 만든다.",
+          "movement": "체험관·공개 보행→교류실↔제작동. 숙소의 사적 영역은 별도 출입.",
+          "check": "행사 야간 운영과 숙소의 휴식이 충돌하지 않도록 출입·운영 시간을 검토한다. 실제 지상 접근과 층 연결은 미확인.",
+          "status": "동측 매스 위치 확인 / 내부 접근 계획 필요"
+        },
+        {
+          "id": "studio",
+          "zone": "중앙 남측 동측 창작",
+          "program": "레지던시 제작동",
+          "location": "동측 창작 획지 안쪽, 체험관과 가장 동쪽 거주동 사이",
+          "scale": "v13 제작 1,500㎡·개인작업실 20실 계획",
+          "basis": "모델 제작동은 체험관 동쪽, 거주동 서쪽. v13 전문 가마·목공·금속 작업 분리.",
+          "reason": "작가의 전문 작업을 지속할 수 있는 제작 영역을 확보하고 공개 시연·체험과 연계하되, 소음·열·분진을 발생시키는 작업은 숙소·방문 체험에서 구분한다. 외곽의 재료 반입과 작업 후면을 확보한다.",
+          "movement": "재료 반입→제작·건조·보관→시연·전시·마켓. 작가: 숙소↔제작동.",
+          "check": "단순히 동쪽에 두었다는 이유로 작업 환경 문제가 해소되지는 않는다. 배기 방향·기계 소음·반입 차량과 숙소 사이 완충을 검토한다.",
+          "status": "제작동 위치 확인 / 설비·완충 제안"
+        },
+        {
+          "id": "artist-housing",
+          "zone": "중앙 남측 동측 창작",
+          "program": "레지던시 거주동",
+          "location": "창작·체험 권역의 가장 동쪽, 제작동 뒤쪽",
+          "scale": "v13 입주작가 20명·숙소 1,000㎡ 계획",
+          "basis": "사용자 설명: 동쪽에 제작동·거주동. 모델 거주동이 제작동보다 동쪽.",
+          "reason": "공개 방문 영역에서 한 단계 물러난 곳에 숙소를 두어 체류자의 휴식·생활을 확보하고, 제작동까지의 일상 이동은 가깝게 유지한다. 마당은 작가 교류와 숙소의 완충 공간으로 활용한다.",
+          "movement": "거주동↔레지던시 마당↔제작동. 일반 방문자는 체험·교류 영역에서 안내.",
+          "check": "거주·제작이 가까운 장점과 작업 소음의 영향을 함께 검토한다. 모델 3개·5층 거주 매스와 v13 숙소 규모는 별도 조정 대상이다.",
+          "status": "거주동 위치 확인 / 용량·사적 동선 검토 필요"
+        },
+        {
+          "id": "experience-outdoor",
+          "zone": "중앙 남측 동측 창작",
+          "program": "야외 체험·축제광장·해석정원",
+          "location": "체험관 앞 공개 영역과 창작 획지의 야외공간",
+          "scale": "v13 야외 12,000㎡ / 체험관 1층 3,000㎡와 합해 체험존 15,000㎡ 목표",
+          "basis": "v13 야외 5개 기능 구성. 모델 8번 획지 약 11,998㎡.",
+          "reason": "실내 수업·시연을 야외 공예마당·행사·정원으로 확장하고, 중앙 보행축과 방문 활동을 연결한다. 숙소 쪽보다 공개 보행축 쪽에 행사 강도가 큰 공간을 우선 배치한다.",
+          "movement": "체험관→공예마당·광장→정원·휴식→중앙 보행축.",
+          "check": "모든 체험 프로그램을 8번 획지 안에 넣으면 최소 목표보다 약 3,002㎡ 작다. 인접 공공공간과의 실제 사용 배분 또는 프로그램·획지 조정을 검토하고 레지던시 마당을 자동 합산하지 않는다.",
+          "status": "야외 실 배치 제안 / 부지 수용 검토 필요"
+        },
+        {
+          "id": "history",
+          "zone": "남측 역사문화·관광",
+          "program": "경주회관·근대역사박물관·지역문화",
+          "location": "남측 기존 역사·그레이트 코트와 근대역사관 거점",
+          "scale": "v13 박물관 3,500㎡·상설전시 약 300명·시민포럼 100석 계획",
+          "basis": "v13 도시역사·철도기억 프로그램과 모델 남측 근대역사관·지역문화원.",
+          "reason": "기존 역사 공간과 새로운 도시역사 전시를 같은 권역에 두어 장소의 기억을 실제 건물·자료·전시로 연결한다. 중앙 창작·생활문화와 구분되는 역사 해석 거점을 관광 관문에 형성한다.",
+          "movement": "관광 안내→기존 역사·광장→박물관·지역문화→중앙 창작·체험.",
+          "check": "기존 역사 보존·활용과 박물관 새 매스의 범위를 확인한다. 모델의 지역문화원 등 전체 매스를 v13 박물관 3,500㎡로 단정하지 않는다.",
+          "status": "남측 거점 확인 / 기존 역사 활용·실 배정 필요"
+        },
+        {
+          "id": "storage",
+          "zone": "남측 역사문화·관광",
+          "program": "개방형 수장고",
+          "location": "박물관과 가까운 역사문화 권역 내부, 공개면과 관리면을 나눠 배치 제안",
+          "scale": "v13 1,000㎡·공개 관람 영역 약 80명 계획",
+          "basis": "v13 프로그램. 독립 수장고 또는 내부 실은 모델에서 미식별.",
+          "reason": "보존·자료관리와 전시 기능을 가까이 연결해 자료 이동을 조직하고, 관람 영역에서 수장·보존 활동의 일부를 볼 수 있도록 한다. 반입·보존 작업은 공개 관람과 구분한다.",
+          "movement": "자료 반입→관리·보존→전시. 관람객: 박물관→공개 수장 영역.",
+          "check": "반입·보안·보존 환경과 공개 영역의 실제 경계를 정한다. 새 독립 건물이 이미 배치됐다고 표현하지 않는다.",
+          "status": "역사문화 거점 내 내부 배치 제안"
+        },
+        {
+          "id": "temporary-gallery",
+          "zone": "남측 역사문화·관광",
+          "program": "기획전시장",
+          "location": "박물관·그레이트 코트·광장 가까운 공개 진입면에 배치 제안",
+          "scale": "v13 1,000㎡·관람 약 140명 계획",
+          "basis": "v13 프로그램. 독립 기획전시장 실 배정은 모델에서 미확인.",
+          "reason": "반복 방문이 가능한 기획 전시를 광장과 관광 보행에 가까이 두고 상설전시와 연속 관람하도록 조직한다. 전시 교체를 위한 후면 반입과 관람 입구를 나눈다.",
+          "movement": "관광·광장→기획전시↔상설전시. 작품은 별도 설치·반입 경로.",
+          "check": "전시 변경·행사와 상시 관람의 동선 충돌을 확인하고 야외 전시와의 공간 배분을 정한다.",
+          "status": "세부 실 배치 제안"
+        },
+        {
+          "id": "archive",
+          "zone": "남측 역사문화·관광",
+          "program": "문화유산 기록·해석실",
+          "location": "박물관·수장고와 연결되는 역사문화 거점 내부의 조용한 업무면",
+          "scale": "v13 500㎡·기록·연구·협업 계획",
+          "basis": "v13 프로그램. 모델의 독립 기록실은 미식별.",
+          "reason": "자료의 기록·연구·보존·전시 해석을 한 권역에서 이어 작업의 연속성을 확보한다. 일반 방문 흐름에서는 물러나되 전시·교육 부서와 업무 연결을 유지한다.",
+          "movement": "자료관리↔기록·연구↔교육·전시 해석.",
+          "check": "실제 담당 조직·보안·자료 반출입과 접근 권한을 정하고 시민 열람 기능과 내부 업무를 구분한다.",
+          "status": "세부 실 배치 제안"
+        },
+        {
+          "id": "business",
+          "zone": "남측 역사문화·관광",
+          "program": "예술인·공예사업화 지원·소상공인 상생",
+          "location": "남측 역사문화 권역과 관문 상업·중앙 공예시장 사이의 접점",
+          "scale": "v13 지원실 800㎡·상담·홍보·사업화 약 40명 계획",
+          "basis": "모델 소상공인 상생동과 v13 사업화 지원 기능; 일대일 대응은 미확인.",
+          "reason": "중앙에서 제작·전시·판매한 활동을 상품기획·계약·홍보·유통으로 이어 지역 상권과 연결한다. 공개 상담은 접근하기 쉬운 면에, 촬영·포장·지원 업무는 서비스 면에 둔다.",
+          "movement": "작가·마켓→사업화 상담·홍보→관문 상가·유통.",
+          "check": "실내마켓의 현장 판매와 지원실의 계약·판로 기능을 나누고 모델 상생동의 실제 실 배정을 확인한다.",
+          "status": "상생동 위치 확인 / 지원실 실 배치 제안"
+        },
+        {
+          "id": "tourism",
+          "zone": "남측 역사문화·관광",
+          "program": "관광지원센터·여행자 휴게",
+          "location": "남측 관문, 관문광장·기존 역사·관문 가로상가와 연결되는 위치",
+          "scale": "v13 1,500㎡·안내·예약·대기·짐보관·휴게 포함",
+          "basis": "모델 남측 관광지원센터와 v13 관문 기능.",
+          "reason": "처음 방문한 사람이 동선과 프로그램을 이해하도록 관광 활동의 시작점에 안내·예약·휴게를 모은다. 역사문화 관람과 중앙 체험·마켓을 안내하고, 짐 보관·대기·수유 등 이동 전후의 편의를 제공한다.",
+          "movement": "주차·환승·남측 진입→관광 안내→역사문화 또는 중앙 공예·체험.",
+          "check": "버스 승하차·환승의 실제 위치와 관광센터까지의 연결을 정한다. 330㎡ 여행자휴게는 v13 1,500㎡ 안에 포함되어 별도 추가하지 않는다.",
+          "status": "관광지원 건물 위치 확인 / 세부 운영·동선 제안"
+        },
+        {
+          "id": "shared-parking",
+          "zone": "남측 역사문화·관광",
+          "program": "관광·상권 공유주차장",
+          "location": "남동측 주차·교통 획지, 모빌리티 허브와 인접",
+          "scale": "v13 300면·3층·9,600㎡ 계획 / 모델 5층·16,000㎡",
+          "basis": "모델 남측 공유주차장과 v13 관광·상권 공유 목적.",
+          "reason": "관광 방문과 상권 이용 차량을 남측 접근부에서 수용하고, 주차 이후 역사·관광·창작 활동을 보행으로 연결한다. 북측 직원 주차와 이용 목적을 구분해 공공업무와 방문 활동의 혼잡을 분산하는 운영 구조를 만든다.",
+          "movement": "남측 차량 접근→공유주차→관광지원·역사관광·중앙 체험.",
+          "check": "300면은 설계 공급 목표이며 상권 부족분의 실측값이 아니다. 실제 진입구·주차면과 관광센터 보행 연결을 확인한다.",
+          "status": "주차동 위치·5층 매스 확인 / 실제 면수 미확인"
+        },
+        {
+          "id": "mobility",
+          "zone": "남측 역사문화·관광",
+          "program": "모빌리티 허브",
+          "location": "남측 공유주차장 인근, 관광 보행망으로 전환되는 접점",
+          "scale": "모델 약 8,502㎡ / v13 독립 연면적 항목 없음",
+          "basis": "모델에 모빌리티 허브가 독립 매스로 존재.",
+          "reason": "주차·승하차에서 보행·자전거 등의 이동수단으로 전환하도록 주차장과 관광 보행망 사이에 둔다. 안내 기능은 관광지원센터와 역할을 나누고 실제 환승 서비스와 연결한다.",
+          "movement": "주차·승하차→이동수단 전환→관광·문화 보행망.",
+          "check": "대중교통 노선·정류장·자전거 운영은 확인되지 않았다. 도입 기능과 규모를 정해 관광센터·주차장과 중복되는 면적을 검토한다.",
+          "status": "매스 위치 확인 / 환승 운영·v13 대응 필요"
+        },
+        {
+          "id": "gateway",
+          "zone": "남측 역사문화·관광",
+          "program": "관문 가로상가·광장·사선 보행축",
+          "location": "남측 관문에서 기존 역사·그레이트 코트로 이어지는 가로와 광장",
+          "scale": "모델 관문 가로상가 약 2,399㎡ / 레지던시 가로상가 약 2,568㎡ / 독립 v13 대응 미확인",
+          "basis": "모델의 관문 가로상가·관문광장·사선축·레지던시 가로상가.",
+          "reason": "관문 가로상가는 관광 진입·휴게·지역 상품을 연결하고, 레지던시 가로상가는 창작 성과의 공개·판매 접점으로 사용한다. 광장과 사선 보행축은 기존 역사와 중앙 보행축 사이의 전환·안내 공간으로 구성한다.",
+          "movement": "남측 관문→관문상가·광장→기존 역사→중앙 보행축. 창작권→레지던시 가로상가.",
+          "check": "관광·생활편의·공예판매 역할을 구분하고 v13 마켓·식음·휴게와 면적을 중복 합산하지 않는다. 외부 상권의 실제 보행 연계도 확인한다.",
+          "status": "상가·광장·축 위치 확인 / 업종·면적 대응 필요"
+        }
+      ],
+      "source": {
+        "label": "사용자 최종 배치 설명 · NEXUS v13 · 저장 3dm 권역 위치",
+        "files": [
+          {
+            "label": "사용자 최종 프로그램 배치 의도 · 2026.10.11"
+          },
+          {
+            "label": "NEXUS 1918 최종 통합 스페이스 프로그램 v13 · 2026.10.11"
+          },
+          {
+            "label": "구경주역_마스터플랜_최종.3dm · 시설·획지·공원·축 위치 참고"
+          }
+        ],
+        "metricDefinitions": [
+          {
+            "label": "수요·규모 근거",
+            "definition": "일 방문 15~20명은 사용자가 이번에 제공한 공공기관 수요 추정이다. 업무석·활동 자리·좌석·주차면수·연면적은 v13 설계 계획값 또는 앞서 검토한 모델 값이며 실측 이용량과 구분한다.",
+            "componentIds": [
+              "placement-summary",
+              "placement-table",
+              "placement-methods",
+              "placement-zone-public",
+              "placement-zone-living",
+              "placement-zone-connection",
+              "placement-zone-craft-west",
+              "placement-zone-creation-east",
+              "placement-zone-history-south"
+            ]
+          },
+          {
+            "label": "배치 확인 상태",
+            "definition": "시설명과 큰 권역 위치가 모델에서 확인되는 항목, 사용자가 설명한 배치 의도, 내부 실·진출입에 대한 후속 제안을 구분했다. 상세 출입구·보행거리·주차구획은 미확인이다.",
+            "componentIds": [
+              "placement-summary",
+              "placement-table",
+              "placement-methods",
+              "placement-zone-public",
+              "placement-zone-living",
+              "placement-zone-connection",
+              "placement-zone-craft-west",
+              "placement-zone-creation-east",
+              "placement-zone-history-south"
+            ]
+          }
+        ],
+        "caveats": [
+          "원화로 통행량이 많고 동측 주거지가 정적이라는 맥락은 사용자 설계 전제이며 별도 현장 실측을 수행하지 않았다.",
+          "현재 Rhino 서비스 응답이 지연되어 저장 3dm을 읽어 큰 권역을 대조했다. 이전 선택 매스 157개 중 저장 파일과 ID가 일치한 것은 156개다. 복합문화·공방 일부에 의미 있는 형상 차이가 있으므로 저장 파일의 형상으로 기존 측정 면적을 덮어쓰거나 정밀 거리·반경을 확정하지 않았다.",
+          "수장고·기획전시장·기록실·지원실과 개별 주차구획은 현재 모델에서 전용 실로 식별되지 않아 내부 배치 제안으로 설명했다.",
+          "주차 수요는 일 방문객 수에서 직접 환산하지 않았다. 계획 인원·활동 자리·좌석을 하루 방문 인구로 합산하지 않았다."
+        ],
+        "evidenceFlow": [
+          {
+            "title": "사용자 배치 의도",
+            "detail": "2026.10.11 이번 메시지: 기관 일 방문 약 15~20명, 기관 전면 방문 주차, 청사 북측 직원 주차, 서측 원화로 공공청사, 청사 남쪽 기관, 북동 주거와 1층 개방 커뮤니티, 중앙 북동 돌봄·공원·텃밭·상업, 남북 세장 문화시설, 중앙 남서 공예 전시·마켓, 중앙 남동 체험·교류 및 동쪽 제작·거주."
+          },
+          {
+            "title": "계획 수요와 기능 구성",
+            "detail": "사용자 첨부 NEXUS v13의 시설별 면적·활동 규모·주차 배분을 읽었다. 숫자의 계획 지위와 인원 정의를 유지해 각 위치의 이용 행태와 연결했다."
+          },
+          {
+            "title": "저장 모델의 권역 위치 대조",
+            "detail": "provider: Rhino MCP; tool: run_python; slot: aardvark. Rhino.FileIO.File3dm.Read로 저장 3dm의 시설·획지·공원·보행축 이름과 좌표를 읽었다. 북서 청사·기관, 북동 주거·생활, 중앙 남서 공예와 남동 제작·체험, 남측 역사·관광·교통의 상대 위치를 대조했다."
+          }
+        ]
+      },
+      "methods": [
+        {
+          "language": "text",
+          "code": "1. 사용자 배치 의도를 권역과 프로그램으로 분해한다. 2. v13의 계획 규모와 이용자 정의를 대응한다. 3. 저장 3dm의 시설명·획지·좌표와 상대 위치를 대조한다. 4. 위치·공개면·서비스면·이용 동선의 설계 이유를 작성한다. 5. 모델 확인, 사용자 추정, 미배정 실의 제안을 분리한다. 6. 필요한 주차면수·보행 거리·방문 인구의 새 값을 계산하지 않는다."
+        }
+      ]
+    }
+  },
+  "id": "report:5587a83b-d782-496d-9a8b-b53561c8a316"
+}

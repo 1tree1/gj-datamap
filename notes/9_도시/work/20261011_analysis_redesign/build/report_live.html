@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>구경주역 통계 리포트</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <script type="module" crossorigin src="/gj-datamap/assets/report-CSgQP9jz.js"></script>
+  <link rel="modulepreload" crossorigin href="/gj-datamap/assets/index-Bm-do-Wu.js">
+  <link rel="stylesheet" crossorigin href="/gj-datamap/assets/report-DcxZCOEZ.css">
+</head>
+<body>
+  <div class="topbar"><div class="in">
+    <span class="brand">구경주역 데이터맵</span>
+    <nav><a href="./index.html">지도</a><a class="on" href="./report.html">통계 리포트</a><a href="./tourists.html">관광객</a></nav>
+  </div></div>
+
+  <!-- 1. 목표 · 이유 · 근거 -->
+  <header class="hero" id="goal">
+    <div class="eyebrow">구경주역 폐역 부지 156,460㎡ · 경주 원도심 · 계획 방향 (2026-09)</div>
+    <h1 class="display">옛 경주역 부지에 <em>경주시청 본청</em>과 <em>모빌리티 허브</em>를 둔다.</h1>
+    <p class="lede">이 부지는 아홉 가지 용도로 구성한다. 북쪽에 <b>시청·의회</b>와 <b>공공시설</b>, 남쪽에 <b>모빌리티 허브</b>, 그 사이에 옛 역사를 낀 <b>광장</b>, <b>청년 주거</b>, <b>공동캠퍼스</b>, 원화로변 <b>근린시설</b>을 두고, 옛 철로를 따라 <b>공원녹지</b>가 남북으로 관통하며 <b>도로</b>는 기정 결정을 유지한다. 낮에는 시청과 캠퍼스가, 주말에는 허브와 광장이, 밤에는 주거가 사람을 붙든다. 아래에 구성표와 근거를 적었다. 각 항목 끝의 숫자 표시를 누르면 해당 그래프가 열린다.</p>
+    <div id="hero-tiles" class="tiles"></div>
+    <div class="plan" id="plan"></div>
+    <div class="why" id="why"></div>
+    <details class="counter" id="counter"><summary>반대 의견과 대응 · 아직 확인되지 않은 것</summary><div id="counter-body"></div></details>
+  </header>
+
+  <!-- 2. 그룹 탐색 -->
+  <nav class="chips" id="chips"></nav>
+
+  <!-- 3. 카드 뉴스 -->
+  <main id="main"></main>
+
+  <footer class="foot">
+    자료 등급 <span class="tier t1">T1</span>법령·고시·승인된 계획 <span class="tier t2">T2</span>공공기관 발간물·통계 원자료·용역보고서 <span class="tier t3">T3</span>학술 논문·학술 사전(방법 부록·논문용, 공모·계획 본문에는 쓰지 않음) <span class="tier t4">T4</span>언론·발표자료·2차자료 · 손으로 옮겨 적은 표는 원문과 대조하기 전에는 인용하지 않는다 · 색 구간(급간)은 임의로 정한 값 · 좌표 처리본 EPSG:5187, 웹 4326 · 생성 스크립트 <code>9_도시/pipeline/build_report_stats.py · build_report_map_stats.py · build_report_fabric.py</code>
+  </footer>
+
+  <!-- 4. 상세 보기 -->
+  <dialog id="dlg">
+    <div class="dlg-head">
+      <div><div class="eyebrow" id="dlg-group"></div><h2 id="dlg-title"></h2></div>
+      <div class="dlg-nav"><button id="dlg-prev" title="이전">‹</button><button id="dlg-next" title="다음">›</button><button id="dlg-close" title="닫기">✕</button></div>
+    </div>
+    <p class="lead" id="dlg-lead"></p>
+    <div id="dlg-chart" class="dlg-chart"></div>
+    <div id="dlg-html"></div>
+    <p class="note" id="dlg-note"></p>
+    <p class="src" id="dlg-src"></p>
+    <p class="dlg-links" id="dlg-links"></p>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+let src=await fs.readFile(new URL('./capture_maps.mjs',import.meta.url),'utf8');
+src=src.slice(0,src.indexOf('const core='));
+src=src.replace("await p.waitForFunction(()=>window.__map.loaded(),{timeout:30000});", "await p.waitForFunction(()=>window.__map.loaded(),{timeout:30000}); await p.evaluate(ids=>{ for(const id of ids)if(id.startsWith('pop_')&&window.__map.getLayer(id+'-lb'))window.__map.setLayoutProperty(id+'-lb','text-size',16); for(const id of ['parks_upis-lb'])if(window.__map.getLayer(id))window.__map.setLayoutProperty(id,'visibility','none'); },ids);");
+const pop=JSON.parse(await fs.readFile(new URL('./web_data/hadm_pop.geojson',import.meta.url),'utf8'));
+let xy=[];function scan(v){if(typeof v[0]==='number')xy.push(v);else for(const a of v)scan(a);}for(const f of pop.features)scan(f.geometry.coordinates);
+const bounds=[[Math.min(...xy.map(x=>x[0])),Math.min(...xy.map(x=>x[1]))],[Math.max(...xy.map(x=>x[0])),Math.max(...xy.map(x=>x[1]))]];
+src+=`\nawait capture('population_full',['pop_chg'],${JSON.stringify(bounds)},[1300,1200]);
+await capture('youth_focus',['pop_y2034'],[[129.161,35.810],[129.281,35.930]],[1300,1200]);
+await capture('aging_focus',['pop_65'],[[129.168,35.814],[129.269,35.925]],[1300,1200]);
+await capture('northsouth_clean',['rail_abandoned','zone','parks_upis'],[[129.195,35.823],[129.231,35.888]],[1000,1100]);
+await fs.writeFile(R+'/capture_refined_manifest.json',JSON.stringify(meta,null,2));await b.close();`;
+await fs.writeFile(new URL('./capture_refined_run.mjs',import.meta.url),src);
+await import('./capture_refined_run.mjs');
